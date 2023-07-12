@@ -1,8 +1,8 @@
-.page-body {
-  font-family: Verdana, Geneva, Tahoma, sans-serif !important;
-}
-
-#title {
-  text-align: center;
-  font-size: 36pt;
+/* .side-navigation {
+  background-color: azure;
+  border-right: 2px solid #011640;
+} */
+a {
+  color: black !important;
+  text-decoration: none !important;
 }
