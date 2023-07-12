@@ -1,8 +1,14 @@
-/* .side-navigation {
-  background-color: azure;
+.side-navigation {
+  background-color: #011640;
   border-right: 2px solid #011640;
-} */
-a {
-  color: black !important;
-  text-decoration: none !important;
+  min-width: 210px;
+}
+
+.side-navigation .nav-link {
+  color: white !important;
+}
+
+.tutor-name {
+  text-align: end;
+  min-width: max-content;
 }
