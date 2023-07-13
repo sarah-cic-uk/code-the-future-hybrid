@@ -27,7 +27,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active border-end border-dark" aria-current="page" href="#">Session 1</a>
+                        <a class="nav-link active border-end border-dark" aria-current="page" href="#" onclick="getPath('pages/sessions/session1/introduction.html')">Session 1</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
                             href="../session2/introduction.html">Session 2</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
@@ -49,7 +49,7 @@
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
                             <li class="nav-item">
-                                <a href="/pages/sessions/session1/lessons/introIDE.html" class="nav-link align-middle px-0">
+                                <a href="#" onclick="getPath('pages/sessions/session1/lessons/introIDE.html')" class="nav-link align-middle px-0">
                                     <i class="fs-4 bi-house text-white"></i> <span class="ms-1 d-none d-sm-inline">Into
                                         to IDEs</span>
                                 </a>
@@ -59,21 +59,21 @@
                                     <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Git & GitHub</span> </a>
                                 <ul class="collapse show nav flex-column ms-3" id="submenu1" data-bs-parent="#menu">
                                     <li class="w-100">
-                                        <a href="/pages/sessions/session1/lessons/introDevEnv.html" class="nav-link px-0"> <span class="d-none d-sm-inline">Git
+                                        <a href="#" onclick="getPath('pages/sessions/session1/lessons/introDevEnv.html')" class="nav-link px-0"> <span class="d-none d-sm-inline">Git
                                                 </span> </a>
                                     </li>
                                     <li>
-                                        <a href="/pages/sessions/session1/lessons/introDevEnv.html" class="nav-link px-0"> <span class="d-none d-sm-inline">GitHub Desktop
+                                        <a href="#" onclick="getPath('pages/sessions/session1/lessons/introDevEnv.html')" class="nav-link px-0"> <span class="d-none d-sm-inline">GitHub Desktop
                                                 </span> </a>
                                     </li>
                                 </ul>
                             </li>
                             <li>
-                                <a href="/pages/sessions/session1/lessons/hostingGithub.html" class="nav-link px-0 align-middle">
+                                <a href="#" onclick="getPath('pages/sessions/session1/lessons/hostingGithub.html')" class="nav-link px-0 align-middle">
                                     <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Hosting on GitHub</span></a>
                             </li>
                             <li>
-                                <a href="/pages/sessions/session1/lessons/gitTerminal.html" class="nav-link px-0 align-middle ">
+                                <a href="#" onclick="getPath('pages/sessions/session1/lessons/gitTerminal.html')" class="nav-link px-0 align-middle ">
                                     <i class="fs-4 bi-bootstrap"></i> <span
                                         class="ms-1 d-none d-sm-inline">Git and
                                         Terminal</span></a>
@@ -82,11 +82,18 @@
                     </div>
                 </div>
                 <div class="col py-3">
-                    <div class="embed-responsive embed-responsive-16by9 text-center">
-                    <video class="embed-responsive-item" controls width="60%" class="mx-a">
-                        <source src="" type="video/mp4">
-                    </video>
-                    </div>
+                    <div class="media-container d-flex">
+                        <div class="embed-responsive embed-responsive-16by9 text-center flex-grow-1">
+                        <video id="session-video" class="embed-responsive-item mx-a" controls width="70%">
+                            <source type="video/mp4">
+                        </video>
+                        </div>
+                        <div class="text-end">
+                            <img id="tutor-avatar" alt="image" class="img-fluid avatar-sm rounded-circle .img-thumbnail" width="100">
+                            <div class="tutor-name">Sarah Neenan <br/>
+                                Software Engineer</div>
+                            </div>
+                            </div>
                     <div class='embed-container embed-responsive' style="width: 100%; min-height: 90vh;">
                         <iframe class="embed-responsive-item" style="width: 100%; min-height: 90vh;" id="github-iframe" name="github-iframe" src=""></iframe>
                     </div>
@@ -104,11 +111,22 @@
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
-                var iframe = document.getElementById('github-iframe');
+                const iframe = document.getElementById('github-iframe');
                 const test = converter.makeHtml(atob(data['content']))
                 const encrypted = encodeURIComponent(data['content'])
                 iframe.src = 'data:text/html,' + test;
             });
+    </script>
+    <script>
+        const BASE_URL = window.location.origin;
+        const PATH = BASE_URL.includes('github') ? '/code-the-future-hybrid/' : '/';
+        function getPath(options){
+          console.log(PATH+options)
+          window.location = PATH+options;
+          return false;
+        }
+        document.getElementById('tutor-avatar').src=PATH+'images/tutors/sarah.png';
+        document.getElementById('session-video').src=PATH+'media/.mp4';
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
