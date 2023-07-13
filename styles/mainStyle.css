@@ -12,3 +12,7 @@
   text-align: end;
   min-width: max-content;
 }
+
+.menu-card {
+  min-height: 200px;
+}
