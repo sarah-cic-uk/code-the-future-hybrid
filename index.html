@@ -145,7 +145,7 @@
                 </li>
                 <li>
                   <a
-                    href="#"
+                    href="pages/sessions/session5/introduction.html"
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
@@ -308,9 +308,9 @@
     ></script>
     <script>
       const BASE_URL = window.location.origin;
-      const PATH = BASE_URL.includes('github')
-        ? '/code-the-future-hybrid/'
-        : '/';
+      const PATH = BASE_URL.includes("github")
+        ? "/code-the-future-hybrid/"
+        : "/";
       function getPath(options) {
         console.log(PATH + options);
         window.location = PATH + options;
@@ -318,10 +318,10 @@
       }
     </script>
     <script>
-      const stylesheet = document.createElement('link');
-      stylesheet.rel = 'stylesheet';
-      stylesheet.type = 'text/css';
-      stylesheet.href = PATH + 'styles/mainStyle.css';
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.type = "text/css";
+      stylesheet.href = PATH + "styles/mainStyle.css";
       document.head.appendChild(stylesheet);
     </script>
   </body>
