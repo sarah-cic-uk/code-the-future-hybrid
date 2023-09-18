@@ -61,25 +61,25 @@
               <a
                 class="nav-link border-end border-dark"
                 aria-current="page"
-                href="../session2/introduction.html"
+                href="../../session2/introduction.html"
                 >Session 2</a
               >
               <a
                 class="nav-link border-end border-dark"
                 aria-current="page"
-                href="../session3/introduction.html"
+                href="../../session3/introduction.html"
                 >Session 3</a
               >
               <a
                 class="nav-link border-end border-dark"
                 aria-current="page"
-                href="../session4/introduction.html"
+                href="../../session4/introduction.html"
                 >Session 4</a
               >
               <a
                 class="nav-link border-end border-dark"
                 aria-current="page"
-                href="../session5/introduction.html"
+                href="../../session5/introduction.html"
                 >Session 5</a
               >
               <a
@@ -102,16 +102,6 @@
                 class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                 id="menu"
               >
-                <li class="nav-item">
-                  <a
-                    href="#"
-                    onclick="getPath('pages/sessions/session1/lessons/introIDE.html')"
-                    class="nav-link align-middle px-0"
-                  >
-                    <i class="fs-4 bi-house text-white"></i>
-                    <span class="ms-1 d-none d-sm-inline">Into to IDEs</span>
-                  </a>
-                </li>
                 <li>
                   <a
                     href="#submenu1"
@@ -119,7 +109,11 @@
                     class="nav-link px-0 align-middle"
                   >
                     <i class="fs-4 bi-speedometer2"></i>
-                    <span class="ms-1 d-none d-sm-inline">Git & GitHub</span>
+                    <span
+                      class="ms-1 d-none d-sm-inline"
+                      style="text-decoration: underline"
+                      >Intoduction to CSS</span
+                    >
                   </a>
                   <ul
                     class="collapse show nav flex-column ms-3"
@@ -129,46 +123,134 @@
                     <li class="w-100">
                       <a
                         href="#"
-                        onclick="getPath('pages/sessions/session1/lessons/introDevEnv.html')"
+                        onclick="getPath('pages/sessions/session4/lessons/introToCSS.html')"
                         class="nav-link px-0"
                       >
-                        <span class="d-none d-sm-inline">Git </span>
+                        <span class="d-none d-sm-inline">What is CSS? </span>
                       </a>
                     </li>
                     <li>
                       <a
                         href="#"
-                        onclick="getPath('pages/sessions/session1/lessons/introDevEnv.html')"
+                        onclick="getPath('pages/sessions/session4/lessons/introToCSS.html')"
                         class="nav-link px-0"
                       >
-                        <span class="d-none d-sm-inline">GitHub Desktop </span>
+                        <span class="d-none d-sm-inline"
+                          >How to use CSS with HTML
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/lessons/introToCSS.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline">CSS Syntax </span>
                       </a>
                     </li>
                   </ul>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    onclick="getPath('pages/sessions/session1/lessons/hostingGithub.html')"
+                    href="#submenu2"
+                    data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-table"></i>
-                    <span class="ms-1 d-none d-sm-inline"
-                      >Hosting on GitHub</span
-                    ></a
+                    <i class="fs-4 bi-speedometer2"></i>
+                    <span class="ms-1 d-none d-sm-inline">Layouts in CSS</span>
+                  </a>
+                  <ul
+                    class="collapse show nav flex-column ms-3"
+                    id="submenu2"
+                    data-bs-parent="#menu"
                   >
+                    <li class="w-100">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/lessons/layoutsInCSS.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline">Float </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/lessons/layoutsInCSS.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline">Flexbox </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/lessons/layoutsInCSS.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline">Grid </span>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    onclick="getPath('pages/sessions/session1/lessons/gitTerminal.html')"
+                    href="#submenu3"
+                    data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
-                    <span class="ms-1 d-none d-sm-inline"
-                      >Git and Terminal</span
-                    ></a
+                    <i class="fs-4 bi-speedometer2"></i>
+                    <span class="ms-1 d-none d-sm-inline">Advanced CSS</span>
+                  </a>
+                  <ul
+                    class="collapse show nav flex-column ms-3"
+                    id="submenu3"
+                    data-bs-parent="#menu"
                   >
+                    <li class="w-100">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session1/lessons/introDevEnv.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline"
+                          >Advanced Concepts
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/lessons/advancedCSS.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline"
+                          >CSS Pro-processors
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/lessons/advancedCSS.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline"
+                          >Responsive Web Design
+                        </span>
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/lessons/advancedCSS.html')"
+                        class="nav-link px-0"
+                      >
+                        <span class="d-none d-sm-inline">CSS Frameworks </span>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
               </ul>
             </div>
@@ -193,9 +275,10 @@
                   alt="image"
                   class="img-fluid avatar-sm rounded-circle .img-thumbnail"
                   width="100"
+                  height="100"
                 />
                 <div class="tutor-name">
-                  Sarah Neenan <br />
+                  Jacob Boardman <br />
                   Software Engineer
                 </div>
               </div>
@@ -225,15 +308,15 @@
     <script>
       var converter = new showdown.Converter();
       fetch(
-        'https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-1/intro_to_ide.md'
+        "https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-4/introduction_to_css.md"
       )
         .then(function (response) {
           return response.json();
         })
         .then(function (data) {
-          const iframe = document.getElementById('github-iframe');
-          const test = converter.makeHtml(atob(data['content']));
-          const encrypted = encodeURIComponent(data['content']);
+          const iframe = document.getElementById("github-iframe");
+          const test = converter.makeHtml(atob(data["content"]));
+          const encrypted = encodeURIComponent(data["content"]);
           iframe.srcdoc =
             '<link rel="stylesheet" type="text/css" href="../../../../styles/iframeStyle.css"/>' +
             test;
@@ -241,23 +324,23 @@
     </script>
     <script>
       const BASE_URL = window.location.origin;
-      const PATH = BASE_URL.includes('github')
-        ? '/code-the-future-hybrid/'
-        : '/';
+      const PATH = BASE_URL.includes("github")
+        ? "/code-the-future-hybrid/"
+        : "/";
       function getPath(options) {
         console.log(PATH + options);
         window.location = PATH + options;
         return false;
       }
-      document.getElementById('tutor-avatar').src =
-        PATH + 'images/tutors/sarah.png';
-      document.getElementById('session-video').src = PATH + 'media/.mp4';
+      document.getElementById("tutor-avatar").src =
+        PATH + "images/tutors/Jacob.jpg";
+      document.getElementById("session-video").src = PATH + "media/.mp4";
     </script>
     <script>
-      const stylesheet = document.createElement('link');
-      stylesheet.rel = 'stylesheet';
-      stylesheet.type = 'text/css';
-      stylesheet.href = PATH + 'styles/mainStyle.css';
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.type = "text/css";
+      stylesheet.href = PATH + "styles/mainStyle.css";
       document.head.appendChild(stylesheet);
     </script>
     <script
