@@ -52,7 +52,7 @@
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <a
-                class="nav-link active border-end border-dark"
+                class="nav-link border-end border-dark"
                 aria-current="page"
                 href="../session1/introduction.html"
                 >Session 1</a
@@ -64,7 +64,7 @@
                 >Session 2</a
               >
               <a
-                class="nav-link border-end border-dark"
+                class="nav-link active border-end border-dark"
                 aria-current="page"
                 href="../session3/introduction.html"
                 >Session 3</a
@@ -116,21 +116,21 @@
                     data-bs-parent="#menu"
                   >
                     <li class="w-100">
-                      <a href="#" class="nav-link px-0">
+                      <a href="#" onclick="getPath('pages/sessions/session3/lessons/html_images_tables.html')" class="nav-link px-0">
                         <span class="d-none d-sm-inline"
                           >Images and Tables
                         </span>
                       </a>
                     </li>
                     <li>
-                      <a href="#" class="nav-link px-0">
+                      <a href="#" onclick="getPath('pages/sessions/session3/lessons/html_forms.html')" class="nav-link px-0">
                         <span class="d-none d-sm-inline"
                           >Forms and Validation
                         </span>
                       </a>
                     </li>
                     <li>
-                      <a href="#" class="nav-link px-0">
+                      <a href="#" onclick="getPath('pages/sessions/session3/lessons/html_hyperlinks.html')" class="nav-link px-0">
                         <span class="d-none d-sm-inline"
                           >Hyperlinks and Creating Multiple Pages
                         </span>
@@ -181,12 +181,19 @@
         });
     </script>
     <script>
+      const BASE_URL = window.location.origin;
+      const PATH = BASE_URL.includes('github') ? '/code-the-future-hybrid/' : '/';
       const stylesheet = document.createElement('link');
       stylesheet.rel = 'stylesheet';
       stylesheet.type = 'text/css';
       stylesheet.href = PATH + 'styles/mainStyle.css';
       document.head.appendChild(stylesheet);
-    </script>
+        function getPath(options){
+          console.log(PATH+options)
+          window.location = PATH+options;
+          return false;
+        }
+      </script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
