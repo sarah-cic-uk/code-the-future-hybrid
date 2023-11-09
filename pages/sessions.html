@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="Code, Future, HTML, CSS, JavaScript, IBM, CIC"
+    />
+    <meta
+      name="description"
+      content="Code the Future free HTML/CSS coding bootcamp"
+    />
+    <meta name="author" content="Sarah Neenan" />
+    <title>Code the Future</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <div class="page-body">
+      <nav
+        class="navbar navbar-expand-lg bg-light"
+        style="border-bottom: 2px double #011640"
+      >
+        <div class="container-fluid">
+          <a
+            class="navbar-brand"
+            href="#"
+            style="
+              border-right: 2px solid #d9437a;
+              padding-right: 10px;
+              color: #1d0c59;
+            "
+            >Code the Future &lt / &gt</a
+          >
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="#"
+                onclick="getPath('pages/sessions/session1/session1-introduction.html')"
+                >About CTF</a
+              >
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="#"
+                onclick="getPath('pages/sessions/session1/session1-introduction.html')"
+                >Meet the tutors</a
+              >
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="#"
+                onclick="getPath('pages/sessions/session1/session1-introduction.html')"
+                >Schedule a 1:1</a
+              >
+              <a class="nav-link" href="#" onclick="getPath('jobs.html')"
+                >Jobs at CIC</a
+              >
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="container-fluid">
+        <div class="row flex-nowrap">
+          <div class="col-auto px-sm-2 px-0 side-navigation">
+            <div
+              class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+            >
+              <a
+                href="/"
+                class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
+              >
+                <span class="fs-5 d-none d-sm-inline">Sessions</span>
+              </a>
+              <ul
+                class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
+                id="menu"
+              >
+                <li class="nav-item">
+                  <a href="#" class="nav-link align-middle px-0">
+                    <i class="fs-4 bi-house text-white"></i>
+                    <span class="ms-1 d-none d-sm-inline">Session 1</span>
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#submenu1"
+                    data-bs-toggle="collapse"
+                    class="nav-link px-0 align-middle"
+                  >
+                    <i class="fs-4 bi-speedometer2"></i>
+                    <span class="ms-1 d-none d-sm-inline">Session 2</span>
+                  </a>
+                  <ul
+                    class="collapse show nav flex-column ms-3"
+                    id="submenu1"
+                    data-bs-parent="#menu"
+                  >
+                    <li class="w-100">
+                      <a href="#" class="nav-link px-0">
+                        <span class="d-none d-sm-inline">sub item</span> 1
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#" class="nav-link px-0">
+                        <span class="d-none d-sm-inline">sub item</span> 2
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#" class="nav-link px-0 align-middle">
+                    <i class="fs-4 bi-table"></i>
+                    <span class="ms-1 d-none d-sm-inline">Session 3</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    data-bs-toggle="collapse"
+                    class="nav-link px-0 align-middle"
+                  >
+                    <i class="fs-4 bi-bootstrap"></i>
+                    <span class="ms-1 d-none d-sm-inline">Session 4</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    data-bs-toggle="collapse"
+                    class="nav-link px-0 align-middle"
+                  >
+                    <i class="fs-4 bi-bootstrap"></i>
+                    <span class="ms-1 d-none d-sm-inline">Session 5</span></a
+                  >
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    data-bs-toggle="collapse"
+                    class="nav-link px-0 align-middle"
+                  >
+                    <i class="fs-4 bi-bootstrap"></i>
+                    <span class="ms-1 d-none d-sm-inline">Showcase</span></a
+                  >
+                </li>
+              </ul>
+              <hr />
+              <div class="dropdown pb-4">
+                <a
+                  href="#"
+                  class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                  id="dropdownUser1"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <img
+                    src="https://github.com/mdo.png"
+                    alt="hugenerd"
+                    width="30"
+                    height="30"
+                    class="rounded-circle"
+                  />
+                  <span class="d-none d-sm-inline mx-1">loser</span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                  <li><a class="dropdown-item" href="#">New project...</a></li>
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col py-3">
+            <div
+              class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 pt-4 px-4"
+            >
+              <div class="col">
+                <div class="card menu-card">
+                  <div class="card-body">
+                    <h5 class="card-title">Session 1</h5>
+                    <p class="card-text">Set up your laptop like a developer</p>
+                  </div>
+                  <div class="card-footer">
+                    <a
+                      href="#"
+                      onclick="getPath('pages/sessions/session1/introduction.html')"
+                      class="btn btn-primary float-end"
+                      >Get Started</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card menu-card">
+                  <div class="card-body">
+                    <h5 class="card-title">Session 2</h5>
+                    <p class="card-text">Create a basic webpage</p>
+                  </div>
+                  <div class="card-footer">
+                    <a
+                      href="#"
+                      onclick="getPath('pages/sessions/session2/introduction.html')"
+                      class="btn btn-primary float-end"
+                      >Go</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card menu-card">
+                  <div class="card-body">
+                    <h5 class="card-title">Session 3</h5>
+                    <p class="card-text">
+                      Add various elements to your webpages (images, tables,
+                      hyperlinks etc)
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a
+                      href="#"
+                      onclick="getPath('pages/sessions/session3/introduction.html')"
+                      class="btn btn-primary float-end"
+                      >Go</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card menu-card">
+                  <div class="card-body">
+                    <h5 class="card-title">Session 4</h5>
+                    <p class="card-text">
+                      Make your website look great with CSS
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a
+                      href="#"
+                      onclick="getPath('pages/sessions/session4/introduction.html')"
+                      class="btn btn-primary float-end"
+                      >Go</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card menu-card">
+                  <div class="card-body">
+                    <h5 class="card-title">Session 5</h5>
+                    <p class="card-text">Learn about accessibility</p>
+                  </div>
+                  <div class="card-footer">
+                    <a
+                      href="#"
+                      onclick="getPath('pages/sessions/session5/introduction.html')"
+                      class="btn btn-primary float-end"
+                      >Go</a
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+                <div class="card menu-card">
+                  <div class="card-body">
+                    <h5 class="card-title">Showcase</h5>
+                    <p class="card-text">
+                      Make your website look great with CSS
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="#" class="btn btn-primary float-end">Go</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      const BASE_URL = window.location.origin;
+      const PATH = BASE_URL.includes("github")
+        ? "/code-the-future-hybrid/"
+        : "/";
+      function getPath(options) {
+        console.log(PATH + options);
+        window.location = PATH + options;
+        return false;
+      }
+    </script>
+    <script>
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.type = "text/css";
+      stylesheet.href = PATH + "styles/mainStyle.css";
+      document.head.appendChild(stylesheet);
+    </script>
+  </body>
+</html>
