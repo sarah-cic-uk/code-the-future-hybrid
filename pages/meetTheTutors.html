@@ -306,9 +306,7 @@
       integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
       crossorigin="anonymous"
     ></script>
-    <script src= 
-    "https://code.jquery.com/jquery-1.12.4.min.js"> 
-        </script> 
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script> 
     <script>
       const BASE_URL = window.location.origin;
       const PATH = BASE_URL.includes('github')
@@ -328,17 +326,9 @@
       document.head.appendChild(stylesheet);
     </script>
     <script>
-
    $(document).ready(function() {
-    console.log('running function')
-    let divheigh = document.getElementById("height-check").offsetHeight
-    var divHeight = $('.height-check').height(); 
-    var divHeight1 = $('.tutor-profile').height(); 
-    var divHeight2 = $('.item').height(); 
-    console.log(divheigh)
-    console.log(divHeight1)
-    console.log(divHeight2)
-    $('.description').css('max-height', divheigh+'px');
+    let divHeight = document.getElementById("height-check").offsetHeight
+    $('.description').css('max-height', divHeight+'px');
 });  
     </script>
   </body>
