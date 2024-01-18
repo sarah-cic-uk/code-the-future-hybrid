@@ -8,6 +8,14 @@
   color: white !important;
 }
 
+.navbar {
+  height: 70px;
+}
+
+.page-content {
+  height: calc(100vh - 70px);
+}
+
 .tutor-name {
   text-align: end;
   min-width: max-content;
@@ -43,14 +51,16 @@
   }
   
   .people {
-    padding:50px 0;
+    padding:20px 0;
     cursor: pointer;
   }
-  .item {
+  .item,
+  .session-card {
     margin-bottom:30px;
   }
   
-  .item .box {
+  .item .box,
+  .session-card .box {
     text-align:center;
     background-repeat:no-repeat;
     background-size:cover;
@@ -58,6 +68,7 @@
     height:280px;
     position:relative;
     overflow:hidden;
+    border: 1px solid black;
   }
   
   .item .cover {
@@ -84,6 +95,19 @@
     width: 100%;
   }
 
+  .session-card .session {
+    position:absolute;
+    bottom:0;
+    left:0;
+    background-color: rgba(255, 255, 255, 0.75);
+    color: black;
+    width: 100%;
+  }
+
+  .session-card .session {
+    padding: 5px;
+  }
+
   .item:hover .cover {
     opacity:1;
   }
@@ -92,7 +116,8 @@
     opacity:0;
   }
   
-  .item .name {
+  .item .name, 
+  .session-name {
     font-weight:bold;
     margin-bottom:8px;
   }
@@ -104,6 +129,15 @@
     letter-spacing:2px;
     font-size:13px;
     margin-bottom:20px;
+  }
+
+ .session-description {
+    text-transform:uppercase;
+    font-weight:bold;
+    color:#020202;
+    letter-spacing:2px;
+    font-size:13px;
+    margin-bottom:10px;
   }
   
   .social {
