@@ -19,6 +19,7 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   </head>
 
   <body>
@@ -55,7 +56,7 @@
                 class="nav-link"
                 aria-current="page"
                 href="#"
-                onclick="getPath('pages/sessions/session1/session1-introduction.html')"
+                onclick="getPath('index.html')"
                 >About CTF</a
               >
               <a
@@ -97,7 +98,7 @@
               >
                 <li class="nav-item">
                   <a href="#" class="nav-link align-middle px-0">
-                    <i class="fs-4 bi-house text-white"></i>
+                    <i class="fs-4 bi-github text-white"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 1</span>
                   </a>
                 </li>
@@ -107,7 +108,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-speedometer2"></i>
+                    <i class="fs-4 bi-window-sidebar"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 2</span>
                   </a>
                   <ul
@@ -129,7 +130,7 @@
                 </li>
                 <li>
                   <a href="#" class="nav-link px-0 align-middle">
-                    <i class="fs-4 bi-table"></i>
+                    <i class="fs-4 bi-code-square"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 3</span></a
                   >
                 </li>
@@ -139,7 +140,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
+                    <i class="fs-4 bi-tools"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 4</span></a
                   >
                 </li>
@@ -149,7 +150,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
+                    <i class="fs-4 bi-tools"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 5</span></a
                   >
                 </li>
@@ -159,7 +160,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
+                    <i class="fs-4 bi-tools"></i>
                     <span class="ms-1 d-none d-sm-inline">Showcase</span></a
                   >
                 </li>
@@ -176,7 +177,7 @@
               <div class="row people d-flex justify-content-center">
                   <div class="col-md-4 col-lg-3 item" id="first-item-card" style="min-width: 200px;">
                     <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/sarah.jpeg)">
-                     <div id="height-check" style="min-height: 240px"> 
+                     <div id="height-check" style="min-height: 205px"> 
                       <div class="profile">
                         <h3 class="name">Sarah Neenan</h3>
                       <p class="title">UK CIC Application Engineering Services Technical Lead</p>
@@ -185,8 +186,12 @@
                       <div class="cover">
                         <h3 class="name">Sarah Neenan</h3>
                         <p class="description">I joined IBM CIC as a graduate in 2016. Before IBM I studied and worked in Animal Behaviour, Conservation and Engineering. It annoyed me that there was no software out there to help in my fish conservation research so I took a free evening course (much like this one!) to see if it was possible to learn to code and build the software that I needed. Soon after, I met someone from IBM CIC who suggested I apply because I showed enthusiasm and knew enough of the basics - they would teach me everything else I needed to know. I'm now a Managing Developer and Development Lead for two dev teams and I love my job.</p>
-                        <div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
-                          </div>
+                        <div class="social">
+                          <a href="https://www.linkedin.com/in/sneenan/" data-toggle="tooltip" title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
+                          <a href="https://github.com/sarah-cic-uk" data-toggle="tooltip" title="CTF Github"><i class="sm-icon bi-githubhub"></i></a>
+                          <a href="https://github.com/neenan" data-toggle="tooltip" title="Personal Github"><i class="sm-icon bi-githubhub"></i></a>
+                        </div>                          
+                      </div>
                       </div>
                   </div>
                   <div class="col-md-4 col-lg-3 item">
@@ -198,8 +203,11 @@
                       <div class="cover">
                         <h3 class="name">Jacob Boardman</h3>
                         <p class="description">I joined IBM CIC as a Java Developer in September 2021, bust quickly transitioned into Front-end development and Javascript. Before IBM I worked as an IT Consultant where I was also contract out to IBM as a Java developer for 2 years, but made myself known and was hired by IBM CIC after my contract ended. I graduated from University studying Computer Science for Games, where i learnt a lot more about the gaming industry, but turned more to software as to not sour the tasting of gaming. I'm fairly new to tutoring so will have to help me learn as well but always enjoyed helping an teaching others.</p>
-                        <div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
-                          </div>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>                          </div>
                       </div>
                   </div>
                   <div class="col-md-4 col-lg-3 item">
@@ -211,8 +219,11 @@
                       <div class="cover">
                         <h3 class="name">Michael Weller</h3>
                         <p class="description">I joined the CIC in early December 2020 as an application developer. I've worked on a wide range of roles and accounts, working in L2 support, cloud solutions, app development and finally web development since the start of this year. I've had spinkles of experience throughout my career from using HTML/CSS to JavaScript/TypeScript with frameworks like React and Angular. I hope now to try to apply my web development knowledge through tutoring.</p>
-                        <div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
-                          </div>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>                          </div>
                       </div>
                   </div>
                   <div class="col-md-4 col-lg-3 item">
@@ -224,8 +235,11 @@
                       <div class="cover">
                         <h3 class="name">Remya Muraleedharan</h3>
                         <p class="description">After my computer science engineering degree I started my career as a server administrator. I switched my career to a developer a few years later and have been one for the past 7 years. I am currently a full stack developer. I joined IBM CIC in May 2021. I enjoy code development and look forward to learning new technologies in my role in IBM.</p>
-                        <div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
-                          </div>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>                          </div>
                       </div>
                   </div>
                   <div class="col-md-4 col-lg-3 item">
@@ -237,11 +251,48 @@
                       <div class="cover">
                         <h3 class="name">Jacqueline Jones</h3>
                         <p class="description">After leaving school/college I spent a long time in the hairdressing industry, one day I began learning code in my own spare time, very much like this which kick-started me onto a new career path. I had already had over 10 years experience in UX/UI design and development before I was approached by someone from the CIC who saw my online portfolio and suggested that I attend a CIC assessment centre, that was over 5 and a half years ago now. Since, I have been with the CIC I've pushed myself out of my comfort zone learning new tech, languages and methodologies however being surrounded by such a high calibre of talented peers and the support of the CIC meant those achievements were within reach.</p>
-                        <div class="social"><a href="#"><i class="fa fa-facebook-official"></i></a><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-instagram"></i></a></div>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
                           </div>
                       </div>
                   </div>
-                 
+                  <div class="col-md-4 col-lg-3 item">
+                    <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/haseeb.jpg)">
+                      <div class="profile">
+                        <h3 class="name">Haseeb Jabbar</h3>
+                      <p class="title">Full Stack Engineer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Haseeb Jabbar</h3>
+                        <p class="description">coming soon...</p>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-md-4 col-lg-3 item">
+                    <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/kadijah.jpg)">
+                      <div class="profile">
+                        <h3 class="name">Kadijah Allarakhiya</h3>
+                      <p class="title">Front-End Developer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Kadijah Allarakhiya</h3>
+                        <p class="description">I joined IBM CIC as an Associate Technology Specialist in August 2022. Before this I studied Accounting and Finance and although I enjoyed it, I realised I enjoyed coding a lot more once I did this Code The Future last year. I was encouraged to apply by my then-tutors and went through the process and ended up here! I've come in with basic HTML and CSS knowledge but I am learning more and more everyday</p>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
           </div>
       </div>
