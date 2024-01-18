@@ -19,9 +19,13 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
   </head>
 
-  <body style="background: #f0f0f0">
+  <body>
     <div class="page-body">
       <nav
         class="navbar navbar-expand-lg bg-light"
@@ -29,8 +33,9 @@
       >
         <div class="container-fluid">
           <a
+            onclick="getPath('index.html')"
             class="navbar-brand"
-            href="/"
+            href="#"
             style="
               border-right: 2px solid #d9437a;
               padding-right: 10px;
@@ -51,14 +56,18 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="/"
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="#"
+                onclick="getPath('index.html')"
                 >About CTF</a
               >
               <a
                 class="nav-link"
                 aria-current="page"
                 href="#"
-                onclick="getPath('pages/sessions/session1/session1-introduction.html')"
+                onclick="getPath('pages/meetTheTutors.html')"
                 >Meet the tutors</a
               >
               <a
@@ -71,15 +80,21 @@
               <a class="nav-link" href="#" onclick="getPath('jobs.html')"
                 >Jobs at CIC</a
               >
+              <a
+                class="nav-link active"
+                href="#"
+                onclick="getPath('pages/sessions.html')"
+                >Sessions</a
+              >
             </div>
           </div>
         </div>
       </nav>
       <div class="container-fluid">
-        <div class="row flex-nowrap">
+        <div class="row flex-nowrap page-content">
           <div class="col-auto px-sm-2 px-0 side-navigation">
             <div
-              class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+              class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white"
             >
               <a
                 href="/"
@@ -93,7 +108,7 @@
               >
                 <li class="nav-item">
                   <a href="#" class="nav-link align-middle px-0">
-                    <i class="fs-4 bi-house text-white"></i>
+                    <i class="fs-4 bi bi-github text-white"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 1</span>
                   </a>
                 </li>
@@ -103,7 +118,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-speedometer2"></i>
+                    <i class="fs-4 bi-window-sidebar"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 2</span>
                   </a>
                   <ul
@@ -125,7 +140,7 @@
                 </li>
                 <li>
                   <a href="#" class="nav-link px-0 align-middle">
-                    <i class="fs-4 bi-table"></i>
+                    <i class="fs-4 bi-code-square"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 3</span></a
                   >
                 </li>
@@ -135,7 +150,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
+                    <i class="fs-4 bi-border-style"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 4</span></a
                   >
                 </li>
@@ -145,7 +160,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
+                    <i class="fs-4 bi-tools"></i>
                     <span class="ms-1 d-none d-sm-inline">Session 5</span></a
                   >
                 </li>
@@ -155,7 +170,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
+                    <i class="fs-4 bi-easel"></i>
                     <span class="ms-1 d-none d-sm-inline">Showcase</span></a
                   >
                 </li>
@@ -176,7 +191,7 @@
                     height="30"
                     class="rounded-circle"
                   />
-                  <span class="d-none d-sm-inline mx-1">loser</span>
+                  <span class="d-none d-sm-inline mx-1">Test User</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
                   <li><a class="dropdown-item" href="#">New project...</a></li>
@@ -191,104 +206,147 @@
             </div>
           </div>
           <div class="col py-3">
-            <div
-              class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 pt-4 px-4"
-            >
-              <div class="col">
-                <div class="card menu-card">
-                  <div class="card-body">
-                    <h5 class="card-title">Session 1</h5>
-                    <p class="card-text">Set up your laptop like a developer</p>
-                  </div>
-                  <div class="card-footer">
-                    <a
-                      href="#"
-                      onclick="getPath('pages/sessions/session1/introduction.html')"
-                      class="btn btn-primary float-end"
-                      >Get Started</a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card menu-card">
-                  <div class="card-body">
-                    <h5 class="card-title">Session 2</h5>
-                    <p class="card-text">Create a basic webpage</p>
-                  </div>
-                  <div class="card-footer">
-                    <a
-                      href="#"
-                      onclick="getPath('pages/sessions/session2/introduction.html')"
-                      class="btn btn-primary float-end"
-                      >Go</a
-                    >
+            <div class="row people d-flex justify-content-center">
+              <div class="col-md-4 session-card">
+                <div
+                  class="box"
+                  style="
+                    background-image: url(../images/sessions/session1.jpeg);
+                  "
+                >
+                  <div class="session">
+                    <div class="session-name">
+                      <h3 class="session-name">Session 1</h3>
+                      <p class="session-description">
+                        Set up your laptop like a developer
+                      </p>
+                    </div>
+                    <div class="card-footer">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session1/introduction.html')"
+                        class="btn btn-primary float-end"
+                        >Get Started</a
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col">
-                <div class="card menu-card">
-                  <div class="card-body">
-                    <h5 class="card-title">Session 3</h5>
-                    <p class="card-text">
-                      Add various elements to your webpages (images, tables,
-                      hyperlinks etc)
-                    </p>
-                  </div>
-                  <div class="card-footer">
-                    <a
-                      href="#"
-                      onclick="getPath('pages/sessions/session3/introduction.html')"
-                      class="btn btn-primary float-end"
-                      >Go</a
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="col">
-                <div class="card menu-card">
-                  <div class="card-body">
-                    <h5 class="card-title">Session 4</h5>
-                    <p class="card-text">
-                      Make your website look great with CSS
-                    </p>
-                  </div>
-                  <div class="card-footer">
-                    <a
-                      href="#"
-                      onclick="getPath('pages/sessions/session4/introduction.html')"
-                      class="btn btn-primary float-end"
-                      >Go</a
-                    >
+              <div class="col-md-4 session-card">
+                <div
+                  class="box"
+                  style="background-image: url(../images/sessions/session2.png)"
+                >
+                  <div class="session">
+                    <div class="session-name">
+                      <h3 class="session-name">Session 2</h3>
+                      <p class="session-description">Create a basic webpage</p>
+                    </div>
+                    <div class="card-footer">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session2/introduction.html')"
+                        class="btn btn-primary float-end"
+                        >Go</a
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col">
-                <div class="card menu-card">
-                  <div class="card-body">
-                    <h5 class="card-title">Session 5</h5>
-                    <p class="card-text">Learn about accessibility</p>
-                  </div>
-                  <div class="card-footer">
-                    <a
-                      href="#"
-                      onclick="getPath('pages/sessions/session5/introduction.html')"
-                      class="btn btn-primary float-end"
-                      >Go</a
-                    >
+              <div class="col-md-4 session-card">
+                <div
+                  class="box"
+                  style="background-image: url(../images/sessions/session3.png)"
+                >
+                  <div class="session">
+                    <div class="session-name">
+                      <h3 class="session-name">Session 3</h3>
+                      <p class="session-description">
+                        Add various elements to your webpages (images, tables,
+                        hyperlinks etc)
+                      </p>
+                    </div>
+                    <div class="card-footer">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session3/introduction.html')"
+                        class="btn btn-primary float-end"
+                        >Go</a
+                      >
+                    </div>
                   </div>
                 </div>
               </div>
-              <div class="col">
-                <div class="card menu-card">
-                  <div class="card-body">
-                    <h5 class="card-title">Showcase</h5>
-                    <p class="card-text">
-                      Make your website look great with CSS
-                    </p>
+              <div class="col-md-4 session-card">
+                <div
+                  class="box"
+                  style="
+                    background-image: url(../images/sessions/session4.jpeg);
+                  "
+                >
+                  <div class="session">
+                    <div class="session-name">
+                      <h3 class="session-name">Session 4</h3>
+                      <p class="session-description">
+                        Make your website look great with CSS
+                      </p>
+                    </div>
+                    <div class="card-footer">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session4/introduction.html')"
+                        class="btn btn-primary float-end"
+                        >Go</a
+                      >
+                    </div>
                   </div>
-                  <div class="card-footer">
-                    <a href="#" class="btn btn-primary float-end">Go</a>
+                </div>
+              </div>
+              <div class="col-md-4 session-card">
+                <div
+                  class="box"
+                  style="background-image: url(../images/sessions/session5.png)"
+                >
+                  <div class="session">
+                    <div class="session-name">
+                      <h3 class="session-name">Session 5</h3>
+                      <p class="session-description">
+                        Learn about accessibility
+                      </p>
+                    </div>
+                    <div class="card-footer">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session5/introduction.html')"
+                        class="btn btn-primary float-end"
+                        >Go</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 session-card">
+                <div
+                  class="box"
+                  style="
+                    background-image: url(../images/sessions/session6.jpeg);
+                  "
+                >
+                  <div class="session">
+                    <div class="session-name">
+                      <h3 class="session-name">Showcase</h3>
+                      <p class="session-description">
+                        Showcase your fantastic work!
+                      </p>
+                    </div>
+                    <div class="card-footer">
+                      <a
+                        href="#"
+                        onclick="getPath('pages/sessions/session6/introduction.html')"
+                        class="btn btn-primary float-end"
+                        >Go</a
+                      >
+                    </div>
                   </div>
                 </div>
               </div>

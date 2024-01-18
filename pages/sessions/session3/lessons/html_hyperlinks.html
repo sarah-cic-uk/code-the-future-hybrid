@@ -16,7 +16,9 @@
     <div class="page-body">
         <nav class="navbar navbar-expand-lg bg-light" style="border-bottom: 2px double #011640;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/"
+                <a
+                onclick="getPath('index.html')" 
+                class="navbar-brand" href="#"
                     style="border-right: 2px solid #D9437A; padding-right: 10px; color: #1D0C59">Code the Future &lt /
                     &gt</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -27,29 +29,30 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session1/introduction.html">Session 1</a>
+                            href="../../session1/introduction.html">Session 1</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session2/introduction.html">Session 2</a>
-                        <a class="nav-link active border-end border-dark" aria-current="page" href="#" onclick="getPath('pages/sessions/session3/introduction.html')">Session 3</a>
+                            href="../../session2/introduction.html">Session 2</a>
+                        <a class="nav-link active border-end border-dark" aria-current="page" 
+                        href="../../session3/introduction.html">Session 3</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session4/introduction.html">Session 4</a>
+                            href="../../session4/introduction.html">Session 4</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session5/introduction.html">Session 5</a>
+                            href="../../session5/introduction.html">Session 5</a>
                         <a class="nav-link border-end border-dark" aria-current="page" href="#">Showcases</a>
                     </div>
                 </div>
             </div>
         </nav>
         <div class="container-fluid">
-            <div class="row flex-nowrap">
+            <div class="row flex-nowrap page-content">
                 <div class="col-auto px-sm-2 px-0 side-navigation">
                     <div
-                        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white">
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
                             <li>
                                 <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">HTML Elements</span> </a>
+                                    <i class="fs-4 bi-window-sidebar"></i> <span class="ms-1 d-none d-sm-inline">HTML Elements</span> </a>
                                 <ul class="collapse show nav flex-column ms-3" id="submenu1" data-bs-parent="#menu">
                                     <li class="w-100">
                                         <a href="#" onclick="getPath('pages/sessions/session3/lessons/html_images_tables.html')" class="nav-link px-0"> <span class="d-none d-sm-inline">Images and Tables

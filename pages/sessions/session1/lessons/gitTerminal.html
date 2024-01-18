@@ -16,7 +16,8 @@
     <div class="page-body">
         <nav class="navbar navbar-expand-lg bg-light" style="border-bottom: 2px double #011640;">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/"
+                <a class="navbar-brand" href="#"
+                onclick="getPath('index.html')"
                     style="border-right: 2px solid #D9437A; padding-right: 10px; color: #1D0C59">Code the Future &lt /
                     &gt</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -26,36 +27,37 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link active border-end border-dark" aria-current="page" href="#" onclick="getPath('pages/sessions/session1/introduction.html')">Session 1</a>
+                        <a class="nav-link active border-end border-dark" aria-current="page"
+                            href="../../session1/introduction.html">Session 1</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session2/introduction.html">Session 2</a>
+                            href="../../session2/introduction.html">Session 2</a>
+                        <a class="nav-link border-end border-dark" aria-current="page" 
+                        href="../../session3/introduction.html">Session 3</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session3/introduction.html">Session 3</a>
+                            href="../../session4/introduction.html">Session 4</a>
                         <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session4/introduction.html">Session 4</a>
-                        <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../session5/introduction.html">Session 5</a>
+                            href="../../session5/introduction.html">Session 5</a>
                         <a class="nav-link border-end border-dark" aria-current="page" href="#">Showcases</a>
                     </div>
                 </div>
             </div>
         </nav>
         <div class="container-fluid">
-            <div class="row flex-nowrap">
+            <div class="row flex-nowrap page-content">
                 <div class="col-auto px-sm-2 px-0 side-navigation">
                     <div
-                        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+                        class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white">
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
                             id="menu">
                             <li class="nav-item">
                                 <a href="#" onclick="getPath('pages/sessions/session1/lessons/introIDE.html')" class="nav-link align-middle px-0">
-                                    <i class="fs-4 bi-house text-white"></i> <span class="ms-1 d-none d-sm-inline">Into
+                                    <i class="fs-4 bi-github text-white"></i> <span class="ms-1 d-none d-sm-inline">Into
                                         to IDEs</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-speedometer2"></i> <span class="ms-1 d-none d-sm-inline">Git & GitHub</span> </a>
+                                    <i class="fs-4 bi-window-sidebar"></i> <span class="ms-1 d-none d-sm-inline">Git & GitHub</span> </a>
                                 <ul class="collapse show nav flex-column ms-3" id="submenu1" data-bs-parent="#menu">
                                     <li class="w-100">
                                         <a href="#" onclick="getPath('pages/sessions/session1/lessons/introDevEnv.html')" class="nav-link px-0"> <span class="d-none d-sm-inline">Git
@@ -69,11 +71,11 @@
                             </li>
                             <li>
                                 <a href="#" onclick="getPath('pages/sessions/session1/lessons/hostingGithub.html')" class="nav-link px-0 align-middle">
-                                    <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Hosting on GitHub</span></a>
+                                    <i class="fs-4 bi-code-square"></i> <span class="ms-1 d-none d-sm-inline">Hosting on GitHub</span></a>
                             </li>
                             <li>
                                 <a href="#" onclick="getPath('pages/sessions/session1/lessons/gitTerminal.html')" class="nav-link px-0 align-middle ">
-                                    <i class="fs-4 bi-bootstrap"></i> <span
+                                    <i class="fs-4 bi-tools"></i> <span
                                         class="ms-1 d-none d-sm-inline">Git and
                                         Terminal</span></a>
                             </li>
@@ -124,7 +126,7 @@
           window.location = PATH+options;
           return false;
         }
-        document.getElementById('tutor-avatar').src=PATH+'images/tutors/sarah.png';
+        document.getElementById('tutor-avatar').src=PATH+'images/tutorAvatars/sarah.png';
         document.getElementById('session-video').src=PATH+'media/gitTerminal.mp4';
     </script>
     <script>

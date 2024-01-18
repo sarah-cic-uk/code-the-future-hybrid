@@ -29,8 +29,9 @@
       >
         <div class="container-fluid">
           <a
+          onclick="getPath('index.html')"
             class="navbar-brand"
-            href="/"
+            href="#"
             style="
               border-right: 2px solid #d9437a;
               padding-right: 10px;
@@ -51,52 +52,26 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a
-                class="nav-link active border-end border-dark"
-                aria-current="page"
-                href="#"
-                onclick="getPath('pages/sessions/session1/introduction.html')"
-                >Session 1</a
-              >
-              <a
-                class="nav-link border-end border-dark"
-                aria-current="page"
-                href="../session2/introduction.html"
-                >Session 2</a
-              >
-              <a
-                class="nav-link border-end border-dark"
-                aria-current="page"
-                href="../session3/introduction.html"
-                >Session 3</a
-              >
-              <a
-                class="nav-link border-end border-dark"
-                aria-current="page"
-                href="../session4/introduction.html"
-                >Session 4</a
-              >
-              <a
-                class="nav-link border-end border-dark"
-                aria-current="page"
-                href="../session5/introduction.html"
-                >Session 5</a
-              >
-              <a
-                class="nav-link border-end border-dark"
-                aria-current="page"
-                href="#"
-                >Showcases</a
-              >
-            </div>
+              <a class="nav-link active border-end border-dark" aria-current="page"
+                  href="../../session1/introduction.html">Session 1</a>
+              <a class="nav-link border-end border-dark" aria-current="page"
+                  href="../../session2/introduction.html">Session 2</a>
+              <a class="nav-link border-end border-dark" aria-current="page" 
+              href="../../session3/introduction.html">Session 3</a>
+              <a class="nav-link border-end border-dark" aria-current="page"
+                  href="../../session4/introduction.html">Session 4</a>
+              <a class="nav-link border-end border-dark" aria-current="page"
+                  href="../../session5/introduction.html">Session 5</a>
+              <a class="nav-link border-end border-dark" aria-current="page" href="#">Showcases</a>
+          </div>
           </div>
         </div>
       </nav>
       <div class="container-fluid">
-        <div class="row flex-nowrap">
+        <div class="row flex-nowrap page-content">
           <div class="col-auto px-sm-2 px-0 side-navigation">
             <div
-              class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
+              class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white"
             >
               <ul
                 class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
@@ -108,7 +83,7 @@
                     onclick="getPath('pages/sessions/session1/lessons/introIDE.html')"
                     class="nav-link align-middle px-0"
                   >
-                    <i class="fs-4 bi-house text-white"></i>
+                    <i class="fs-4 bi-github text-white"></i>
                     <span class="ms-1 d-none d-sm-inline">Into to IDEs</span>
                   </a>
                 </li>
@@ -118,7 +93,7 @@
                     data-bs-toggle="collapse"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-speedometer2"></i>
+                    <i class="fs-4 bi-window-sidebar"></i>
                     <span class="ms-1 d-none d-sm-inline">Git & GitHub</span>
                   </a>
                   <ul
@@ -152,7 +127,7 @@
                     onclick="getPath('pages/sessions/session1/lessons/hostingGithub.html')"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-table"></i>
+                    <i class="fs-4 bi-code-square"></i>
                     <span class="ms-1 d-none d-sm-inline"
                       >Hosting on GitHub</span
                     ></a
@@ -164,7 +139,7 @@
                     onclick="getPath('pages/sessions/session1/lessons/gitTerminal.html')"
                     class="nav-link px-0 align-middle"
                   >
-                    <i class="fs-4 bi-bootstrap"></i>
+                    <i class="fs-4 bi-tools"></i>
                     <span class="ms-1 d-none d-sm-inline"
                       >Git and Terminal</span
                     ></a
