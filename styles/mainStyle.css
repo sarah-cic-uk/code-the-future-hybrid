@@ -10,10 +10,17 @@
 
 .navbar {
   height: 70px;
+  background-color: #eae9f3 !important;
+}
+
+.navbar-brand {
+  min-width: 210px;
+  text-align: center;
 }
 
 .page-content {
   height: calc(100vh - 70px);
+  background-color: #f4f4f9
 }
 
 /* sessions & meet the tutors */
