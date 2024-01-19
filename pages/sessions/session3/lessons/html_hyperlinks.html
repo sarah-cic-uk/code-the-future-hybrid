@@ -106,8 +106,9 @@
                 var iframe = document.getElementById('github-iframe');
                 const test = converter.makeHtml(atob(data['content']))
                 const encrypted = encodeURIComponent(data['content'])
-                iframe.src = 'data:text/html,' + test;
-            });
+                iframe.srcdoc =
+            '<link rel="stylesheet" type="text/css" href="../../../../styles/iframeStyle.css"/>' +
+            test;              });
     </script>
     <script>
         const BASE_URL = window.location.origin;
