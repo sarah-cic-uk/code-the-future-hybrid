@@ -1,0 +1,213 @@
+.side-navigation {
+  background-color: #011640;
+  border-right: 2px solid #011640;
+  min-width: 210px;
+}
+
+.side-navigation .nav-link {
+  color: white !important;
+}
+
+.navbar {
+  height: 70px;
+  background-color: #eae9f3 !important;
+}
+
+.navbar-brand {
+  min-width: 210px;
+  text-align: center;
+}
+
+.page-body {
+  width: 100vw;
+}
+
+.page-content {
+  min-height: calc(100vh - 70px);
+  background-color: #f4f4f9
+}
+
+/* sessions & meet the tutors */
+.tutor-name {
+  text-align: end;
+  min-width: max-content;
+}
+
+.menu-card {
+  min-height: 200px;
+}
+
+.tutor-profile {
+  min-width: 200px;
+  min-height: 300px;
+  background-position: center;
+  background-size: cover;
+}
+
+
+@media (max-width:767px) {
+  h2 {
+    margin-bottom: 25px;
+    padding-top: 25px;
+    font-size: 24px;
+  }
+}
+
+.intro {
+  font-size: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.intro p {
+  margin-bottom: 0;
+}
+
+.people {
+  padding: 20px 0;
+  cursor: pointer;
+}
+
+.item,
+.session-card {
+  margin-bottom: 30px;
+}
+
+.item .box,
+.session-card .box {
+  text-align: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 280px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid black;
+}
+
+.item .cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 127, 255, 0.75);
+  transition: opacity 0.15s ease-in;
+  opacity: 0;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #fff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.item .profile {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(240, 255, 255, 0.5);
+  color: black;
+  width: 100%;
+}
+
+.session-card .session {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.75);
+  color: black;
+  width: 100%;
+}
+
+.session-card .session {
+  padding: 5px;
+}
+
+.item:hover .cover {
+  opacity: 1;
+}
+
+.item:hover .profile {
+  opacity: 0;
+}
+
+.item .name,
+.session-name {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.item .title {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #020202;
+  letter-spacing: 2px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+.session-description {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #020202;
+  letter-spacing: 2px;
+  font-size: 13px;
+  margin-bottom: 10px;
+}
+
+.social {
+  font-size: 18px;
+  height: 40px;
+  background-color: rgb(240, 248, 255, 0.75);
+  color: #011640;
+}
+
+.social a {
+  color: inherit;
+  margin: 5px 10px;
+  display: inline-block;
+  opacity: 0.7;
+}
+
+.social a:hover {
+  opacity: 1;
+}
+
+.description {
+  overflow: scroll;
+  padding: 0 10px;
+  margin-bottom: 5px;
+}
+
+.sm-icon {
+  padding: 10px 0;
+}
+
+/* login page */
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: rgb(1, 22, 64);
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(90deg, rgba(1, 22, 64, 1) 0%, rgba(29, 12, 89, 1) 25%, rgba(49, 35, 140, 1) 73%, rgba(217, 67, 122, 1) 92%);
+}
+
+
+@media (min-width: 769px) {
+  .gradient-custom-2 {
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem;
+  }
+}
+
+form i {
+  cursor: pointer;
+}
+
+.input-group-text {
+  width: 40px;
+  margin: 0;
+  padding: 0;
+}
+.input-group-text i {
+  margin-left: 10px;
+}
