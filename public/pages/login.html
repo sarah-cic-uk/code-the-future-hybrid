@@ -212,10 +212,7 @@
         try {
           await firebase.auth().createUserWithEmailAndPassword(email, password)
             .catch((error) => {
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              console.log(error)
-              alert("REGISTERED FAILED: ", error.code)
+              console.log(error.message)
             })
 
           await sendEmailVerification(auth.currentUser).catch((err) =>
@@ -223,10 +220,11 @@
           );
 
           const user = firebase.auth().currentUser;
-
-          user.updateProfile({ displayName: "Sarah (IBM)" }).catch(
+          user.updateProfile({ displayName: name }).catch(
             (err) => console.log(err)
           );
+
+          window.location.replace("./sessions.html");
 
         } catch (err) {
           console.log(err);
@@ -234,15 +232,13 @@
       };
 
       function login() {
-        console.log("logging in ")
         event.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
         auth.signInWithEmailAndPassword(email, password)
           .then((userCredential) => {
-            console.log(userCredential)
-            console.log("SIGNED IN AS ", user)
+            window.location.replace("./sessions.html");
           })
           .catch((error) => {
             console.log("error signing in: ", error.message)
@@ -251,9 +247,7 @@
 
       function logout(event) {
         firebase.auth().signOut().then(() => {
-          // Sign-out successful.
           console.log("Logged out ")
-
         }).catch((error) => {
           console.log("error signing out: ", error.message)
         });
