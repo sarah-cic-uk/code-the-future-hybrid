@@ -22,7 +22,7 @@
           padding-right: 10px;
           color: #1d0c59;
         ">
-          <img src="../images/logo.png" height=60px />
+          <img src="../public/images/logo.png" height=60px alt="CTF"/>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,28 +43,22 @@
               Log In
             </button>
             <div class="profileBtn dropdown px-3">
-              <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
-                id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
                 <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                  alt="Black and White Portrait of a Man" loading="lazy" />
+                  alt="Black and White Portrait of a Man" loading="lazy" onclick="getPath('pages/profile.html')" />
               </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
-                <li>
-                  <a class="dropdown-item" href="#">My profile</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">Settings</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#">Logout</a>
-                </li>
+
+              <ul class="dropdown-menu  dropdown-menu-end"" aria-labelledby=" dropdownMenuLink">
+                <li><a class="dropdown-item" href="#">My Profile</a></li>
+                <li><a class="dropdown-item" href="#">Log out</a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    <div class="container-fluid">
+    <div class="container-fluid px-5">
       <p class="h1" style="text-align: center; padding-top: 10px">
         Welcome to Code the Future
       </p>
@@ -86,22 +80,21 @@
           introduce you to like-minded people and IBM CIC developers to help
           you grow your network and enter into the world of technology.
         </p>
+        <p><b>Overall Goal:</b> To build your own website!</p>
 
+<br/>
         <h2>Course Outline</h2>
-
-        <p>Overall Goal: To build your own website!</p>
-
         <p>
           Each session we will teach you the skills you need to develop your
           own website:
         </p>
-        <section class="pt-5 pb-5">
+        <section class="pt-3 pb-5">
           <div class="container">
             <div class="row">
               <div class="col-6">
                 <h3 class="mb-3">Course Session Overviews</h3>
               </div>
-              <div class="col-6 text-right">
+              <div class="col-6 text-end">
                 <a class="btn btn-primary mb-3 mr-1" href="#carousel-sessions" role="button" data-bs-slide="prev">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                     class="bi bi-arrow-left" viewBox="0 0 16 16">
@@ -266,8 +259,8 @@
     document.head.appendChild(stylesheet);
   </script>
   <script>
-    if (sessionStorage.getItem('loggedIn') === "true") {
-      console.log("here",sessionStorage.getItem('loggedIn'))
+    if (localStorage.getItem('loggedIn') === "true") {
+      console.log("here", localStorage.getItem('loggedIn'))
       document.querySelector(".loginBtn").style.display = "none";
       document.querySelector(".profileBtn").style.display = "block";
     }

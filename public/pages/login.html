@@ -98,10 +98,7 @@
                             data-bs-target="#exampleModal">
                             Register
                           </button>
-
                         </div>
-
-
                       </div>
                     </div>
                     <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
@@ -114,9 +111,6 @@
                   </div>
                 </div>
               </div>
-
-
-
             </div>
           </div>
         </section>
@@ -245,10 +239,10 @@
 
         auth.signInWithEmailAndPassword(email, password)
           .then((userCredential) => {
-            sessionStorage.setItem('loggedIn', true);
+            localStorage.setItem('loggedIn', true);
             const user = firebase.auth().currentUser;
             console.log(user)
-            sessionStorage.setItem('displayName', user.displayName );
+            localStorage.setItem('displayName', user.displayName );
             window.location.replace("./sessions.html");
           })
           .catch((error) => {
@@ -259,7 +253,7 @@
       function logout(event) {
         firebase.auth().signOut().then(() => {
           console.log("Logged out ")
-          sessionStorage.setItem('loggedIn', false);
+          localStorage.setItem('loggedIn', false);
         }).catch((error) => {
           console.log("error signing out: ", error.message)
         });
