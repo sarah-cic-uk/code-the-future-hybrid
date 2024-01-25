@@ -64,13 +64,22 @@
                         <form onsubmit="login()">
                           <div class="form-outline mb-4">
                             <label class="form-label" for="email">Username</label>
+                            <div class="input-group">
+                              <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
                             <input type="email" id="email" class="form-control"
                               placeholder="Registered email address" />
+                          </div>
                           </div>
 
                           <div class="form-outline mb-5">
                             <label class="form-label" for="password">Password</label>
+                            <div class="input-group">
+                              <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                             <input type="password" id="password" class="form-control" />
+                            <span class="input-group-text" id="password-input">
+                              <i class="bi bi-eye-slash togglePassword"></i>
+                            </span>
+                          </div>
                           </div>
 
                           <div class="text-center pt-1 mb-1">
@@ -134,18 +143,18 @@
               <div class="form-group col-12">
                 <label for="newEmail">Email<span class="text-danger">*</span></label>
                 <div class="input-group flex-nowrap">
-                  <div class="input-group-text"><i class="bi bi-envelope"></i></div>
+                  <div class="input-group-text"><i class="bi bi-envelope-fill"></i></div>
                   <input type="text" class="form-control form-control-lg" name="newEmail" id="newEmail" required="">
                   <div class="invalid-feedback">Add your email as your username</div>
                 </div>
                 <div class="form-group">
                   <label>Password<span class="text-danger">*</span></label>
                   <div class="input-group flex-nowrap">
-                    <div class="input-group-text"><i class="bi bi-lock"></i></div>
+                    <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                     <input type="password" class="form-control form-control-lg" id="newPassword" required=""
                       autocomplete="new-password" />
                     <div class="invalid-feedback">Choose a password</div>
-                    <span class="input-group-text" id="password-input">
+                    <span class="input-group-text" id="newPasswordInput">
                       <i class="bi bi-eye-slash toggleNewPassword"></i>
                     </span>
                   </div>
@@ -153,11 +162,11 @@
                 <div class="form-group">
                   <label>Confirm Password<span class="text-danger">*</span></label>
                   <div class="input-group flex-nowrap">
-                    <div class="input-group-text"><i class="bi bi-lock"></i></div>
+                    <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                     <input type="password" class="form-control form-control-lg" id="passwordCheck" name="passwordCheck"
                       required="" />
                     <div class="invalid-feedback">Passwords don't match</div>
-                    <span class="input-group-text" id="password-input">
+                    <span class="input-group-text" id="passwordCheckInput">
                       <i class="bi bi-eye-slash togglePasswordCheck"></i>
                     </span>
                   </div>
@@ -180,7 +189,7 @@
       const BASE_URL = window.location.origin;
       const PATH = BASE_URL.includes('github')
         ? '/code-the-future-hybrid/'
-        : '/';
+        : '/public/';
       function getPath(options) {
         console.log(PATH + options);
         window.location = PATH + options;
@@ -207,8 +216,6 @@
         const email = document.getElementById('newEmail').value;
         const password = document.getElementById('newPassword').value;
         const name = document.getElementById('displayName').value;
-        console.log('registering')
-        console.log('newEmail', email)
         try {
           await firebase.auth().createUserWithEmailAndPassword(email, password)
             .catch((error) => {
@@ -238,6 +245,10 @@
 
         auth.signInWithEmailAndPassword(email, password)
           .then((userCredential) => {
+            sessionStorage.setItem('loggedIn', true);
+            const user = firebase.auth().currentUser;
+            console.log(user)
+            sessionStorage.setItem('displayName', user.displayName );
             window.location.replace("./sessions.html");
           })
           .catch((error) => {
@@ -248,6 +259,7 @@
       function logout(event) {
         firebase.auth().signOut().then(() => {
           console.log("Logged out ")
+          sessionStorage.setItem('loggedIn', false);
         }).catch((error) => {
           console.log("error signing out: ", error.message)
         });
@@ -258,8 +270,10 @@
     <script>
       const toggleNewPassword = document.querySelector('.toggleNewPassword');
       const togglePasswordCheck = document.querySelector('.togglePasswordCheck');
+      const password = document.querySelector('.togglePassword');
       const newPasswordEl = document.getElementById('newPassword');
       const passwordCheckEl = document.getElementById('passwordCheck');
+      const passwordEl = document.getElementById('password');
       toggleNewPassword.addEventListener('click', (e) => {
         const type = newPasswordEl
           .getAttribute('type') === 'password' ?
@@ -272,6 +286,13 @@
           .getAttribute('type') === 'password' ?
           'text' : 'password';
         passwordCheckEl.setAttribute('type', type);
+        e.target.classList.toggle('bi-eye');
+      });
+      password.addEventListener('click', (e) => {
+        const type = passwordEl
+          .getAttribute('type') === 'password' ?
+          'text' : 'password';
+          passwordEl.setAttribute('type', type);
         e.target.classList.toggle('bi-eye');
       });
     </script>
