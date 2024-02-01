@@ -198,14 +198,13 @@
     </script>
 <script>
   const BASE_URL = window.location.origin;
-  const PATH = BASE_URL.includes('github') ? '/code-the-future-hybrid/' : '/';
+  const PATH = BASE_URL.includes('github') ? '/code-the-future-hybrid/' : BASE_URL.includes('app') ? '/' : '/public/';
   const stylesheet = document.createElement('link');
   stylesheet.rel = 'stylesheet';
   stylesheet.type = 'text/css';
   stylesheet.href = PATH + 'styles/mainStyle.css';
   document.head.appendChild(stylesheet);
     function getPath(options){
-      console.log(PATH+options)
       window.location = PATH+options;
       return false;
     }
