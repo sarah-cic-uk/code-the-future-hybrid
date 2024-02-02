@@ -1,368 +1,229 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="keywords"
-      content="Code, Future, HTML, CSS, JavaScript, IBM, CIC"
-    />
-    <meta
-      name="description"
-      content="Code the Future free HTML/CSS coding bootcamp"
-    />
-    <meta name="author" content="Sarah Neenan" />
-    <title>Code the Future</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
-    />
-  </head>
 
-  <body>
-    <div class="page-body">
-      <nav
-        class="navbar navbar-expand-lg bg-light"
-        style="border-bottom: 2px double #011640"
-      >
-        <div class="container-fluid g-0">
-          <a
-            onclick="getPath('index.html')"
-            class="navbar-brand"
-            href="#"
-            style="
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+  <title>Code the Future</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light" style="border-bottom: 2px double #011640">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
               border-right: 2px solid #d9437a;
               padding-right: 10px;
               color: #1d0c59;
-            "
-          >
-            <img src="../images/logo.png" height="60px" />
-          </a>
-          <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div
-            class="collapse navbar-collapse justify-content-between"
-            id="navbarNavAltMarkup"
-          >
-            <div class="navbar-nav">
-              <a
-                class="nav-link"
-                aria-current="page"
-                href="#"
-                onclick="getPath('index.html')"
-                >About CTF</a
-              >
-              <a
-                class="nav-link"
-                aria-current="page"
-                href="#"
-                onclick="getPath('pages/meetTheTutors.html')"
-                >Meet the tutors</a
-              >
-              <a
-                class="nav-link"
-                aria-current="page"
-                href="#"
-                onclick="getPath('pages/1on1.html')"
-                >Schedule a 1:1</a
-              >
-              <a class="nav-link" href="#" onclick="getPath('pages/jobs.html')"
-                >Jobs at CIC</a
-              >
-              <a
-                class="nav-link active"
-                href="#"
-                onclick="getPath('pages/sessions.html')"
-                >Sessions</a
-              >
-            </div>
+            ">
+          <img src="../images/logo.png" height="60px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
+              tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
+            <a class="nav-link active" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+          </div>
 
-            <div class="d-flex align-items-center">
-              <!-- Logged in Avatar -->
-              <div>
-                <p class="my-auto" id="profileName"></p>
-              </div>
-              <div class="dropdown px-3">
-                <a
-                  data-mdb-dropdown-init
-                  class="dropdown-toggle d-flex align-items-center hidden-arrow"
-                  href="#"
-                  id="navbarDropdownMenuAvatar"
-                  role="button"
-                  aria-expanded="false"
-                >
-                  <img
-                    src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-                    class="rounded-circle"
-                    height="25"
-                    alt="Black and White Portrait of a Man"
-                    loading="lazy"
-                  />
-                </a>
-                <ul
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="navbarDropdownMenuAvatar"
-                >
-                  <li>
-                    <a class="dropdown-item" href="#">My profile</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">Settings</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#">Logout</a>
-                  </li>
-                </ul>
-              </div>
+          <div class="d-flex align-items-center">
+            <!-- Logged in Avatar -->
+            <div>
+              <p class="my-auto" id="profileName"></p>
+            </div>
+            <div class="dropdown px-3">
+              <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow" href="#"
+                id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
+                  alt="Black and White Portrait of a Man" loading="lazy" />
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                <li>
+                  <a class="dropdown-item" href="#">My profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Settings</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#">Logout</a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-      </nav>
-      <div class="container-fluid">
-        <div class="row flex-nowrap page-content">
-          <div class="col-auto px-sm-2 px-0 side-navigation">
-            <div
-              class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white"
-            >
-              <a
-                href="/"
-                class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none"
-              >
-                <span class="fs-5 d-none d-sm-inline">Sessions</span>
-              </a>
-              <ul
-                class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
-                id="menu"
-              >
-                <li class="nav-item">
-                  <a href="#" class="nav-link align-middle px-0">
-                    <i class="fs-4 bi bi-github text-white"></i>
-                    <span class="ms-1 d-none d-sm-inline">Session 1</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#submenu1"
-                    data-bs-toggle="collapse"
-                    class="nav-link px-0 align-middle"
-                  >
-                    <i class="fs-4 bi-window-sidebar"></i>
-                    <span class="ms-1 d-none d-sm-inline">Session 2</span>
-                  </a>
-                  <ul
-                    class="collapse show nav flex-column ms-3"
-                    id="submenu1"
-                    data-bs-parent="#menu"
-                  >
-                    <li class="w-100">
-                      <a href="#" class="nav-link px-0">
-                        <span class="d-none d-sm-inline">sub item</span> 1
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#" class="nav-link px-0">
-                        <span class="d-none d-sm-inline">sub item</span> 2
-                      </a>
-                    </li>
-                  </ul>
-                </li>
-                <li>
-                  <a href="#" class="nav-link px-0 align-middle">
-                    <i class="fs-4 bi-code-square"></i>
-                    <span class="ms-1 d-none d-sm-inline">Session 3</span></a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    data-bs-toggle="collapse"
-                    class="nav-link px-0 align-middle"
-                  >
-                    <i class="fs-4 bi-border-style"></i>
-                    <span class="ms-1 d-none d-sm-inline">Session 4</span></a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    data-bs-toggle="collapse"
-                    class="nav-link px-0 align-middle"
-                  >
-                    <i class="fs-4 bi-tools"></i>
-                    <span class="ms-1 d-none d-sm-inline">Session 5</span></a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    data-bs-toggle="collapse"
-                    class="nav-link px-0 align-middle"
-                  >
-                    <i class="fs-4 bi-easel"></i>
-                    <span class="ms-1 d-none d-sm-inline">Showcase</span></a
-                  >
-                </li>
-              </ul>
-              <hr />
-            </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <div class="col-auto px-sm-2 px-0 side-navigation">
+          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white">
+            <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+              <span class="fs-5 d-none d-sm-inline">Sessions</span>
+            </a>
+            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+              <li class="nav-item">
+                <a href="#" class="nav-link align-middle px-0">
+                  <i class="fs-4 bi bi-github text-white"></i>
+                  <span class="ms-1 d-none d-sm-inline">Session 1</span>
+                </a>
+              </li>
+              <li>
+                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-window-sidebar"></i>
+                  <span class="ms-1 d-none d-sm-inline">Session 2</span>
+                </a>
+                <ul class="collapse show nav flex-column ms-3" id="submenu1" data-bs-parent="#menu">
+                  <li class="w-100">
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">sub item</span> 1
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" class="nav-link px-0">
+                      <span class="d-none d-sm-inline">sub item</span> 2
+                    </a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="#" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-code-square"></i>
+                  <span class="ms-1 d-none d-sm-inline">Session 3</span></a>
+              </li>
+              <li>
+                <a href="#" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-border-style"></i>
+                  <span class="ms-1 d-none d-sm-inline">Session 4</span></a>
+              </li>
+              <li>
+                <a href="#" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-tools"></i>
+                  <span class="ms-1 d-none d-sm-inline">Session 5</span></a>
+              </li>
+              <li>
+                <a href="#" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                  <i class="fs-4 bi-easel"></i>
+                  <span class="ms-1 d-none d-sm-inline">Showcase</span></a>
+              </li>
+            </ul>
+            <hr />
           </div>
-          <div class="col py-3">
-            <div class="row people d-flex justify-content-center">
-              <div class="col-md-4 session-card">
-                <div
-                  class="box"
-                  style="
+        </div>
+        <div class="col py-3">
+          <div class="row people d-flex justify-content-center">
+            <div class="col-md-4 session-card">
+              <div class="box" style="
                     background-image: url(../images/sessions/session1.jpeg);
-                  "
-                >
-                  <div class="session">
-                    <div class="session-name">
-                      <h3 class="session-name">Session 1</h3>
-                      <p class="session-description">
-                        Set up your laptop like a developer
-                      </p>
-                    </div>
-                    <div class="card-footer">
-                      <a
-                        href="#"
-                        onclick="getPath('pages/sessions/session1/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Get Started</a
-                      >
-                    </div>
+                  ">
+                <div class="session">
+                  <div class="session-name">
+                    <h3 class="session-name">Session 1</h3>
+                    <p class="session-description">
+                      Set up your laptop like a developer
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="#" onclick="createPath('pages/sessions/session1/introduction.html')"
+                      class="btn btn-primary float-end">Get Started</a>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4 session-card">
-                <div
-                  class="box"
-                  style="background-image: url(../images/sessions/session2.png)"
-                >
-                  <div class="session">
-                    <div class="session-name">
-                      <h3 class="session-name">Session 2</h3>
-                      <p class="session-description">Create a basic webpage</p>
-                    </div>
-                    <div class="card-footer">
-                      <a
-                        href="#"
-                        onclick="getPath('pages/sessions/session2/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
-                      >
-                    </div>
+            </div>
+            <div class="col-md-4 session-card">
+              <div class="box" style="background-image: url(../images/sessions/session2.png)">
+                <div class="session">
+                  <div class="session-name">
+                    <h3 class="session-name">Session 2</h3>
+                    <p class="session-description">Create a basic webpage</p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="#" onclick="createPath('pages/sessions/session2/introduction.html')"
+                      class="btn btn-primary float-end">Go</a>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4 session-card">
-                <div
-                  class="box"
-                  style="background-image: url(../images/sessions/session3.png)"
-                >
-                  <div class="session">
-                    <div class="session-name">
-                      <h3 class="session-name">Session 3</h3>
-                      <p class="session-description">
-                        Add various elements to your webpages (images, tables,
-                        hyperlinks etc)
-                      </p>
-                    </div>
-                    <div class="card-footer">
-                      <a
-                        href="#"
-                        onclick="getPath('pages/sessions/session3/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
-                      >
-                    </div>
+            </div>
+            <div class="col-md-4 session-card">
+              <div class="box" style="background-image: url(../images/sessions/session3.png)">
+                <div class="session">
+                  <div class="session-name">
+                    <h3 class="session-name">Session 3</h3>
+                    <p class="session-description">
+                      Add various elements to your webpages (images, tables,
+                      hyperlinks etc)
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="#" onclick="createPath('pages/sessions/session3/introduction.html')"
+                      class="btn btn-primary float-end">Go</a>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4 session-card">
-                <div
-                  class="box"
-                  style="
+            </div>
+            <div class="col-md-4 session-card">
+              <div class="box" style="
                     background-image: url(../images/sessions/session4.jpeg);
-                  "
-                >
-                  <div class="session">
-                    <div class="session-name">
-                      <h3 class="session-name">Session 4</h3>
-                      <p class="session-description">
-                        Make your website look great with CSS
-                      </p>
-                    </div>
-                    <div class="card-footer">
-                      <a
-                        href="#"
-                        onclick="getPath('pages/sessions/session4/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
-                      >
-                    </div>
+                  ">
+                <div class="session">
+                  <div class="session-name">
+                    <h3 class="session-name">Session 4</h3>
+                    <p class="session-description">
+                      Make your website look great with CSS
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="#" onclick="createPath('pages/sessions/session4/introduction.html')"
+                      class="btn btn-primary float-end">Go</a>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4 session-card">
-                <div
-                  class="box"
-                  style="background-image: url(../images/sessions/session5.png)"
-                >
-                  <div class="session">
-                    <div class="session-name">
-                      <h3 class="session-name">Session 5</h3>
-                      <p class="session-description">
-                        Learn about accessibility
-                      </p>
-                    </div>
-                    <div class="card-footer">
-                      <a
-                        href="#"
-                        onclick="getPath('pages/sessions/session5/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
-                      >
-                    </div>
+            </div>
+            <div class="col-md-4 session-card">
+              <div class="box" style="background-image: url(../images/sessions/session5.png)">
+                <div class="session">
+                  <div class="session-name">
+                    <h3 class="session-name">Session 5</h3>
+                    <p class="session-description">
+                      Learn about accessibility
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="#" onclick="createPath('pages/sessions/session5/introduction.html')"
+                      class="btn btn-primary float-end">Go</a>
                   </div>
                 </div>
               </div>
-              <div class="col-md-4 session-card">
-                <div
-                  class="box"
-                  style="
+            </div>
+            <div class="col-md-4 session-card">
+              <div class="box" style="
                     background-image: url(../images/sessions/session6.jpeg);
-                  "
-                >
-                  <div class="session">
-                    <div class="session-name">
-                      <h3 class="session-name">Showcase</h3>
-                      <p class="session-description">
-                        Showcase your fantastic work!
-                      </p>
-                    </div>
-                    <div class="card-footer">
-                      <a
-                        href="#"
-                        onclick="getPath('pages/sessions/session6/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
-                      >
-                    </div>
+                  ">
+                <div class="session">
+                  <div class="session-name">
+                    <h3 class="session-name">Showcase</h3>
+                    <p class="session-description">
+                      Showcase your fantastic work!
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <a href="#" onclick="createPath('pages/sessions/session6/introduction.html')"
+                      class="btn btn-primary float-end">Go</a>
                   </div>
                 </div>
               </div>
@@ -372,25 +233,30 @@
       </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
-  <script>
-    const BASE_URL = window.location.origin;
-    const PATH = BASE_URL.includes('github')
-      ? '/code-the-future-hybrid/'
-      : BASE_URL.includes('app') ? '/' : '/public/';
-    function getPath(options) {
-      window.location = PATH + options;
+  </div>
+  <script type="text/javascript">
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.type = 'text/css';
+    stylesheet.href = getPath() + 'styles/mainStyle.css';
+    document.head.appendChild(stylesheet);
+
+    window.onload = (event) => {
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"))
+
+      const tutorProfiles = document.getElementsByClassName("tutor-profile")
+      for (const element of tutorProfiles) {
+        let coverHeight = element.querySelector('.cover').offsetHeight;
+        let nameHeight = element.querySelector(".cover > .name").offsetHeight;
+        let socialHeight = 60;
+        element.querySelector('.description').style.maxHeight = coverHeight - nameHeight - socialHeight + 'px';
+      };
+    }
+
+    function createPath(options) {
+      window.location = getPath() + options;
       return false;
     }
-  </script>
-  <script>
-    const stylesheet = document.createElement("link");
-    stylesheet.rel = "stylesheet";
-    stylesheet.type = "text/css";
-    stylesheet.href = PATH + "styles/mainStyle.css";
-    document.head.appendChild(stylesheet);
   </script>
   <script>
     const profileName = localStorage.getItem('displayName')

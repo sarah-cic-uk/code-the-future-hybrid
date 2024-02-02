@@ -11,13 +11,18 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 </head>
 
 <body>
   <div class="page-body">
     <nav class="navbar navbar-expand-lg bg-light" style="border-bottom: 2px double #011640">
       <div class="container-fluid g-0">
-        <a onclick="getPath('index.html')" class="navbar-brand" href="#" style="
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
           border-right: 2px solid #d9437a;
           padding-right: 10px;
           color: #1d0c59;
@@ -30,19 +35,32 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link" aria-current="page" href="#" onclick="getPath('index.html')">About CTF</a>
-            <a class="nav-link active" aria-current="page" href="#" onclick="getPath('pages/meetTheTutors.html')">Meet the
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link active" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet
+              the
               tutors</a>
-            <a class="nav-link" aria-current="page" href="#"
-              onclick="getPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="getPath('pages/jobs.html')">Jobs at CIC</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
           </div>
           <div class="d-flex align-items-center">
-            <button type="button" onclick="getPath('pages/login.html')" class="btn me-3"
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3"
               style="background-color: #d9437a; color: white">
               Log In
             </button>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
+                  alt="Black and White Portrait of a Man" loading="lazy" onclick="createPath('pages/profile.html')" />
+              </a>
+
+              <ul class="dropdown-menu  dropdown-menu-end"" aria-labelledby=" dropdownMenuLink">
+                <li><a class="dropdown-item" href="#">My Profile</a></li>
+                <li><a class="dropdown-item" href="#">Log out</a></li>
+              </ul>
+            </div>
           </div>
+        </div>
         </div>
     </nav>
     <div class="container-fluid">
@@ -239,38 +257,30 @@
       </div>
     </div>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-  <script>
-    const BASE_URL = window.location.origin;
-    console.log(BASE_URL)
-    const PATH = BASE_URL.includes('github')
-      ? '/code-the-future-hybrid/'
-      : BASE_URL.includes('app') ? '/' : '/public/';
-    function getPath(options) {
-      window.location = PATH + options;
-      return false;
-    }
-  </script>
-  <script>
+  <script type="text/javascript">
     const stylesheet = document.createElement('link');
     stylesheet.rel = 'stylesheet';
     stylesheet.type = 'text/css';
-    stylesheet.href = PATH + 'styles/mainStyle.css';
+    stylesheet.href = getPath() + 'styles/mainStyle.css';
     document.head.appendChild(stylesheet);
-  </script>
-  <script>
+
     window.onload = (event) => {
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"))
+
       const tutorProfiles = document.getElementsByClassName("tutor-profile")
-      for (let i = 0; i < tutorProfiles.length; i++) {
-        let coverHeight = tutorProfiles[i].querySelector('.cover').offsetHeight;
-        let nameHeight = tutorProfiles[i].querySelector(".cover > .name").offsetHeight;
+      for (const element of tutorProfiles) {
+        let coverHeight = element.querySelector('.cover').offsetHeight;
+        let nameHeight = element.querySelector(".cover > .name").offsetHeight;
         let socialHeight = 60;
-        tutorProfiles[i].querySelector('.description').style.maxHeight = coverHeight - nameHeight - socialHeight + 'px';
+        element.querySelector('.description').style.maxHeight = coverHeight - nameHeight - socialHeight + 'px';
       };
-    };  
+    }
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
   </script>
 </body>
+
 </html>
