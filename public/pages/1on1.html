@@ -41,17 +41,23 @@
               style="background-color: #d9437a; color: white">
               Log In
             </button>
-            <div class="profileBtn dropdown px-3">
-              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                  alt="Black and White Portrait of a Man" loading="lazy" onclick="getPath('pages/profile.html')" />
-              </a>
+            <div class="d-flex align-items-center">
+              <!-- Logged in Avatar -->
+              <div>
+                <p class="my-auto" id="profileName"></p>
+              </div>
+              <div class="profileBtn dropdown px-3">
+                <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
+                    alt="Black and White Portrait of a Man" loading="lazy" />
+                </a>
 
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
-                <li><a class="dropdown-item" href="#" onclick="logout()">Log out</a></li>
-              </ul>
+                <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

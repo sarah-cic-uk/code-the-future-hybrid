@@ -4,6 +4,8 @@ function auth(loginBtn, profileBtn, sessionsBtn) {
     if (loginBtn) loginBtn.style.display = "none";
     if (loginBtn) profileBtn.style.display = "block";
     if (sessionsBtn) sessionsBtn.style.display = "block";
+    const profileName = localStorage.getItem('displayName')
+    document.querySelector('#profileName').innerHTML = profileName;
   }
   else {
     if (loginBtn) loginBtn.style.display = "block";
@@ -20,10 +22,12 @@ function getPath() {
   return PATH;
 }
 
-function logout(auth) {
-  auth.signOut().then(() => {
+function logout(fbAuth) {
+  fbAuth.signOut().then(() => {
     console.log("Logged out ")
     localStorage.setItem('loggedIn', false);
+    console.log(`${getPath()}/login.html`)
+    window.location.replace(`${getPath()}pages/login.html`);
   }).catch((error) => {
     console.log("error signing out: ", error.message)
   });
