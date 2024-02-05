@@ -37,10 +37,8 @@
             <a class="nav-link" aria-current="page" href="#" onclick="getPath('index.html')">About CTF</a>
             <a class="nav-link" aria-current="page" href="#" onclick="getPath('pages/meetTheTutors.html')">Meet the
               tutors</a>
-            <a class="nav-link" aria-current="page" href="#"
-              onclick="getPath('pages/sessions/session1/session1-introduction.html')">Schedule a 1:1</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
             <a class="nav-link" href="#" onclick="getPath('jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="getPath('pages/sessions.html')">Sessions</a>
           </div>
         </div>
       </div>
@@ -66,20 +64,20 @@
                             <label class="form-label" for="email">Username</label>
                             <div class="input-group">
                               <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                            <input type="email" id="email" class="form-control"
-                              placeholder="Registered email address" />
-                          </div>
+                              <input type="email" id="email" class="form-control"
+                                placeholder="Registered email address" />
+                            </div>
                           </div>
 
                           <div class="form-outline mb-5">
                             <label class="form-label" for="password">Password</label>
                             <div class="input-group">
                               <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                            <input type="password" id="password" class="form-control" />
-                            <span class="input-group-text" id="password-input">
-                              <i class="bi bi-eye-slash togglePassword"></i>
-                            </span>
-                          </div>
+                              <input type="password" id="password" class="form-control" />
+                              <span class="input-group-text" id="password-input">
+                                <i class="bi bi-eye-slash togglePassword"></i>
+                              </span>
+                            </div>
                           </div>
 
                           <div class="text-center pt-1 mb-1">
@@ -241,7 +239,7 @@
             localStorage.setItem('loggedIn', true);
             const user = firebase.auth().currentUser;
             console.log(user)
-            localStorage.setItem('displayName', user.displayName );
+            localStorage.setItem('displayName', user.displayName);
             window.location.replace("./sessions.html");
           })
           .catch((error) => {
@@ -249,14 +247,14 @@
           });
       };
 
-      function logout(event) {
-        firebase.auth().signOut().then(() => {
-          console.log("Logged out ")
-          localStorage.setItem('loggedIn', false);
-        }).catch((error) => {
-          console.log("error signing out: ", error.message)
-        });
-      };
+      // function logout(event) {
+      //   firebase.auth().signOut().then(() => {
+      //     console.log("Logged out ")
+      //     localStorage.setItem('loggedIn', false);
+      //   }).catch((error) => {
+      //     console.log("error signing out: ", error.message)
+      //   });
+      // };
 
 
     </script>
@@ -285,7 +283,7 @@
         const type = passwordEl
           .getAttribute('type') === 'password' ?
           'text' : 'password';
-          passwordEl.setAttribute('type', type);
+        passwordEl.setAttribute('type', type);
         e.target.classList.toggle('bi-eye');
       });
     </script>

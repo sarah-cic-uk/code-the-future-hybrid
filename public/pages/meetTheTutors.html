@@ -36,11 +36,13 @@
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link active" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet
+            <a class="nav-link active" aria-current="page" href="#"
+              onclick="createPath('pages/meetTheTutors.html')">Meet
               the
               tutors</a>
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
             <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
             <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3"
@@ -51,17 +53,17 @@
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                  alt="Black and White Portrait of a Man" loading="lazy" onclick="createPath('pages/profile.html')" />
+                  alt="Black and White Portrait of a Man" loading="lazy" />
               </a>
 
               <ul class="dropdown-menu  dropdown-menu-end"" aria-labelledby=" dropdownMenuLink">
-                <li><a class="dropdown-item" href="#">My Profile</a></li>
-                <li><a class="dropdown-item" href="#">Log out</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logout()">Log out</a></li>
               </ul>
             </div>
           </div>
         </div>
-        </div>
+      </div>
     </nav>
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">

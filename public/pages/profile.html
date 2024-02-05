@@ -41,21 +41,20 @@
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
               tutors</a>
-            <a class="nav-link" aria-current="page" href="#"
-              onclick="createPath('pages/sessions/session1/session1-introduction.html')">Schedule a 1:1</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
             <a class="nav-link" href="#" onclick="createPath('jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                  alt="Black and White Portrait of a Man" loading="lazy" onclick="createPath('pages/profile.html')" />
+                  alt="Black and White Portrait of a Man" loading="lazy" />
               </a>
 
               <ul class="dropdown-menu  dropdown-menu-end"" aria-labelledby=" dropdownMenuLink">
-                <li><a class="dropdown-item" href="#">My Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
                 <li><a class="dropdown-item" href="#" onclick="logout()">Log out</a></li>
               </ul>
             </div>
@@ -107,7 +106,7 @@
 
     firebase.initializeApp(firebaseConfig);
 
-    const auth = firebase.auth();
+    const fbAuth = firebase.auth();
 
     function logout(event) {
       firebase.auth().signOut().then(() => {
@@ -118,6 +117,9 @@
         console.log("error signing out: ", error.message)
       });
     };
+    // function logUserOut(event){
+    //   logout(firebase.auth())
+    // }
 
   </script>
   <script type="text/javascript">
@@ -128,7 +130,7 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"))
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
     }
 
     function createPath(options) {
