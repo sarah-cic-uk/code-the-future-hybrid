@@ -265,7 +265,7 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"))
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
     }
 
     function createPath(options) {

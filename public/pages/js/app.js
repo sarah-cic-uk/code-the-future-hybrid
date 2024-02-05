@@ -24,7 +24,6 @@ function getPath() {
 
 function logout(fbAuth) {
   fbAuth.signOut().then(() => {
-    console.log("Logged out ")
     localStorage.setItem('loggedIn', false);
     console.log(`${getPath()}/login.html`)
     window.location.replace(`${getPath()}pages/login.html`);

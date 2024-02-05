@@ -49,7 +49,7 @@
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
-            <button type="button" onclick="getPath('pages/login.html')" class="loginBtn btn me-3"
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3"
               style="background-color: #d9437a; color: white">
               Log In
             </button>
@@ -277,7 +277,7 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"))
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
       const tutorProfiles = document.getElementsByClassName("tutor-profile")
       for (const element of tutorProfiles) {

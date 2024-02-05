@@ -23,7 +23,7 @@
   <div class="page-body">
     <nav class="navbar navbar-expand-lg bg-light" style="border-bottom: 2px double #011640">
       <div class="container-fluid g-0">
-        <a onclick="getPath('index.html')" class="navbar-brand" href="#" style="
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
               border-right: 2px solid #d9437a;
               padding-right: 10px;
               color: #1d0c59;
@@ -36,17 +36,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav">
-            <a class="nav-link" aria-current="page" href="#" onclick="getPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="getPath('pages/meetTheTutors.html')">Meet the
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
               tutors</a>
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="getPath('jobs.html')">Jobs at CIC</a>
-          </div>
-          <div class="d-flex align-items-center">
-            <button type="button" onclick="getPath('pages/login.html')" class="loginBtn btn me-3"
-              style="background-color: #d9437a; color: white">
-              Log In
-            </button>
+            <a class="nav-link" href="#" onclick="createPath('jobs.html')">Jobs at CIC</a>
           </div>
         </div>
       </div>
@@ -180,19 +174,25 @@
     </div>
 
   </div>
+  <script type="text/javascript">
+    const stylesheet = document.createElement('link');
+    stylesheet.rel = 'stylesheet';
+    stylesheet.type = 'text/css';
+    stylesheet.href = getPath() + 'styles/mainStyle.css';
+    document.head.appendChild(stylesheet);
 
+    window.onload = (event) => {
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+    }
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
-  <script>
-    const BASE_URL = window.location.origin;
-    const PATH = BASE_URL.includes('github')
-      ? '/code-the-future-hybrid/'
-      : BASE_URL.includes('app') ? '/' : '/public/';
-    function getPath(options) {
-      window.location = PATH + options;
+    function createPath(options) {
+      window.location = getPath() + options;
       return false;
+    }
+
+    function logUserOut(event) {
+      const fbAuth = firebase.auth();
+      logout(fbAuth)
     }
   </script>
   <script type="text/javascript">
@@ -269,13 +269,7 @@
       e.target.classList.toggle('bi-eye');
     });
   </script>
-  <script>
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.type = 'text/css';
-    stylesheet.href = '../styles/mainStyle.css';
-    document.head.appendChild(stylesheet);
-  </script>
+
 </body>
 
 </html>
