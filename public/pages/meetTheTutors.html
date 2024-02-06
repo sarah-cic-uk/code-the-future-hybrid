@@ -56,7 +56,7 @@
               <div class="row people d-flex justify-content-center">
                 <div class="col-md-4 col-lg-3 item" id="first-item-card" style="min-width: 200px;">
                   <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/sarah.jpeg)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Sarah Neenan</h3>
                       <p class="title">UK CIC Application Engineering Services Technical Lead</p>
                     </div>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-md-4 col-lg-3 item">
                   <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/jacob.jpg)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Jacob Boardman</h3>
                       <p class="title">Full Stack Engineer</p>
                     </div>
@@ -106,7 +106,7 @@
                 <div class="col-md-4 col-lg-3 item">
                   <div class="box tutor-profile"
                     style="background-image:url(../images/tutorProfiles/MichaelWeller.jpeg)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Michael Weller</h3>
                       <p class="title">Full Stack Engineer</p>
                     </div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="col-md-4 col-lg-3 item">
                   <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/remya.jpeg)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Remya Muraleedharan</h3>
                       <p class="title">Full Stack Engineer</p>
                     </div>
@@ -149,7 +149,7 @@
                 <div class="col-md-4 col-lg-3 item">
                   <div class="box tutor-profile"
                     style="background-image:url(../images/tutorProfiles/JacquelineJones.jpeg)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Jacqueline Jones</h3>
                       <p class="title">Front-End Developer</p>
                     </div>
@@ -173,7 +173,7 @@
                 </div>
                 <div class="col-md-4 col-lg-3 item">
                   <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/haseeb.jpg)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Haseeb Jabbar</h3>
                       <p class="title">Full Stack Engineer</p>
                     </div>
@@ -190,7 +190,7 @@
                 </div>
                 <div class="col-md-4 col-lg-3 item">
                   <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/kadijah.png)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Kadijah Allarakhiya</h3>
                       <p class="title">Front-End Developer</p>
                     </div>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="col-md-4 col-lg-3 item">
                   <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/doaa.jpeg)">
-                    <div class="profile" style="min-height: 205px">
+                    <div class="profile">
                       <h3 class="name">Doaa Radwan</h3>
                       <p class="title">Front-End Developer</p>
                     </div>
@@ -245,11 +245,11 @@
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
   <script>
     const BASE_URL = window.location.origin;
+    console.log(BASE_URL)
     const PATH = BASE_URL.includes('github')
       ? '/code-the-future-hybrid/'
-      : '/public/';
+      : BASE_URL.includes('app') ? '/' : '/public/';
     function getPath(options) {
-      console.log(PATH + options);
       window.location = PATH + options;
       return false;
     }
