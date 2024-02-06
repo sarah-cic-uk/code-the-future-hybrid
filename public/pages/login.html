@@ -227,7 +227,7 @@
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
-      auth.signInWithEmailAndPassword(email, password)
+      firebase.auth().signInWithEmailAndPassword(email, password)
         .then((userCredential) => {
           localStorage.setItem('loggedIn', true);
           const user = firebase.auth().currentUser;
