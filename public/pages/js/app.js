@@ -1,41 +1,33 @@
-  
-     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
-     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js";
-    // import firebase from "firebase/compat/app";
-    // import "firebase/compat/auth";
-    // import { initializeApp } from 'firebase/app';
 
-     // Your web app's Firebase configuration
-     // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-     const firebaseConfig = {
-       apiKey: "AIzaSyAgkCUR0Y-7jXurdxrVDYNxQVRQidiNJBw",
-       authDomain: "code-the-future-hybrid.firebaseapp.com",
-       projectId: "code-the-future-hybrid",
-       storageBucket: "code-the-future-hybrid.appspot.com",
-       messagingSenderId: "872086354850",
-       appId: "1:872086354850:web:092e805b04287ae7fcd0fb",
-       measurementId: "G-JSR5R0X09W"
-     };
-     
-     // Initialize Firebase
-    //  const app = initializeApp(firebaseConfig);
-    // const analytics = getAnalytics(app);
-    firebase.initializeApp(firebaseConfig);
+function auth(loginBtn, profileBtn, sessionsBtn) {
+  if (localStorage.getItem('loggedIn') === "true") {
+    if (loginBtn) loginBtn.style.display = "none";
+    if (loginBtn) profileBtn.style.display = "block";
+    if (sessionsBtn) sessionsBtn.style.display = "block";
+    const profileName = localStorage.getItem('displayName')
+    document.querySelector('#profileName').innerHTML = profileName;
+  }
+  else {
+    if (loginBtn) loginBtn.style.display = "block";
+    if (loginBtn) profileBtn.style.display = "none";
+    if (sessionsBtn) sessionsBtn.style.display = "none";
+  }
+}
 
-    export const auth = firebase.auth();
+function getPath() {
+  const BASE_URL = window.location.origin;
+  const PATH = BASE_URL.includes('github')
+    ? '/code-the-future-hybrid/'
+    : BASE_URL.includes('app') ? '/' : '/public/';
+  return PATH;
+}
 
-    function   login(event) {
-        console.log("logging in ")
-        event.preventDefault();
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        auth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        // Signed in
-        var user = userCredential.user;
-        console.log("SIGNED IN AS ",user)
-      })
-      .catch((error) => {
-        console.log("error signing in: ", error.message)
-      });
-      };
+function logout(fbAuth) {
+  fbAuth.signOut().then(() => {
+    localStorage.setItem('loggedIn', false);
+    console.log(`${getPath()}/login.html`)
+    window.location.replace(`${getPath()}pages/login.html`);
+  }).catch((error) => {
+    console.log("error signing out: ", error.message)
+  });
+};
