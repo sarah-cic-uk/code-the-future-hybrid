@@ -119,8 +119,8 @@
                         <div class="text-end">
                             <img id="tutor-avatar" alt="image" class="img-fluid avatar-sm rounded-circle .img-thumbnail"
                                 width="100">
-                                <div class="tutor-name">Haseeb Jabbar <br />
-                                    Full Stack Engineer</div>
+                            <div class="tutor-name">Haseeb Jabbar <br />
+                                Full Stack Engineer</div>
                         </div>
                     </div>
                 </div>
@@ -140,39 +140,11 @@
         window.onload = (event) => {
             auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
-// Create a reference with an initial file path and name
-const storage = firebase.storage();
-console.log(storage)
+            const storage = firebase.storage();
+            const pathReference = storage.ref('media/accessibilityExample.mp4');
+            const el = document.getElementById('session-video');
+            fetchVideo(pathReference, el)
 
-var pathReference = storage.ref('accessibilityExample.mp4');
-console.log(pathReference)
-
-// // Create a reference from a Google Cloud Storage URI
-// const gsReference = storage.ref(storage, 'gs://code-the-future-hybrid.appspot.com/accessibilityExample.mp4');
-// // const gsReference = storage.ref(storage, 'gs://code-the-future-hybrid.appspot.com/accessibilityExample.mp4');
-// console.log(gsReference)
-
-pathReference.getDownloadURL()
-  .then((url) => {
-    // `url` is the download URL for 'images/stars.jpg'
-    console.log(url)
-
-    // This can be downloaded directly:
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'blob';
-    xhr.onload = (event) => {
-      var blob = xhr.response;
-    };
-    xhr.open('GET', url);
-    xhr.send();
-
-    // Or inserted into an <img> element
-    var video = document.getElementById('session-video');
-    video.setAttribute('src', url);
-  })
-  .catch((error) => {
-    // Handle any errors
-  });
             document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.jpg';
             // document.getElementById('session-video').src = getPath() + 'media/accessibilityExample.mp4';
         }

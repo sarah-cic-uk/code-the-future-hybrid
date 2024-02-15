@@ -19,6 +19,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
   <script defer type="module" src="../../../js/firebase.js"></script>
   <script type="text/javascript" src="../../../js/app.js"></script>
 </head>
@@ -132,8 +133,8 @@
               <img id="tutor-avatar" alt="image" class="img-fluid avatar-sm rounded-circle .img-thumbnail"
                 width="100" />
               <div class="tutor-name">
-                Sarah Neenan <br />
-                Software Engineer
+                Doaa Radwan <br />
+                Front-End Developer
               </div>
             </div>
           </div>
@@ -170,9 +171,12 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
-      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
-      document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/sarah.png';
-      document.getElementById('session-video').src = getPath() + 'media/gitTerminal.mp4';
+      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
+      const storage = firebase.storage();
+            const pathReference = storage.ref('media/introIDE.mp4');
+            const el = document.getElementById('session-video');
+            fetchVideo(pathReference, el)
+      document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/doaa.jpeg';
 
     }
 

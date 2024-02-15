@@ -71,23 +71,36 @@
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
         <div class="container">
-          <div class="intro">
-            <h2 class="text-center">Other Learning Opportunities with IBM CIC</h2>
-            <br />
+          <h2 class="text-center mt-4">Other Learning Opportunities with IBM CIC</h2>
+          <br />
+          <div class="row pb-4 pt-4">
             <h3>Join an IBM CIC Innovation Hackathon</h3>
-            <br />
-            <p>IBM CIC run external hackathons for colleges and universities to allow to experience life as an IBMer.
+            <div class="col-9 mt-3">
+
+            <p>IBM CIC runs external hackathons for colleges and universities to give students an insight into life as
+              an IBMer.
             </p>
+            <p>The Hackathons challenge students to come up with new ideas to solve real-world issues and gives them
+              hands-on
+              experience of enterprise style developemt. The teams will utilise Design Thinking and agile processes to
+              create
+              Proof of Concepts to bring thier ideas to life</p>
             <p>After attending a Hackathon participants will be able to describe the software lifecycle from Problem
               Statement to working Proof of Concept, and design, create and test a prototype app/site. They will have
               greater understanding of the role of a Software Engineering in a Consultancy and be able to present ideas
               and apps to clients in a clear, concise manner. </p>
-            <br />
-            <p>Pending application for Credly Badge to allow hackathon participants to share their successful completion
-              of an IBM hackathon on linkedIn and CVs to help them demonstrate that they have learnt technical and
-              software lifecycle skills and can implement those skills in a hackathon (and therefore professional)
+            <p>Those who meet the given criteria by the end of the Hackathon can earn a Credly Badge (<a
+                href="https://www.credly.com/org/ibm/badge/ibm-cic-hackathon-innovation-squad-member" target="_blank">
+                IBM CIC Hackathon: Innovation Squad Member</a>). This allows the participants to share their successful
+              completion
+              of an IBM hackathon on LinkedIn and CVs to help them demonstrate that they have learnt technical and
+              software lifecycle skills and can implement those skills in a hackathon (or enterprise)
               environment.
             </p>
+          </div>
+          <div class="col-3 text-center mt-3">
+            <img src="../images/hackathonBadge.png" width="200" height="200" />
+          </div>
           </div>
         </div>
       </div>
@@ -113,12 +126,6 @@
       const fbAuth = firebase.auth();
       logout(fbAuth)
     }
-  </script>
-  <script>
-    $(document).ready(function () {
-      let divHeight = document.getElementById("height-check").offsetHeight
-      $('.description').css('max-height', divHeight + 'px');
-    });  
   </script>
 </body>
 
