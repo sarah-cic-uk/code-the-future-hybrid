@@ -1,11 +1,11 @@
 .side-navigation {
   background-color: #011640;
   border-right: 2px solid #011640;
-  min-width: 210px;
+  max-width: 210px;
 }
 
 .side-navigation .nav-link {
-  color: white !important;
+  color: white;
 }
 
 .navbar {
@@ -14,7 +14,7 @@
 }
 
 .navbar-brand {
-  min-width: 210px;
+  min-width: auto;
   text-align: center;
 }
 
@@ -210,4 +210,59 @@ form i {
 }
 .input-group-text i {
   margin-left: 10px;
+
+}
+
+.navbar {
+  border-bottom: 2px solid #011640
+}
+
+.navbar-nav {
+  width: 80%;
+  height: 70px;
+}
+
+.navbar-nav .nav-link {
+border-right: 2px solid #011640;
+justify-content: center;
+height: 100%;
+font-weight: 500;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  color: #011640;
+}
+
+.nav-link span {
+  vertical-align: text-bottom;
+}
+
+.nav-link:hover {
+  color: #d8447a
+}
+
+.nav-link.active-side-nav,
+.active-side-nav:hover {
+  color: #1DF2DD
+}
+
+.active-top-nav {
+color: #d8447a;
+font-weight: 600;
+}
+
+@media (min-width: 576px) {
+  .side-navigation {
+    max-width: 210px;
+    min-width: 210px;
+  }
+  .navbar-brand {
+    min-width: 210px;
+  }
+}
+
+ul[id^=submenu] li {
+  font-size: 13px;
 }

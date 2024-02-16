@@ -31,9 +31,9 @@ function logout(fbAuth) {
   });
 };
 
-function fetchVideo(pathReference, el){
+function fetchVideo(pathReference, el) {
   pathReference.getDownloadURL()
-  .then((url) => {
+    .then((url) => {
       // // This can be downloaded directly:
       // var xhr = new XMLHttpRequest();
       // xhr.responseType = 'blob';
@@ -45,8 +45,8 @@ function fetchVideo(pathReference, el){
 
       // Or inserted into an <img> element
       el.setAttribute('src', url);
-  })
-  .catch((error) => {
+    })
+    .catch((error) => {
       // Handle any errors
-  });
+    });
 }
