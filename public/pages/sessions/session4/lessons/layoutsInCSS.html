@@ -13,10 +13,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"
     integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
   <script defer type="module" src="../../../js/firebase.js"></script>
+  <script src="../../../js/sidenav.js" type="text/javascript" defer></script>
   <script type="text/javascript" src="../../../js/app.js"></script>
 </head>
 
@@ -73,100 +76,6 @@
     </nav>
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
-        <div class="col-auto px-sm-2 px-0 side-navigation">
-          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white">
-            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-              <li>
-                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-window-sidebar"></i>
-                  <span class="ms-1 d-none d-sm-inline">Intoduction to CSS</span>
-                </a>
-                <ul class="collapse show nav flex-column ms-3" id="submenu1" data-bs-parent="#menu">
-                  <li class="w-100">
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/introToCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">What is CSS? </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/introToCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">How to use CSS with HTML
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/introToCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">CSS Syntax </span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-window-sidebar"></i>
-                  <span class="ms-1 d-none d-sm-inline" style="text-decoration: underline">Layouts in CSS</span>
-                </a>
-                <ul class="collapse show nav flex-column ms-3" id="submenu2" data-bs-parent="#menu">
-                  <li class="w-100">
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/layoutsInCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Float </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/layoutsInCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Flexbox </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/layoutsInCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Grid </span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-window-sidebar"></i>
-                  <span class="ms-1 d-none d-sm-inline">Advanced CSS</span>
-                </a>
-                <ul class="collapse show nav flex-column ms-3" id="submenu3" data-bs-parent="#menu">
-                  <li class="w-100">
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/advancedCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Advanced Concepts
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/advancedCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">CSS Pro-processors
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/advancedCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Responsive Web Design
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session4/lessons/advancedCSS.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">CSS Frameworks </span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
         <div class="col py-3">
           <div class="media-container d-flex">
             <div class="embed-responsive embed-responsive-16by9 text-center flex-grow-1">
@@ -175,7 +84,7 @@
               </video>
             </div>
             <div class="text-end">
-              <img id="tutor-avatar" alt="image" class="img-fluid avatar-sm rounded-circle .img-thumbnail" width="100"
+              <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle " width="100"
                 height="100" />
               <div class="tutor-name">
                 Jacob Boardman <br />
@@ -221,7 +130,7 @@
     window.onload = (event) => {
       auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
       document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/sarah.png';
-      document.getElementById('session-video').src = getPath() + 'media/gitTerminal.mp4';
+      updateSideNav()
     }
 
     function createPath(options) {

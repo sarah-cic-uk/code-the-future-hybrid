@@ -266,3 +266,7 @@ font-weight: 600;
 ul[id^=submenu] li {
   font-size: 13px;
 }
+
+#tutor-avatar {
+  object-fit: cover;
+}

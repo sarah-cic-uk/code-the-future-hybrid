@@ -13,11 +13,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"
     integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script defer type="module" src="../../js/firebase.js"></script>
   <script type="text/javascript" src="../../js/app.js"></script>
+  <script src="../../js/sidenav.js" type="text/javascript" defer></script>
 </head>
 
 <body>
@@ -72,41 +74,6 @@
     </nav>
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
-        <div class="col-2 px-sm-2 px-0 side-navigation">
-          <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white">
-            <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-              <li>
-                <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                  <i class="fs-4 bi-window-sidebar"></i>
-                  <span class="ms-1 d-none d-sm-inline">HTML Elements</span>
-                </a>
-                <ul class="collapse show nav flex-column ms-3" id="submenu1" data-bs-parent="#menu">
-                  <li class="w-100">
-                    <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_images_tables.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Images and Tables
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_forms.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Forms and Validation
-                      </span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_hyperlinks.html')"
-                      class="nav-link px-0">
-                      <span class="d-none d-sm-inline">Hyperlinks and Creating Multiple Pages
-                      </span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-        </div>
         <div class="col py-3">
           <div class="embed-container" style="width: 100%; min-height: 90vh; pointer-events: none">
             <iframe style="width: 100%; min-height: 90vh" id="github-iframe" name="github-iframe" src=""></iframe>
@@ -140,7 +107,8 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
-      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
+      updateSideNavOverview();
     }
 
     function createPath(options) {

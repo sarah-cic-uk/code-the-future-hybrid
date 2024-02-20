@@ -3,7 +3,7 @@ function auth(loginBtn, profileBtn, sessionsBtn) {
   if (localStorage.getItem('loggedIn') === "true") {
     if (loginBtn) loginBtn.style.display = "none";
     if (loginBtn) profileBtn.style.display = "block";
-    if (sessionsBtn) sessionsBtn.style.display = "block";
+    if (sessionsBtn) sessionsBtn.style.display = "inline-flex";
     const profileName = localStorage.getItem('displayName')
     document.querySelector('#profileName').innerHTML = profileName;
   }
@@ -30,6 +30,24 @@ function logout(fbAuth) {
     console.log("error signing out: ", error.message)
   });
 };
+
+function updateSideNav() {
+  const filename = window.location.pathname.match(/.*\/(.*)$/)[1];
+  const name = filename.substring(0, filename.indexOf("."));
+  const session = window.location.pathname.match(/session\d/)[0];
+  const submenu = 'submenu' + session.match(/\d/);
+  document.getElementById(submenu).classList.add("show");
+  document.getElementsByName(name)[0].classList.add("active-side-nav");
+  document.getElementsByName(session)[0].classList.add("active-side-nav");
+};
+
+function updateSideNavOverview() {
+  const session = window.location.pathname.match(/session\d/)[0];
+  const submenu = 'submenu' + session.match(/\d/);
+  document.getElementById(submenu).classList.add("show");
+  document.getElementsByName(session + '-overview')[0].classList.add("active-side-nav");
+  document.getElementsByName(session)[0].classList.add("active-side-nav");
+}
 
 function fetchVideo(pathReference, el) {
   pathReference.getDownloadURL()

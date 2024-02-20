@@ -132,23 +132,23 @@
         </div>
 
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class=true>
-        <button type="button" class="btn btn-primary">Apply Now</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                ...
+              </div>
+              <div class=true>
+                <button type="button" class="btn btn-primary">Apply Now</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -165,7 +165,7 @@
         const jobs = document.getElementsByClassName("job-category")
         for (const element of jobs) {
           let cardWidth = element.querySelector(".job-name").offsetWidth;
-          if(element.querySelector('.job-description')) element.querySelector('.job-description').style.width = cardWidth + 'px';
+          if (element.querySelector('.job-description')) element.querySelector('.job-description').style.width = cardWidth + 'px';
         };
       }
 
@@ -173,7 +173,7 @@
         const jobs = document.getElementsByClassName("job-category")
         for (const element of jobs) {
           let cardWidth = element.querySelector(".job-name").offsetWidth;
-          if(element.querySelector('.job-description')) element.querySelector('.job-description').style.width = cardWidth + 'px';
+          if (element.querySelector('.job-description')) element.querySelector('.job-description').style.width = cardWidth + 'px';
         };
       }
 
@@ -186,7 +186,7 @@
         const fbAuth = firebase.auth();
         logout(fbAuth)
       }
-      function getClass(){
+      function getClass() {
         return 'd-none'
       }
     </script>
