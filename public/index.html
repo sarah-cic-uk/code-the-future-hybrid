@@ -10,7 +10,7 @@
   <title>Code the Future</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -68,157 +68,185 @@
         </div>
       </div>
     </nav>
-    <div class="container-fluid px-5">
-      <p class="h1" style="text-align: center; padding-top: 10px">
-        Welcome to Code the Future
-      </p>
-      <p class="lead" style="text-align: center; padding-top: 10px">
-        Let's learn to build a website together!
-      </p>
-      <hr class="mb-4" style="border: 1px solid #d9437a !important; width: 70%; margin: auto; opacity: 1;" />
-      <div class="row-cols-1">
-        <p>
-          Welcome to the course! This 6-8 session course will teach you the
-          basics of web development and give you insight into the role of a
-          developer. By the end you will have built your own fully functioning
-          website you can use, share and add to your web development
-          portfolio.
-        </p>
+    <div class="container-fluid px-0 mx-0">
+      <section class="welcome-container row gx-0">
+        <div class="col-2">
+        </div>
+        <div class="col-4 py-4 px-4">
+          <p id="welcome-heading">
+            Welcome to Code the Future
+          </p>
+          <p class="h6 pb-3">
+            <i>Let's learn to build a website together!</i>
+          </p>
+          <p class="small">
+            Welcome to the course! This 6-8 session course will teach you the
+            basics of web development and give you insight into the role of a
+            developer. By the end you will have built your own fully functioning
+            website you can use, share and add to your web development
+            portfolio.
+          </p>
 
-        <p>
-          The aim of this course is to not only teach you how to code, but
-          introduce you to like-minded people and IBM CIC developers to help
-          you grow your network and enter into the world of technology.
-        </p>
-        <p><b>Overall Goal:</b> To build your own website!</p>
+          <p class="small"> The aim of this course is to not only teach you how to code, but
+            introduce you to like-minded people and IBM CIC developers to help
+            you grow your network and enter into the world of technology.
+          </p>
+          <p class="small"><b>Overall Goal:</b> To build your own website!</p>
+        </div>
+        <div class="col-6" style="background-image:url(./images/hero_img.png); background-position: center;">
+        </div>
+      </section>
+      <section>
+        <div class="card" style="width: 70vw; text-align: center;
+  margin: -30px auto 30px auto">
+          <div class="row py-3 px-4 info-modal">
+            <div class="col">
+              <i class="fs-1 bi-mortarboard-fill"></i>
+              <div class="fw-bold mb-2">Certificate and Badge</div>
+              <div class="small">After successfully completing the course, you will receive a certificate from IBM
+                Client Innovation Centre. Additionally, you can earn a verified Credly badge for your final website,
+                which can be used on social media and your CV.</div>
+            </div>
+            <div class="col">
+              <i class="fs-1 bi-easel-fill"></i>
+              <div class="fw-bold mb-2">Expert Instructors</div>
+              <div class="small">Gain invaluable insights from seasoned industry experts with hands-on experience. Get
+                personalised coaching to accelerate your progress and achieve that goal.</div>
+            </div>
+            <div class="col">
+              <i class="fs-1 bi-code-slash"></i>
+              <div class="fw-bold mb-2">Support applying for jobs</div>
+              <div class="small">After finishing this course and earning a certificate and a Credly badge, you can apply
+                for a job at IBM CIC. If you're interested, please inform us, and we'll move you to the telephone
+                interview stage of the recruitment process.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="pt-3 pb-5 mx-5 row">
+        <div class="container">
+          <div class="row">
+            <div class="col-6">
+              <h3 class="mb-3" id="sessions-heading">Course Session Overviews</h3>
 
-        <br />
-
-        <section class="pt-3 pb-5">
-          <div class="container">
-            <div class="row">
-              <div class="col-6">
-                <h3 class="mb-3">Course Session Overviews</h3>
-
-              </div>
-              <div class="col-6 text-end">
-                <a class="btn btn-primary mb-3 mr-1" href="#carousel-sessions" role="button" data-bs-slide="prev">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-left" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                      d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                  </svg>
-                </a>
-                <a class="btn btn-primary mb-3" href="#carousel-sessions" role="button" data-bs-slide="next">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                    class="bi bi-arrow-right" viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                  </svg>
-                </a>
-              </div>
-              <div class="col-12">
-                <p>
-                  Each session we will teach you the skills you need to develop your
-                  own website:
-                </p>
-                <div id="carousel-sessions" class="carousel slide" data-ride="carousel">
-                  <div class="carousel-inner">
-                    <div class="carousel-item active">
-                      <div class="row">
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session1.jpeg" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 1</h4>
-                              <p class="card-text">
-                                Set up your laptop like a developer
-                              </p>
-                            </div>
+            </div>
+            <div class="col-6 text-end">
+              <a class="btn btn-primary mb-3 mr-1" href="#carousel-sessions" role="button" data-bs-slide="prev">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-arrow-left" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                </svg>
+              </a>
+              <a class="btn btn-primary mb-3" href="#carousel-sessions" role="button" data-bs-slide="next">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-arrow-right" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd"
+                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+                </svg>
+              </a>
+            </div>
+            <div class="col-12">
+              <p>
+                Each session we will teach you the skills you need to develop your
+                own website:
+              </p>
+              <div id="carousel-sessions" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="row">
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session1.jpeg" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 1</h4>
+                            <p class="card-text">
+                              Set up your laptop like a developer
+                            </p>
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session2.png" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 2</h4>
-                              <p class="card-text">Create a basic webpage</p>
-                            </div>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session2.png" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 2</h4>
+                            <p class="card-text">Create a basic webpage</p>
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session3.png" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 3</h4>
-                              <p class="card-text">
-                                Add various elements to your webpages (images,
-                                tables, hyperlinks etc)
-                              </p>
-                            </div>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session3.png" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 3</h4>
+                            <p class="card-text">
+                              Add various elements to your webpages (images,
+                              tables, hyperlinks etc)
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="carousel-item">
-                      <div class="row">
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session4.jpeg" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 4</h4>
-                              <p class="card-text">
-                                Make your website look great with CSS
-                              </p>
-                            </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="row">
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session4.jpeg" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 4</h4>
+                            <p class="card-text">
+                              Make your website look great with CSS
+                            </p>
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session5.png" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 5</h4>
-                              <p class="card-text">
-                                Work on your own website with help from the
-                                tutors
-                              </p>
-                            </div>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session5.png" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 5</h4>
+                            <p class="card-text">
+                              Work on your own website with help from the
+                              tutors
+                            </p>
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/coding-together.jpeg" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 6</h4>
-                              <p class="card-text">
-                                Work on your sites with the tutors around to
-                                help
-                              </p>
-                            </div>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/coding-together.jpeg" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 6</h4>
+                            <p class="card-text">
+                              Work on your sites with the tutors around to
+                              help
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="carousel-item">
-                      <div class="row">
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session6.jpeg" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 7</h4>
-                              <p class="card-text">
-                                Finish your website and show it off!
-                              </p>
-                            </div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="row">
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/sessions/session6.jpeg" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 7</h4>
+                            <p class="card-text">
+                              Finish your website and show it off!
+                            </p>
                           </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                          <div class="card h-100">
-                            <img class="img-fluid card-img-top" alt="100%x280" src="./images/cv-builder-block.png" />
-                            <div class="card-body">
-                              <h4 class="card-title">Session 8</h4>
-                              <p class="card-text">Optional CV workshop</p>
-                            </div>
+                      </div>
+                      <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                          <img class="img-fluid card-img-top" alt="100%x280" src="./images/cv-builder-block.png" />
+                          <div class="card-body">
+                            <h4 class="card-title">Session 8</h4>
+                            <p class="card-text">Optional CV workshop</p>
                           </div>
                         </div>
                       </div>
@@ -228,54 +256,55 @@
               </div>
             </div>
           </div>
-        </section>
-        <hr class="mb-4" style="border: 1px solid #d9437a !important; width: 70%; margin: auto; opacity: 1;" />
-        <div class="row pb-4 pt-4">
-          <div class="col-9">
-            <h3>Certificate & Badge</h3>
-            <br />
-            <p>
-              Upon completion of this course you will be awarded a certificate
-              from the IBM Client Innovation Centre. If you demonstrate the
-              website you have built over the duration of the course at the
-              showcase in the final session, then you will also be awarded a
-              verified <a href="https://www.credly.com/org/ibm/badge/code-the-future-html-css" target="_blank">Credly
-                badge</a> for use of social media and your CV.
-            </p>
-            <p>
-              If you decide to apply for a position at the IBM CIC and let the
-              course tutors know, you will automatically be sent through to the
-              telephone interview stage of the recruitment process.
-            </p>
-            <h6><b>Badge Support</b></h6>
-
-            <p><b>If I pass the course, when do I get the badge?</b><br />
-              Badges are typically issued automatically after you meet the course requirements and grading policy. You
-              should get an email notification of receiving the badge in one to four days.</p>
-
-            <p><b>Where can I find more information about digital badges?</b><br />
-              For more information about badges, see Frequently asked questions on IBM Training.</p>
-
-            <h6><b>Further support</b></h6>
-            <p>For questions related to your Credly badge earner account and profile, as well as issues related to
-              claiming your badge after receiving a notification, go to support.credly.com.
-            <br/>For questions related to the course and badge, contact: Sarah at sarah.neenan-cic-uk@uk.ibm.com </p>
-
-          </div>
-          <div class="col-3 text-center">
-            <img src="./images/credlyBadge.png" width="200" height="200" />
-          </div>
-
-          <p>NOTICE: IBM leverages the services of Credly, a 3rd party data processor authorized by IBM and located in
-            the United States, to assist in the administration of the IBM Digital Badge program. In order to issue you
-            an IBM Digital Badge, your personal information (name, email address, and badge earned) will be shared
-            with Credly. You will receive an email notification from Credly with instructions for claiming the badge.
-            Your personal information is used to issue your badge and for program reporting and operational purposes.
-            IBM may share the personal information collected with IBM subsidiaries and third parties globally. It will
-            be handled in a manner consistent with IBM privacy practices. The IBM Privacy Statement can be viewed
-            here: https://www.ibm.com/privacy/us/en/. IBM employees can view the IBM Internal Privacy Statement here:
-            https://w3.ibm.com/w3publisher/w3-privacy-notice.</p>
         </div>
+      </section>
+      <hr class="mb-4" style="border: 1px solid #d9437a !important; width: 70%; margin: auto; opacity: 1;" />
+      <div class="row pb-4 pt-4 mx-5">
+        <div class="col-9">
+          <h3>Certificate & Badge</h3>
+          <br />
+          <p>
+            Upon completion of this course you will be awarded a certificate
+            from the IBM Client Innovation Centre. If you demonstrate the
+            website you have built over the duration of the course at the
+            showcase in the final session, then you will also be awarded a
+            verified <a href="https://www.credly.com/org/ibm/badge/code-the-future-html-css" target="_blank">Credly
+              badge</a> for use of social media and your CV.
+          </p>
+          <p>
+            If you decide to apply for a position at the IBM CIC and let the
+            course tutors know, you will automatically be sent through to the
+            telephone interview stage of the recruitment process.
+          </p>
+          <h6><b>Badge Support</b></h6>
+
+          <p><b>If I pass the course, when do I get the badge?</b><br />
+            Badges are typically issued automatically after you meet the course requirements and grading policy. You
+            should get an email notification of receiving the badge in one to four days.</p>
+
+          <p><b>Where can I find more information about digital badges?</b><br />
+            For more information about badges, see Frequently asked questions on IBM Training.</p>
+
+          <h6><b>Further support</b></h6>
+          <p>For questions related to your Credly badge earner account and profile, as well as issues related to
+            claiming your badge after receiving a notification, go to support.credly.com.
+            <br />For questions related to the course and badge, contact: Sarah at sarah.neenan-cic-uk@uk.ibm.com
+          </p>
+
+        </div>
+        <div class="col-3 text-center">
+          <img src="./images/credlyBadge.png" width="200" height="200" />
+        </div>
+
+        <p>NOTICE: IBM leverages the services of Credly, a 3rd party data processor authorized by IBM and located in
+          the United States, to assist in the administration of the IBM Digital Badge program. In order to issue you
+          an IBM Digital Badge, your personal information (name, email address, and badge earned) will be shared
+          with Credly. You will receive an email notification from Credly with instructions for claiming the badge.
+          Your personal information is used to issue your badge and for program reporting and operational purposes.
+          IBM may share the personal information collected with IBM subsidiaries and third parties globally. It will
+          be handled in a manner consistent with IBM privacy practices. The IBM Privacy Statement can be viewed
+          here: https://www.ibm.com/privacy/us/en/. IBM employees can view the IBM Internal Privacy Statement here:
+          https://w3.ibm.com/w3publisher/w3-privacy-notice.</p>
       </div>
     </div>
   </div>

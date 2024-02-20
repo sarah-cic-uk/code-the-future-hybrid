@@ -208,6 +208,7 @@ form i {
   margin: 0;
   padding: 0;
 }
+
 .input-group-text i {
   margin-left: 10px;
 
@@ -223,10 +224,10 @@ form i {
 }
 
 .navbar-nav .nav-link {
-border-right: 2px solid #011640;
-justify-content: center;
-height: 100%;
-font-weight: 500;
+  border-right: 2px solid #011640;
+  justify-content: center;
+  height: 100%;
+  font-weight: 500;
 }
 
 .nav-link {
@@ -249,8 +250,8 @@ font-weight: 500;
 }
 
 .active-top-nav {
-color: #d8447a;
-font-weight: 600;
+  color: #d8447a;
+  font-weight: 600;
 }
 
 @media (min-width: 576px) {
@@ -258,6 +259,7 @@ font-weight: 600;
     max-width: 210px;
     min-width: 210px;
   }
+
   .navbar-brand {
     min-width: 210px;
   }
@@ -269,4 +271,31 @@ ul[id^=submenu] li {
 
 #tutor-avatar {
   object-fit: cover;
+}
+
+.welcome-container {
+  background: #31238C;
+  color: #fff;
+  width: 100%;
+  height: 60vh;
+}
+
+#welcome-heading {
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 50px;
+  line-height: 60px;
+  letter-spacing: -0.04em;
+}
+
+#sessions-heading {
+  font-family: sans-serif;
+  font-style: normal;
+  font-weight: 900;
+  font-size: 40px;
+}
+
+.info-modal i {
+  color: #1DF2DD
 }
