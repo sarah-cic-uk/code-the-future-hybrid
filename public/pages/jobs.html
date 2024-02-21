@@ -76,53 +76,58 @@
           <div class="team-grid">
             <div class="container">
               <div class="intro">
-                <h2 class="text-center">Jobs @ IBM CIC</h2>
+                <h2 class="text-center" id="jobs-heading">Jobs @ IBM CIC</h2>
+              </div>
+              <div class="row">
+                <p>IBM CIC is a fast growing developer community. We are looking for passionate people who want to
+                  develop their career in technology. You do not need to know what specific job role you want to do, and
+                  you do not need to be a computer science graduate to join us.</p>
+                <p>We are proud of our training and development opportunities. As part of our exciting CIC technical
+                  community, you will be welcome to undertake a multitude of training courses with an extensive range of
+                  classroom, e-learning, interactive and video courses. With our support, you will have the opportunity
+                  to acquire industry recognised qualifications, gain valuable experience with globally renowned
+                  companies and work with industry leading technologies. This will enable you to grow within our
+                  business which we support via promotion and progression opportunities.</p>
               </div>
               <div class="row people d-flex justify-content-center">
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card box job-category shadow"
-                    style="background-image:url(../images/jobCategories/apprentice.png); height: 400px;"
-                    data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    <div class="job">
-                      <h3 class="job-name card-title py-1">Apprenticeship</h3>
-                      <!-- <div class="job-description" style="background-image:url(../images/jobCategories/apprenticeQR.png);"></div> -->
+                  <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#apprenticeModal">
+                    <img class="job-image" src="../images/jobCategories/apprentice.png" />
+                    <div class="job card-body">
+                      <h4 class="job-name text-center">Apprenticeship</h4>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card box job-category shadow"
-                    style="background-image:url(../images/jobCategories/graduate.jpeg); height: 400px;">
-                    <div class="job">
-                      <h3 class="job-name card-title py-1">Associate Programme (Graduates)</h3>
-                      <div class="job-description"
-                        style="background-image:url(../images/jobCategories/applicationsGrad.png);"></div>
+                  <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#graduateModal">
+                    <img class="job-qr" src="../images/jobCategories/applicationsGrad.png" width="50%" />
+                    <img class="job-image" src="../images/jobCategories/graduate.jpeg" />
+                    <div class="job card-body">
+                      <h4 class="job-name text-center">Associate Programme (Graduates)</h4>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card box job-category shadow"
-                    style="background-image:url(../images/jobCategories/techEntry.jpeg); height: 400px;">
-                    <div class="job">
-                      <h3 class="job-name card-title py-1">Tech Entry</h3>
-                      <!-- <div class="job-description" style="background-image:url(../images/jobCategories/apprenticeQR.png);"></div> -->
+                  <div class="card job-category shadow">
+                    <img class="job-image" src="../images/jobCategories/techEntry.jpeg" />
+                    <div class="job card-body">
+                      <h4 class="job-name text-center">Tech Entry</h4>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card box job-category shadow"
-                    style="background-image:url(../images/jobCategories/techReEntry.jpeg); height: 400px;">
-                    <div class="job">
-                      <h3 class="job-name card-title py-1">Tech RE-entry</h3>
-                      <!-- <div class="job-description" style="background-image:url(../images/jobCategories/apprenticeQR.png);"></div> -->
+                  <div class="card job-category shadow">
+                    <img class="job-image" src="../images/jobCategories/techReEntry.jpeg" />
+                    <div class="job card-body">
+                      <h4 class="job-name text-center">Tech RE-entry</h4>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card box job-category shadow"
-                    style="background-image:url(../images/jobCategories/experiencedHire.jpeg); height: 400px;">
-                    <div class="job">
-                      <h3 class="job-name card-title py-1">Experienced Hire</h3>
-                      <!-- <div class="job-description" style="background-image:url(../images/jobCategories/apprenticeQR.png);"></div> -->
+                  <div class="card job-category shadow">
+                    <img class="job-image" src="../images/jobCategories/experiencedHire.jpeg" />
+                    <div class="job card-body">
+                      <h4 class="job-name text-center">Experienced Hire</h4>
                     </div>
                   </div>
                 </div>
@@ -132,24 +137,40 @@
         </div>
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!--Apprentice Modal -->
+        <div class="modal fade" id="apprenticeModal" tabindex="-1" aria-labelledby="apprenticeModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
               <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Apprenticeships @ IBM</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                ...
+                info goes here
               </div>
               <div class=true>
-                <button type="button" class="btn btn-primary">Apply Now</button>
+                <button type="button" class="btn btn-primary disabled align-self-end">Applications currently closed</button>
               </div>
             </div>
           </div>
         </div>
-
+<!--Graduate Modal -->
+<div class="modal fade" id="graduateModal" tabindex="-1" aria-labelledby="graduateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Associate Programme @ IBM</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        info goes here
+      </div>
+      <div class="justify-content-end">
+        <button type="button" class="btn btn-primary disabled">Apply</button>
+      </div>
+    </div>
+  </div>
+</div>
       </div>
     </div>
     <script type="text/javascript">
