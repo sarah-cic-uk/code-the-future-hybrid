@@ -41,17 +41,22 @@
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
                     <div class="navbar-nav nav-justified">
-                        <a class="nav-link active border-end border-dark" aria-current="page"
+                        <a class="nav-link border-end border-dark" name="session1-nav" aria-current="page"
                             href="../../session1/introduction.html">Session 1</a>
-                        <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../../session2/introduction.html">Session 2</a>
-                        <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../../session3/introduction.html">Session 3</a>
-                        <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../../session4/introduction.html">Session 4</a>
-                        <a class="nav-link border-end border-dark" aria-current="page"
-                            href="../../session5/introduction.html">Session 5</a>
-                        <a class="nav-link border-end border-dark" aria-current="page" href="#">Showcases</a>
+                        <a class="nav-link border-end border-dark" name="session2-nav" aria-current="page"
+                            href="../../session2/introduction.html">Session
+                            2</a>
+                        <a class="nav-link border-end border-dark" name="session3-nav" aria-current="page"
+                            href="../../session3/introduction.html">Session
+                            3</a>
+                        <a class="nav-link border-end border-dark" name="session4-nav" aria-current="page"
+                            href="../../session4/introduction.html">Session
+                            4</a>
+                        <a class="nav-link border-end border-dark" name="session5-nav" aria-current="page"
+                            href="../../session5/introduction.html">Session
+                            5</a>
+                        <a class="nav-link border-end border-dark" name="showcase-nav" aria-current="page"
+                            href="#">Showcases</a>
                     </div>
                     <div class="d-flex align-items-center">
                         <!-- Logged in Avatar -->
@@ -128,7 +133,7 @@
             const el = document.getElementById('session-video');
             fetchVideo(pathReference, el)
 
-            document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/bells.png';
+            document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/bells.jpg';
             updateSideNav()
         }
 

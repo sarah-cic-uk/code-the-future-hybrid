@@ -39,6 +39,7 @@ function updateSideNav() {
   document.getElementById(submenu).classList.add("show");
   document.getElementsByName(name)[0].classList.add("active-side-nav");
   document.getElementsByName(session)[0].classList.add("active-side-nav");
+  document.getElementsByName(session + '-nav')[0].classList.add("active-top-nav");
 };
 
 function updateSideNavOverview() {
@@ -47,6 +48,7 @@ function updateSideNavOverview() {
   document.getElementById(submenu).classList.add("show");
   document.getElementsByName(session + '-overview')[0].classList.add("active-side-nav");
   document.getElementsByName(session)[0].classList.add("active-side-nav");
+  document.getElementsByName(session + '-nav')[0].classList.add("active-top-nav");
 }
 
 function fetchVideo(pathReference, el) {

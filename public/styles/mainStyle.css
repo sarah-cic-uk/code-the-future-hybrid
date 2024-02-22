@@ -228,6 +228,7 @@ form i {
   justify-content: center;
   height: 100%;
   font-weight: 500;
+  font-family: sans-serif;
 }
 
 .nav-link {
@@ -323,4 +324,9 @@ ul[id^=submenu] li {
 
 .job.card-body {
   height: 90px;
+}
+
+.active-top-nav {
+  color: #d8447a;
+  font-weight: 600 !important;
 }
