@@ -84,10 +84,16 @@ template.innerHTML = `
             <span class="d-none d-sm-inline">Overview</span></a>
         </li>
         <li>
-          <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_images_tables.html')"
-            class="nav-link p-0" name="html_images_tables">
+          <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_images.html')"
+            class="nav-link p-0" name="html_images">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">Tables and Images</span></a>
+            <span class="d-none d-sm-inline">Images</span></a>
+        </li>
+        <li>
+          <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_tables.html')"
+            class="nav-link p-0" name="html_tables">
+            <i class="fs-4 bi-dash"></i>
+            <span class="d-none d-sm-inline">Tables</span></a>
         </li>
         <li>
           <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_forms.html')"
