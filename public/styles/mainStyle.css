@@ -63,7 +63,8 @@
   margin-bottom: 0;
 }
 
-.people {
+.people,
+.jobs {
   padding: 20px 0;
   cursor: pointer;
 }
@@ -143,6 +144,10 @@
   letter-spacing: 2px;
   font-size: 13px;
   margin-bottom: 20px;
+}
+
+.jobs .item {
+min-width: 330px;
 }
 
 .session-description {
@@ -329,4 +334,8 @@ ul[id^=submenu] li {
 .active-top-nav {
   color: #d8447a;
   font-weight: 600 !important;
+}
+
+.job-btns a {
+  min-height: 62px;
 }

@@ -39,7 +39,7 @@
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
               tutors</a>
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link active-top-nav" href="#" onclick="createPath('pages/jobs.html')" >Jobs at CIC</a>
+            <a class="nav-link active-top-nav" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
@@ -89,10 +89,10 @@
                   companies and work with industry leading technologies. This will enable you to grow within our
                   business which we support via promotion and progression opportunities.</p>
               </div>
-              <div class="row people d-flex justify-content-center">
+              <div class="row jobs d-flex justify-content-center">
                 <div class="col-md-4 col-lg-3 item">
                   <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#apprenticeModal">
-                    <img class="job-image" src="../images/jobCategories/apprentice.png" />
+                    <img class="job-image" src="../images/jobCategories/apprentice.jpg" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Apprenticeship</h4>
                     </div>
@@ -108,7 +108,7 @@
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card job-category shadow">
+                  <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#entryModal">
                     <img class="job-image" src="../images/jobCategories/techEntry.jpeg" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Tech Entry</h4>
@@ -116,7 +116,7 @@
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card job-category shadow">
+                  <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#reEntryModal">
                     <img class="job-image" src="../images/jobCategories/techReEntry.jpeg" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Tech RE-entry</h4>
@@ -124,7 +124,7 @@
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-3 item">
-                  <div class="card job-category shadow">
+                  <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#experiencedModal">
                     <img class="job-image" src="../images/jobCategories/experiencedHire.jpeg" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Experienced Hire</h4>
@@ -138,39 +138,159 @@
 
 
         <!--Apprentice Modal -->
-        <div class="modal fade" id="apprenticeModal" tabindex="-1" aria-labelledby="apprenticeModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal fade" id="apprenticeModal" tabindex="-1" aria-labelledby="apprenticeModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
               <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Apprenticeships @ IBM</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                info goes here
+                Information coming soon - enquire now and chat with our TA team 
               </div>
-              <div class=true>
-                <button type="button" class="btn btn-primary disabled align-self-end">Applications currently closed</button>
+              <div class="d-flex justify-content-end p-2">
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn btn-primary">Enquire
+                  now</a>
               </div>
             </div>
           </div>
         </div>
-<!--Graduate Modal -->
-<div class="modal fade" id="graduateModal" tabindex="-1" aria-labelledby="graduateModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Associate Programme @ IBM</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        info goes here
-      </div>
-      <div class="justify-content-end">
-        <button type="button" class="btn btn-primary disabled">Apply</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <!--Graduate Modal -->
+        <div class="modal fade" id="graduateModal" tabindex="-1" aria-labelledby="graduateModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Associate Programme @ IBM</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Information coming soon - enquire now and chat with our TA team 
+              </div>
+              <div class="d-flex justify-content-end p-2">
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn btn-primary">Enquire
+                  now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Tech Entry Modal -->
+        <div class="modal fade" id="entryModal" tabindex="-1" aria-labelledby="entryModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Tech Entry @ IBM</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                Information coming soon - enquire now and chat with our TA team 
+              </div>
+              <div class="d-flex justify-content-end p-2">
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn btn-primary">Enquire
+                  now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--ReEntry Modal -->
+        <div class="modal fade" id="reEntryModal" tabindex="-1" aria-labelledby="reEntryModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Tech Re-Entry @ IBM</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p><strong>The role is suitable for someone who has previously worked within the IT sector and is
+                    looking to
+                    return after a career break of at least a year.</strong></p>
+                <p> We are ideally looking for people that have previous experience in one of the following areas:</p>
+                <ul>
+                  <li>Project Management</li>
+                  <li>Business Analysis</li>
+                  <li>Front-end Development</li>
+                  <li>Back-end Development</li>
+                  <li>Full Stack Engineering</li>
+                  <li>Quality Engineering (Test Specialists)</li>
+                  <li>Technical Support</li>
+                </ul>
+                <p> We understand that re-joining employment after a career break can be nerve-racking and difficult.
+                  That is why we have introduced the tech re-entry programme to enable talented individuals like you the
+                  opportunity to re-start your career. In your first six-months with the CIC the tech re-entry programme
+                  will provide opportunities to update your skills, access to the latest tools and technologies and work
+                  alongside multi-disciplinary teams to hone expertise and deliver on client-critical solutions.</p>
+
+                <p><b>So why join the programme?</b></p>
+                <ul>
+                  <li> The program offers flexibility and ease of transition from your career break to getting back to
+                    the
+                    workforce</li>
+                  <li> A community of like-minded re-joiners will support you as you restart your journey together</li>
+                  <li> You will have the opportunity to update your skills and expertise as you work on real projects
+                    with
+                    real impact</li>
+                  <li> A dedicated mentor will help you get up to speed with the environment and new technology</li>
+                </ul>
+              </div>
+              <div class="d-flex justify-content-end p-2">
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn btn-primary">Enquire
+                  now</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Experienced Modal -->
+        <div class="modal fade" id="experiencedModal" tabindex="-1" aria-labelledby="experiencedModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Experienced Hires @ IBM</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Our Experienced roles allow you to work in one of our IBM Consulting Client Innovation Centres
+                  (Delivery Centres),
+                  where we deliver deep technical and industry expertise to a wide range of public and private sector
+                  clients around the world. Our delivery centres offer our clients locally based skills and technical
+                  expertise to drive innovation and adoption of new technology.</p>
+
+                <p>A career in IBM Consulting is rooted by long-term relationships and close collaboration with clients
+                  across the globe.</p>
+                <p>You'll work with visionaries across multiple industries to improve the hybrid cloud and AI journey
+                  for
+                  the most innovative and valuable companies in the world. Your ability to accelerate impact and make
+                  meaningful change for your clients is enabled by our strategic partner ecosystem and our robust
+                  technology platforms across the IBM portfolio, including Software and Red Hat.</p>
+                <p>For specific role requirements use the links below:</p>
+              </div>
+              <div class="row">
+                <div class="job-btns col-2 mx-2 mb-2"><a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR#jobDetails=705412_5016"
+                    target="_blank" class="btn btn-primary">Full Stack Engineer</a></div>
+                <div class="job-btns col-2 mx-2 mb-2"> <a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR#jobDetails=705412_5016"
+                    target="_blank" class="btn btn-primary">AWS DevOps Engineer</a></div>
+                <div class="job-btns col-2 mx-2 mb-2"> <a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR#jobDetails=705412_5016"
+                    target="_blank" class="btn btn-primary">Azure DevOps Engineer</a></div>
+                <div class="job-btns col-2 mx-2 mb-2"> <a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR#jobDetails=705412_5016"
+                    target="_blank" class="btn btn-primary">Front End Developer</a></div>
+                <div class="job-btns col-2 mx-2 mb-2"> <a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR#jobDetails=705412_5016"
+                    target="_blank" class="btn btn-primary">Linux Infrastructure Specialist</a></div>
+                <div class="job-btns col-2 mx-2 mb-2"> <a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR#jobDetails=705412_5016"
+                    target="_blank" class="btn btn-primary">Windows System Administrator</a></div>
+                <div class="job-btns col-2 mx-2 mb-2"> <a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR#jobDetails=705412_5016"
+                    target="_blank" class="btn btn-primary">AWS DevOps Engineer</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script type="text/javascript">
