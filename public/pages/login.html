@@ -11,12 +11,11 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-  <script type="module" src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/10.7.2/firebase-analytics.js"></script>
-  <script type="module" src="https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
   <script defer type="module" src="./js/firebase.js"></script>
   <script type="text/javascript" src="./js/app.js"></script>
 </head>
@@ -70,8 +69,8 @@
                           <label class="form-label" for="email">Username</label>
                           <div class="input-group">
                             <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                            <input type="email" id="email" class="form-control"
-                              placeholder="Registered email address" />
+                            <input type="email" id="email" class="form-control" placeholder="Registered email address"
+                              autocomplete="current-email" />
                           </div>
                         </div>
 
@@ -79,7 +78,7 @@
                           <label class="form-label" for="password">Password</label>
                           <div class="input-group">
                             <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                            <input type="password" id="password" class="form-control" />
+                            <input type="password" id="password" class="form-control" autocomplete="current-password" />
                             <span class="input-group-text" id="password-input">
                               <i class="bi bi-eye-slash togglePassword"></i>
                             </span>
@@ -129,153 +128,170 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body mx-3">
-          <form class="form" role="form" autocomplete="off" id="formLogin" onsubmit="registerNewUser()">
+          <div class="form-group">
+            <label for="displayName">Display Name<span class="text-danger">*</span></label>
+            <div class="input-group">
+              <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+              <input type="text" class="form-control form-control-lg" name="displayName" id="displayName" required=""
+                autocomplete="new-name">
+              <div class="invalid-feedback">Add a display name</div>
+            </div>
+          </div>
+          <div class="form-group col-12">
+            <label for="newEmail">Email<span class="text-danger">*</span></label>
+            <div class="input-group flex-nowrap">
+              <div class="input-group-text"><i class="bi bi-envelope-fill"></i></div>
+              <input type="text" class="form-control form-control-lg" name="newEmail" id="newEmail" required=""
+                autocomplete="new-email">
+              <div class="invalid-feedback">Add your email as your username</div>
+            </div>
             <div class="form-group">
-              <label for="displayName">Display Name<span class="text-danger">*</span></label>
-              <div class="input-group">
-                <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                <input type="text" class="form-control form-control-lg" name="displayName" id="displayName" required="">
-                <div class="invalid-feedback">Add a display name</div>
+              <label>Password<span class="text-danger">*</span></label>
+              <div class="input-group flex-nowrap">
+                <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                <input type="password" class="form-control form-control-lg" id="newPassword" required=""
+                  autocomplete="new-password" />
+                <div class="invalid-feedback">Choose a password</div>
+                <span class="input-group-text" id="newPasswordInput">
+                  <i class="bi bi-eye-slash toggleNewPassword"></i>
+                </span>
               </div>
             </div>
-            <div class="form-group col-12">
-              <label for="newEmail">Email<span class="text-danger">*</span></label>
+            <div class="form-group">
+              <label>Confirm Password<span class="text-danger">*</span></label>
               <div class="input-group flex-nowrap">
-                <div class="input-group-text"><i class="bi bi-envelope-fill"></i></div>
-                <input type="text" class="form-control form-control-lg" name="newEmail" id="newEmail" required="">
-                <div class="invalid-feedback">Add your email as your username</div>
+                <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                <input type="password" class="form-control form-control-lg" id="passwordCheck" name="passwordCheck"
+                  required="" autocomplete="new-password" />
+                <div class="invalid-feedback">Passwords don't match</div>
+                <span class="input-group-text" id="passwordCheckInput">
+                  <i class="bi bi-eye-slash togglePasswordCheck"></i>
+                </span>
               </div>
-              <div class="form-group">
-                <label>Password<span class="text-danger">*</span></label>
-                <div class="input-group flex-nowrap">
-                  <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                  <input type="password" class="form-control form-control-lg" id="newPassword" required=""
-                    autocomplete="new-password" />
-                  <div class="invalid-feedback">Choose a password</div>
-                  <span class="input-group-text" id="newPasswordInput">
-                    <i class="bi bi-eye-slash toggleNewPassword"></i>
-                  </span>
-                </div>
+              <div class="form-group py-4 text-center">
+                <button class="btn" style="background-color: #d9437a; color: white" id="btnLogin"
+                  onclick="registerNewUser()">Sign
+                  up!</button>
               </div>
-              <div class="form-group">
-                <label>Confirm Password<span class="text-danger">*</span></label>
-                <div class="input-group flex-nowrap">
-                  <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                  <input type="password" class="form-control form-control-lg" id="passwordCheck" name="passwordCheck"
-                    required="" />
-                  <div class="invalid-feedback">Passwords don't match</div>
-                  <span class="input-group-text" id="passwordCheckInput">
-                    <i class="bi bi-eye-slash togglePasswordCheck"></i>
-                  </span>
-                </div>
-                <div class="form-group py-4 text-center">
-                  <button type="submit" class="btn" style="background-color: #d9437a; color: white" id="btnLogin">Sign
-                    up!</button>
-                </div>
-          </form>
+            </div>
+          </div>
         </div>
+
       </div>
-    </div>
+      <script type="text/javascript">
+        const stylesheet = document.createElement('link');
+        stylesheet.rel = 'stylesheet';
+        stylesheet.type = 'text/css';
+        stylesheet.href = getPath() + 'styles/mainStyle.css';
+        document.head.appendChild(stylesheet);
 
-  </div>
-  <script type="text/javascript">
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.type = 'text/css';
-    stylesheet.href = getPath() + 'styles/mainStyle.css';
-    document.head.appendChild(stylesheet);
+        window.onload = (event) => {
+          auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+        }
 
-    window.onload = (event) => {
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
-    }
+        function createPath(options) {
+          window.location = getPath() + options;
+          return false;
+        }
 
-    function createPath(options) {
-      window.location = getPath() + options;
-      return false;
-    }
+        function logUserOut(event) {
+          const fbAuth = firebase.auth();
+          logout(fbAuth)
+        }
 
-    function logUserOut(event) {
-      const fbAuth = firebase.auth();
-      logout(fbAuth)
-    }
-  </script>
-  <script type="text/javascript">
-    async function registerNewUser() {
-      const email = document.getElementById('newEmail').value;
-      const password = document.getElementById('newPassword').value;
-      const name = document.getElementById('displayName').value;
-      try {
-        await firebase.auth().createUserWithEmailAndPassword(email, password)
-          .catch((error) => {
-            console.log(error.message)
-          })
+        async function registerNewUser() {
+          console.log("SUBMITTING")
+          const email = document.getElementById('newEmail').value;
+          const password = document.getElementById('newPassword').value;
+          const name = document.getElementById('displayName').value;
+          try {
+            const fbAuth = await firebase.auth();
+            await fbAuth.createUserWithEmailAndPassword(email, password)
+              .catch((error) => {
+                console.log(error.code)
+                console.log(error.message)
+              })
 
-        await sendEmailVerification(auth.currentUser).catch((err) =>
-          console.log(err)
-        );
+            const user = fbAuth.currentUser;
 
-        const user = firebase.auth().currentUser;
-        user.updateProfile({ displayName: name }).catch(
-          (err) => console.log(err)
-        );
+            await user.sendEmailVerification().catch((err) =>
+              console.log(err)
+            );
 
-        window.location.replace("./sessions.html");
+            await user.updateProfile({ displayName: name }).catch(
+              (err) => console.log(err)
+            );
 
-      } catch (err) {
-        console.log(err);
-      }
-    };
+            fbAuth.onAuthStateChanged(async (user) => {
+              if (user) {
+                await addUserToDatabase(user);
+                window.location.replace("./sessions.html");
+              } else {
+                console.log('no user')
+              }
+            });
 
-    function login() {
-      event.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
 
-      firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          localStorage.setItem('loggedIn', true);
-          const user = firebase.auth().currentUser;
-          console.log(user)
-          localStorage.setItem('displayName', user.displayName);
-          window.location.replace("./sessions.html");
-        })
-        .catch((error) => {
-          console.log("error signing in: ", error.message)
+          } catch (err) {
+            console.log(err);
+          }
+        };
+
+        async function addUserToDatabase(user) {
+          const database = firebase.database();
+          await database.ref('users/' + user.uid).set({ displayName: user.displayName, email: user.email });
+        }
+
+        function login() {
+          event.preventDefault();
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+
+          firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              localStorage.setItem('loggedIn', true);
+              const user = firebase.auth().currentUser;
+              console.log(user)
+              localStorage.setItem('displayName', user.displayName);
+              window.location.replace("./sessions.html");
+            })
+            .catch((error) => {
+              console.log("error signing in: ", error.message)
+            });
+        };
+      </script>
+      <script>
+        const toggleNewPassword = document.querySelector('.toggleNewPassword');
+        const togglePasswordCheck = document.querySelector('.togglePasswordCheck');
+        const password = document.querySelector('.togglePassword');
+        const newPasswordEl = document.getElementById('newPassword');
+        const passwordCheckEl = document.getElementById('passwordCheck');
+        const passwordEl = document.getElementById('password');
+        toggleNewPassword.addEventListener('click', (e) => {
+          const type = newPasswordEl
+            .getAttribute('type') === 'password' ?
+            'text' : 'password';
+          newPasswordEl.setAttribute('type', type);
+          e.target.classList.toggle('bi-eye');
         });
-    };
-  </script>
-  <script>
-    const toggleNewPassword = document.querySelector('.toggleNewPassword');
-    const togglePasswordCheck = document.querySelector('.togglePasswordCheck');
-    const password = document.querySelector('.togglePassword');
-    const newPasswordEl = document.getElementById('newPassword');
-    const passwordCheckEl = document.getElementById('passwordCheck');
-    const passwordEl = document.getElementById('password');
-    toggleNewPassword.addEventListener('click', (e) => {
-      const type = newPasswordEl
-        .getAttribute('type') === 'password' ?
-        'text' : 'password';
-      newPasswordEl.setAttribute('type', type);
-      e.target.classList.toggle('bi-eye');
-    });
-    togglePasswordCheck.addEventListener('click', (e) => {
-      const type = passwordCheckEl
-        .getAttribute('type') === 'password' ?
-        'text' : 'password';
-      passwordCheckEl.setAttribute('type', type);
-      e.target.classList.toggle('bi-eye');
-    });
-    password.addEventListener('click', (e) => {
-      const type = passwordEl
-        .getAttribute('type') === 'password' ?
-        'text' : 'password';
-      passwordEl.setAttribute('type', type);
-      e.target.classList.toggle('bi-eye');
-    });
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
+        togglePasswordCheck.addEventListener('click', (e) => {
+          const type = passwordCheckEl
+            .getAttribute('type') === 'password' ?
+            'text' : 'password';
+          passwordCheckEl.setAttribute('type', type);
+          e.target.classList.toggle('bi-eye');
+        });
+        password.addEventListener('click', (e) => {
+          const type = passwordEl
+            .getAttribute('type') === 'password' ?
+            'text' : 'password';
+          passwordEl.setAttribute('type', type);
+          e.target.classList.toggle('bi-eye');
+        });
+      </script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
 
 </body>
 
