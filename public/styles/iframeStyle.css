@@ -35,8 +35,13 @@ padding: 10px;
 
 code {
   background-color: white;
+  font-size: 15px;
 }
 
 tr {
   border: 1px solid lightgray;
+}
+
+td {
+  padding: 5px
 }
