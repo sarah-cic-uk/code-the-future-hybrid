@@ -36,6 +36,10 @@ function updateSideNav() {
   const name = filename.substring(0, filename.indexOf("."));
   const session = window.location.pathname.match(/session\d/)[0];
   const submenu = 'submenu' + session.match(/\d/);
+  console.log(name)
+  console.log(session)
+  console.log(submenu)
+
   document.getElementById(submenu).classList.add("show");
   document.getElementsByName(name)[0].classList.add("active-side-nav");
   document.getElementsByName(session)[0].classList.add("active-side-nav");

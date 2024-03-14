@@ -17,7 +17,7 @@ template.innerHTML = `
         </li>
         <li>
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/introIDE.html')"
-            class="nav-link p-0 name="introIDE"">
+            class="nav-link p-0" name="introIDE">
             <i class="fs-4 bi-dash"></i>
             <span class="d-none d-sm-inline">Laptop Setup</span></a>
         </li>
