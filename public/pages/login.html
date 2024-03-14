@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="text-center pt-1 mb-1">
-                          <button class="btn btn-block fa-lg mb-3" style="background-color: #d9437a; color: white"
+                          <button class="btn btn-block fa-lg mb-3 button-style" 
                             type="submit">Log In</button>
                         </div>
                       </form>
@@ -97,7 +97,7 @@
 
                       <div class="d-flex align-items-center justify-content-center pb-4">
                         <p class="mb-0 me-2">Don't have an account?</p>
-                        <button type="button" class="btn" style="border-color: #d9437a" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-register" data-bs-toggle="modal"
                           data-bs-target="#registrationModal">
                           Register
                         </button>
@@ -200,7 +200,6 @@
         }
 
         async function registerNewUser() {
-          console.log("SUBMITTING")
           const email = document.getElementById('newEmail').value;
           const password = document.getElementById('newPassword').value;
           const name = document.getElementById('displayName').value;
@@ -224,13 +223,16 @@
 
             fbAuth.onAuthStateChanged(async (user) => {
               if (user) {
+                localStorage.setItem('loggedIn', true);
+                localStorage.setItem('displayName', user.displayName);
                 await addUserToDatabase(user);
                 window.location.replace("./sessions.html");
               } else {
                 console.log('no user')
+                localStorage.removeItem('loggedIn');
+                localStorage.removeItem('displayName');
               }
             });
-
 
           } catch (err) {
             console.log(err);
@@ -251,7 +253,6 @@
             .then((userCredential) => {
               localStorage.setItem('loggedIn', true);
               const user = firebase.auth().currentUser;
-              console.log(user)
               localStorage.setItem('displayName', user.displayName);
               window.location.replace("./sessions.html");
             })

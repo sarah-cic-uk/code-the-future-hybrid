@@ -348,4 +348,25 @@ ul[id^=submenu] li {
 
 .job-btns a {
   min-height: 62px;
+  width: 180px;
+  background-color: #31238C; 
+  color: white;
+}
+
+.job-btns a:hover,
+.btn-register:hover,
+.button-style,
+.button-style-invert:hover {
+  background-color: #d9437a; 
+  color: white;
+}
+
+.button-style:hover,
+.button-style-invert {
+  background-color: #31238C; 
+  color: white;
+}
+
+.btn-register {
+  border-color: #d9437a;
 }
