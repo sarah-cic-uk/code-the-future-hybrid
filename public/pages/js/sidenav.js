@@ -138,6 +138,12 @@ template.innerHTML = `
             <i class="fs-4 bi-dash"></i>
             <span class="d-none d-sm-inline">Advanced CSS</span></a>
         </li>
+        <li>
+          <a href="#" onclick="createPath('pages/sessions/session4/lessons/cssActivities.html')"
+            class="nav-link p-0" name="cssActivities">
+            <i class="fs-4 bi-dash"></i>
+            <span class="d-none d-sm-inline">CSS Activity</span></a>
+        </li>
       </ul>
     </li>
     <li class="pb-2">
