@@ -133,7 +133,6 @@
 
     window.onload = (event) => {
       auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
-      const fbAuth = firebase.auth();
       const storage = firebase.storage();
       const pathReference = storage.ref('media/introIDE.mp4');
       const el = document.getElementById('session-video');
