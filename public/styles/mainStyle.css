@@ -157,7 +157,7 @@
 }
 
 .jobs .item {
-min-width: 330px;
+  min-width: 330px;
 }
 
 .session-description {
@@ -322,9 +322,9 @@ ul[id^=submenu] li {
   bottom: 0;
   margin-bottom: 0;
   /* min-height: 80px; */
-  /* background-size: contain; */
-  /* background-repeat: no-repeat; */
-/* } */ 
+/* background-size: contain; */
+/* background-repeat: no-repeat; */
+/* } */
 
 .job-image {
   object-fit: cover;
@@ -349,7 +349,7 @@ ul[id^=submenu] li {
 .job-btns a {
   min-height: 62px;
   width: 180px;
-  background-color: #31238C; 
+  background-color: #31238C;
   color: white;
 }
 
@@ -357,16 +357,29 @@ ul[id^=submenu] li {
 .btn-register:hover,
 .button-style,
 .button-style-invert:hover {
-  background-color: #d9437a; 
+  background-color: #d9437a;
   color: white;
 }
 
 .button-style:hover,
 .button-style-invert {
-  background-color: #31238C; 
+  background-color: #31238C;
   color: white;
 }
 
 .btn-register {
   border-color: #d9437a;
+}
+
+.hidden-feedback {
+  display: none;
+}
+
+.invalid-feedback {
+  display: block;
+  color: red;
+  display: flex;
+  justify-content: flex-end;
+  font-size: small;
+  padding-right: 5px;
 }

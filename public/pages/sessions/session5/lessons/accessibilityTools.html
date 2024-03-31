@@ -14,13 +14,10 @@
         integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
-    <script defer type="module" src="../../../js/firebase.js"></script>
-    <script type="text/javascript" src="../../../js/app.js"></script>
     <script src="../../../js/sidenav.js" type="text/javascript" defer></script>
+    <script  type="text/javascript" src="../../../js/app.js"></script>
+    <script  src="../../../js/imports.js"></script>
+    <script defer type="module" src="../../../js/firebase.js"></script>
 </head>
 
 <body>
@@ -106,6 +103,11 @@
             </div>
         </div>
     </div>
+    <script type="module">
+        import { fbAuth, fbStorage } from "../../../js/firebase.js"
+        window.fbAuth = fbAuth;
+        window.fbStorage = fbStorage;
+      </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"
         integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -134,8 +136,8 @@
         window.onload = (event) => {
             auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
-            const storage = firebase.storage();
-            const pathReference = storage.ref('media/accessibilityTools.mp4');
+            
+            const pathReference = window.fbStorage.ref('media/accessibilityTools.mp4');
             const el = document.getElementById('session-video');
             fetchVideo(pathReference, el)
 
@@ -149,8 +151,7 @@
         }
 
         function logUserOut(event) {
-            const fbAuth = firebase.auth();
-            logout(fbAuth)
+            logout(window.fbAuth)
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"

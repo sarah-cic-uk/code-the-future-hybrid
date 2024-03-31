@@ -1,6 +1,3 @@
-// import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.3/firebase-app.js'
-// import { getAuth } from 'https://www.gstatic.com/firebasejs/9.6.3/firebase-auth.js'
-// import { getStorage, ref } from "https://www.gstatic.com/firebasejs/9.6.3/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAgkCUR0Y-7jXurdxrVDYNxQVRQidiNJBw",
@@ -11,11 +8,13 @@ const firebaseConfig = {
   appId: "1:872086354850:web:092e805b04287ae7fcd0fb",
   measurementId: "G-JSR5R0X09W",
   databaseURL: "https://code-the-future-hybrid-default-rtdb.europe-west1.firebasedatabase.app/"
-  
 };
 
 firebase.initializeApp(firebaseConfig);
+
 export const fbAuth = firebase.auth();
+export const fbDB = firebase.database()
+export const fbStorage = firebase.storage()
 
 
 
