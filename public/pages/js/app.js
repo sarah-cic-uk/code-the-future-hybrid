@@ -11,6 +11,7 @@ function auth(loginBtn, profileBtn, sessionsBtn) {
     if (loginBtn) loginBtn.style.display = "block";
     if (loginBtn) profileBtn.style.display = "none";
     if (sessionsBtn) sessionsBtn.style.display = "none";
+    if(window.location.pathname.match(/.*\/(.*)$/)[1] !== "login.html") {window.location.replace(`${getPath()}pages/login.html`)};
   }
 }
 
