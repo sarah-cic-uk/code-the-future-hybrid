@@ -80,19 +80,6 @@
         <div class="container-fluid">
             <div class="row flex-nowrap page-content">
                 <div class="col py-3">
-                    <div class="media-container d-flex">
-                        <div class="embed-responsive embed-responsive-16by9 text-center flex-grow-1">
-                            <video id="session-video" class="embed-responsive-item mx-a" controls width="70%">
-                                <source type="video/mp4">
-                            </video>
-                        </div>
-                        <div class="text-end">
-                            <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle "
-                                width="100" height="100">
-                            <div class="tutor-name">Michael Weller<br />
-                                Software Engineer</div>
-                        </div>
-                    </div>
                     <div class='embed-container embed-responsive' style="width: 100%; min-height: 90vh;">
                         <iframe class="embed-responsive-item" style="width: 100%; min-height: 90vh;" id="github-iframe"
                             name="github-iframe" src=""></iframe>
@@ -102,9 +89,8 @@
         </div>
     </div>
     <script type="module">
-        import { fbAuth, fbStorage } from "../../../js/firebase.js"
+        import { fbAuth } from "../../js/firebase.js"
         window.fbAuth = fbAuth;
-        window.fbStorage = fbStorage;
       </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/2.1.0/showdown.min.js"
         integrity="sha512-LhccdVNGe2QMEfI3x4DVV3ckMRe36TfydKss6mJpdHjNFiV07dFpS2xzeZedptKZrwxfICJpez09iNioiSZ3hA=="
@@ -112,7 +98,7 @@
         </script>
     <script>
         var converter = new showdown.Converter();
-        fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-3/html_hyperlinks.md')
+        fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-6/additional_help.md')
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
@@ -124,7 +110,7 @@
                     test;
             });
     </script>
-    <script defer type="text/javascript">
+    <script type="text/javascript">
         const stylesheet = document.createElement('link');
         stylesheet.rel = 'stylesheet';
         stylesheet.type = 'text/css';
@@ -133,13 +119,6 @@
 
         window.onload = (event) => {
             auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
-
-            
-            const pathReference = window.fbStorage.ref('media/htmlHyperlinks.mp4');
-            const el = document.getElementById('session-video');
-            fetchVideo(pathReference, el)
-
-            document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/MichaelWeller.png';
             updateSideNav()
         }
 

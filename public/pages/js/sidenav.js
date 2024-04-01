@@ -194,6 +194,12 @@ template.innerHTML = `
             <i class="fs-4 bi-dash"></i>
             <span class="d-none d-sm-inline">Project Planning</span></a>
         </li>
+        <li>
+        <a href="#" onclick="createPath('pages/sessions/session6/lessons/additionalHelp.html')"
+          class="nav-link p-0" name="additionalHelp">
+          <i class="fs-4 bi-dash"></i>
+          <span class="d-none d-sm-inline">Additional Help</span></a>
+      </li>
       </ul>
     </li>
   </ul>
