@@ -304,7 +304,6 @@
             localStorage.setItem('loggedIn', true);
             localStorage.setItem('displayName', user.displayName);
             //localStorage.setItem('cohort', user.cohort);
-            //localStorage.setItem('cohort', user.cohort);
             await addUserToDatabase(user, validCode);
             window.location.replace("./sessions.html");
           } else {
@@ -327,16 +326,16 @@
       event.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      fbAuth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
+      window.fbAuth.signInWithEmailAndPassword(email, password)
+        .then(async (userCredential) => {
           localStorage.setItem('loggedIn', true);
-          const user = firebase.auth().currentUser;
+          const user = window.fbAuth.currentUser;
+          console.log('user',user.uid)
           localStorage.setItem('displayName', user.displayName);
-          localStorage.setItem('cohort', user.cohort);
-          const dbuser = firebase.database().ref('/users').once('value');
-          console.log(dbuser);
-          localStorage.setItem('cohort', dbuser?.cohort);
-          //window.location.replace("./sessions.html");
+          const userdb = await window.fbDB.ref('users/' + user.uid).once('value')
+          localStorage.setItem('cohort', userdb.val().cohort)
+          console.log(userdb.val())
+          window.location.replace("./sessions.html");
         })
         .catch((error) => {
           console.log("error signing in: ", error.message)
