@@ -303,11 +303,13 @@
           if (user) {
             localStorage.setItem('loggedIn', true);
             localStorage.setItem('displayName', user.displayName);
+            //localStorage.setItem('cohort', user.cohort);
             await addUserToDatabase(user, validCode);
             window.location.replace("./sessions.html");
           } else {
             localStorage.removeItem('loggedIn');
             localStorage.removeItem('displayName');
+            localStorage.removeItem('cohort');
           }
         });
       } catch (err) {
@@ -328,7 +330,11 @@
           localStorage.setItem('loggedIn', true);
           const user = firebase.auth().currentUser;
           localStorage.setItem('displayName', user.displayName);
-          window.location.replace("./sessions.html");
+          localStorage.setItem('cohort', user.cohort);
+          const dbuser = firebase.database().ref('/users').once('value');
+          console.log(dbuser);
+          localStorage.setItem('cohort', dbuser?.cohort);
+          //window.location.replace("./sessions.html");
         })
         .catch((error) => {
           console.log("error signing in: ", error.message)
