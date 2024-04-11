@@ -304,11 +304,13 @@
             localStorage.setItem('loggedIn', true);
             localStorage.setItem('displayName', user.displayName);
             //localStorage.setItem('cohort', user.cohort);
+            //localStorage.setItem('cohort', user.cohort);
             await addUserToDatabase(user, validCode);
             window.location.replace("./sessions.html");
           } else {
             localStorage.removeItem('loggedIn');
             localStorage.removeItem('displayName');
+            localStorage.removeItem('cohort');
             localStorage.removeItem('cohort');
           }
         });
