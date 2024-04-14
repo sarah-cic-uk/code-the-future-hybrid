@@ -177,8 +177,8 @@
                 onclick="validateAndRegister()">Sign
                 up!</button>
             </div>
-            <div class="float-end mb-1" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-            aria-controls="collapseExample">
+            <div class="float-end mb-1" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+              aria-expanded="false" aria-controls="collapseExample">
               <a class="small" style="cursor: pointer;">
                 view data privacy information<i class="bi bi-shield-exclamation ms-1" style="color: #1d0c59;"></i>
               </a>
@@ -323,10 +323,10 @@
       event.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      fbAuth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
+      window.fbAuth.signInWithEmailAndPassword(email, password)
+        .then(async (userCredential) => {
           localStorage.setItem('loggedIn', true);
-          const user = firebase.auth().currentUser;
+          const user = window.fbAuth.currentUser;
           localStorage.setItem('displayName', user.displayName);
           window.location.replace("./sessions.html");
         })
