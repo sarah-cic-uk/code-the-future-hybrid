@@ -155,7 +155,7 @@
         <div class="row flex-nowrap page-content">
           <div class="col py-3">
             <div class="row people d-flex justify-content-center">
-              <div class="col-md-4 session-card" id="`checkReleaseDate()`">
+              <div class="col-md-4 session-card" id="session1-card">
                 <div
                   class="box"
                   style="
@@ -174,6 +174,7 @@
                         href="#"
                         onclick="createPath('pages/sessions/session1/introduction.html')"
                         class="btn btn-primary float-end"
+                        id="session1-card-btn"
                         >Get Started</a
                       >
                     </div>
@@ -195,6 +196,7 @@
                         href="#"
                         onclick="createPath('pages/sessions/session2/introduction.html')"
                         class="btn btn-primary float-end"
+                        id="session2-card-btn"
                         >Go</a
                       >
                     </div>
@@ -326,13 +328,33 @@
             }
           });
         });
-        console.log(userCohort);
+        setSessionButtonStates(userCohort);
         auth(
           null,
           document.querySelector(".profileBtn"),
           document.querySelector("#sessionsLink")
         );
       };
+
+      function setSessionButtonStates(userCohort) {
+        const now = new Date().getTime() / 1000;
+        console.log(now);
+        console.log(userCohort);
+        const sess1btn = document.getElementById("session1-card-btn");
+        if ((sess1btn.disabled = userCohort.sessions[0].releaseDate > now)) {
+          sess1btn.classList.add("disabled");
+        } else {
+          sess1btn.classList.remove("disabled");
+        }
+
+        const sess2btn = document.getElementById("session2-card-btn");
+        if ((sess2btn.disabled = userCohort.sessions[1].releaseDate > now)) {
+          sess2btn.classList.add("disabled");
+        } else {
+          sess1btn.classList.remove("disabled");
+        }
+      }
+
       function createPath(options) {
         window.location = getPath() + options;
         return false;
