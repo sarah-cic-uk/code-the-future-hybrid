@@ -312,7 +312,6 @@
     </script>
     <script type="text/javascript">
       const stylesheet = document.createElement("link");
-      let userCohort;
       stylesheet.rel = "stylesheet";
       stylesheet.type = "text/css";
       stylesheet.href = getPath() + "styles/mainStyle.css";
@@ -321,13 +320,16 @@
       window.onload = async (event) => {
         console.log("Loaded Page...");
         console.log(window.localStorage);
-        await window.fbDB.ref("/cohorts").once("value", (cohort) => {
-          cohort.forEach((ch) => {
-            if (ch.val().id == window.localStorage.cohort) {
-              userCohort = ch.val();
-            }
-          });
-        });
+        const userCohort = await window.fbDB
+          .ref("/cohorts")
+          .child(window.localStorage.cohort)
+          .once("value")
+          .then((snapshot) => snapshot.val())
+          .catch((error) => ({
+            errorCode: error.code,
+            errorMessage: error.message
+          }));
+        console.log(userCohort);
         setSessionButtonStates(userCohort);
         auth(
           null,
@@ -341,17 +343,24 @@
         console.log(now);
         console.log(userCohort);
         const sess1btn = document.getElementById("session1-card-btn");
-        if ((sess1btn.disabled = userCohort.sessions[0].releaseDate > now)) {
+        console.log({ userCohort: userCohort.sessionReleaseDates });
+        userCohort.sessionReleaseDates.forEach((session) => {
+          switch (session) {
+            case session1:
+              console.log("inside switch statement");
+              break;
+
+            default:
+              break;
+          }
+        });
+        if (userCohort.sessionReleaseDates.session1 > now) {
           sess1btn.classList.add("disabled");
-        } else {
-          sess1btn.classList.remove("disabled");
         }
 
         const sess2btn = document.getElementById("session2-card-btn");
-        if ((sess2btn.disabled = userCohort.sessions[1].releaseDate > now)) {
+        if (userCohort.sessionReleaseDates.session2 > now) {
           sess2btn.classList.add("disabled");
-        } else {
-          sess1btn.classList.remove("disabled");
         }
       }
 
