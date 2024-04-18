@@ -170,13 +170,15 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <a
+                      <button
                         href="#"
                         onclick="createPath('pages/sessions/session1/introduction.html')"
-                        class="btn btn-primary float-end"
+                        class="release-date-btn btn btn-primary float-end"
                         id="session1-card-btn"
-                        >Get Started</a
+                        name="session1"
                       >
+                        Get Started
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -192,13 +194,15 @@
                       <p class="session-description">Create a basic webpage</p>
                     </div>
                     <div class="card-footer">
-                      <a
+                      <button
                         href="#"
                         onclick="createPath('pages/sessions/session2/introduction.html')"
-                        class="btn btn-primary float-end"
+                        class="release-date-btn btn btn-primary float-end"
                         id="session2-card-btn"
-                        >Go</a
+                        name="session2"
                       >
+                        Go
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -217,12 +221,15 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <a
+                      <button
                         href="#"
                         onclick="createPath('pages/sessions/session3/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
+                        class="release-date-btn btn btn-primary float-end"
+                        id="session3-card-btn"
+                        name="session3"
                       >
+                        Go
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -242,12 +249,15 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <a
+                      <button
                         href="#"
                         onclick="createPath('pages/sessions/session4/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
+                        class="release-date-btn btn btn-primary float-end"
+                        id="session4-card-btn"
+                        name="session4"
                       >
+                        Go
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -265,12 +275,15 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <a
+                      <button
                         href="#"
                         onclick="createPath('pages/sessions/session5/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
+                        class="release-date-btn btn btn-primary float-end"
+                        id="session5-card-btn"
+                        name="session5"
                       >
+                        Go
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -290,12 +303,15 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <a
+                      <button
                         href="#"
                         onclick="createPath('pages/sessions/session6/introduction.html')"
-                        class="btn btn-primary float-end"
-                        >Go</a
+                        class="release-date-btn btn btn-primary float-end"
+                        id="session6-card-btn"
+                        name="session6"
                       >
+                        Go
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -318,8 +334,6 @@
       document.head.appendChild(stylesheet);
 
       window.onload = async (event) => {
-        console.log("Loaded Page...");
-        console.log(window.localStorage);
         const userCohort = await window.fbDB
           .ref("/cohorts")
           .child(window.localStorage.cohort)
@@ -329,8 +343,7 @@
             errorCode: error.code,
             errorMessage: error.message
           }));
-        console.log(userCohort);
-        setSessionButtonStates(userCohort);
+        cheackReleaseDates(userCohort);
         auth(
           null,
           document.querySelector(".profileBtn"),
@@ -338,30 +351,12 @@
         );
       };
 
-      function setSessionButtonStates(userCohort) {
-        const now = new Date().getTime() / 1000;
-        console.log(now);
-        console.log(userCohort);
-        const sess1btn = document.getElementById("session1-card-btn");
-        console.log({ userCohort: userCohort.sessionReleaseDates });
-        userCohort.sessionReleaseDates.forEach((session) => {
-          switch (session) {
-            case session1:
-              console.log("inside switch statement");
-              break;
-
-            default:
-              break;
-          }
+      function cheackReleaseDates(userCohort) {
+        document.querySelectorAll(".release-date-btn").forEach((btn) => {
+          btn.disabled =
+            new Date().getTime() / 1000 <
+            userCohort.sessionReleaseDates[btn.name];
         });
-        if (userCohort.sessionReleaseDates.session1 > now) {
-          sess1btn.classList.add("disabled");
-        }
-
-        const sess2btn = document.getElementById("session2-card-btn");
-        if (userCohort.sessionReleaseDates.session2 > now) {
-          sess2btn.classList.add("disabled");
-        }
       }
 
       function createPath(options) {
