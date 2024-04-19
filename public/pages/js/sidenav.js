@@ -5,10 +5,11 @@ template.innerHTML = `
 <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2">
   <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
     <li class="nav-item pb-2">
-      <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session1">
+      <button href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session1">
         <i class="fs-4 bi-github"></i>
         <span class="ms-3 d-none d-sm-inline">Session 1</span>
-      </a>
+        <span id="session1-tooltip" class="tooltip-text hidden">Session Opens Soon</span>
+      </button>
       <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
         <li class="w-100">
           <a href="#" onclick="createPath('pages/sessions/session1/introduction.html')" class="nav-link p-0" name="session1-overview">
@@ -41,11 +42,12 @@ template.innerHTML = `
         </li>
       </ul>
     </li>
-    <li class="pb-2">
-      <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session2">
+    <li class="nav-item pb-2">
+      <button href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session2">
         <i class="fs-4 bi-window-sidebar"></i>
         <span class="ms-3 d-none d-sm-inline">Session 2</span>
-      </a>
+        <span id="session2-tooltip" class="tooltip-text hidden">Session Opens Soon</span>
+      </button>
       <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
         <li class="w-100">
           <a href="#" onclick="createPath('pages/sessions/session2/introduction.html')" class="nav-link p-0" name="session2-overview">
@@ -72,11 +74,12 @@ template.innerHTML = `
         </li>
       </ul>
     </li>
-    <li class="pb-2">
-      <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session3">
+    <li class="nav-item pb-2">
+      <button href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session3">
         <i class="fs-4 bi-code-square"></i>
         <span class="ms-3 d-none d-sm-inline">Session 3</span>
-      </a>
+        <span id="session3-tooltip" class="tooltip-text hidden">Session Opens Soon</span>
+      </button>
       <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
         <li class="w-100">
           <a href="#" onclick="createPath('pages/sessions/session3/introduction.html')" class="nav-link p-0" name="session3-overview">
@@ -109,11 +112,12 @@ template.innerHTML = `
         </li>
       </ul>
     </li>
-    <li class="pb-2">
-      <a href="#submenu4" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session4">
+    <li class="nav-item pb-2">
+      <button href="#submenu4" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session4">
         <i class="fs-4 bi-border-style"></i>
         <span class="ms-3 d-none d-sm-inline">Session 4</span>
-      </a>
+        <span id="session4-tooltip" class="tooltip-text hidden">Session Opens Soon</span>
+      </button>
       <ul class="collapse nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
         <li class="w-100">
           <a href="#" onclick="createPath('pages/sessions/session4/introduction.html')" class="nav-link p-0" name="session4-overview">
@@ -146,11 +150,12 @@ template.innerHTML = `
         </li>
       </ul>
     </li>
-    <li class="pb-2">
-      <a href="#submenu5" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session5">
+    <li class="nav-item pb-2">
+      <button href="#submenu5" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session5">
         <i class="fs-4 bi-tools"></i>
         <span class="ms-3 d-none d-sm-inline">Session 5</span>
-      </a>
+        <span id="session5-tooltip" class="tooltip-text hidden">Session Opens Soon</span>
+      </button>
       <ul class="collapse nav flex-column ms-1" id="submenu5" data-bs-parent="#menu">
         <li class="w-100">
           <a href="#" onclick="createPath('pages/sessions/session5/introduction.html')" class="nav-link p-0" name="session5-overview">
@@ -177,11 +182,12 @@ template.innerHTML = `
         </li>
       </ul>
     </li>
-    <li class="pb-2">
-      <a href="#submenu6" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session6">
+    <li class="nav-item pb-2">
+      <button href="#submenu6" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session6">
         <i class="fs-4 bi-easel"></i>
         <span class="ms-3 d-none d-sm-inline">Showcase</span>
-      </a>
+        <span id="session6-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+      </button>
       <ul class="collapse nav flex-column ms-1" id="submenu6" data-bs-parent="#menu">
         <li class="w-100">
           <a href="#" onclick="createPath('pages/sessions/session6/introduction.html')" class="nav-link p-0" name="session6-overview">

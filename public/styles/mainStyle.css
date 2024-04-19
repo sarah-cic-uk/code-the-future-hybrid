@@ -2,12 +2,19 @@
   background-color: #011640;
   border-right: 2px solid #011640;
   max-width: 210px;
+  z-index: 100;
 }
 
 .side-navigation .nav-link {
   color: white;
 }
-
+.side-navigation .nav-item button {
+background:none;
+border:none;
+margin:0;
+padding:0;
+cursor: pointer;
+}
 .navbar {
   height: 70px;
   background-color: #eae9f3 !important;
@@ -382,4 +389,35 @@ ul[id^=submenu] li {
   justify-content: flex-end;
   font-size: small;
   padding-right: 5px;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  min-width: max-content;
+  color: #011640;
+  background-color: #f8f9fa;
+  padding: 5px;
+  border: 1px solid #011640;
+  border-radius: 5px;
+}
+
+.hover-text:hover .tooltip-text {
+  visibility: visible;
+}
+
+.hover-text {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.nav-item button[disabled] span:first-of-type,
+.nav-item button[disabled] i {
+opacity: 0.5;
 }
