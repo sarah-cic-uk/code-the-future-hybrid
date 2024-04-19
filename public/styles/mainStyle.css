@@ -20,6 +20,10 @@ cursor: pointer;
   background-color: #eae9f3 !important;
 }
 
+.navbar-nav button {
+  border: none;
+}
+
 .navbar-brand {
   min-width: auto;
   text-align: center;
@@ -246,12 +250,14 @@ form i {
 }
 
 .navbar-nav .nav-link {
-  border-right: 2px solid #011640;
   justify-content: center;
   height: 100%;
   font-weight: 500;
   font-family: sans-serif;
+  background-color: transparent;
 }
+
+
 
 .nav-link {
   display: inline-flex;
@@ -263,7 +269,7 @@ form i {
   vertical-align: text-bottom;
 }
 
-.nav-link:hover {
+.nav-link a:hover {
   color: #d8447a
 }
 
@@ -272,10 +278,15 @@ form i {
   color: #1DF2DD
 }
 
-.active-top-nav {
-  color: #d8447a;
+.active-top-nav a {
+  color: #d8447a !important;
   font-weight: 600;
 }
+
+.navbar-nav .nav-link a {
+  text-decoration: none;
+  color: #011640;
+  }
 
 @media (min-width: 576px) {
   .side-navigation {

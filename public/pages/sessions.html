@@ -197,6 +197,7 @@
     import { fbAuth, fbDB } from "./js/firebase.js";
     window.fbAuth = fbAuth;
     window.fbDB = fbDB;
+    window.fbDB = fbDB;
   </script>
   <script type="text/javascript">
     const stylesheet = document.createElement("link");
@@ -205,43 +206,14 @@
     stylesheet.href = getPath() + "styles/mainStyle.css";
     document.head.appendChild(stylesheet);
 
-    window.onload = async (event) => {
-      const userCohort = await window.fbDB
-        .ref("/cohorts")
-        .child(window.localStorage.cohort)
-        .once("value")
-        .then((snapshot) => snapshot.val())
-        .catch((error) => ({
-          errorCode: error.code,
-          errorMessage: error.message
-        }));
-      cheackReleaseDates(userCohort);
+    window.onload = (event) => {
+      checkReleaseDates(window.fbDB);
       auth(
         null,
         document.querySelector(".profileBtn"),
         document.querySelector("#sessionsLink")
       );
     };
-
-    function cheackReleaseDates(userCohort) {
-      // session buttons
-      document.querySelectorAll(".release-date-btn").forEach((btn) => {
-        btn.disabled =
-          Date.now() <
-          userCohort.sessionReleaseDates[btn.name];
-      });
-      // sidebar links
-      document.querySelectorAll(".nav-item button").forEach((item) => {
-        if (
-          Date.now() <
-          userCohort.sessionReleaseDates[item.name]) {
-          item.disabled = true;
-          item.classList.add('hover-text');
-          document.getElementById(`${item.name}-tooltip`).classList.remove('hidden');
-          document.getElementById(`${item.name}-tooltip`).innerHTML = `Session Opens ${new Date(userCohort.sessionReleaseDates[item.name]).toLocaleString().split(',')[0]}`;
-        }
-      });
-    }
 
     function createPath(options) {
       window.location = getPath() + options;

@@ -177,8 +177,8 @@
                 onclick="validateAndRegister()">Sign
                 up!</button>
             </div>
-            <div class="float-end mb-1" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
-            aria-controls="collapseExample">
+            <div class="float-end mb-1" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+              aria-expanded="false" aria-controls="collapseExample">
               <a class="small" style="cursor: pointer;">
                 view data privacy information<i class="bi bi-shield-exclamation ms-1" style="color: #1d0c59;"></i>
               </a>
@@ -200,6 +200,7 @@
     import { fbAuth, fbDB } from "./js/firebase.js"
     window.fbAuth = fbAuth;
     window.fbDB = fbDB;
+    window.fbDB = fbDB;
   </script>
   <script defer type="text/javascript">
     const stylesheet = document.createElement('link');
@@ -209,6 +210,7 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
+      checkReleaseDates(window.fbDB);
       auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
     }
 
@@ -330,7 +332,7 @@
         .then(async (userCredential) => {
           localStorage.setItem('loggedIn', true);
           const user = window.fbAuth.currentUser;
-          console.log('user',user.uid)
+          console.log('user', user.uid)
           localStorage.setItem('displayName', user.displayName);
           const userdb = await window.fbDB.ref('users/' + user.uid).once('value')
           localStorage.setItem('cohort', userdb.val().cohort)
