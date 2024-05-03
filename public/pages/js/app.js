@@ -66,9 +66,13 @@ async function checkReleaseDates(fbDB) {
     }));
   // session buttons
   document.querySelectorAll(".release-date-btn").forEach((btn) => {
-    btn.disabled =
-      Date.now() <
-      userCohort.sessionReleaseDates[btn.name];
+      if(Date.now() <
+      userCohort.sessionReleaseDates[btn.name]){
+      btn.disabled = true;
+      btn.classList.add('hover-text');
+      document.getElementById(`${btn.name}-tooltip`).classList.remove('hidden');
+      document.getElementById(`${btn.name}-tooltip`).innerHTML = `Session Opens ${new Date(userCohort.sessionReleaseDates[btn.name]).toLocaleString().split(',')[0]}`;
+      }
   });
   // sidebar links
   document.querySelectorAll(".nav-item button").forEach((item) => {
