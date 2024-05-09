@@ -25,7 +25,7 @@
     />
     <script type="text/javascript" src="./js/app.js"></script>
     <script src="./js/imports.js"></script>
-    <script defer type="module" src="./js/firebase.js"></script>
+    <script parser-inserted defer type="module" src="./js/firebase.js"></script>
     <style>
       form {
         width: 100%;
@@ -219,7 +219,7 @@
         </div>
       </div>
     </div>
-    <script type="module">
+    <script defer type="module">
       import { fbAuth, fbDB } from "./js/firebase.js";
       window.fbAuth = fbAuth;
     </script>
@@ -255,6 +255,8 @@
       //     profile_picture: imageUrl
       //   });
       // }
+
+
     </script>
     <script>
       window.onload = (event) => {

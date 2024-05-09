@@ -17,7 +17,7 @@
     <script src="../../../js/sidenav.js" type="text/javascript" defer></script>
     <script  type="text/javascript" src="../../../js/app.js"></script>
     <script  src="../../../js/imports.js"></script>
-    <script defer type="module" src="../../../js/firebase.js"></script>
+    <script parser-inserted defer type="module" src="../../../js/firebase.js"></script>
 </head>
 
 <body>
@@ -103,7 +103,7 @@
             </div>
         </div>
     </div>
-    <script type="module">
+    <script defer type="module">
         import { fbAuth, fbStorage } from "../../../js/firebase.js"
         window.fbAuth = fbAuth;
         window.fbStorage = fbStorage;
