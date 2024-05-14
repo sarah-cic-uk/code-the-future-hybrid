@@ -70,9 +70,12 @@ async function checkReleaseDates(fbDB) {
       userCohort.sessionReleaseDates[btn.name]){
       btn.disabled = true;
       btn.classList.add('hover-text');
-      document.getElementById(`${btn.name}-tooltip`).classList.remove('hidden');
-      document.getElementById(`${btn.name}-tooltip`).innerHTML = `Session Opens ${new Date(userCohort.sessionReleaseDates[btn.name]).toLocaleString().split(',')[0]}`;
-      }
+      // document.getElementById(`${btn.name}-tooltip`).foreach
+
+      document.getElementById(`${btn.name}-btn-tooltip`).classList.remove('hidden');
+      document.getElementById(`${btn.name}-btn-tooltip`).innerHTML = `Session Opens ${new Date(userCohort.sessionReleaseDates[btn.name]).toLocaleString().split(',')[0]}`;
+      console.log(document.getElementById(`${btn.name}-btn-tooltip`));
+    }
   });
   // sidebar links
   document.querySelectorAll(".nav-item button").forEach((item) => {
