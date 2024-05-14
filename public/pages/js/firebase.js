@@ -1,4 +1,4 @@
-const SarahfirebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyAgkCUR0Y-7jXurdxrVDYNxQVRQidiNJBw",
   authDomain: "code-the-future-hybrid.firebaseapp.com",
   projectId: "code-the-future-hybrid",
@@ -8,16 +8,6 @@ const SarahfirebaseConfig = {
   measurementId: "G-JSR5R0X09W",
   databaseURL:
     "https://code-the-future-hybrid-default-rtdb.europe-west1.firebasedatabase.app/",
-};
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA1M-spdbLBikmMNzAol0m3uE0_WZYAXWU",
-  authDomain: "pokemon-firebase-820fd.firebaseapp.com",
-  projectId: "pokemon-firebase-820fd",
-  storageBucket: "pokemon-firebase-820fd.appspot.com",
-  messagingSenderId: "866190768035",
-  appId: "1:866190768035:web:f63814c66decac85d28c16",
-  databaseURL: "https://pokemon-firebase-820fd-default-rtdb.firebaseio.com",
 };
 
 firebase.initializeApp(firebaseConfig);
