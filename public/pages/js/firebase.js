@@ -1,3 +1,4 @@
+
 const firebaseConfig = {
   apiKey: "AIzaSyAgkCUR0Y-7jXurdxrVDYNxQVRQidiNJBw",
   authDomain: "code-the-future-hybrid.firebaseapp.com",
@@ -6,19 +7,11 @@ const firebaseConfig = {
   messagingSenderId: "872086354850",
   appId: "1:872086354850:web:092e805b04287ae7fcd0fb",
   measurementId: "G-JSR5R0X09W",
-  databaseURL:
-    "https://code-the-future-hybrid-default-rtdb.europe-west1.firebasedatabase.app/",
+  databaseURL: "https://code-the-future-hybrid-default-rtdb.europe-west1.firebasedatabase.app/"
 };
 
 firebase.initializeApp(firebaseConfig);
 
 export const fbAuth = firebase.auth();
-export const fbDB = firebase.database();
-export const fbStorage = firebase.storage();
-
-// Confirm firebase variables available within firebase.js
-console.log("Firebase SDK modules initialized within firebase.js...");
-
-console.log("fbAuth:", fbAuth);
-console.log("fbDB:", fbDB);
-console.log("fbStorage:", fbStorage);
+export const fbDB = firebase.database()
+export const fbStorage = firebase.storage()
