@@ -15,3 +15,10 @@ firebase.initializeApp(firebaseConfig);
 export const fbAuth = firebase.auth();
 export const fbDB = firebase.database()
 export const fbStorage = firebase.storage()
+
+// Confirm firebase variables available within firebase.js
+console.log("Firebase SDK modules initialized within firebase.js...");
+
+console.log("fbAuth:", fbAuth);
+console.log("fbDB:", fbDB);
+console.log("fbStorage:", fbStorage);
