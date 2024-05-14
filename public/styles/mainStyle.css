@@ -8,13 +8,15 @@
 .side-navigation .nav-link {
   color: white;
 }
+
 .side-navigation .nav-item button {
-background:none;
-border:none;
-margin:0;
-padding:0;
-cursor: pointer;
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
 }
+
 .navbar {
   height: 70px;
   background-color: #eae9f3 !important;
@@ -286,7 +288,7 @@ form i {
 .navbar-nav .nav-link a {
   text-decoration: none;
   color: #011640;
-  }
+}
 
 @media (min-width: 576px) {
   .side-navigation {
@@ -430,5 +432,17 @@ ul[id^=submenu] li {
 
 .nav-item button[disabled] span:first-of-type,
 .nav-item button[disabled] i {
-opacity: 0.5;
+  opacity: 0.5;
+}
+
+.release-date-btn {
+  pointer-events: all !important
+}
+
+.release-date-btn:active {
+  pointer-events: none;
+}
+
+.release-date-btn .tooltip-text {
+  right: 0;
 }
