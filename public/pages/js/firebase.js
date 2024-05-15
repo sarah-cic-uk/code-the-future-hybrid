@@ -7,8 +7,7 @@ const firebaseConfig = {
   messagingSenderId: "872086354850",
   appId: "1:872086354850:web:092e805b04287ae7fcd0fb",
   measurementId: "G-JSR5R0X09W",
-  databaseURL:
-    "https://code-the-future-hybrid-default-rtdb.europe-west1.firebasedatabase.app/",
+  databaseURL: "https://code-the-future-hybrid-default-rtdb.firebaseio.com"
 };
 
 // Initialize Firebase
