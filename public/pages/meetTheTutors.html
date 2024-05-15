@@ -1,344 +1,608 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="Code, Future, HTML, CSS, JavaScript, IBM, CIC"
+    />
+    <meta
+      name="description"
+      content="Code the Future free HTML/CSS coding bootcamp"
+    />
+    <meta name="author" content="Sarah Neenan" />
+    <title>Code the Future</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
+    />
+    <script type="text/javascript" src="./js/app.js"></script>
+    <script src="./js/imports.js"></script>
+    <script parser-inserted defer type="module" src="./js/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
-  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
-  <meta name="author" content="Sarah Neenan" />
-  <title>Code the Future</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-  <script type="text/javascript" src="./js/app.js"></script>
-  <script src="./js/imports.js"></script>
-  <script defer type="module" src="./js/firebase.js"></script>
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-</head>
-
-<body>
-  <div class="page-body">
-    <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-          border-right: 2px solid #d9437a;
-          padding-right: 10px;
-          color: #1d0c59;
-        ">
-          <img src="../images/logo.png" height=60px alt="CTF" />
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
-          <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link  active-top-nav" aria-current="page" href="#"
-              onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
-          </div>
-          <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style">
-              Log In
-            </button>
+  <body>
+    <div class="page-body">
+      <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid g-0">
+          <a
+            onclick="createPath('index.html')"
+            class="navbar-brand"
+            href="#"
+            style="
+              border-right: 2px solid #d9437a;
+              padding-right: 10px;
+              color: #1d0c59;
+            "
+          >
+            <img src="../images/logo.png" height="60px" alt="CTF" />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="collapse navbar-collapse justify-content-between"
+            id="navbarNavAltMarkup"
+          >
+            <div class="navbar-nav nav-justified">
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="#"
+                onclick="createPath('index.html')"
+                >About CTF</a
+              >
+              <a
+                class="nav-link active-top-nav"
+                aria-current="page"
+                href="#"
+                onclick="createPath('pages/meetTheTutors.html')"
+                >Meet the tutors</a
+              >
+              <a
+                class="nav-link"
+                aria-current="page"
+                href="#"
+                onclick="createPath('pages/1on1.html')"
+                >Schedule a 1:1</a
+              >
+              <a
+                class="nav-link"
+                href="#"
+                onclick="createPath('pages/jobs.html')"
+                >Jobs at CIC</a
+              >
+              <a
+                class="nav-link"
+                href="#"
+                onclick="createPath('pages/courseCatalog.html')"
+                >Course Catalog</a
+              >
+              <a
+                class="nav-link"
+                id="sessionsLink"
+                href="#"
+                onclick="createPath('pages/sessions.html')"
+                >Sessions</a
+              >
+            </div>
             <div class="d-flex align-items-center">
-              <!-- Logged in Avatar -->
-              <div>
-                <p class="my-auto" id="profileName"></p>
-              </div>
-              <div class="profileBtn dropdown px-3">
-                <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                    alt="Black and White Portrait of a Man" loading="lazy" />
-                </a>
+              <button
+                type="button"
+                onclick="createPath('pages/login.html')"
+                class="loginBtn btn me-3 button-style"
+              >
+                Log In
+              </button>
+              <div class="d-flex align-items-center">
+                <!-- Logged in Avatar -->
+                <div>
+                  <p class="my-auto" id="profileName"></p>
+                </div>
+                <div class="profileBtn dropdown px-3">
+                  <a
+                    class="btn dropdown-toggle"
+                    href="#"
+                    role="button"
+                    id="dropdownMenuLink"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <img
+                      src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                      class="rounded-circle"
+                      height="25"
+                      alt="Black and White Portrait of a Man"
+                      loading="lazy"
+                    />
+                  </a>
 
-                <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
-                  <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
-                </ul>
+                  <ul
+                    class="dropdown-menu dropdown-menu-end"
+                    aria-labelledby=" dropdownMenuLink"
+                  >
+                    <li>
+                      <a
+                        class="dropdown-item"
+                        href="#"
+                        onclick="createPath('pages/profile.html')"
+                        >My Profile</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-item" href="#" onclick="logUserOut()"
+                        >Log out</a
+                      >
+                    </li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </nav>
-    <div class="container-fluid">
-      <div class="row flex-nowrap page-content">
-        <div class="col py-3">
-          <div class="team-grid">
-            <div class="container">
-              <div class="intro">
-                <h2 class="text-center">Let us introduce ourselves...</h2>
-              </div>
-              <div class="row people d-flex justify-content-center">
-                <div class="col-md-4 col-lg-4 item" id="first-item-card">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/sarah.jpeg)">
-                    <div class="profile">
-                      <h3 class="name">Sarah Neenan</h3>
-                      <p class="title">UK CIC Application Engineering Services Technical Lead</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Sarah Neenan</h3>
-                      <p class="description">I joined IBM CIC as a graduate in 2016. Before IBM I studied and worked in
-                        Animal Behaviour, Conservation and Engineering. It annoyed me that there was no software out
-                        there to help in my fish conservation research so I took a free evening course (much like this
-                        one!) to see if it was possible to learn to code and build the software that I needed. Soon
-                        after, I met someone from IBM CIC who suggested I apply because I showed enthusiasm and knew
-                        enough of the basics - they would teach me everything else I needed to know. I'm now a Managing
-                        Developer and Development Lead for two dev teams and I love my job.</p>
-                      <div class="social">
-                        <a href="https://www.linkedin.com/in/sneenan/" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/sarah-cic-uk" data-toggle="tooltip" title="CTF Github"><i
-                            class="sm-icon bi-github"></i></a>
-                        <a href="https://github.com/neenan" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+      </nav>
+      <div class="container-fluid">
+        <div class="row flex-nowrap page-content">
+          <div class="col py-3">
+            <div class="team-grid">
+              <div class="container">
+                <div class="intro">
+                  <h2 class="text-center">Let us introduce ourselves...</h2>
+                </div>
+                <div class="row people d-flex justify-content-center">
+                  <div class="col-md-4 col-lg-4 item" id="first-item-card">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/sarah.jpeg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Sarah Neenan</h3>
+                        <p class="title">
+                          UK CIC Application Engineering Services Technical Lead
+                        </p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Sarah Neenan</h3>
+                        <p class="description">
+                          I joined IBM CIC as a graduate in 2016. Before IBM I
+                          studied and worked in Animal Behaviour, Conservation
+                          and Engineering. It annoyed me that there was no
+                          software out there to help in my fish conservation
+                          research so I took a free evening course (much like
+                          this one!) to see if it was possible to learn to code
+                          and build the software that I needed. Soon after, I
+                          met someone from IBM CIC who suggested I apply because
+                          I showed enthusiasm and knew enough of the basics -
+                          they would teach me everything else I needed to know.
+                          I'm now a Managing Developer and Development Lead for
+                          two dev teams and I love my job.
+                        </p>
+                        <div class="social">
+                          <a
+                            href="https://www.linkedin.com/in/sneenan/"
+                            data-toggle="tooltip"
+                            title="Connect on LinkedIn"
+                            ><i class="sm-icon bi-linkedin"></i
+                          ></a>
+                          <a
+                            href="https://github.com/sarah-cic-uk"
+                            data-toggle="tooltip"
+                            title="CTF Github"
+                            ><i class="sm-icon bi-github"></i
+                          ></a>
+                          <a
+                            href="https://github.com/neenan"
+                            data-toggle="tooltip"
+                            title="Personal Github"
+                            ><i class="sm-icon bi-github"></i
+                          ></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/jacob.jpg)">
-                    <div class="profile">
-                      <h3 class="name">Jacob Boardman</h3>
-                      <p class="title">Full Stack Engineer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Jacob Boardman</h3>
-                      <p class="description">I joined IBM CIC as a Java Developer in September 2021, bust quickly
-                        transitioned into Front-end development and Javascript. Before IBM I worked as an IT Consultant
-                        where I was also contract out to IBM as a Java developer for 2 years, but made myself known and
-                        was hired by IBM CIC after my contract ended. I graduated from University studying Computer
-                        Science for Games, where i learnt a lot more about the gaming industry, but turned more to
-                        software as to not sour the tasting of gaming. I'm fairly new to tutoring so will have to help
-                        me learn as well but always enjoyed helping an teaching others.</p>
-                      <div class="social">
-                        <a href="https://www.linkedin.com/in/jacob-boardman-411190109/" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/Jacob-Boardman" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/jacob.jpg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Jacob Boardman</h3>
+                        <p class="title">Full Stack Engineer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Jacob Boardman</h3>
+                        <p class="description">
+                          I joined IBM CIC as a Java Developer in September
+                          2021, bust quickly transitioned into Front-end
+                          development and Javascript. Before IBM I worked as an
+                          IT Consultant where I was also contract out to IBM as
+                          a Java developer for 2 years, but made myself known
+                          and was hired by IBM CIC after my contract ended. I
+                          graduated from University studying Computer Science
+                          for Games, where i learnt a lot more about the gaming
+                          industry, but turned more to software as to not sour
+                          the tasting of gaming. I'm fairly new to tutoring so
+                          will have to help me learn as well but always enjoyed
+                          helping an teaching others.
+                        </p>
+                        <div class="social">
+                          <a
+                            href="https://www.linkedin.com/in/jacob-boardman-411190109/"
+                            data-toggle="tooltip"
+                            title="Connect on LinkedIn"
+                            ><i class="sm-icon bi-linkedin"></i
+                          ></a>
+                          <a
+                            href="https://github.com/Jacob-Boardman"
+                            data-toggle="tooltip"
+                            title="Personal Github"
+                            ><i class="sm-icon bi-github"></i
+                          ></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile"
-                    style="background-image:url(../images/tutorProfiles/MichaelWeller.jpeg)">
-                    <div class="profile">
-                      <h3 class="name">Michael Weller</h3>
-                      <p class="title">Full Stack Engineer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Michael Weller</h3>
-                      <p class="description">I joined the CIC in early December 2020 as an application developer. I've
-                        worked on a wide range of roles and accounts, working in L2 support, cloud solutions, app
-                        development and finally web development since the start of this year. I've had spinkles of
-                        experience throughout my career from using HTML/CSS to JavaScript/TypeScript with frameworks
-                        like React and Angular. I hope now to try to apply my web development knowledge through
-                        tutoring.</p>
-                      <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
-                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/MichaelWeller.jpeg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Michael Weller</h3>
+                        <p class="title">Full Stack Engineer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Michael Weller</h3>
+                        <p class="description">
+                          I joined the CIC in early December 2020 as an
+                          application developer. I've worked on a wide range of
+                          roles and accounts, working in L2 support, cloud
+                          solutions, app development and finally web development
+                          since the start of this year. I've had spinkles of
+                          experience throughout my career from using HTML/CSS to
+                          JavaScript/TypeScript with frameworks like React and
+                          Angular. I hope now to try to apply my web development
+                          knowledge through tutoring.
+                        </p>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/remya.jpeg)">
-                    <div class="profile">
-                      <h3 class="name">Remya Muraleedharan</h3>
-                      <p class="title">Full Stack Engineer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Remya Muraleedharan</h3>
-                      <p class="description">After my computer science engineering degree I started my career as a
-                        server administrator. I switched my career to a developer a few years later and have been one
-                        for the past 7 years. I am currently a full stack developer. I joined IBM CIC in May 2021. I
-                        enjoy code development and look forward to learning new technologies in my role in IBM.</p>
-                      <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
-                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/remya.jpeg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Remya Muraleedharan</h3>
+                        <p class="title">Full Stack Engineer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Remya Muraleedharan</h3>
+                        <p class="description">
+                          After my computer science engineering degree I started
+                          my career as a server administrator. I switched my
+                          career to a developer a few years later and have been
+                          one for the past 7 years. I am currently a full stack
+                          developer. I joined IBM CIC in May 2021. I enjoy code
+                          development and look forward to learning new
+                          technologies in my role in IBM.
+                        </p>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile"
-                    style="background-image:url(../images/tutorProfiles/JacquelineJones.jpeg)">
-                    <div class="profile">
-                      <h3 class="name">Jacqueline Jones</h3>
-                      <p class="title">Front-End Developer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Jacqueline Jones</h3>
-                      <p class="description">After finishing school/college, I worked in the hairdressing industry for
-                        quite some time.<br />
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/JacquelineJones.jpeg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Jacqueline Jones</h3>
+                        <p class="title">Front-End Developer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Jacqueline Jones</h3>
+                        <p class="description">
+                          After finishing school/college, I worked in the
+                          hairdressing industry for quite some time.<br />
 
-                        One day, I started learning code in my free time, which eventually led me to pursue a new career
-                        path. I already had more than 10 years of experience in UX/UI design and development when
-                        someone from the CIC discovered my online portfolio and suggested that I attend a CIC assessment
-                        centre. That was over 7 and a half years ago.<br />
+                          One day, I started learning code in my free time,
+                          which eventually led me to pursue a new career path. I
+                          already had more than 10 years of experience in UX/UI
+                          design and development when someone from the CIC
+                          discovered my online portfolio and suggested that I
+                          attend a CIC assessment centre. That was over 7 and a
+                          half years ago.<br />
 
-                        Since joining the CIC, I've pushed myself to step out of my comfort zone and learn new
-                        technologies, programming languages, and methodologies.<br />
+                          Since joining the CIC, I've pushed myself to step out
+                          of my comfort zone and learn new technologies,
+                          programming languages, and methodologies.<br />
 
-                        Being a part of the CIC community has been an enriching experience for me. The supportive
-                        environment fostered by the organisation has created an atmosphere of growth and learning.The
-                        presence of highly talented peers has been a source of inspiration and motivation for me to push
-                        my limits and achieve my goals. Their expertise, diverse perspectives, and willingness to
-                        collaborate have helped me expand my knowledge and skill set.I feel grateful to be a part of the
-                        CIC organisation and community, which has enabled me to realise my potential and pursue my
-                        aspirations with confidence.</p>
-                      <div class="social">
-                        <a href="https://www.linkedin.com/in/j4cquelinejones/" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/J4cquelineJones" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                          Being a part of the CIC community has been an
+                          enriching experience for me. The supportive
+                          environment fostered by the organisation has created
+                          an atmosphere of growth and learning.The presence of
+                          highly talented peers has been a source of inspiration
+                          and motivation for me to push my limits and achieve my
+                          goals. Their expertise, diverse perspectives, and
+                          willingness to collaborate have helped me expand my
+                          knowledge and skill set.I feel grateful to be a part
+                          of the CIC organisation and community, which has
+                          enabled me to realise my potential and pursue my
+                          aspirations with confidence.
+                        </p>
+                        <div class="social">
+                          <a
+                            href="https://www.linkedin.com/in/j4cquelinejones/"
+                            data-toggle="tooltip"
+                            title="Connect on LinkedIn"
+                            ><i class="sm-icon bi-linkedin"></i
+                          ></a>
+                          <a
+                            href="https://github.com/J4cquelineJones"
+                            data-toggle="tooltip"
+                            title="Personal Github"
+                            ><i class="sm-icon bi-github"></i
+                          ></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/haseeb.png)">
-                    <div class="profile">
-                      <h3 class="name">Haseeb Jabbar</h3>
-                      <p class="title">Full Stack Engineer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Haseeb Jabbar</h3>
-                      <p class="description">coming soon...</p>
-                      <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
-                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/haseeb.png);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Haseeb Jabbar</h3>
+                        <p class="title">Full Stack Engineer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Haseeb Jabbar</h3>
+                        <p class="description">coming soon...</p>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/kristel.png)">
-                    <div class="profile">
-                      <h3 class="name">Kristel Caisip</h3>
-                      <p class="title">Full Stack Engineer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Kristel Caisip</h3>
-                      <p class="description">I joined IBM CIC in March 2021 as a full stack developer after years of
-                        working as an Oracle Consultant. I wanted to improve my technical skills and dive into the
-                        latest technologies such as Cloud Computing, AI, and full stack development. I received
-                        exceptional support from my Dev Practice at CIC which has helped (continuously) accelerate my
-                        growth in these areas in a short amount of time. I joined the CTF program to pay it forward,
-                        ready to support and inspire others in their own tech journeys.</p>
-                      <div class="social">
-                        <a href="https://github.com/kcibm" data-toggle="tooltip" title="Business Github"><i
-                            class="sm-icon bi-github"></i></a>
-                        <a href="https://github.com/kristelcaisip" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/kristel.png);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Kristel Caisip</h3>
+                        <p class="title">Full Stack Engineer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Kristel Caisip</h3>
+                        <p class="description">
+                          I joined IBM CIC in March 2021 as a full stack
+                          developer after years of working as an Oracle
+                          Consultant. I wanted to improve my technical skills
+                          and dive into the latest technologies such as Cloud
+                          Computing, AI, and full stack development. I received
+                          exceptional support from my Dev Practice at CIC which
+                          has helped (continuously) accelerate my growth in
+                          these areas in a short amount of time. I joined the
+                          CTF program to pay it forward, ready to support and
+                          inspire others in their own tech journeys.
+                        </p>
+                        <div class="social">
+                          <a
+                            href="https://github.com/kcibm"
+                            data-toggle="tooltip"
+                            title="Business Github"
+                            ><i class="sm-icon bi-github"></i
+                          ></a>
+                          <a
+                            href="https://github.com/kristelcaisip"
+                            data-toggle="tooltip"
+                            title="Personal Github"
+                            ><i class="sm-icon bi-github"></i
+                          ></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/kadijah.png)">
-                    <div class="profile">
-                      <h3 class="name">Kadijah Allarakhiya</h3>
-                      <p class="title">Front-End Developer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Kadijah Allarakhiya</h3>
-                      <p class="description">I joined IBM CIC as an Associate Technology Specialist in August 2022.
-                        Before this I studied Accounting and Finance and although I enjoyed it, I realised I enjoyed
-                        coding a lot more once I did this Code The Future last year. I was encouraged to apply by my
-                        then-tutors and went through the process and ended up here! I've come in with basic HTML and CSS
-                        knowledge but I am learning more and more everyday</p>
-                      <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
-                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/kadijah.png);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Kadijah Allarakhiya</h3>
+                        <p class="title">Front-End Developer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Kadijah Allarakhiya</h3>
+                        <p class="description">
+                          I joined IBM CIC as an Associate Technology Specialist
+                          in August 2022. Before this I studied Accounting and
+                          Finance and although I enjoyed it, I realised I
+                          enjoyed coding a lot more once I did this Code The
+                          Future last year. I was encouraged to apply by my
+                          then-tutors and went through the process and ended up
+                          here! I've come in with basic HTML and CSS knowledge
+                          but I am learning more and more everyday
+                        </p>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/doaa.jpeg)">
-                    <div class="profile">
-                      <h3 class="name">Doaa Radwan</h3>
-                      <p class="title">Front-End Developer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Doaa Radwan</h3>
-                      <p class="description">Assalam Alaykom! I joined IBM as an Associate in April 2022. Before IBM, I
-                        Studied 3 years of computer engineering at the Islamic University in Gaza, Palestine before
-                        moving into the UK and doing a BSc in computing at De Motfort University and then following it
-                        by a MSc in Data Analytics. After graduating, I volunteered at a faith school and foodback for 2
-                        years till I had persmission to work and then applied for IBM right away. I enjoy working in IBM
-                        as I get to learn different technologies and pick up new skills and make a differance by working
-                        on great projects.</p>
-                      <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
-                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/doaa.jpeg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Doaa Radwan</h3>
+                        <p class="title">Front-End Developer</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Doaa Radwan</h3>
+                        <p class="description">
+                          Assalam Alaykom! I joined IBM as an Associate in April
+                          2022. Before IBM, I Studied 3 years of computer
+                          engineering at the Islamic University in Gaza,
+                          Palestine before moving into the UK and doing a BSc in
+                          computing at De Motfort University and then following
+                          it by a MSc in Data Analytics. After graduating, I
+                          volunteered at a faith school and foodback for 2 years
+                          till I had persmission to work and then applied for
+                          IBM right away. I enjoy working in IBM as I get to
+                          learn different technologies and pick up new skills
+                          and make a differance by working on great projects.
+                        </p>
+                        <div class="social">
+                          <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                          <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                          <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/bells.jpeg)">
-                    <div class="profile">
-                      <h3 class="name">Obelema Wodike</h3>
-                      <p class="title">Senior Business Analyst</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Bells Wodike</h3>
-                      <p class="description">I joined IBM in 2022 as an experienced higher (Senior Business Analyst
-                        (BA)). Before IBM I have worked as an agile BA, a digital transformation BA, a software
-                        developer, freelance graphic designer, Associate Lecturer in computing (Human Computer
-                        Interaction) and several other computing area. I am also a trained teacher in information
-                        technology and secondary computer science which I took on because of my passion to reach out to
-                        more girls to join the computing career and technology industry. Currently at IBM, I work as a
-                        Senior Business Analyst/Business Architect and I enjoy what I do in IBM and look forward to
-                        tutor in trainings like code the future so I could leverage the platform to tutor more girls in
-                        computing, debias them of the myth that this industry are for boys only and encourage them to
-                        take on computer science / informaton technology as a career.</p>
-                      <div class="social">
-                        <a href="https://www.linkedin.com/in/obelema-prince-wodike-phd-11851943/" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/bells.jpeg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Obelema Wodike</h3>
+                        <p class="title">Senior Business Analyst</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Bells Wodike</h3>
+                        <p class="description">
+                          I joined IBM in 2022 as an experienced higher (Senior
+                          Business Analyst (BA)). Before IBM I have worked as an
+                          agile BA, a digital transformation BA, a software
+                          developer, freelance graphic designer, Associate
+                          Lecturer in computing (Human Computer Interaction) and
+                          several other computing area. I am also a trained
+                          teacher in information technology and secondary
+                          computer science which I took on because of my passion
+                          to reach out to more girls to join the computing
+                          career and technology industry. Currently at IBM, I
+                          work as a Senior Business Analyst/Business Architect
+                          and I enjoy what I do in IBM and look forward to tutor
+                          in trainings like code the future so I could leverage
+                          the platform to tutor more girls in computing, debias
+                          them of the myth that this industry are for boys only
+                          and encourage them to take on computer science /
+                          informaton technology as a career.
+                        </p>
+                        <div class="social">
+                          <a
+                            href="https://www.linkedin.com/in/obelema-prince-wodike-phd-11851943/"
+                            data-toggle="tooltip"
+                            title="Connect on LinkedIn"
+                            ><i class="sm-icon bi-linkedin"></i
+                          ></a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="background-image:url(../images/tutorProfiles/amber.jpg)">
-                    <div class="profile">
-                      <h3 class="name">Amber Idumwonyi</h3>
-                      <p class="title">Senior Test Specialist</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Amber Idumwonyi</h3>
-                      <p class="description">I joined IBM CIC as a Senior Test Specialist in October 2021. Before IBM, I
-                        studied computing science and then went further to acquire a Masters degree in Business Systems
-                        Analysis and Design with the aim of becoming a Business Analyst. Later I realised I was a very
-                        inquisitive and success driven person who always wants things done in the right way, (almost
-                        perfect) quality enough to yield success. I took a job at SNC-Lavlin Atkins where I was the sole
-                        Test Engineer working on the Heathrow Aviation project and checking to ensure the facial
-                        recognition system could actually recognise a passenger’s face. Whilst working on that project,
-                        I realised that being a tester wasn’t enough, I needed to learn and understand the backend of a
-                        software, which then made me take on the position of QA Automation Engineer at IBM. I am now
-                        being taught how to code in Java Language. I have learnt a lot since I joined IBM and the
-                        trainings and career progression IBM offers is second to none.</p>
-                      <div class="social">
-                        <a href="https://www.linkedin.com/in/ambitiousmak" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/Makeve" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                  <div class="col-md-4 col-lg-4 item">
+                    <div
+                      class="box tutor-profile"
+                      style="
+                        background-image: url(../images/tutorProfiles/amber.jpg);
+                      "
+                    >
+                      <div class="profile">
+                        <h3 class="name">Amber Idumwonyi</h3>
+                        <p class="title">Senior Test Specialist</p>
+                      </div>
+                      <div class="cover">
+                        <h3 class="name">Amber Idumwonyi</h3>
+                        <p class="description">
+                          I joined IBM CIC as a Senior Test Specialist in
+                          October 2021. Before IBM, I studied computing science
+                          and then went further to acquire a Masters degree in
+                          Business Systems Analysis and Design with the aim of
+                          becoming a Business Analyst. Later I realised I was a
+                          very inquisitive and success driven person who always
+                          wants things done in the right way, (almost perfect)
+                          quality enough to yield success. I took a job at
+                          SNC-Lavlin Atkins where I was the sole Test Engineer
+                          working on the Heathrow Aviation project and checking
+                          to ensure the facial recognition system could actually
+                          recognise a passenger’s face. Whilst working on that
+                          project, I realised that being a tester wasn’t enough,
+                          I needed to learn and understand the backend of a
+                          software, which then made me take on the position of
+                          QA Automation Engineer at IBM. I am now being taught
+                          how to code in Java Language. I have learnt a lot
+                          since I joined IBM and the trainings and career
+                          progression IBM offers is second to none.
+                        </p>
+                        <div class="social">
+                          <a
+                            href="https://www.linkedin.com/in/ambitiousmak"
+                            data-toggle="tooltip"
+                            title="Connect on LinkedIn"
+                            ><i class="sm-icon bi-linkedin"></i
+                          ></a>
+                          <a
+                            href="https://github.com/Makeve"
+                            data-toggle="tooltip"
+                            title="Personal Github"
+                            ><i class="sm-icon bi-github"></i
+                          ></a>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -349,44 +613,49 @@
         </div>
       </div>
     </div>
-  </div>
-  <script type="module">
-    import { fbAuth, fbDB } from "./js/firebase.js"
-    window.fbAuth = fbAuth;
-    window.fbDB = fbDB;
-  </script>
-  <script type="text/javascript">
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.type = 'text/css';
-    stylesheet.href = getPath() + 'styles/mainStyle.css';
-    document.head.appendChild(stylesheet);
+    <script defer type="module">
+      import { fbAuth, fbDB } from "./js/firebase.js";
+      window.fbAuth = fbAuth;
+      window.fbDB = fbDB;
+    </script>
+    <script type="text/javascript">
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.type = "text/css";
+      stylesheet.href = getPath() + "styles/mainStyle.css";
+      document.head.appendChild(stylesheet);
 
-    window.onload = (event) => {
-      checkReleaseDates(window.fbDB);
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+      window.onload = (event) => {
+        checkReleaseDates(window.fbDB);
+        auth(
+          document.querySelector(".loginBtn"),
+          document.querySelector(".profileBtn"),
+          document.querySelector("#sessionsLink")
+        );
 
-      const tutorProfiles = document.getElementsByClassName("tutor-profile")
-      for (const element of tutorProfiles) {
-        let coverHeight = element.querySelector('.cover').offsetHeight;
-        let nameHeight = element.querySelector(".cover > .name").offsetHeight;
-        let socialHeight = 60;
-        element.querySelector('.description').style.height = coverHeight - nameHeight - socialHeight + 'px';
+        const tutorProfiles = document.getElementsByClassName("tutor-profile");
+        for (const element of tutorProfiles) {
+          let coverHeight = element.querySelector(".cover").offsetHeight;
+          let nameHeight = element.querySelector(".cover > .name").offsetHeight;
+          let socialHeight = 60;
+          element.querySelector(".description").style.height =
+            coverHeight - nameHeight - socialHeight + "px";
+        }
       };
-    }
 
-    function createPath(options) {
-      window.location = getPath() + options;
-      return false;
-    }
+      function createPath(options) {
+        window.location = getPath() + options;
+        return false;
+      }
 
-    function logUserOut(event) {
-      logout(window.fbAuth)
-    }
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
-</body>
-
+      function logUserOut(event) {
+        logout(window.fbAuth);
+      }
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+  </body>
 </html>
