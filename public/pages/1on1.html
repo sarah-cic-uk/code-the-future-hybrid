@@ -187,16 +187,29 @@
       return false;
     }
 
+    // function getTutors() {
+    //   console.log("getTutors function")
+    //   const dbRef = window.fbDB.ref("tutors");
+    //   console.log(dbRef)
+    //   dbRef.on('value', (snapshot) => {
+    //     console.log("hello")
+    //     const data = snapshot.val();
+    //     console.log(data)
+    //   });
+    // }
+
     function getTutors() {
-      console.log("getTutors function")
-      const dbRef = window.fbDB.ref("tutors");
-      console.log(dbRef)
-      dbRef.on('value', (snapshot) => {
-        console.log("hello")
-        const data = snapshot.val();
-        console.log(data)
-      });
-    }
+  console.log("getTutors function");
+  const dbRef = window.fbDB.ref("tutors");
+  console.log(dbRef);
+  dbRef.once('value', (snapshot) => {
+    console.log("dbRef data: ");
+    const data = snapshot.val();
+    console.log(data);
+  }, (error) => {
+    console.error("Error getting tutors:", error);
+  });
+}
 
     function logUserOut(event) {
       const fbAuth = firebase.auth();

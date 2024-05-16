@@ -35,7 +35,8 @@ async function initFirebase() {
     messagingSenderId: "866190768035",
     appId: "1:866190768035:web:f63814c66decac85d28c16",
     measurementId: "G-R5R0X09W",
-    databaseURL: "http://pokemon-firebase-820fd-default-rtdb.firebaseio.com",
+    databaseURL:
+      "https://code-the-future-hybrid-default-rtdb.europe-west1.firebasedatabase.app/",
   };
 
   const firebaseConfig = {
