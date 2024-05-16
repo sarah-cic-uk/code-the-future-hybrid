@@ -68,8 +68,11 @@ async function initFirebase() {
   console.log("fbAuth:", fbAuth);
   console.log("fbDB:", fbDB);
   console.log("fbStorage:", fbStorage);
+
+  // Export fbAuth and fbDB and fbStorage
+  globalThis.fbAuth = fbAuth;
+  globalThis.fbDB = fbDB;
+  globalThis.fbStorage = fbStorage;
 }
 // Call loadFirebase when the document is ready
 document.addEventListener("DOMContentLoaded", loadFirebase);
-
-export { fbAuth, fbDB, fbStorage };
