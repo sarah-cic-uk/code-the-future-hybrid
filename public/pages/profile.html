@@ -41,9 +41,9 @@
         box-sizing: border-box;
       }
     </style>
-        <script type="text/javascript" src="./js/app.js"></script>
-        <!-- <script  src="./js/imports.js"></script> -->
-        <script type="module" src="./js/firebase.js"></script>
+    <script type="text/javascript" src="./js/app.js"></script>
+    <!-- <script  src="./js/imports.js"></script> -->
+    <script type="module" src="./js/firebase.js"></script>
   </head>
 
   <body>
@@ -230,6 +230,7 @@
     <script defer type="module">
       import { fbAuth, fbDB } from "./js/firebase.js";
       window.fbAuth = fbAuth;
+      console.log("from within profile.html:", fbAuth, fbDB);
     </script>
     <script type="text/javascript">
       const stylesheet = document.createElement("link");
