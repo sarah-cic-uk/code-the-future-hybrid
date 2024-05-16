@@ -27,7 +27,7 @@ export let fbAuth, fbDB, fbStorage;
 
 async function initFirebase() {
   // Replace with secrets management?
-  const firebaseConfig = {
+  const ChrisfirebaseConfig = {
     apiKey: "AIzaSyA1M-spdbLBikmMNzAol0m3uE0_WZYAXWU",
     authDomain: "pokemon-firebase-820fd.firebaseapp.com",
     projectId: "pokemon-firebase-820fd",
@@ -38,7 +38,7 @@ async function initFirebase() {
     databaseURL: "http://pokemon-firebase-820fd-default-rtdb.firebaseio.com",
   };
 
-  const SarahfirebaseConfig = {
+  const firebaseConfig = {
     apiKey: "AIzaSyAgkCUR0Y-7jXurdxrVDYNxQVRQidiNJBw",
     authDomain: "code-the-future-hybrid.firebaseapp.com",
     projectId: "code-the-future-hybrid",
@@ -59,7 +59,7 @@ async function initFirebase() {
 
   window.fbAuth = fbAuth;
   window.fbDB = fbDB;
-  
+
   globalThis.fbAuth = fbAuth;
   globalThis.fbDB = fbDB;
 
