@@ -23,7 +23,7 @@ async function loadFirebase() {
 }
 
 // Initialize Firebase
-// export let fbAuth, fbDB, fbStorage;
+export let fbAuth, fbDB, fbStorage;
 
 async function initFirebase() {
   // Replace with secrets management?
@@ -59,7 +59,9 @@ async function initFirebase() {
 
   window.fbAuth = fbAuth;
   window.fbDB = fbDB;
-  window.fbStorage = fbStorage;
+  
+  globalThis.fbAuth = fbAuth;
+  globalThis.fbDB = fbDB;
 
   console.log(
     "Firebase SDK modules and Firebase core both initialized within firebase.js..."
@@ -68,11 +70,6 @@ async function initFirebase() {
   console.log("fbAuth:", fbAuth);
   console.log("fbDB:", fbDB);
   console.log("fbStorage:", fbStorage);
-
-  // Export fbAuth and fbDB and fbStorage
-  globalThis.fbAuth = fbAuth;
-  globalThis.fbDB = fbDB;
-  globalThis.fbStorage = fbStorage;
 }
 // Call loadFirebase when the document is ready
 document.addEventListener("DOMContentLoaded", loadFirebase);
