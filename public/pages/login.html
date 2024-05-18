@@ -194,11 +194,11 @@
         </div>
       </div>
     </div>
-    <!--  -->
   </div>
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js"
     window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
     window.fbDB = fbDB;
   </script>
   <script defer type="text/javascript">
@@ -209,6 +209,7 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
+      checkReleaseDates(window.fbDB);
       auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
     }
 
@@ -303,11 +304,14 @@
           if (user) {
             localStorage.setItem('loggedIn', true);
             localStorage.setItem('displayName', user.displayName);
+            //localStorage.setItem('cohort', user.cohort);
             await addUserToDatabase(user, validCode);
             window.location.replace("./sessions.html");
           } else {
             localStorage.removeItem('loggedIn');
             localStorage.removeItem('displayName');
+            localStorage.removeItem('cohort');
+            localStorage.removeItem('cohort');
           }
         });
       } catch (err) {
@@ -328,6 +332,9 @@
           localStorage.setItem('loggedIn', true);
           const user = window.fbAuth.currentUser;
           localStorage.setItem('displayName', user.displayName);
+          const userdb = await window.fbDB.ref('users/' + user.uid).once('value')
+          localStorage.setItem('cohort', userdb.val().cohort)
+          console.log(userdb.val())
           window.location.replace("./sessions.html");
         })
         .catch((error) => {

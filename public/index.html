@@ -311,6 +311,7 @@
   <script  type="module">
     import {fbAuth} from "./pages/js/firebase.js"
     window.fbAuth = fbAuth;
+window.fbDB = fbDB;
   </script>
   <script defer type="text/javascript">
 
@@ -321,7 +322,8 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+      checkReleaseDates(window.fbDB);
+auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
     }
 
     function logUserOut(event) {
