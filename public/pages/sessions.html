@@ -23,10 +23,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css"
     />
-    <script type="text/javascript" src="./js/app.js"></script>
-    <script src="./js/imports.js"></script>
-    <script parser-inserted defer type="module" src="./js/firebase.js"></script>
     <script src="./js/sidenav.js" type="text/javascript" defer></script>
+    <script type="text/javascript" src="./js/app.js"></script>
+    <!-- <script  src="./js/imports.js"></script> -->
+    <script type="module" src="./js/firebase.js"></script>
   </head>
 
   <body>
@@ -155,7 +155,7 @@
         <div class="row flex-nowrap page-content">
           <div class="col py-3">
             <div class="row people d-flex justify-content-center">
-              <div class="col-md-4 session-card" id="session1-card">
+              <div class="col-md-4 session-card">
                 <div
                   class="box"
                   style="
@@ -170,18 +170,12 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <button
+                      <a
                         href="#"
                         onclick="createPath('pages/sessions/session1/introduction.html')"
-                        class="release-date-btn btn btn-primary float-end"
-                        id="session1-card-btn"
-                        name="session1"
+                        class="btn btn-primary float-end"
+                        >Get Started</a
                       >
-                        Get Started
-                        <span id="session1-btn-tooltip" class="tooltip-text"
-                          >Session Opens Soon</span
-                        >
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -197,18 +191,12 @@
                       <p class="session-description">Create a basic webpage</p>
                     </div>
                     <div class="card-footer">
-                      <button
+                      <a
                         href="#"
                         onclick="createPath('pages/sessions/session2/introduction.html')"
-                        class="release-date-btn btn btn-primary float-end"
-                        id="session2-card-btn"
-                        name="session2"
+                        class="btn btn-primary float-end"
+                        >Go</a
                       >
-                        Go
-                        <span id="session2-btn-tooltip" class="tooltip-text"
-                          >Session Opens Soon</span
-                        >
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -227,18 +215,12 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <button
+                      <a
                         href="#"
                         onclick="createPath('pages/sessions/session3/introduction.html')"
-                        class="release-date-btn btn btn-primary float-end"
-                        id="session3-card-btn"
-                        name="session3"
+                        class="btn btn-primary float-end"
+                        >Go</a
                       >
-                        Go
-                        <span id="session3-btn-tooltip" class="tooltip-text"
-                          >Session Opens Soon</span
-                        >
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -258,18 +240,12 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <button
+                      <a
                         href="#"
                         onclick="createPath('pages/sessions/session4/introduction.html')"
-                        class="release-date-btn btn btn-primary float-end"
-                        id="session4-card-btn"
-                        name="session4"
+                        class="btn btn-primary float-end"
+                        >Go</a
                       >
-                        Go
-                        <span id="session4-btn-tooltip" class="tooltip-text"
-                          >Session Opens Soon</span
-                        >
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -287,18 +263,12 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <button
+                      <a
                         href="#"
                         onclick="createPath('pages/sessions/session5/introduction.html')"
-                        class="release-date-btn btn btn-primary float-end"
-                        id="session5-card-btn"
-                        name="session5"
+                        class="btn btn-primary float-end"
+                        >Go</a
                       >
-                        Go
-                        <span id="session5-btn-tooltip" class="tooltip-text"
-                          >Session Opens Soon</span
-                        >
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -318,18 +288,12 @@
                       </p>
                     </div>
                     <div class="card-footer">
-                      <button
+                      <a
                         href="#"
                         onclick="createPath('pages/sessions/session6/introduction.html')"
-                        class="release-date-btn btn btn-primary float-end"
-                        id="session6-card-btn"
-                        name="session6"
+                        class="btn btn-primary float-end"
+                        >Go</a
                       >
-                        Go
-                        <span id="session6-btn-tooltip" class="tooltip-text"
-                          >Session Opens Soon</span
-                        >
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -339,11 +303,9 @@
         </div>
       </div>
     </div>
-    <script type="module">
-      import { fbAuth, fbDB } from "./js/firebase.js";
+    <script defer type="module">
+      import { fbAuth } from "./js/firebase.js";
       window.fbAuth = fbAuth;
-      window.fbDB = fbDB;
-      window.fbDB = fbDB;
     </script>
     <script type="text/javascript">
       const stylesheet = document.createElement("link");
@@ -353,7 +315,6 @@
       document.head.appendChild(stylesheet);
 
       window.onload = (event) => {
-        checkReleaseDates(window.fbDB);
         auth(
           null,
           document.querySelector(".profileBtn"),
