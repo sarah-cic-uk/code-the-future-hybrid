@@ -2,15 +2,28 @@
   background-color: #011640;
   border-right: 2px solid #011640;
   max-width: 210px;
+  z-index: 100;
 }
 
 .side-navigation .nav-link {
   color: white;
 }
 
+.side-navigation .nav-item button {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
 .navbar {
   height: 70px;
   background-color: #eae9f3 !important;
+}
+
+.navbar-nav button {
+  border: none;
 }
 
 .navbar-brand {
@@ -239,12 +252,14 @@ form i {
 }
 
 .navbar-nav .nav-link {
-  border-right: 2px solid #011640;
   justify-content: center;
   height: 100%;
   font-weight: 500;
   font-family: sans-serif;
+  background-color: transparent;
 }
+
+
 
 .nav-link {
   display: inline-flex;
@@ -256,7 +271,7 @@ form i {
   vertical-align: text-bottom;
 }
 
-.nav-link:hover {
+.nav-link a:hover {
   color: #d8447a
 }
 
@@ -265,9 +280,14 @@ form i {
   color: #1DF2DD
 }
 
-.active-top-nav {
-  color: #d8447a;
+.active-top-nav a {
+  color: #d8447a !important;
   font-weight: 600;
+}
+
+.navbar-nav .nav-link a {
+  text-decoration: none;
+  color: #011640;
 }
 
 @media (min-width: 576px) {
@@ -382,6 +402,49 @@ ul[id^=submenu] li {
   justify-content: flex-end;
   font-size: small;
   padding-right: 5px;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  min-width: max-content;
+  color: #011640;
+  background-color: #f8f9fa;
+  padding: 5px;
+  border: 1px solid #011640;
+  border-radius: 5px;
+}
+
+.hover-text:hover .tooltip-text {
+  visibility: visible;
+}
+
+.hover-text {
+  position: relative;
+  display: inline-block;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.nav-item button[disabled] span:first-of-type,
+.nav-item button[disabled] i {
+  opacity: 0.5;
+}
+
+.release-date-btn {
+  pointer-events: all !important
+}
+
+.release-date-btn:active {
+  pointer-events: none;
+}
+
+.release-date-btn .tooltip-text {
+  right: 0;
 }
 
 .profile-question {
