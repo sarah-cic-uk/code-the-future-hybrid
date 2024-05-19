@@ -222,16 +222,10 @@
     }
 
     async function validateAndRegister() {
-      console.log('validateForm')
-
       const forms = document.querySelectorAll('.needs-validation')
 
       Array.from(forms).forEach(async form => {
-        console.log("2")
-
         form.addEventListener('submit', async event => {
-          console.log("3")
-
           const password = document.getElementById('newPassword').value;
           const passwordRepeat = document.getElementById('passwordCheck').value;
           const matchingPasswords = password === passwordRepeat
@@ -261,19 +255,13 @@
 
 
     async function validateCohortCode(cohortCode) {
-      console.log('validateCohortCode', window.fbDB)
-
       const possibleCodes = await window.fbDB.ref('cohorts/').once('value')
-      console.log("codes", possibleCodes)
-
       const possibleCodes1 = possibleCodes.val();
-      console.log("codes1", possibleCodes1)
       return possibleCodes.find(obj => obj.code === cohortCode)?.id;
     }
 
 
     async function registerNewUser() {
-      console.log('registerNewUser')
 
       const email = document.getElementById('newEmail').value;
       const password = document.getElementById('newPassword').value;

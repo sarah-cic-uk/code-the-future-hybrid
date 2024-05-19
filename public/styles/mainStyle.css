@@ -383,3 +383,8 @@ ul[id^=submenu] li {
   font-size: small;
   padding-right: 5px;
 }
+
+.profile-question {
+  width: 100%;
+  font-weight: bold;
+}
