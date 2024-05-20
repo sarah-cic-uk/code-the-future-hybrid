@@ -12,8 +12,8 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   <script  type="text/javascript" src="./js/app.js"></script>
-  <script  src="./js/imports.js"></script>
-  <script defer type="module" src="./js/firebase.js"></script>
+  <!-- <script  src="./js/imports.js"></script> -->
+  <script type="module" src="./js/firebase.js"></script>
 </head>
 
 <body>
@@ -42,8 +42,7 @@
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style"
-              >
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style">
               Log In
             </button>
             <div class="d-flex align-items-center">
@@ -149,7 +148,8 @@
                 Information coming soon - enquire now and chat with our TA team
               </div>
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn button-style-invert">Enquire
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
+                  class="btn button-style-invert">Enquire
                   now</a>
               </div>
             </div>
@@ -169,7 +169,8 @@
                 Information coming soon - enquire now and chat with our TA team
               </div>
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn button-style-invert">Enquire
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
+                  class="btn button-style-invert">Enquire
                   now</a>
               </div>
             </div>
@@ -222,8 +223,8 @@
                     <ul>
                       <li>AWS/Azure</li>
                     </ul>
-                     As your career evolves you will gain further experience across
-                        networking, infrastructure, cyber security, AI, and cloud computing.
+                    As your career evolves you will gain further experience across
+                    networking, infrastructure, cyber security, AI, and cloud computing.
                     Our team of experienced
                     professionals will guide you every step of the way, ensuring a smooth transition into this field.
                   </li>
@@ -253,7 +254,8 @@
 
               </div>
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn button-style-invert">Enquire
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
+                  class="btn button-style-invert">Enquire
                   now</a>
               </div>
             </div>
@@ -301,7 +303,8 @@
                 </ul>
               </div>
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn button-style-invert">Enquire
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
+                  class="btn button-style-invert">Enquire
                   now</a>
               </div>
             </div>
@@ -358,9 +361,10 @@
         </div>
       </div>
     </div>
-    <script type="module">
+    <script defer type="module">
       import { fbAuth, fbDB } from "./js/firebase.js"
       window.fbAuth = fbAuth;
+      window.fbDB = fbDB;
     </script>
     <script type="text/javascript">
       const stylesheet = document.createElement('link');
@@ -370,6 +374,7 @@
       document.head.appendChild(stylesheet);
 
       window.onload = (event) => {
+        checkReleaseDates(window.fbDB);
         auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
         const jobs = document.getElementsByClassName("job-category")
