@@ -17,15 +17,11 @@
   <script type="module" src="./js/firebase.js"></script>
 </head>
 
-  <body>
-    <div class="page-content">
-      <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid g-0">
-          <a
-            onclick="createPath('index.html')"
-            class="navbar-brand"
-            href="#"
-            style="
+<body>
+  <div class="page-content">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
               border-right: 2px solid #d9437a;
               padding-right: 10px;
               color: #1d0c59;
@@ -64,9 +60,10 @@
                 </a>
 
                 <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                                 <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li> <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                </li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                  <li>
+                    <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
+                  </li>
                   <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
                 </ul>
               </div>
@@ -149,7 +146,8 @@
       </table>
       <p id="show-more">Show more
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="11" viewBox="0 0 18 11" fill="none">
-          <path d="M1 1.5L9 9.5L17 1.5" stroke="#31238C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M1 1.5L9 9.5L17 1.5" stroke="#31238C" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
         </svg>
       </p>
       <p class="h4" style="padding: 1rem 0 0.75rem; font-weight: 600;">

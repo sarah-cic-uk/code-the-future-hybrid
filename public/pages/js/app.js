@@ -66,8 +66,8 @@ async function checkReleaseDates(fbDB) {
     }));
   // session buttons
   document.querySelectorAll(".release-date-btn").forEach((btn) => {
-      if(Date.now() <
-      userCohort.sessionReleaseDates[btn.name]){
+    if (Date.now() <
+      userCohort.sessionReleaseDates[btn.name]) {
       btn.disabled = true;
       btn.classList.add('hover-text');
       document.getElementById(`${btn.name}-btn-tooltip`).classList.remove('hidden');
