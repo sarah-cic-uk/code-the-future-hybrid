@@ -106,8 +106,13 @@ console.log(elements)
 
 
     async function getCohortData(cohortId) {
+      console.log('cohortID', cohortId)
       await window.fbDB.ref('users').once("value").then((snapshot) => {
+      console.log('snapshot', snapshot)
+
         snapshot.forEach((userSnapshot) => {
+      console.log('userSnapshot', userSnapshot)
+
           let userEntry = userSnapshot.val();
           if (userEntry.cohort === cohortId) {
             const cardContainer = document.querySelector(".card-container")
