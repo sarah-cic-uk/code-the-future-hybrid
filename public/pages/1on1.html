@@ -29,15 +29,11 @@
     <script type="module" src="./js/firebase.js"></script>
   </head>
 
-  <body>
-    <div class="page-content">
-      <nav class="navbar navbar-expand-lg bg-light">
-        <div class="container-fluid g-0">
-          <a
-            onclick="createPath('index.html')"
-            class="navbar-brand"
-            href="#"
-            style="
+<body>
+  <div class="page-content">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
               border-right: 2px solid #d9437a;
               padding-right: 10px;
               color: #1d0c59;
@@ -132,26 +128,13 @@
                       loading="lazy"
                     />
                   </a>
-
-                  <ul
-                    class="dropdown-menu dropdown-menu-end"
-                    aria-labelledby=" dropdownMenuLink"
-                  >
-                    <li>
-                      <a
-                        class="dropdown-item"
-                        href="#"
-                        onclick="createPath('pages/profile.html')"
-                        >My Profile</a
-                      >
-                    </li>
-                    <li>
-                      <a class="dropdown-item" href="#" onclick="logUserOut()"
-                        >Log out</a
-                      >
-                    </li>
-                  </ul>
-                </div>
+                <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                  <li>
+                    <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
+                  </li>
+                  <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+                </ul>
               </div>
             </div>
           </div>
@@ -364,3 +347,4 @@
     ></script>
   </body>
 </html>
+
