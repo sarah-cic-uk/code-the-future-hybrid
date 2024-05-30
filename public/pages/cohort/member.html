@@ -69,7 +69,7 @@
       </div>
     </nav>
     <div class="container-fluid page-content">
-      <h1 class="text-center pt-4">chosen profile</h1>
+      <h1 class="text-center pt-4" id="page-title">Profile</h1>
 
         <label class="profile-question text-start" for="who">Tell us who you are:</label>
         <textarea readonly id="who" name="who"></textarea>
@@ -96,6 +96,7 @@
     const who = document.getElementById('who');
       const what = document.getElementById('what');
       const career = document.getElementById('career');
+      const pageTitle = document.getElementById('page-title');
 
     window.onload = async (event) => {
       auth(
@@ -105,9 +106,9 @@
       );
 
       const cardContainer = document.querySelector(".card-container")
-      console.log(window.location.search.slice(1))
-      const memberData = await getUserProfile(window.location.search.slice(1));
-      console.log(memberData)
+      memberName = window.location.search.slice(1).split("&")[0]
+      await getUserProfile(window.location.search.slice(1).split("&")[1], memberName);
+      console.log(mamberName)
       // const createNewElement = `<div class="col card shadow m-2" style="height: fit-content">
       //   <div class="card-body">
       //     <div class="d-flex justify-content-center">
@@ -126,7 +127,7 @@
     };
 
 
-    async function getUserProfile(member) {
+    async function getUserProfile(member, memberName) {
       console.log(member)
             const profileData = await window.fbDB.ref('users/' + member + '/profile').once('value')
       console.log(profileData)
@@ -137,6 +138,7 @@
             who.innerHTML = profileValues.about
             what.innerHTML = profileValues.learning
             career.innerHTML = profileValues.aspirations
+            pageTitle.innerHTML = memberName
           }
     function createPath(options) {
       window.location = getPath() + options;
