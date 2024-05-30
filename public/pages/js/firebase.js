@@ -23,7 +23,7 @@ async function loadFirebase() {
 }
 
 // Initialize Firebase
-export let fbAuth, fbDB, fbStorage;
+export let fbAuth, fbDB, fbStorage, currentUser;
 
 async function initFirebase() {
   // Replace with secrets management?

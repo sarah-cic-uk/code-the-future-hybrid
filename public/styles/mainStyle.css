@@ -446,3 +446,8 @@ ul[id^=submenu] li {
 .release-date-btn .tooltip-text {
   right: 0;
 }
+
+.profile-question {
+  width: 100%;
+  font-weight: bold;
+}

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+  <title>Code the Future</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script type="text/javascript" src="../js/app.js"></script>
+  <script type="module" src="../js/firebase.js"></script>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
+              border-right: 2px solid #d9437a;
+              padding-right: 10px;
+              color: #1d0c59;
+            ">
+          <img src="../../images/logo.png" height="60px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
+              tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('jobs.html')">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+          </div>
+          <div class="d-flex align-items-center">
+            <!-- Logged in Avatar -->
+            <div>
+              <p class="my-auto" id="profileName"></p>
+            </div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
+                  alt="Black and White Portrait of a Man" loading="lazy" />
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid page-content">
+      <!-- <h1 class="text-center pt-4" id="page-title">Profile</h1> -->
+      <section class="section about-section gray-bg" id="about">
+        <div class="container-fluid">
+          <div class="row align-items-center flex-row-reverse">
+            <div class="col-lg-6 px-2">
+              <div class="about-text go-to">
+                <h3 class="dark-color" id="page-title">Profile</h3>
+                <h6 class="theme-color" id="tag-line"></h6>
+                <mark>About me</mark>
+                <p id="who" name="who"></p>
+                <mark>What I hope to learn</mark>
+                <p id="what" name="what"></p>
+                <mark>My Aspirations</mark>
+                <p id="career" name="career"></p>
+                <div class="row about-list">
+                  <div class="">
+                    <div class="media">
+                      <label>Current Job</label>
+                      <p>Student</p>
+                    </div>
+                    <div class="media">
+                      <label>Location</label>
+                      <p>Winchester, UK</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 px-2  text-center">
+              <div class="about-avatar">
+                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" title="" alt="">
+              </div>
+              <div class="counter mt-4">
+                <div class="row">
+                  <div class="col-6">
+                    <div class="count-data text-center">
+                      <a href="https://www.linkedin.com/in/j4cquelinejones/" data-toggle="tooltip"
+                        title="Connect on LinkedIn"><i class="fs-2 icon bi-linkedin"></i></a>
+                      <p class="m-0px font-w-600">LinkedIn</p>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="count-data text-center">
+
+                      <a href="https://github.com/J4cquelineJones" data-toggle="tooltip" title="Personal Github"><i
+                          class="icon fs-2 bi-github"></i></a>
+                      <p class="m-0px font-w-600">GitHub</p>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+    </div>
+  </div>
+  <script defer type="module">
+    import { fbAuth, fbDB } from "../js/firebase.js";
+    window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
+  </script>
+  <script type="text/javascript">
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+    const who = document.getElementById('who');
+    const what = document.getElementById('what');
+    const career = document.getElementById('career');
+    const pageTitle = document.getElementById('page-title');
+
+    window.onload = async (event) => {
+      auth(
+        null,
+        document.querySelector(".profileBtn"),
+        document.querySelector("#sessionsLink")
+      );
+
+      memberName = window.location.search.slice(1).split("&")[0].replace(/%20/g, ' ')
+      await getUserProfile(window.location.search.slice(1).split("&")[1], memberName);
+    };
+
+
+    async function getUserProfile(member, memberName) {
+      const profileData = await window.fbDB.ref('users/' + member + '/profile').once('value')
+      const profileValues = profileData.val();
+      who.innerHTML = profileValues.about
+      what.innerHTML = profileValues.learning
+      career.innerHTML = profileValues.aspirations
+      pageTitle.innerHTML = memberName
+    }
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut(event) {
+      logout(window.fbAuth);
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
+<style>
+  .section {
+    padding: 100px 0;
+    position: relative;
+  }
+
+  .gray-bg {
+    background-color: #f5f5f5;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  img {
+    vertical-align: middle;
+    border-style: none;
+  }
+
+  /* About Me 
+---------------------*/
+  .about-text h3 {
+    font-size: 45px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+
+  @media (max-width: 767px) {
+    .about-text h3 {
+      font-size: 35px;
+    }
+  }
+
+  .about-text h6 {
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+
+  @media (max-width: 767px) {
+    .about-text h6 {
+      font-size: 18px;
+    }
+  }
+
+  .about-text p {
+    font-size: 18px;
+    /* max-width: 450px; */
+  }
+
+  .about-text p mark {
+    font-weight: 600;
+    color: #20247b;
+  }
+
+  .about-list {
+    padding-top: 10px;
+  }
+
+  .about-list .media {
+    padding: 5px 0;
+  }
+
+  .about-list label {
+    color: #20247b;
+    font-weight: 600;
+    margin: 0;
+    position: relative;
+  }
+
+  .about-list p {
+    margin: 0;
+    font-size: 15px;
+  }
+
+  @media (max-width: 991px) {
+    .about-avatar {
+      margin-top: 30px;
+    }
+  }
+
+  .about-section .counter {
+    padding: 22px 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
+  }
+
+  .about-section .counter .count-data {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .about-section .counter .count {
+    font-weight: 700;
+    color: #20247b;
+    margin: 0 0 5px;
+  }
+
+  .about-section .counter p {
+    font-weight: 600;
+    margin: 0;
+  }
+
+  mark {
+    background-image: linear-gradient(rgba(216, 68, 122, 1), rgba(216, 68, 122, 0.6));
+    background-size: 100% 3px;
+    background-repeat: no-repeat;
+    background-position: 0 bottom;
+    background-color: transparent;
+    padding: 0;
+    color: currentColor;
+    font-weight: bold;
+  }
+
+  .theme-color {
+    color: rgb(216, 68, 122);
+  }
+
+  .dark-color {
+    color: rgb(12, 56, 168);
+    ;
+  }
+
+  .icon {
+    color: rgb(12, 56, 168);
+  }
+</style>
