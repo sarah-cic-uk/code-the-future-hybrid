@@ -100,7 +100,7 @@
             </div>
             <div class="col-lg-6 px-2  text-center">
               <div class="about-avatar">
-                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" title="" alt="">
+                <img id="profile-pic" title="" alt="">
               </div>
               <div class="counter mt-4">
                 <div class="row">
@@ -130,9 +130,10 @@
     </div>
   </div>
   <script defer type="module">
-    import { fbAuth, fbDB } from "../js/firebase.js";
+    import { fbAuth, fbDB, fbStorage } from "../js/firebase.js";
     window.fbAuth = fbAuth;
     window.fbDB = fbDB;
+    window.fbStorage = fbStorage;
   </script>
   <script type="text/javascript">
     const stylesheet = document.createElement("link");
@@ -164,6 +165,9 @@
       what.innerHTML = profileValues.learning
       career.innerHTML = profileValues.aspirations
       pageTitle.innerHTML = memberName
+      const pathReference = await window.fbStorage.ref("profilePics/" + member);
+      const el = document.getElementById("profile-pic");
+      fetchMedia(pathReference, el);
     }
     function createPath(options) {
       window.location = getPath() + options;
@@ -262,9 +266,10 @@
 
   .about-section .counter {
     padding: 22px 20px;
-    background: #ffffff;
+    background: #eae9f3;
     border-radius: 10px;
     box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
+    border: 1px solid #011640;
   }
 
   .about-section .counter .count-data {

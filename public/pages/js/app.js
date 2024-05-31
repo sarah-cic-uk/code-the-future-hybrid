@@ -99,19 +99,9 @@ async function checkReleaseDates(fbDB) {
   });
 }
 
-function fetchVideo(pathReference, el) {
+function fetchMedia(pathReference, el) {
   pathReference.getDownloadURL()
     .then((url) => {
-      // // This can be downloaded directly:
-      // var xhr = new XMLHttpRequest();
-      // xhr.responseType = 'blob';
-      // xhr.onload = (event) => {
-      //     var blob = xhr.response;
-      // };
-      // xhr.open('GET', url);
-      // xhr.send();
-
-      // Or inserted into an <img> element
       el.setAttribute('src', url);
     })
     .catch((error) => {
