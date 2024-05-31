@@ -58,9 +58,11 @@ async function initFirebase() {
 
   window.fbAuth = fbAuth;
   window.fbDB = fbDB;
+  window.fbStorage = fbStorage;
 
   globalThis.fbAuth = fbAuth;
   globalThis.fbDB = fbDB;
+  globalThis.fbStorage = fbStorage;
 
   console.log(
     "Firebase SDK modules and Firebase core both initialized within firebase.js..."

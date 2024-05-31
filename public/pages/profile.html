@@ -167,10 +167,10 @@
         logout(window.fbAuth);
       }
 
-      function displaySelectedImage(event, elementId) {
+       function displaySelectedImage(event, elementId) {
         const selectedImage = document.getElementById(elementId);
         const fileInput = event.target;
-
+console.log(fileInput.files[0].name.split('.')[0])
         if (fileInput.files && fileInput.files[0]) {
           const reader = new FileReader();
 
@@ -179,6 +179,10 @@
           };
 
           reader.readAsDataURL(fileInput.files[0]);
+          const storageRef = window.fbStorage.ref("profilePics/"+fileInput.files[0].name.split('.')[0]);
+          console.log(storageRef)
+          storageRef.put(fileInput.files[0]);
+
         }
       }
 

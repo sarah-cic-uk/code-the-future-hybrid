@@ -122,7 +122,7 @@
     </div>
   </div>
   <script defer type="module">
-    import { fbAuth, fbStorage } from "../../../js/firebase.js";
+    import { fbAuth, fbDB, fbStorage } from "../../../js/firebase.js";
     window.fbAuth = fbAuth;
     window.fbDB = fbDB;
     window.fbStorage = fbStorage;
@@ -161,7 +161,7 @@
 
       const pathReference = window.fbStorage.ref("media/firstWebpage.mp4");
       const el = document.getElementById("session-video");
-      fetchVideo(pathReference, el);
+      fetchMedia(pathReference, el);
 
       document.getElementById("tutor-avatar").src =
         getPath() + "images/tutorAvatars/remya.jpeg";
