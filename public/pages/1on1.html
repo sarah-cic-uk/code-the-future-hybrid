@@ -385,9 +385,9 @@
       function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
         const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
         sessionRequestRef.set({
-          tutorId: tutor.id,
+          // tutorId: tutor.id,
           tutorName: tutor.displayName,
-          tutorEmail: tutor.email,
+          // tutorEmail: tutor.email,
           requestedDate: requestedDate,
           requestedTime: requestedTime,
           requestedDuration: requestedDuration,
