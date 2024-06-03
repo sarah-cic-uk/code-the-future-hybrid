@@ -310,6 +310,16 @@
               const tutorTile = document.createElement("div");
               tutorTile.classList.add("tutor-tile");
 
+              // Add click event listener
+              tutorTile.addEventListener("click", function() {
+                // Remove the 'selected' class from all tutor tiles
+                const tutorTiles = scrollbox.querySelectorAll(".tutor-tile");
+                tutorTiles.forEach((tile) => tile.classList.remove("selected"));
+
+                // Add the 'selected' class to the clicked tutor tile
+                this.classList.add("selected");
+              });
+
               const tutorImage = document.createElement("img");
               tutorImage.src = `../images/tutorAvatars/${tutor.avatar}`;
               tutorImage.height = 70;
