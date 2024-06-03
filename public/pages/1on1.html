@@ -290,6 +290,8 @@
       //   });
       // }
 
+      let selectedTutor = null;
+
       function getTutors() {
         console.log("getTutors function");
         const dbRef = window.fbDB.ref("tutors");
@@ -318,6 +320,9 @@
 
                 // Add the 'selected' class to the clicked tutor tile
                 this.classList.add("selected");
+
+                // Store the selected tutor data
+                selectedTutor = tutor;
               });
 
               const tutorImage = document.createElement("img");
@@ -344,6 +349,53 @@
           }
         );
       }
+
+      const requestSessionBtn = document.querySelector("#alt-session button");
+      requestSessionBtn.addEventListener("click", requestSession);
+
+      function requestSession() {
+        if (!selectedTutor) {
+          alert("Please select a tutor first.");
+          return;
+        }
+
+        const dateInput = document.querySelector("#alt-session input[type='date']");
+        const timeInput = document.querySelector("#alt-session input[type='time']");
+        const durationSelect = document.querySelector("#alt-session select");
+
+        const requestedDate = dateInput.value;
+        const requestedTime = timeInput.value;
+        const requestedDuration = durationSelect.value;
+
+        // Send email to the tutor
+        sendEmailToTutor(selectedTutor, requestedDate, requestedTime, requestedDuration);
+
+        // Write data to Firebase database
+        writeSessionRequestToDatabase(selectedTutor, requestedDate, requestedTime, requestedDuration);
+      }
+
+
+      function sendEmailToTutor(tutor, requestedDate, requestedTime, requestedDuration) {
+        console.log(`Sending email to ${tutor.email} with the following details:`);
+        console.log(`Date: ${requestedDate}`);
+        console.log(`Time: ${requestedTime}`);
+        console.log(`Duration: ${requestedDuration}`);
+      }
+
+      function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
+        const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
+        sessionRequestRef.set({
+          tutorId: tutor.id,
+          tutorName: tutor.displayName,
+          tutorEmail: tutor.email,
+          requestedDate: requestedDate,
+          requestedTime: requestedTime,
+          requestedDuration: requestedDuration,
+          requestedBy: window.localStorage.getItem("userId"), // Assuming you have the user's ID stored in localStorage
+        });
+      }
+
+
 
       function logUserOut(event) {
         const fbAuth = firebase.auth();
