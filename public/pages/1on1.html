@@ -164,31 +164,6 @@
             <img src="../images/tutorAvatars/haseeb.png" height="70" width="70"
               style="border-radius: 100%; object-fit: cover;" />
             <p style="max-width: 80px; text-align: center; margin: 0;">Haseeb Jabbar</p>
-          </div>
-          <div class="tutor-tile">
-            <img src="../images/tutorAvatars/haseeb.png" height="70" width="70"
-              style="border-radius: 100%; object-fit: cover;" />
-            <p style="max-width: 80px; text-align: center; margin: 0;">Haseeb Jabbar</p>
-          </div>
-          <div class="tutor-tile">
-            <img src="../images/tutorAvatars/haseeb.png" height="70" width="70"
-              style="border-radius: 100%; object-fit: cover;" />
-            <p style="max-width: 80px; text-align: center; margin: 0;">Haseeb Jabbar</p>
-          </div>
-          <div class="tutor-tile">
-            <img src="../images/tutorAvatars/haseeb.png" height="70" width="70"
-              style="border-radius: 100%; object-fit: cover;" />
-            <p style="max-width: 80px; text-align: center; margin: 0;">Haseeb Jabbar</p>
-          </div>
-          <div class="tutor-tile">
-            <img src="../images/tutorAvatars/haseeb.png" height="70" width="70"
-              style="border-radius: 100%; object-fit: cover;" />
-            <p style="max-width: 80px; text-align: center; margin: 0;">Haseeb Jabbar</p>
-          </div>
-          <div class="tutor-tile">
-            <img src="../images/tutorAvatars/haseeb.png" height="70" width="70"
-              style="border-radius: 100%; object-fit: cover;" />
-            <p style="max-width: 80px; text-align: center; margin: 0;">Haseeb Jabbar</p>
           </div> -->
         </div>
           </div>
@@ -280,18 +255,6 @@
         return false;
       }
 
-      // function getTutors() {
-      //   const dbRef = fbDB.ref("tutors");
-      //   console.log(dbRef)
-      //   dbRef.on('value', (snapshot) => {
-      //     console.log("hello")
-      //     const data = snapshot.val();
-      //     console.log(data)
-      //   });
-      // }
-
-      let selectedTutor = null;
-
       function getTutors() {
         console.log("getTutors function");
         const dbRef = window.fbDB.ref("tutors");
@@ -377,6 +340,7 @@
 
       function sendEmailToTutor(tutor, requestedDate, requestedTime, requestedDuration) {
         console.log(`Sending email to ${tutor.displayName} with the following details:`);
+        // console.log(`Email: ${tutor.email}`);
         console.log(`Date: ${requestedDate}`);
         console.log(`Time: ${requestedTime}`);
         console.log(`Duration: ${requestedDuration}`);
@@ -385,13 +349,12 @@
       function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
         const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
         sessionRequestRef.set({
-          // tutorId: tutor.id,
           tutorName: tutor.displayName,
           // tutorEmail: tutor.email,
           requestedDate: requestedDate,
           requestedTime: requestedTime,
           requestedDuration: requestedDuration,
-          requestedBy: window.localStorage.getItem("userId"), // Assuming you have the user's ID stored in localStorage
+          requestedBy: window.localStorage.getItem("userId"),
         });
       }
 
