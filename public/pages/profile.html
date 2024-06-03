@@ -113,8 +113,7 @@
             </div>
             <div class="col">
               <div class="d-flex justify-content-center mb-4">
-                <img id="selectedAvatar" src="https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg"
-                  class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;"
+                <img id="selectedAvatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;"
                   alt="example placeholder" />
               </div>
               <div class="text-center">
@@ -170,7 +169,6 @@
       function displaySelectedImage(event, elementId) {
         const selectedImage = document.getElementById(elementId);
         const fileInput = event.target;
-
         if (fileInput.files && fileInput.files[0]) {
           const reader = new FileReader();
 
@@ -179,6 +177,9 @@
           };
 
           reader.readAsDataURL(fileInput.files[0]);
+          const storageRef = window.fbStorage.ref("profilePics/" + fileInput.files[0].name.split('.')[0]);
+          storageRef.put(fileInput.files[0]);
+
         }
       }
 
@@ -191,6 +192,13 @@
             who.innerHTML = profileValues.about
             what.innerHTML = profileValues.learning
             career.innerHTML = profileValues.aspirations
+            const profilePicElement = document.getElementById("selectedAvatar");
+            const pathReference = await window.fbStorage.ref("profilePics/" + currentUser.uid);
+            if (pathReference) {
+              fetchMedia(pathReference, profilePicElement);
+            } else {
+              profilePicElement.setAttribute('src', 'https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg');
+            }
           }
           else {
             console.err('ERROR: User data not found')
