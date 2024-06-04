@@ -182,7 +182,9 @@
               <td>10:00 AM - 10:30 PM</td>
               <td>America/Sao Paulo</td>
               <td style="padding-top: 0; padding-bottom: 0">
-                <button>Book a Session</button>
+                <!-- <button>Book a Session</button> -->
+                <button onclick="handleSessionRequest(this, true)">Book a Session</button>
+
               </td>
             </tr>
             <tr>
@@ -190,7 +192,9 @@
               <td>10:00 AM - 10:30 PM</td>
               <td>America/Sao Paulo</td>
               <td style="padding-top: 0; padding-bottom: 0">
-                <button>Book a Session</button>
+                <!-- <button>Book a Session</button> -->
+                <button onclick="handleSessionRequest(this, true)">Book a Session</button>
+
               </td>
             </tr>
           </table>
@@ -270,6 +274,7 @@
             const scrollbox = document.getElementById("scrollbox");
 
             // Iterate over the tutors and create the HTML elements
+            let firstTutor = true;
             for (const tutorId in data) {
               const tutor = data[tutorId];
               const tutorTile = document.createElement("div");
@@ -305,6 +310,13 @@
               tutorTile.appendChild(tutorImage);
               tutorTile.appendChild(tutorName);
               scrollbox.appendChild(tutorTile);
+
+              // Set the first tutor as the default selected tutor
+              if (firstTutor) {
+                tutorTile.classList.add("selected");
+              selectedTutor = tutor;
+              firstTutor = false;
+              }
             }
           },
           (error) => {
@@ -337,6 +349,36 @@
         writeSessionRequestToDatabase(selectedTutor, requestedDate, requestedTime, requestedDuration);
       }
 
+      function handleSessionRequest(button, isBookingSession) {
+      if (!selectedTutor) {
+        alert("Please select a tutor first.");
+        return;
+      }
+
+      let requestedDate, requestedTime, requestedDuration;
+
+      if (isBookingSession) {
+        const row = button.parentNode.parentNode;
+        requestedDate = row.cells[0].textContent;
+        requestedTime = row.cells[1].textContent;
+        requestedDuration = row.cells[2].textContent;
+      } else {
+        const dateInput = document.querySelector("#alt-session input[type='date']");
+        const timeInput = document.querySelector("#alt-session input[type='time']");
+        const durationSelect = document.querySelector("#alt-session select");
+
+        requestedDate = dateInput.value;
+        requestedTime = timeInput.value;
+        requestedDuration = durationSelect.value;
+      }
+
+      // Send email to the tutor
+      sendEmailToTutor(selectedTutor, requestedDate, requestedTime, requestedDuration);
+
+      // Write data to Firebase database
+      writeSessionRequestToDatabase(selectedTutor, requestedDate, requestedTime, requestedDuration);
+    }
+
 
       function sendEmailToTutor(tutor, requestedDate, requestedTime, requestedDuration) {
         console.log(`Selected ${tutor.displayName} with the following details:`);
@@ -356,6 +398,7 @@
           requestedDuration: requestedDuration,
           requestedBy: window.localStorage.getItem("userId"),
         });
+        console.log(`sessionRequest written to database: ${sessionRequestRef}`);
       }
 
 
