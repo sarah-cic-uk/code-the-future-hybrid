@@ -388,18 +388,6 @@
         console.log(`Duration: ${requestedDuration}`);
       }
 
-      // function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
-      //   const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
-      //   sessionRequestRef.set({
-      //     tutorName: tutor.displayName,
-      //     // tutorEmail: tutor.email,
-      //     requestedDate: requestedDate,
-      //     requestedTime: requestedTime,
-      //     requestedDuration: requestedDuration,
-      //     requestedBy: window.localStorage.getItem("userId"),
-      //   });
-      //   console.log(`sessionRequest written to database: ${sessionRequestRef}`);
-      // }
 
       function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
       const currentUser = fbAuth.currentUser;
@@ -411,7 +399,6 @@
         const userName = currentUser.displayName;
 
         sessionRequestRef.set({
-          // tutorId: tutor.id,
           tutorName: tutor.displayName,
           // tutorEmail: tutor.email,
           requestedDate: requestedDate,
@@ -423,13 +410,12 @@
             userName: userName,
           },
         });
+        console.log(`sessionRequest written to database: ${sessionRequestRef}`);
+
       } else {
         console.log("No user is currently logged in.");
       }
     }
-
-
-
 
       function logUserOut(event) {
         const fbAuth = firebase.auth();
