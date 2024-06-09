@@ -154,7 +154,7 @@
 
     window.onload = (event) => {
       checkReleaseDates(window.fbDB);
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"), false)
     }
 
     function createPath(options) {
