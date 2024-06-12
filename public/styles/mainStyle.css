@@ -451,3 +451,11 @@ ul[id^=submenu] li {
   width: 100%;
   font-weight: bold;
 }
+
+#hero-img {
+  background-image: linear-gradient(to right, rgba(49, 35, 140, 1), rgba(244, 239, 239, 0.5)), url( '../images/hero_img.jpg');
+  height: auto;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
