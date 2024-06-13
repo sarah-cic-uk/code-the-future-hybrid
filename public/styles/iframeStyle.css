@@ -63,3 +63,9 @@ ol {
   cursor: default;
   pointer-events: none;
 }
+
+/* to fix the block level links in markdown */
+a {
+  color: inherit;
+  text-transform:inherit;
+}
