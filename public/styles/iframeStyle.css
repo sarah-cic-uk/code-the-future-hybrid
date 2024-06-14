@@ -68,6 +68,6 @@ ol {
 a.link-fix {
   color: blue;
   text-decoration: underline;
-  cursor: default;
-  pointer-events: none;
+  cursor: pointer;
+  pointer-events: all;
 }
