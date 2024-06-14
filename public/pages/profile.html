@@ -17,7 +17,7 @@
 </head>
 
 <body>
-  <div class="page-body">
+  <div class="page-content">
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid g-0">
         <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
@@ -33,13 +33,12 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')" title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')" title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')" title="Sessions">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
             <!-- Logged in Avatar -->
@@ -54,80 +53,79 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
-                </li>
+                <li> <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a> </li>
+                <li> <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a> </li>
+                <li> <a class="dropdown-item" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    <div class="container-fluid g-0 text-center">
-      <div class="page-content p-4">
-        <h1 id="profileHeading" class="p-2">Profile</h1>
-        <div>
-          <p>
-            Let us know more about yourself, your aspirations and goals so
-            that the tutors and others from your Code the Future cohort can get to know
-            you better.
-          </p>
-        </div>
-        <div class="container">
-          <div class="row align-items-center">
 
-            <div class="col">
-              <form onsubmit="updateProfile()">
-                <fieldset>
-                  <legend>Profile Form</legend>
+    
+    <main class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <div class="col py-3">
 
-                  <label class="profile-question text-start" for="who">Tell us who you are:</label>
-                  <textarea id="who" name="who"></textarea>
+          <div class="container">
+            <p id="profileHeading" class="h1" style="padding-top:3rem; font-weight:900; opacity:0.9;"></p>
 
-                  <label class="profile-question text-start" for="what">What are you hoping to learn from this
-                    course?</label>
-                  <textarea id="what" name="what"></textarea>
+            <p class="h4" style="padding:1.5rem 0 0.75rem; font-weight:600; font-style:italic;">
+              Let us know more about yourself
+            </p>
 
-                  <label class="profile-question text-start" for="career">What are your career aspirations?</label>
-                  <textarea id="career" name="career"></textarea>
-                  <div style="width: 100%;">
-                    <div class="text-end">
-                      <button class="btn btn-block fa-lg mb-3" style="border: 1px solid #d9437a; color: black"
-                        type="reset" value="Cancel" title="Cancel changes">
-                        Cancel Changes
-                      </button>
-                      <button class="btn btn-block fa-lg mb-3" style="background-color: #d9437a; color: white"
-                        type="submit" value="Submit" title="Save profile">
-                        Save profile
-                      </button>
+            <p style="padding-top: 10px">
+              What are your aspirations and goals so that the tutors and others from your Code the Future cohort can get to know you better.
+            </p>
+
+            <div class="row align-items-center">
+              <div class="col">
+                <form onsubmit="updateProfile()">
+                  <fieldset>
+                    <legend>Profile form</legend>
+
+                    <label class="profile-question text-start" for="who">Tell us who you are</label>
+                    <textarea id="who" name="who"></textarea>
+
+                    <label class="profile-question text-start" for="what">What are you hoping to learn from this
+                      course?</label>
+                    <textarea id="what" name="what"></textarea>
+
+                    <label class="profile-question text-start" for="career">What are your career aspirations?</label>
+                    <textarea id="career" name="career"></textarea>
+
+                    <div style="float:right;">
+                      <a style="text-decoration:none; color:#1d0c59; margin:0 2rem 2rem 0" type="reset" value="Clear" title="Clear" onClick="">Clear</a>
+                      <button class="btn btn-block fa-lg mb-3" style="background-color: #d9437a; color: white" type="submit" value="Submit" title="Save profile">Save profile</button>
                     </div>
-                  </div>
-                </fieldset>
-              </form>
-            </div>
-            <div class="col">
-              <div class="d-flex justify-content-center mb-4">
-                <img id="selectedAvatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;"
-                  alt="example placeholder" />
+
+                  </fieldset>
+                </form>
               </div>
-              <div class="text-center">
-                <div data-mdb-ripple-init class="mt-1 btn btn-rounded" style="background-color: #1d0c58; color: white">
-                  <input class="form-control" type="file" id="formFile"
-                    onchange="displaySelectedImage(event, 'selectedAvatar')">
-                  <label class="form-label text-white m-1" for="profilePic">Update profile picture</label>
+
+              <div class="col">
+                <div class="d-flex justify-content-center mb-4">
+                  <img id="selectedAvatar" class="rounded-circle" style="width:200px; height:200px; object-fit:cover;" alt="example placeholder" />
+                </div>
+
+                <div class="text-center">
+                  <div data-mdb-ripple-init class="mt-1 btn btn-rounded" style="background-color: #1d0c58; color: white">
+                    <input class="form-control" type="file" id="formFile"
+                      onchange="displaySelectedImage(event, 'selectedAvatar')">
+                    <label class="form-label text-white m-1" for="profilePic">Update profile picture</label>
+                  </div>
                 </div>
               </div>
             </div>
+
           </div>
+          
         </div>
       </div>
-    </div>
+    </main>
+
+
     <script defer type="module">
       import { fbAuth, fbDB } from "./js/firebase.js";
       window.fbAuth = fbAuth;
@@ -145,7 +143,7 @@
       const career = document.getElementById('career');
 
       window.onload = (event) => {
-        console.log("Liad")
+        console.log("Load")
         auth(
           document.querySelector(".loginBtn"),
           document.querySelector(".profileBtn"),
@@ -242,4 +240,7 @@
     margin: 8px 0;
     box-sizing: border-box;
   }
+  .rounded-circle {
+    box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
 </style>
