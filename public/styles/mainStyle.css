@@ -332,6 +332,7 @@ ul[id^='submenu'] li {
 	font-style: normal;
 	font-weight: 900;
 	font-size: 40px;
+  opacity: 0.8;
 }
 
 .info-modal i {
