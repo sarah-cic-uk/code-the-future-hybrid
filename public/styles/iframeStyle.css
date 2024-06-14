@@ -3,7 +3,7 @@ body {
   margin: 0px 30px;
 }
 
-li a {
+li a, ul li a {
   /* color: black;
   text-decoration: none; */
   pointer-events: all;
@@ -57,7 +57,7 @@ ol {
   line-height: 1.5em;
 }
 
-:not(a[href*="https"]) {
+:not(a[href*="https"]), :not(a[href*="http"]) {
   color: black;
   text-decoration: none;
   cursor: default;
