@@ -57,9 +57,9 @@ ol {
   line-height: 1.5em;
 }
 
-/* :not(a[href*="https"]) {
+:not(a[href*="https"]) {
   color: black;
   text-decoration: none;
   cursor: default;
   pointer-events: none;
-} */
+}
