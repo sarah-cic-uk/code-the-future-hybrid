@@ -64,8 +64,10 @@ ol {
   pointer-events: none;
 }
 
-/* fix for 2 links */
-:not(a[href*="http"]) {
+/* fix for 2 http links */
+a.link-fix {
+  color: blue;
+  text-decoration: underline;
   cursor: default;
   pointer-events: none;
 }
