@@ -136,37 +136,37 @@
         </div>
       </section>
 
-      <section class="pb-5 mx-5 row" style="padding-top:3rem;">
-        <div class="container">
+      <section class="mx-5 row" style="padding-top:3rem;">
+        <div style="min-height: calc(70vh - 10px);">
+            
+          <div class="col py-3">
+              <div class="container">
+                  <h3 class="mb-1" id="sessions-heading">Course session overview</h3>
+                  <p>
+                    Each session we will teach you the skills you need to develop your
+                    own website:
+                  </p>
+
+                <div class="col-12 text-end">
+                  <a style="margin-right:1rem;" class="btn btn-primary" href="#carousel-sessions" role="button" data-bs-slide="prev" title="previous">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                      <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                    </svg>
+                  </a>
+
+                  <a class="btn btn-primary" href="#carousel-sessions" role="button" data-bs-slide="next" title="next">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                      </svg>
+                  </a>
+                </div>
+              </div> 
+          </div>
+            
           <div class="row">
-            <div class="col-6">
-              <h3 class="mb-3" id="sessions-heading">Course Session Overviews</h3>
-            </div>
-            <div class="col-6 text-end">
-              <a class="btn btn-primary mb-3 mr-1" href="#carousel-sessions" role="button" data-bs-slide="prev"
-                title="previous">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                  class="bi bi-arrow-left" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd"
-                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-                </svg>
-              </a>
-              <a class="btn btn-primary mb-3" href="#carousel-sessions" role="button" data-bs-slide="next" title="next">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                  class="bi bi-arrow-right" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd"
-                    d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
-                </svg>
-              </a>
-            </div>
-            <div class="col-12">
-              <p>
-                Each session we will teach you the skills you need to develop your
-                own website:
-              </p>
-              <div id="carousel-sessions" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
+            <div id="carousel-sessions" class="carousel slide" data-ride="carousel">
+              <div class="carousel-inner">
+                <div class="carousel-item active">
                     <div class="row">
                       <div class="col-md-4 mb-3">
                         <div class="card h-100">
@@ -201,8 +201,10 @@
                         </div>
                       </div>
                     </div>
-                  </div>
+                </div>
+
                   <div class="carousel-item">
+
                     <div class="row">
                       <div class="col-md-4 mb-3">
                         <div class="card h-100">
@@ -215,6 +217,7 @@
                           </div>
                         </div>
                       </div>
+
                       <div class="col-md-4 mb-3">
                         <div class="card h-100">
                           <img class="img-fluid card-img-top" alt="session 5" src="./images/sessions/session5.png" />
@@ -226,6 +229,7 @@
                           </div>
                         </div>
                       </div>
+
                       <div class="col-md-4 mb-3">
                         <div class="card h-100">
                           <img class="img-fluid card-img-top" alt="session 6" src="./images/coding-together.jpeg" />
@@ -237,9 +241,13 @@
                           </div>
                         </div>
                       </div>
+
                     </div>
+
                   </div>
+
                   <div class="carousel-item">
+
                     <div class="row">
                       <div class="col-md-4 mb-3">
                         <div class="card h-100">
@@ -252,6 +260,7 @@
                           </div>
                         </div>
                       </div>
+
                       <div class="col-md-4 mb-3">
                         <div class="card h-100">
                           <img class="img-fluid card-img-top" alt="session 8" src="./images/cv-builder-block.png" />
@@ -262,11 +271,12 @@
                         </div>
                       </div>
                     </div>
+
                   </div>
-                </div>
               </div>
             </div>
-          </div>
+          </div> 
+
         </div>
       </section>
 
@@ -360,10 +370,10 @@
           </div>
         </div>
       </section>
-
     </main>
+
   </div>
-  </div>
+
   <script type="module">
     import { fbAuth } from "./pages/js/firebase.js"
     window.fbAuth = fbAuth;
