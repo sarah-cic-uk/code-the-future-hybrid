@@ -356,6 +356,7 @@ ul[id^='submenu'] li {
 .catalog-badge {
 	float:inline-end; padding:0 1rem 8rem 2rem;
 }
+
 #sessions-heading,
 #jobs-heading {
 	font-family: sans-serif;
@@ -409,7 +410,7 @@ ul[id^='submenu'] li {
 }
 
 .job-btns a:hover,
-.btn-register:hover,
+/* .btn-register:hover, */
 .button-style,
 .button-style-invert:hover {
 	background-color: #d9437a;
@@ -422,9 +423,9 @@ ul[id^='submenu'] li {
 	color: white;
 }
 
-.btn-register {
+/* .btn-register {
 	border-color: #d9437a;
-}
+} */
 
 .hidden-feedback {
 	display: none;
@@ -514,9 +515,7 @@ ul[id^='submenu'] li {
 	opacity: 0.8;
     font-size: 2rem;
 }
-.h2 {
-	/* sessions-heading, jobs-heading */
-}
+/* .h2 {#sessions-heading, #jobs-heading} */
 .login .h2 {
 	opacity: 0.7;
     font-size: 1.25rem;
@@ -536,9 +535,10 @@ ul[id^='submenu'] li {
 .h5 {
 	padding:1.5rem 0 0.75rem 0; font-weight:500;
 }
-.h6 {
-	/* reboot.scss*/
-}
+/* reboot.scss 
+.h6 {}
+*/
+
 .button-generic {
     padding: 0.5rem 1.5rem;
     border-radius: 0.4rem !important;
