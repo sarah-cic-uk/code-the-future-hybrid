@@ -1,8 +1,6 @@
-.page-content {
-    background-color: white;
+.page-content.OneToOne {
     padding-bottom: 4rem;
 }
-
 .tutor-tile {
     display: flex;
     flex-direction: column;
@@ -11,108 +9,74 @@
     border-radius: 1rem;
     gap: 0.5rem
 }
-
 .selected {
     background-color: white;
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
 }
-
 .tutor-selector, .calendar-selector {
-    background-color: #eae9f3;
+    background-color: #f4f4f4;
     display: flex;
     padding: 1rem;
     gap: 0.2rem;
     border-radius: 10px;
     box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
-    border: 1px solid #011640;
+    border: 1px solid #dee2e6;
 }
-
 #scrollbox::-webkit-scrollbar {
     width: .0em;
 }
-
 #scrollbox::-webkit-scrollbar:horizontal{
     height: .0em;
 }
-
 #scrollbox::-webkit-scrollbar,
 #scrollbox::-webkit-scrollbar-thumb {
     overflow: visible;
     border-radius: 4px;
 }
-
 #scrollbox::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, .2);
 }
-
 table {
     width: 100%;
+    background-color:white;
+    border:1px solid #E0E0E0;
 }
-
 thead {
-    background-color: #31238C;
-    color: white;
+    background-color: #E0E0E0;
+    color: #191919;
 }
-
 tr {
     border-bottom: 1px solid #E0E0E0 !important;
 }
-
 tr:nth-child(even) {
-    background-color: #c5cee2;
+    background-color: #F3F3F3;
 }
-
 td {
     padding: 1rem;
 }
-
 th {
     padding: 0.5rem 1rem;
 }
-
 table button {
-    background-color: white;
-    border: solid 1px #d9437a;
-    color: #31238C;
-    font-weight: 500;
-    padding: 0.3rem 0.5rem;
-    border-radius: 0.4rem !important;
+    background-color: #31238C;
+    border: 0;
+    color: white;
 }
-
-#show-more {
-    padding: 1rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: #31238C;
-}
-
 #alt-session {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     align-items: flex-start;
 }
-
 #alt-session select {
     appearance: none;
 }
-
 #alt-session > div {
     display: flex;
     gap: 1rem
 }
-
 #alt-session > div > * {
     border-radius: 0.5rem;
     padding: 0.5rem 0.75rem;
-    border: solid 1px rgb(118, 118, 118);
-}
-
-#alt-session button {
-    background-color: #d9437a;
-    color: white;
-    padding: 0.5rem 1.5rem;
-    border: 0;
-    border-radius: 0.4rem !important;
+    border: solid 1px #ced4da;
 }
