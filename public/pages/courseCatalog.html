@@ -18,19 +18,18 @@
 
 <body>
   <div class="page-content">
+
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-          border-right: 2px solid #d9437a;
-          padding-right: 10px;
-          color: #1d0c59;
-        ">
+        
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="border-right: 2px solid #d9437a; padding-right: 10px; color: #1d0c59; ">
           <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About
@@ -45,16 +44,15 @@
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')"
               title="Sessions">Sessions</a>
           </div>
+
           <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style"
-              title="Login">
-              Login
-            </button>
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn me-3 button-generic primary"title="Login">Login</button>
             <div class="d-flex align-items-center">
-              <!-- Logged in Avatar -->
+
               <div>
                 <p class="my-auto" id="profileName"></p>
               </div>
+
               <div class="profileBtn dropdown px-3">
                 <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -63,15 +61,15 @@
                 </a>
 
                 <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My
-                      profile</a></li>
-                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')"
-                      title="View cohort">View cohort</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a></li>
                   <li><a class="dropdown-item" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
                 </ul>
+
               </div>
             </div>
           </div>
+
         </div>
     </nav>
 
@@ -80,28 +78,20 @@
         <div class="col py-3">
 
           <div class="container">
-            <p class="h1" style="padding-top:3rem; font-weight:900; opacity:0.9;">
-              Course Catalog
-            </p>
-            <p class="h4" style="padding:1.5rem 0 0.75rem; font-weight:600; font-style:italic;">
-              Let's show you other learning opportunities with IBM CIC
-            </p>
+            <section>
+            <h1 class="h1">Course Catalog</h1>
+            <h2 class="h4">Let's show you other learning opportunities with IBM CIC</h2>
 
-            <div style="width:67%; display:block; float:left; margin-right:2rem; padding-bottom:3rem;">
-              <p class="h5" style="padding:1.5rem 0 0.75rem; font-weight:500;">
-                Join an IBM CIC Innovation Hackathon
-              </p>
-              <p style="padding-top:10px">
-                IBM CIC runs external hackathons for colleges and universities to give students an insight into life as an
-                IBMer.
-              </p>
-              <p style="padding-top:10px">
+            <div class="catalog-blurb">
+              <h5 class="h5">Join an IBM CIC Innovation Hackathon</h5>
+              <p>IBM CIC runs external hackathons for colleges and universities to give students an insight into life as an IBMer.</p>
+              <p>
                 The Hackathons challenge students to come up with new ideas to solve real-world issues and gives them hands-on
                 experience of enterprise style development. The teams will utilise Design Thinking and agile processes to
                 create
                 Proof of Concepts to bring their ideas to life.
               </p>
-              <p style="padding-top:10px">
+              <p>
                 After attending a Hackathon participants will be able to describe the software lifecycle from Problem
                 Statement to
                 working Proof of Concept, and design, create and test a prototype app/site. They will have greater
@@ -110,7 +100,7 @@
                 clear,
                 concise manner.
               </p>
-              <p style="padding-top:10px">
+              <p>
                 Those who meet the given criteria by the end of the Hackathon can earn a Credly Badge <a
                   href="https://www.credly.com/org/ibm/badge/ibm-cic-hackathon-innovation-squad-member" target="_blank"
                   title="Credly badge: IBM CIC Hackathon: Innovation Squad Member">IBM CIC Hackathon: Innovation Squad
@@ -124,37 +114,33 @@
             </div>
           
             <div>
-              <img src="../images/hackathonBadge.png" alt="Credly: Hackathon badge" width="30%" height="40%"
-                style="float: inline-end; padding:0 1rem 8rem 2rem;" />
+              <img src="../images/hackathonBadge.png" alt="Credly: Hackathon badge" width="30%" height="40%" class="catalog-badge" />
             </div>
+            </section>
 
-            <div>
-              <hr style="width:90%; margin:30px auto;">
-            </div>
+            <hr class="hr" style="margin:3rem auto;" />
 
-            <div>
-              <p class="h5" style="padding:1.5rem 0 0.75rem; font-weight:500;">
-                Badge support
-              </p>
+            <section>
+              <h5 class="h5">Badge support</h5>
 
               <div class="card" style="margin:30px auto 60px auto; box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);">
                 <div class="row py-3 px-4 info-modal">
 
-                  <div class="col" style="padding: 1rem 2rem;">
+                  <div class="col override">
                     <i class="fs-1 bi-chat-quote"></i>
                     <div class="fw-bold mb-2">If I pass the course, when do I get the badge?</div>
                     <div class="small">Badges are typically issued automatically after you meet the course requirements and
                       grading policy. You should get an email notification of receiving the badge in one to four days.</div>
                   </div>
 
-                  <div class="col" style="padding: 1rem 2rem;">
+                  <div class="col override">
                     <i class="fs-1 bi-chat-quote"></i>
                     <div class="fw-bold mb-2">Where can I find more information about digital badges?</div>
                     <div class="small">For more information about badges, see Frequently asked questions on IBM Training.
                     </div>
                   </div>
 
-                  <div class="col" style="padding: 1rem 2rem;">
+                  <div class="col override">
                     <i class="fs-1 bi-life-preserver"></i>
                     <div class="fw-bold mb-2">Further support</div>
                     <div class="small">For questions related to your Credly badge earner account and profile, as well as
@@ -169,7 +155,7 @@
                 </div>
               </div>
 
-              <div style="padding:30px 0 60px 0;">
+              <div class="privacy">
                 <p class="small"><strong>NOTICE:</strong> IBM leverages the services of Credly, a 3rd party data processor
                   authorized by IBM and located in
                   the United States, to assist in the administration of the IBM Digital Badge program. In order to issue you
@@ -187,7 +173,7 @@
                     title="IBM W3 publisher privacy notice">https://w3.ibm.com/w3publisher/w3-privacy-notice</a>.
                 </p>
               </div>
-            </div>
+            </section>
           </div>
           
         </div>
