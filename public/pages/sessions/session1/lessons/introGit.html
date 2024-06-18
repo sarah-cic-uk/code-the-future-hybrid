@@ -70,7 +70,8 @@
                             <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page"
                                 onclick="createPath('pages/sessions/session5/introduction.html')" title="Session 5">
                                 Session 5
-                                <span id="session5-tooltip" class="box tooltip-text hidden" title="Session Opens Soon">Session Opens Soon</span>
+                                <span id="session5-tooltip" class="box tooltip-text hidden"
+                                    title="Session Opens Soon">Session Opens Soon</span>
                             </button>
                             <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page"
                                 onclick="createPath('pages/sessions/session6/introduction.html')" title="Showcase">
@@ -116,11 +117,16 @@
                                 <source type="video/mp4">
                             </video>
                         </div>
+
                         <div class="text-end">
-                            <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle" width="100"
-                                height="100">
-                            <div class="tutor-name">Haseeb Jabbar <br />
-                                Full Stack Engineer</div>
+                            <div class="avatar-sessions-card">
+                                <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle" width="100"
+                                    height="100" />
+                                <div class="tutor-name">
+                                    <strong>Haseeb Jabbar</strong> <br />
+                                    Full Stack Engineer
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class='embed-container embed-responsive' style="width: 100%; min-height: 90vh;">
@@ -129,61 +135,61 @@
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+            </main>
+        </div>
 
-    <script defer type="module">
-        import { fbAuth, fbStorage } from "../../../js/firebase.js"
-        window.fbAuth = fbAuth;
-        window.fbDB = fbDB;
-        window.fbStorage = fbStorage;
-    </script>
-    <script>
-        var converter = new showdown.Converter();
-        fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-1/intro_to_github.md')
-            .then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                var iframe = document.getElementById('github-iframe');
-                const test = converter.makeHtml(atob(data['content']))
-                const encrypted = encodeURIComponent(data['content'])
-                iframe.srcdoc =
-                    '<link rel="stylesheet" type="text/css" href="../../../../styles/iframeStyle.css"/>' +
-                    test;
-            });
-    </script>
-    <script type="text/javascript">
-        const stylesheet = document.createElement('link');
-        stylesheet.rel = 'stylesheet';
-        stylesheet.type = 'text/css';
-        stylesheet.href = getPath() + 'styles/mainStyle.css';
-        document.head.appendChild(stylesheet);
+        <script defer type="module">
+            import { fbAuth, fbStorage } from "../../../js/firebase.js"
+            window.fbAuth = fbAuth;
+            window.fbDB = fbDB;
+            window.fbStorage = fbStorage;
+        </script>
+        <script>
+            var converter = new showdown.Converter();
+            fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-1/intro_to_github.md')
+                .then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    var iframe = document.getElementById('github-iframe');
+                    const test = converter.makeHtml(atob(data['content']))
+                    const encrypted = encodeURIComponent(data['content'])
+                    iframe.srcdoc =
+                        '<link rel="stylesheet" type="text/css" href="../../../../styles/iframeStyle.css"/>' +
+                        test;
+                });
+        </script>
+        <script type="text/javascript">
+            const stylesheet = document.createElement('link');
+            stylesheet.rel = 'stylesheet';
+            stylesheet.type = 'text/css';
+            stylesheet.href = getPath() + 'styles/mainStyle.css';
+            document.head.appendChild(stylesheet);
 
-        window.onload = (event) => {
-            checkReleaseDates(window.fbDB);
-            auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+            window.onload = (event) => {
+                checkReleaseDates(window.fbDB);
+                auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
 
-            const pathReference = window.fbStorage.ref('media/introGit.mp4');
-            const el = document.getElementById('session-video');
-            fetchMedia(pathReference, el)
+                const pathReference = window.fbStorage.ref('media/introGit.mp4');
+                const el = document.getElementById('session-video');
+                fetchMedia(pathReference, el)
 
-            document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.png';
-            updateSideNav()
-        }
+                document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.png';
+                updateSideNav()
+            }
 
-        function createPath(options) {
-            window.location = getPath() + options;
-            return false;
-        }
+            function createPath(options) {
+                window.location = getPath() + options;
+                return false;
+            }
 
-        function logUserOut(event) {
-            logout(window.fbAuth)
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+            function logUserOut(event) {
+                logout(window.fbAuth)
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
 </body>
 
 </html>
