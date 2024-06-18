@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -19,29 +19,26 @@
 
 <body>
   <div class="page-body">
+    
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
-          <img src="../images/logo.png" height="60px" />
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
+          <img src="../images/logo.png" height="60px" alt="CTF logo" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link active-top-nav" id="sessionsLink" href="#"
-              onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')" title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')" title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course Catalog</a>
+            <a class="nav-link active-top-nav" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')" title="Sessions">Sessions</a>
           </div>
 
           <div class="d-flex align-items-center">
@@ -58,30 +55,25 @@
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
-                  </li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a> </li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a></li>
+                  <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
                 </ul>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </nav>
+
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
         <div class="col py-3">
-          <div class="row people d-flex justify-content-center">
+
+          <main id="main" class="row people d-flex justify-content-center">
             <div class="col-md-4 session-card">
-              <div class="box" style="
-                    background-image: url(../images/sessions/session1.jpeg);
-                  ">
+              <div class="box" style="background-image: url(../images/sessions/session1.jpeg);">
                 <div class="session">
                   <div class="session-name">
                     <h3 class="session-name">Session 1</h3>
@@ -90,8 +82,7 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session1/introduction.html')"
-                      class="btn btn-primary float-end">Get Started</a>
+                    <a href="#" onclick="createPath('pages/sessions/session1/introduction.html')" class="btn button-generic primary float-end" title="Get started">Get started</a>
                   </div>
                 </div>
               </div>
@@ -104,8 +95,7 @@
                     <p class="session-description">Create a basic webpage</p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session2/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <a href="#" onclick="createPath('pages/sessions/session2/introduction.html')" class="btn button-generic primary float-end" title="Go">Go</a>
                   </div>
                 </div>
               </div>
@@ -121,8 +111,7 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session3/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <a href="#" onclick="createPath('pages/sessions/session3/introduction.html')" class="btn button-generic primary float-end" title="Go">Go</a>
                   </div>
                 </div>
               </div>
@@ -139,8 +128,7 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session4/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <a href="#" onclick="createPath('pages/sessions/session4/introduction.html')" class="btn button-generic primary float-end" title="Go">Go</a>
                   </div>
                 </div>
               </div>
@@ -155,8 +143,7 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session5/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <a href="#" onclick="createPath('pages/sessions/session5/introduction.html')" class="btn button-generic primary float-end" title="Go">Go</a>
                   </div>
                 </div>
               </div>
@@ -173,16 +160,17 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session6/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <a href="#" onclick="createPath('pages/sessions/session6/introduction.html')" class="btn button-generic primary float-end" title="Go">Go</a>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+
+          </main>
         </div>
       </div>
     </div>
+
   </div>
   <script defer type="module">
     import { fbAuth } from "./js/firebase.js";
@@ -199,7 +187,8 @@
       auth(
         null,
         document.querySelector(".profileBtn"),
-        document.querySelector("#sessionsLink")
+        document.querySelector("#sessionsLink"),
+        false
       );
     };
 

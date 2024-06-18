@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -20,12 +20,9 @@
 <body>
   <div class="page-body">
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
           <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -34,18 +31,16 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link active-top-nav" aria-current="page" href="#"
-              onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About CTF</a>
+            <a class="nav-link active-top-nav" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')" title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')" title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')" title="Sessions">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style">
-              Log In
-            </button>
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn me-3 button-generic primary"title="Login">Login</button>
+
             <div class="d-flex align-items-center">
               <!-- Logged in Avatar -->
               <div>
@@ -59,15 +54,9 @@
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
-                  </li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a></li>
+                  <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
                 </ul>
               </div>
             </div>
@@ -75,19 +64,22 @@
         </div>
       </div>
     </nav>
+
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
-        <div class="col py-3">
+        <main id="main" class="col py-3">
           <div class="team-grid">
+
             <div class="container">
-              <div class="intro">
-                <h2 class="text-center">Let us introduce ourselves...</h2>
-              </div>
+              <section>
+                <h1 class="h1">Meet the Tutors</h1>
+                <h2 class="h4">Let's introduce ourselves</h2>
+                <p>We all come from diverse backgrounds and have unique experiences, but our goal is the same - to assist you in reaching your objective and completing the course, which will set you on the path to something great!</p>
+              </section>
+
               <div class="row people d-flex justify-content-center">
                 <div class="col-md-4 col-lg-4 item" id="first-item-card">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/sarah.jpeg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/sarah.jpeg);">
                     <div class="profile">
                       <h3 class="name">Sarah Neenan</h3>
                       <p class="title">
@@ -111,20 +103,15 @@
                         two dev teams and I love my job.
                       </p>
                       <div class="social">
-                        <a href="https://www.linkedin.com/in/sneenan/" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/sarah-cic-uk" data-toggle="tooltip" title="CTF Github"><i
-                            class="sm-icon bi-github"></i></a>
-                        <a href="https://github.com/neenan" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/sneenan/" data-toggle="tooltip" title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
+                        <a href="https://github.com/sarah-cic-uk" data-toggle="tooltip" title="CTF Github"><i class="sm-icon bi-github"></i></a>
+                        <a href="https://github.com/neenan" data-toggle="tooltip" title="Personal Github"><i  class="sm-icon bi-github"></i></a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/jacob.jpg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/jacob.jpg);">
                     <div class="profile">
                       <h3 class="name">Jacob Boardman</h3>
                       <p class="title">Full Stack Engineer</p>
@@ -146,18 +133,14 @@
                         helping an teaching others.
                       </p>
                       <div class="social">
-                        <a href="https://www.linkedin.com/in/jacob-boardman-411190109/" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/Jacob-Boardman" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/jacob-boardman-411190109/" data-toggle="tooltip" title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
+                        <a href="https://github.com/Jacob-Boardman" data-toggle="tooltip" title="Personal Github"><i class="sm-icon bi-github"></i></a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/MichaelWeller.jpeg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/MichaelWeller.jpeg);">
                     <div class="profile">
                       <h3 class="name">Michael Weller</h3>
                       <p class="title">Full Stack Engineer</p>
@@ -176,17 +159,15 @@
                         knowledge through tutoring.
                       </p>
                       <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                        <!-- <a href="#"><i class="sm-icon bi-facebook"></i></a>
                         <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        <a href="#"><i class="sm-icon bi-instagram"></i></a> -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/remya.jpeg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/remya.jpeg);">
                     <div class="profile">
                       <h3 class="name">Remya Muraleedharan</h3>
                       <p class="title">Full Stack Engineer</p>
@@ -203,17 +184,15 @@
                         technologies in my role in IBM.
                       </p>
                       <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                        <!-- <a href="#"><i class="sm-icon bi-facebook"></i></a>
                         <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        <a href="#"><i class="sm-icon bi-instagram"></i></a> -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/JacquelineJones.jpeg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/JacquelineJones.jpeg);">
                     <div class="profile">
                       <h3 class="name">Jacqueline Jones</h3>
                       <p class="title">Front-End Developer</p>
@@ -250,18 +229,14 @@
                         aspirations with confidence.
                       </p>
                       <div class="social">
-                        <a href="https://www.linkedin.com/in/j4cquelinejones/" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/J4cquelineJones" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/j4cquelinejones/" data-toggle="tooltip" title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
+                        <a href="https://github.com/J4cquelineJones" data-toggle="tooltip" title="Personal Github"><i class="sm-icon bi-github"></i></a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/haseeb.png);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/haseeb.png);">
                     <div class="profile">
                       <h3 class="name">Haseeb Jabbar</h3>
                       <p class="title">Full Stack Engineer</p>
@@ -270,17 +245,15 @@
                       <h3 class="name">Haseeb Jabbar</h3>
                       <p class="description">coming soon...</p>
                       <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                        <!-- <a href="#"><i class="sm-icon bi-facebook"></i></a>
                         <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        <a href="#"><i class="sm-icon bi-instagram"></i></a> -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/kristel.png);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/kristel.png);">
                     <div class="profile">
                       <h3 class="name">Kristel Caisip</h3>
                       <p class="title">Full Stack Engineer</p>
@@ -300,18 +273,14 @@
                         inspire others in their own tech journeys.
                       </p>
                       <div class="social">
-                        <a href="https://github.com/kcibm" data-toggle="tooltip" title="Business Github"><i
-                            class="sm-icon bi-github"></i></a>
-                        <a href="https://github.com/kristelcaisip" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                        <a href="https://github.com/kcibm" data-toggle="tooltip" title="Business Github"><i class="sm-icon bi-github"></i></a>
+                        <a href="https://github.com/kristelcaisip" data-toggle="tooltip" title="Personal Github"><i class="sm-icon bi-github"></i></a>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/kadijah.png);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/kadijah.png);">
                     <div class="profile">
                       <h3 class="name">Kadijah Allarakhiya</h3>
                       <p class="title">Front-End Developer</p>
@@ -329,17 +298,15 @@
                         but I am learning more and more everyday
                       </p>
                       <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                        <!-- <a href="#"><i class="sm-icon bi-facebook"></i></a>
                         <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        <a href="#"><i class="sm-icon bi-instagram"></i></a> -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/doaa.jpeg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/doaa.jpeg);">
                     <div class="profile">
                       <h3 class="name">Doaa Radwan</h3>
                       <p class="title">Front-End Developer</p>
@@ -360,17 +327,15 @@
                         and make a differance by working on great projects.
                       </p>
                       <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                        <!-- <a href="#"><i class="sm-icon bi-facebook"></i></a>
                         <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
+                        <a href="#"><i class="sm-icon bi-instagram"></i></a> -->
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/bells.jpeg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/bells.jpeg);">
                     <div class="profile">
                       <h3 class="name">Obelema Wodike</h3>
                       <p class="title">Senior Business Analyst</p>
@@ -404,13 +369,12 @@
                   </div>
                 </div>
                 <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/amber.jpg);
-                      ">
+                  <div class="box tutor-profile" style="background-image: url(../images/tutorProfiles/amber.png);">
                     <div class="profile">
                       <h3 class="name">Amber Idumwonyi</h3>
                       <p class="title">Senior Test Specialist</p>
                     </div>
+
                     <div class="cover">
                       <h3 class="name">Amber Idumwonyi</h3>
                       <p class="description">
@@ -425,8 +389,8 @@
                         SNC-Lavlin Atkins where I was the sole Test Engineer
                         working on the Heathrow Aviation project and checking
                         to ensure the facial recognition system could actually
-                        recognise a passenger’s face. Whilst working on that
-                        project, I realised that being a tester wasn’t enough,
+                        recognise a passengers face. Whilst working on that
+                        project, I realised that being a tester wasn't enough,
                         I needed to learn and understand the backend of a
                         software, which then made me take on the position of
                         QA Automation Engineer at IBM. I am now being taught
@@ -434,11 +398,10 @@
                         since I joined IBM and the trainings and career
                         progression IBM offers is second to none.
                       </p>
+
                       <div class="social">
-                        <a href="https://www.linkedin.com/in/ambitiousmak" data-toggle="tooltip"
-                          title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
-                        <a href="https://github.com/Makeve" data-toggle="tooltip" title="Personal Github"><i
-                            class="sm-icon bi-github"></i></a>
+                        <a href="https://www.linkedin.com/in/ambitiousmak" data-toggle="tooltip" title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
+                        <a href="https://github.com/Makeve" data-toggle="tooltip" title="Personal Github"><i class="sm-icon bi-github"></i></a>
                       </div>
                     </div>
                   </div>
@@ -446,10 +409,12 @@
               </div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   </div>
+
+
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js";
     window.fbAuth = fbAuth;
@@ -465,7 +430,8 @@
       auth(
         document.querySelector(".loginBtn"),
         document.querySelector(".profileBtn"),
-        document.querySelector("#sessionsLink")
+        document.querySelector("#sessionsLink"),
+        false
       );
 
       const tutorProfiles = document.getElementsByClassName("tutor-profile");

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -17,14 +17,12 @@
 </head>
 
 <body>
-  <div class="page-body">
+  <div class="page-content">
+
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
           <img src="../images/logo.png" height="60px" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -33,13 +31,17 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About
+              CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')"
+              title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')"
+              title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course
+              Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')"
+              title="Sessions">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
             <!-- Logged in Avatar -->
@@ -54,80 +56,89 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
-                </li>
+                <li> <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My
+                    profile</a> </li>
+                <li> <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')"
+                    title="View cohort">View cohort</a> </li>
+                <li> <a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    <div class="container-fluid g-0 text-center">
-      <div class="page-content p-4">
-        <h1 id="profileHeading" class="p-2">Profile</h1>
-        <div>
-          <p>
-            Let us know more about yourself, your aspirations and goals so
-            that the tutors and others from your Code the Future cohort can get to know
-            you better.
-          </p>
-        </div>
-        <div class="container">
-          <div class="row align-items-center">
 
-            <div class="col">
-              <form onsubmit="updateProfile()">
-                <fieldset>
-                  <legend>Profile Form</legend>
 
-                  <label class="profile-question text-start" for="who">Tell us who you are:</label>
-                  <textarea id="who" name="who"></textarea>
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <main id="main" class="col py-3">
 
-                  <label class="profile-question text-start" for="what">What are you hoping to learn from this
-                    course?</label>
-                  <textarea id="what" name="what"></textarea>
+          <div class="container">
+            <section>
+              <h1 id="profileHeading" class="h1"></h1>
+              <h2 class="h4">Let us know more about yourself</h2>
+              <p>What are your aspirations and goals so that the tutors and others from your Code the Future cohort can
+                get to know you better.</p>
+            </section>
 
-                  <label class="profile-question text-start" for="career">What are your career aspirations?</label>
-                  <textarea id="career" name="career"></textarea>
-                  <div style="width: 100%;">
-                    <div class="text-end">
-                      <button class="btn btn-block fa-lg mb-3" style="border: 1px solid #d9437a; color: black"
-                        type="reset" value="Cancel" title="Cancel changes">
-                        Cancel Changes
-                      </button>
-                      <button class="btn btn-block fa-lg mb-3" style="background-color: #d9437a; color: white"
-                        type="submit" value="Submit" title="Save profile">
-                        Save profile
-                      </button>
+            <section class="row" style="margin-bottom:4rem">
+              <div class="col">
+
+                <form onsubmit="updateProfile()">
+                  <fieldset>
+                    <legend>Profile form</legend>
+
+                    <div class="form-group" style="margin-top:1rem;">
+                      <label class="profile-question text-start form-label" for="who">Tell us who you are</label>
+                      <div class="input-group">
+                        <textarea rows="3" class="form-control" id="who" name="who" placeholder="Let us know more about yourself."></textarea>
+                      </div>
                     </div>
-                  </div>
-                </fieldset>
-              </form>
-            </div>
-            <div class="col">
-              <div class="d-flex justify-content-center mb-4">
-                <img id="selectedAvatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;"
-                  alt="example placeholder" />
+
+                    <div class="form-group" style="margin-top:1rem;">
+                      <label class="profile-question text-start form-label" for="what">What are you hoping to learn from this course?</label>
+                      <div class="input-group">
+                        <textarea rows="3" class="form-control" id="what" name="what" placeholder="Let us know what made you sign up and what you would like to achieve from it."></textarea>
+                      </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top:1rem;">
+                      <label class="profile-question text-start form-label" for="career">What are your career aspirations?</label>
+                      <div class="input-group">
+                        <textarea rows="3" class="form-control"id="career" name="career" placeholder="Let us know where you would like to see yourself in the future, what fascinating path could your career journey lead you?"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="CTA-group">
+                      <input type="reset" value="Clear" id="reset" class="btn nav-link" />
+                      <input type="submit" value="Save profile" id="submit" class="btn button-generic primary" />
+                    </div>
+                  </fieldset>
+                </form>
               </div>
-              <div class="text-center">
-                <div data-mdb-ripple-init class="mt-1 btn btn-rounded" style="background-color: #1d0c58; color: white">
-                  <input class="form-control" type="file" id="formFile"
-                    onchange="displaySelectedImage(event, 'selectedAvatar')">
-                  <label class="form-label text-white m-1" for="profilePic">Update profile picture</label>
+
+              <div class="col" style="margin-top:4rem">
+                <div class="d-flex justify-content-center mb-4">
+                  <img id="selectedAvatar" class="rounded-circle" alt="Cohort avatar" />
+                </div>
+
+                <div class="text-center">
+                  <div data-mdb-ripple-init class="mt-1 btn btn-rounded"
+                    style="background-color: #1d0c58; color: white">
+                    <input class="form-control" type="file" id="formFile" onchange="displaySelectedImage(event, 'selectedAvatar')">
+                    <label class="form-label text-white m-1" for="profilePic">Update profile picture</label>
+                  </div>
                 </div>
               </div>
-            </div>
+            </section>
+
           </div>
-        </div>
+
+        </main>
       </div>
     </div>
+
+
     <script defer type="module">
       import { fbAuth, fbDB } from "./js/firebase.js";
       window.fbAuth = fbAuth;
@@ -145,7 +156,7 @@
       const career = document.getElementById('career');
 
       window.onload = (event) => {
-        console.log("Liad")
+        console.log("Load")
         auth(
           document.querySelector(".loginBtn"),
           document.querySelector(".profileBtn"),
@@ -241,5 +252,9 @@
     padding: 12px 20px;
     margin: 8px 0;
     box-sizing: border-box;
+  }
+
+  .rounded-circle {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
 </style>

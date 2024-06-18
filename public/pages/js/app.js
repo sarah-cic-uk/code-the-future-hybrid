@@ -1,5 +1,5 @@
 
-function auth(loginBtn, profileBtn, sessionsBtn) {
+function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
   if (localStorage.getItem('loggedIn') === "true") {
     if (loginBtn) loginBtn.style.display = "none";
     if (loginBtn) profileBtn.style.display = "block";
@@ -11,7 +11,9 @@ function auth(loginBtn, profileBtn, sessionsBtn) {
     if (loginBtn) loginBtn.style.display = "block";
     if (loginBtn) profileBtn.style.display = "none";
     if (sessionsBtn) sessionsBtn.style.display = "none";
-    if (window.location.pathname.match(/.*\/(.*)$/)[1] !== "login.html") { window.location.replace(`${getPath()}pages/login.html`) };
+    if (needsAuth) {
+      if (window.location.pathname.match(/.*\/(.*)$/)[1] !== "login.html") { window.location.replace(`${getPath()}pages/login.html`) };
+    }
   }
 }
 

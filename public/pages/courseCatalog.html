@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -17,40 +17,43 @@
 </head>
 
 <body>
-  <div class="page-body">
+  <div class="page-content">
+
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-          border-right: 2px solid #d9437a;
-          padding-right: 10px;
-          color: #1d0c59;
-        ">
-          <img src="../images/logo.png" height=60px />
+        
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
+          <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
-            <a class="nav-link active-top-nav" href="#" onclick="createPath('pages/courseCatalog.html')">Course
-              Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About
+              CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')"
+              title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')"
+              title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link active-top-nav" href="#" onclick="createPath('pages/courseCatalog.html')"
+              title="Course Catalog">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')"
+              title="Sessions">Sessions</a>
           </div>
+
           <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style">
-              Log In
-            </button>
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn me-3 button-generic primary" title="Login">Login</button>
             <div class="d-flex align-items-center">
-              <!-- Logged in Avatar -->
+
               <div>
                 <p class="my-auto" id="profileName"></p>
               </div>
+
               <div class="profileBtn dropdown px-3">
                 <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                   aria-expanded="false">
@@ -59,87 +62,126 @@
                 </a>
 
                 <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                  </li>
-                  <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a></li>
+                  <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
                 </ul>
+
               </div>
             </div>
           </div>
+
         </div>
     </nav>
+
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
-        <div class="container">
-          <h2 class="text-center mt-4">Other Learning Opportunities with IBM CIC</h2>
-          <br />
-          <div class="row pb-4 pt-4">
-            <h3>Join an IBM CIC Innovation Hackathon</h3>
-            <div class="col-9 mt-3">
+        <main id="main" class="col py-3">
 
-              <p>IBM CIC runs external hackathons for colleges and universities to give students an insight into life as
-                an IBMer.
-              </p>
-              <p>The Hackathons challenge students to come up with new ideas to solve real-world issues and gives them
-                hands-on
-                experience of enterprise style developemt. The teams will utilise Design Thinking and agile processes to
+          <div class="container">
+            <section>
+            <h1 class="h1">Course Catalog</h1>
+            <h2 class="h4">Let's show you other learning opportunities with IBM CIC</h2>
+
+            <div class="catalog-blurb">
+              <h5 class="h5">Join an IBM CIC Innovation Hackathon</h5>
+              <p>IBM CIC runs external hackathons for colleges and universities to give students an insight into life as an IBMer.</p>
+              <p>
+                The Hackathons challenge students to come up with new ideas to solve real-world issues and gives them hands-on
+                experience of enterprise style development. The teams will utilise Design Thinking and agile processes to
                 create
-                Proof of Concepts to bring thier ideas to life</p>
-              <p>After attending a Hackathon participants will be able to describe the software lifecycle from Problem
-                Statement to working Proof of Concept, and design, create and test a prototype app/site. They will have
-                greater understanding of the role of a Software Engineering in a Consultancy and be able to present
-                ideas
-                and apps to clients in a clear, concise manner. </p>
-              <p>Those who meet the given criteria by the end of the Hackathon can earn a Credly Badge (<a
-                  href="https://www.credly.com/org/ibm/badge/ibm-cic-hackathon-innovation-squad-member"
-                  target="_blank">IBM CIC Hackathon: Innovation Squad Member</a>). This allows the participants to share
-                their
-                successful completion of an IBM hackathon on LinkedIn and CVs to help them demonstrate that they have
-                learnt technical and
-                software lifecycle skills and can implement those skills in a hackathon (or enterprise)
-                environment.
+                Proof of Concepts to bring their ideas to life.
               </p>
-              <h6><b>Badge Support</b></h6>
-
-              <p><b>If I pass the course, when do I get the badge?</b><br />
-                Badges are typically issued automatically after you meet the course requirements and grading policy. You
-                should get an email notification of receiving the badge in one to four days.</p>
-
-              <p><b>Where can I find more information about digital badges?</b><br />
-                For more information about badges, see Frequently asked questions on IBM Training.</p>
-
-              <h6><b>Further support</b></h6>
-              <p>For questions related to your Credly badge earner account and profile, as well as issues related to
-                claiming your badge after receiving a notification, go to <a href="support.credly.com"
-                  target="_blank">support.credly.com</a>.
-                <br />For questions related to the course and badge, contact
-                <a href="mailto:sarah.neenan-cic-uk@uk.ibm.com" target="_blank">Sarah from IBM CIC</a>
+              <p>
+                After attending a Hackathon participants will be able to describe the software lifecycle from Problem
+                Statement to
+                working Proof of Concept, and design, create and test a prototype app/site. They will have greater
+                understanding of
+                the role of a Software Engineering in a Consultancy and be able to present ideas and apps to clients in a
+                clear,
+                concise manner.
               </p>
-
+              <p>
+                Those who meet the given criteria by the end of the Hackathon can earn a Credly Badge <a
+                  href="https://www.credly.com/org/ibm/badge/ibm-cic-hackathon-innovation-squad-member" target="_blank"
+                  title="Credly badge: IBM CIC Hackathon: Innovation Squad Member">IBM CIC Hackathon: Innovation Squad
+                  Member</a>.
+                This allows the participants to share their successful completion of an IBM hackathon on LinkedIn and CVs to
+                help
+                them demonstrate that they have learned technical and software lifecycle skills and can implement those skills
+                in a
+                hackathon (or enterprise) environment.
+              </p>
             </div>
-
-            <div class="col-3 text-center mt-3">
-              <img src="../images/hackathonBadge.png" width="200" height="200" />
+          
+            <div>
+              <img src="../images/hackathonBadge.png" alt="Credly: Hackathon badge" width="30%" height="40%" class="catalog-badge" />
             </div>
-            <p>NOTICE: IBM leverages the services of Credly, a 3rd party data processor authorized by IBM and located in
-              the United States, to assist in the administration of the IBM Digital Badge program. In order to issue you
-              an IBM Digital Badge, your personal information (name, email address, and badge earned) will be shared
-              with Credly. You will receive an email notification from Credly with instructions for claiming the badge.
-              Your personal information is used to issue your badge and for program reporting and operational purposes.
-              IBM may share the personal information collected with IBM subsidiaries and third parties globally. It will
-              be handled in a manner consistent with IBM privacy practices. The IBM Privacy Statement can be viewed
-              here: <a href="https://www.ibm.com/privacy/us/en/" target="_blank">https://www.ibm.com/privacy/us/en/</a>.
-              IBM employees can view the IBM Internal Privacy Statement here:
-              <a href="https://w3.ibm.com/w3publisher/w3-privacy-notice"
-                target="_blank">https://w3.ibm.com/w3publisher/w3-privacy-notice</a>.
-            </p>
+            </section>
+
+            <hr class="hr" style="margin:3rem auto;" />
+
+            <section>
+              <h5 class="h5">Badge support</h5>
+
+              <div class="card" style="margin:30px auto 60px auto; box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);">
+                <div class="row py-3 px-4 info-modal">
+
+                  <div class="col override">
+                    <i class="fs-1 bi-chat-quote"></i>
+                    <div class="fw-bold mb-2">If I pass the course, when do I get the badge?</div>
+                    <div class="small">Badges are typically issued automatically after you meet the course requirements and
+                      grading policy. You should get an email notification of receiving the badge in one to four days.</div>
+                  </div>
+
+                  <div class="col override">
+                    <i class="fs-1 bi-chat-quote"></i>
+                    <div class="fw-bold mb-2">Where can I find more information about digital badges?</div>
+                    <div class="small">For more information about badges, see Frequently asked questions on IBM Training.
+                    </div>
+                  </div>
+
+                  <div class="col override">
+                    <i class="fs-1 bi-life-preserver"></i>
+                    <div class="fw-bold mb-2">Further support</div>
+                    <div class="small">For questions related to your Credly badge earner account and profile, as well as
+                      issues related to
+                      claiming your badge after receiving a notification, go to <a href="https://support.credly.com/hc/en-us"
+                        target="_blank" title="External link to Credly support">support.credly.com</a>.
+                      <br />For questions related to the course and badge, contact
+                      <a href="mailto:sarah.neenan-cic-uk@uk.ibm.com" target="_blank"
+                        title="Email link to Sarah from IBM CIC">Sarah from IBM CIC</a>.
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="privacy">
+                <p class="small"><strong>NOTICE:</strong> IBM leverages the services of Credly, a 3rd party data processor
+                  authorized by IBM and located in
+                  the United States, to assist in the administration of the IBM Digital Badge program. In order to issue you
+                  an IBM Digital Badge, your personal information (name, email address, and badge earned) will be shared
+                  with Credly. You will receive an email notification from Credly with instructions for claiming the badge.
+                  Your personal information is used to issue your badge and for program reporting and operational purposes.
+                  IBM may share the personal information collected with IBM subsidiaries and third parties globally. It will
+                  be handled in a manner consistent with IBM privacy practices.</p>
+
+                <p class="small">The IBM Privacy Statement can be viewed
+                  here: <a href="https://www.ibm.com/privacy/us/en/" target="_blank"
+                    title="IBM privacy notice">https://www.ibm.com/privacy/us/en/</a>.
+                  IBM employees can view the IBM Internal Privacy Statement here:
+                  <a href="https://w3.ibm.com/w3publisher/w3-privacy-notice" target="_blank"
+                    title="IBM W3 publisher privacy notice">https://w3.ibm.com/w3publisher/w3-privacy-notice</a>.
+                </p>
+              </div>
+            </section>
           </div>
-        </div>
+          
+        </main>
       </div>
     </div>
   </div>
+
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js"
     window.fbAuth = fbAuth;
@@ -154,7 +196,7 @@
 
     window.onload = (event) => {
       checkReleaseDates(window.fbDB);
-      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+      auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"), false)
     }
 
     function createPath(options) {

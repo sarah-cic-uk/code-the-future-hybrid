@@ -3,7 +3,7 @@ body {
   margin: 0px 30px;
 }
 
-li a {
+li a, ul li a {
   /* color: black;
   text-decoration: none; */
   pointer-events: all;
@@ -62,4 +62,12 @@ ol {
   text-decoration: none;
   cursor: default;
   pointer-events: none;
+}
+
+/* fix for 2 http links */
+a.link-fix {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+  pointer-events: all;
 }

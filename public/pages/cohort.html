@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -17,14 +17,12 @@
 
 <body>
   <div class="page-body">
+
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
-          <img src="../images/logo.png" height="60px" />
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
+          <img src="../images/logo.png" height="60px"  alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,14 +30,14 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')" title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')" title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')" title="Sessions">Sessions</a>
           </div>
+
           <div class="d-flex align-items-center">
             <!-- Logged in Avatar -->
             <div>
@@ -53,29 +51,30 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My
-                    Profile</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
-                </li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a> </li>
+                <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </nav>
-    <div class="container-fluid page-content">
-      <h1 class="text-center pt-4">Meet your Cohort</h1>
-      <div class="row card-container">
 
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <main id="main" class="col py-3">
+
+          <h1 class="h1">Meet your Cohort</h1>
+          <div class="row card-container">
+
+          </div>
+        </main>
       </div>
     </div>
+    
   </div>
+
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js";
     window.fbAuth = fbAuth;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="utf-8" />
@@ -17,34 +17,32 @@
 </head>
 
 <body>
-  <div class="page-content">
+  <div class="page-body">
+
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
           <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link active-top-nav" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')" title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')" title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link active-top-nav" href="#" onclick="createPath('pages/jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')" title="Sessions">Sessions</a>
           </div>
+
           <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style">
-              Log In
-            </button>
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn me-3 button-generic primary"title="Login">Login</button>
+
             <div class="d-flex align-items-center">
               <!-- Logged in Avatar -->
               <div>
@@ -58,11 +56,9 @@
                 </a>
 
                 <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
-                  <li>
-                    <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                  </li>
-                  <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohor">View cohort</a></li>
+                  <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
                 </ul>
               </div>
             </div>
@@ -70,14 +66,18 @@
         </div>
       </div>
     </nav>
+
+
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
-        <div class="col py-3">
+
+        <main class="col py-3">
           <div class="team-grid">
+
             <div class="container">
-              <div class="intro">
-                <h2 class="text-center" id="jobs-heading">Jobs @ IBM CIC</h2>
-              </div>
+              <h1 class="h1">Jobs at IBM CIC</h1>
+              <h2 class="h4">Let's show you the available job roles</h2>
+
               <div class="row">
                 <p>IBM CIC is a fast growing developer community. We are looking for passionate people who want to
                   develop their career in technology. You do not need to know what specific job role you want to do, and
@@ -89,78 +89,81 @@
                   companies and work with industry leading technologies. This will enable you to grow within our
                   business which we support via promotion and progression opportunities.</p>
               </div>
+
               <div class="row jobs d-flex justify-content-center">
                 <div class="col-md-4 col-lg-3 item">
                   <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#apprenticeModal">
-                    <img class="job-image" src="../images/jobCategories/apprentice.jpg" />
+                    <img class="job-image" src="../images/jobCategories/apprentice.jpg" alt="Students in class" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Apprenticeship</h4>
                     </div>
                   </div>
                 </div>
+
                 <div class="col-md-4 col-lg-3 item">
                   <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#graduateModal">
                     <!-- <img class="job-qr" src="../images/jobCategories/applicationsGrad.png" width="50%" /> -->
-                    <img class="job-image" src="../images/jobCategories/graduate.jpeg" />
+                    <img class="job-image" src="../images/jobCategories/graduate.jpeg" alt="Someone writing onto a whiteboard" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Associate Programme (Graduates)</h4>
                     </div>
                   </div>
                 </div>
+
                 <div class="col-md-4 col-lg-3 item">
                   <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#entryModal">
-                    <img class="job-image" src="../images/jobCategories/techEntry.jpeg" />
+                    <img class="job-image" src="../images/jobCategories/techEntry.jpeg" alt="Technical entry students" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Tech Entry</h4>
                     </div>
                   </div>
                 </div>
+
                 <div class="col-md-4 col-lg-3 item">
                   <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#reEntryModal">
-                    <img class="job-image" src="../images/jobCategories/techReEntry.jpeg" />
+                    <img class="job-image" src="../images/jobCategories/techReEntry.jpeg" alt="Female students at a computer working together" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Tech RE-entry</h4>
                     </div>
                   </div>
                 </div>
+
                 <div class="col-md-4 col-lg-3 item">
                   <div class="card job-category shadow" data-bs-toggle="modal" data-bs-target="#experiencedModal">
-                    <img class="job-image" src="../images/jobCategories/experiencedHire.jpeg" />
+                    <img class="job-image" src="../images/jobCategories/experiencedHire.jpeg" alt="IT specialist working at her standing desk" />
                     <div class="job card-body">
                       <h4 class="job-name text-center">Experienced Hire</h4>
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
-        </div>
+        </main>
 
 
         <!--Apprentice Modal -->
-        <div class="modal fade" id="apprenticeModal" tabindex="-1" aria-labelledby="apprenticeModalLabel"
-          aria-hidden="true">
+        <div class="modal fade" id="apprenticeModal" tabindex="-1" aria-labelledby="apprenticeModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
               <div class="modal-header gradient-custom-2 text-white">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Apprenticeships @ IBM</h1>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                  style="opacity: 1;"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1;" title="Close"></button>
               </div>
               <div class="modal-body">
-                Information coming soon - enquire now and chat with our TA team
+                Information coming soon - enquire now and chat with our TA team.
               </div>
+
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
-                  class="btn button-style-invert">Enquire
-                  now</a>
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank" class="btn button-generic secondary" title="Enquire now">Enquire now</a>
               </div>
             </div>
           </div>
         </div>
+
         <!--Graduate Modal -->
-        <div class="modal fade" id="graduateModal" tabindex="-1" aria-labelledby="graduateModalLabel"
-          aria-hidden="true">
+        <div class="modal fade" id="graduateModal" tabindex="-1" aria-labelledby="graduateModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
               <div class="modal-header gradient-custom-2 text-white">
@@ -169,31 +172,27 @@
                   style="opacity: 1;"></button>
               </div>
               <div class="modal-body">
-                Information coming soon - enquire now and chat with our TA team
+                Information coming soon - enquire now and chat with our TA team.
               </div>
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
-                  class="btn button-style-invert">Enquire
-                  now</a>
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"  class="btn button-generic secondary" title="Enquire now">Enquire now</a>
               </div>
             </div>
           </div>
         </div>
+
         <!--Tech Entry Modal -->
         <div class="modal fade" id="entryModal" tabindex="-1" aria-labelledby="entryModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
               <div class="modal-header gradient-custom-2 text-white">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Tech Entry @ IBM</h1>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                  style="opacity: 1;"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1;" title="Close"></button>
               </div>
-              <div class="modal-body">
 
-                <p><b>Are you ex-military and ready for a career change that can take you to new heights in the dynamic
-                    world of technology?</b></p>
-                <p>The IBM CIC are introducing an exciting career opportunity to join our Software Engineering Practice
-                  via the Tech Entry Scheme</p>
+              <div class="modal-body">
+                <p><b>Are you ex-military and ready for a career change that can take you to new heights in the dynamic world of technology?</b></p>
+                <p>The IBM CIC are introducing an exciting career opportunity to join our Software Engineering Practice via the Tech Entry Scheme</p>
                 <p>We are thrilled to offer this exceptional opportunity for individuals transitioning into IT and
                   software development (even without a formal degree). At IBM CIC we believe that passion, dedication,
                   and a willingness to learn are the driving forces being success in this ever-evolving industry. We
@@ -254,30 +253,29 @@
                 <p>The role will be in a Public Sector account and allow you to utilise your experience and industry
                   knowledge to help problem solve, devise solutions and build new technology to advance industry
                   processes.</p>
-
               </div>
+
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
-                  class="btn button-style-invert">Enquire
-                  now</a>
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"  class="btn button-generic secondary" title="Enquire now">Enquire now</a>
               </div>
             </div>
           </div>
         </div>
+
         <!--ReEntry Modal -->
         <div class="modal fade" id="reEntryModal" tabindex="-1" aria-labelledby="reEntryModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
             <div class="modal-content">
               <div class="modal-header gradient-custom-2 text-white">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Tech Re-Entry @ IBM</h1>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                  style="opacity: 1;"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1;" title="Close"></button>
               </div>
+
               <div class="modal-body">
                 <p><strong>The role is suitable for someone who has previously worked within the IT sector and is
                     looking to
                     return after a career break of at least a year.</strong></p>
-                <p> We are ideally looking for people that have previous experience in one of the following areas:</p>
+                <p>We are ideally looking for people that have previous experience in one of the following areas:</p>
                 <ul>
                   <li>Project Management</li>
                   <li>Business Analysis</li>
@@ -287,7 +285,7 @@
                   <li>Quality Engineering (Test Specialists)</li>
                   <li>Technical Support</li>
                 </ul>
-                <p> We understand that re-joining employment after a career break can be nerve-racking and difficult.
+                <p>We understand that re-joining employment after a career break can be nerve-racking and difficult.
                   That is why we have introduced the tech re-entry programme to enable talented individuals like you the
                   opportunity to re-start your career. In your first six-months with the CIC the tech re-entry programme
                   will provide opportunities to update your skills, access to the latest tools and technologies and work
@@ -295,24 +293,23 @@
 
                 <p><b>So why join the programme?</b></p>
                 <ul>
-                  <li> The program offers flexibility and ease of transition from your career break to getting back to
+                  <li>The program offers flexibility and ease of transition from your career break to getting back to
                     the
                     workforce</li>
-                  <li> A community of like-minded re-joiners will support you as you restart your journey together</li>
-                  <li> You will have the opportunity to update your skills and expertise as you work on real projects
+                  <li>A community of like-minded re-joiners will support you as you restart your journey together</li>
+                  <li>You will have the opportunity to update your skills and expertise as you work on real projects
                     with
                     real impact</li>
-                  <li> A dedicated mentor will help you get up to speed with the environment and new technology</li>
+                  <li>A dedicated mentor will help you get up to speed with the environment and new technology</li>
                 </ul>
               </div>
               <div class="d-flex justify-content-end p-2">
-                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"
-                  class="btn button-style-invert">Enquire
-                  now</a>
+                <a href="mailto:UK.CIC.Pipeline.Recruitment@ibm.com" target="_blank"  class="btn button-generic secondary" title="Enquire now">Enquire now</a>
               </div>
             </div>
           </div>
         </div>
+
         <!--Experienced Modal -->
         <div class="modal fade" id="experiencedModal" tabindex="-1" aria-labelledby="experiencedModalLabel"
           aria-hidden="true">
@@ -320,9 +317,9 @@
             <div class="modal-content">
               <div class="modal-header gradient-custom-2 text-white">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Experienced Hires @ IBM</h1>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                  style="opacity: 1;"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="opacity: 1;" title="Close"></button>
               </div>
+
               <div class="modal-body">
                 <p>Our Experienced roles allow you to work in one of our IBM Consulting Client Innovation Centres
                   (Delivery Centres),
@@ -339,31 +336,35 @@
                   technology platforms across the IBM portfolio, including Software and Red Hat.</p>
                 <p>For specific role requirements use the links below:</p>
               </div>
+
               <div class="row justify-content-between px-4">
                 <div class="job-btns col-2 mx-2 px-0 mb-2"><a
                     href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671812BR"
-                    target="_blank" class="btn">Full Stack Engineer</a></div>
+                    target="_blank" class="btn button-generic secondary" title="Full Stack Engineer">Full Stack Engineer</a></div>
                 <div class="job-btns col-2 mx-2 px-0 mb-2"> <a
                     href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671759BR"
-                    target="_blank" class="btn">AWS DevOps Engineer</a></div>
+                    target="_blank" class="btn button-generic secondary" title="AWS DevOps Engineer">AWS DevOps Engineer</a></div>
                 <div class="job-btns col-2 mx-2 px-0 mb-2"> <a
                     href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671776BR"
-                    target="_blank" class="btn">Azure DevOps Engineer</a></div>
+                    target="_blank" class="btn button-generic secondary" title="Azure DevOps Engineer">Azure DevOps Engineer</a></div>
                 <div class="job-btns col-2 mx-2 px-0 mb-2"> <a
                     href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671142BR"
-                    target="_blank" class="btn">Front End Developer</a></div>
-                <div class="job-btns col-2 mx-2 px-0 mb-2"> <a
-                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671829BR"
-                    target="_blank" class="btn">Linux Infrastructure Specialist</a></div>
+                    target="_blank" class="btn button-generic secondary" title="Front End Developer">Front End Developer</a></div>
                 <div class="job-btns col-2 mx-2 px-0 mb-2"> <a
                     href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671802BR"
-                    target="_blank" class="btn">Windows System Administrator</a></div>
+                    target="_blank" class="btn button-generic secondary" title="Windows System Administrator">Windows System Administrator</a></div>
+                <div class="job-btns col-2 mx-2 px-0 mb-2"> <a
+                    href="https://krb-sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?PageType=JobDetails&partnerid=26059&siteid=5016&Areq=671829BR"
+                    target="_blank" class="btn button-generic secondary" title="Linux Infrastructure Specialist">Linux Infrastructure Specialist</a></div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+  </div>
+
     <script defer type="module">
       import { fbAuth, fbDB } from "./js/firebase.js"
       window.fbAuth = fbAuth;
@@ -378,7 +379,7 @@
 
       window.onload = (event) => {
         checkReleaseDates(window.fbDB);
-        auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+        auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"), false)
 
         const jobs = document.getElementsByClassName("job-category")
         for (const element of jobs) {
