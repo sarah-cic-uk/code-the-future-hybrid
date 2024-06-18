@@ -291,11 +291,6 @@ form i {
 .nav-link span {
 	vertical-align: text-bottom;
 }
-
-/* not so sure this works ...
-.nav-link a:hover {
-	color: #d8447a;
-} */
 a.nav-link:hover, a.nav-link:focus,
 button.nav-link:hover, button.nav-link:focus,
 .side-navigation a.nav-link:hover, .side-navigation a.nav-link:focus {
@@ -349,6 +344,7 @@ ul[id^='submenu'] li {
 	font-size: 50px;
 	line-height: 60px;
 	letter-spacing: -0.04em;
+	padding: 2rem 0 0 0;
 }
 #welcome-heading.login-title {
 	margin-bottom: 0;
@@ -410,16 +406,6 @@ ul[id^='submenu'] li {
 	position: relative;
 	top: -15px;
 }
-
-/* .job-description {
-  position: absolute;
-  bottom: 0;
-  margin-bottom: 0;
-  /* min-height: 80px; */
-/* background-size: contain; */
-/* background-repeat: no-repeat; */
-/* } */
-
 .job-image {
 	object-fit: cover;
 	width: 100%;
@@ -445,23 +431,6 @@ ul[id^='submenu'] li {
 	min-height: 62px;
 	width: 180px;
 }
-
-/* .button-style,
-.button-style-invert:hover {
-	background-color: #d9437a;
-	color: white;
-} */
-
-/* .button-style:hover,
-.button-style-invert {
-	background-color: #31238c;
-	color: white;
-} */
-
-/* .btn-register {
-	border-color: #d9437a;
-} */
-
 .hidden-feedback {
 	display: none;
 }
