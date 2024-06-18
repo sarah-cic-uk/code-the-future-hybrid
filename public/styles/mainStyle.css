@@ -19,11 +19,9 @@
 	max-width: 210px;
 	z-index: 100;
 }
-
 .side-navigation .nav-link {
 	color: white;
 }
-
 .side-navigation .nav-item button {
 	background: none;
 	border: none;
@@ -31,16 +29,13 @@
 	padding: 0;
 	cursor: pointer;
 }
-
 .navbar {
 	height: 70px;
 	background-color: #eae9f3 !important;
 }
-
 .navbar-nav button {
 	border: none;
 }
-
 .navbar-brand {
 	min-width: auto;
 	text-align: center;
@@ -48,7 +43,17 @@
     padding-right: 10px;
     color: #1d0c59;
 }
-
+.dropdown-toggle {
+    border-width: 0 !important;
+    border-color: transparent !important;
+}
+a.dropdown-item.logout:hover {
+    background-color: #d9437a !important;
+    color: white;
+}
+.rounded-circle {
+    border: 2px solid #d9437a !important;
+}
 .page-body {
 	width: 100vw;
 }
