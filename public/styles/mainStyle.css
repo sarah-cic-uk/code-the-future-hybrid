@@ -64,9 +64,23 @@ a.dropdown-item.logout:hover {
 }
 
 /* sessions & meet the tutors */
+.avatar-sessions-card {
+	background: white;
+    width: auto;
+    height: auto;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ced4da;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	text-align: center;
+}
+img#tutor-avatar {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	border: 1px solid rgba(75, 75, 75, 0.2) !important;
+}
 .tutor-name {
-	text-align: end;
 	min-width: max-content;
+	padding-top: 0.5rem;
 }
 
 .menu-card {
