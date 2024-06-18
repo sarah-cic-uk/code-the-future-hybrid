@@ -22,7 +22,7 @@
       <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
         <a onclick="createPath('index.html')" class="navbar-brand" href="#">
-          <img src="../images/logo.png" height="60px"  alt="CTF" />
+          <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,12 +30,17 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')" title="Meet the Tutors">Meet the Tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')" title="Schedule a 1:1">Schedule a 1:1</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')" title="About CTF">About
+              CTF</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')"
+              title="Meet the Tutors">Meet the Tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')"
+              title="Schedule a 1:1">Schedule a 1:1</a>
             <a class="nav-link" href="#" onclick="createPath('jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')" title="Sessions">Sessions</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course
+              Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')"
+              title="Sessions">Sessions</a>
           </div>
 
           <div class="d-flex align-items-center">
@@ -51,8 +56,10 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
-                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a> </li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My
+                    profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View
+                    cohort</a> </li>
                 <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
               </ul>
             </div>
@@ -64,15 +71,24 @@
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
         <main id="main" class="col py-3">
+          <div class="team-grid">
 
-          <h1 class="h1">Meet your Cohort</h1>
-          <div class="row card-container">
+            <div class="container">
+              <section>
+                <h1 class="h1">Meet the Cohort</h1>
+                <h2 class="h4">Introduce yourselves and get to know your peers</h2>
+              </section>
+
+              <div class="row people justify-content-left card-container">
+
+              </div>
+            </div>
 
           </div>
         </main>
       </div>
     </div>
-    
+
   </div>
 
   <script defer type="module">
@@ -117,14 +133,14 @@
           let userEntry = userSnapshot.val();
           if (userEntry.cohort === cohortId) {
             const cardContainer = document.querySelector(".card-container")
-            const createNewElement = `<div class="col card shadow m-2" style="height: fit-content">
+            const createNewElement = `<div class="col-md-2 col-lg-2 card shadow m-1">
                 <div class="card-body">
                 <div class="d-flex justify-content-center">
                 <img class="rounded-circle img-thumbnail" src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" /> 
                 </div>  
                 <div class="text-center my-6">
                 <p class="d-block h5 mt-4">${userEntry.displayName}</p> 
-                <a href="#" name="${userEntry.displayName}" id="${userSnapshot.key}" class="btn-link dynamic-link">View Profile
+                <a href="#" name="${userEntry.displayName}" id="${userSnapshot.key}" class="btn button-generic tertiary dynamic-link" title="View profile">View profile
                 </a> 
                 </div> 
                 </div>
