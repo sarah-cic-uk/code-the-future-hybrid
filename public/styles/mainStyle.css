@@ -1,3 +1,18 @@
+.skip-to-main-content-link {
+	position: absolute;
+	left: -9999px;
+	z-index: 999;
+	padding: 1em;
+	background-color: #011640;
+	color: white;
+	opacity: 0;
+}
+.skip-to-main-content-link:focus {
+	left: 50%;
+	transform: translateX(-50%);
+	opacity: 1;
+}
+
 .side-navigation {
 	background-color: #011640;
 	border-right: 2px solid #011640;
@@ -101,7 +116,7 @@
 	overflow: hidden;
 	border: 1px solid #dee2e6;
 	border-radius: 0.375rem;
-    border-color: 1px solid rgba(0, 0, 0, 0.175);
+	border-color: 1px solid rgba(0, 0, 0, 0.175);
 }
 
 .item .cover {
@@ -274,12 +289,18 @@ form i {
 	vertical-align: text-bottom;
 }
 
+/* not so sure this works ...
 .nav-link a:hover {
+	color: #d8447a;
+} */
+a.nav-link:hover, a.nav-link:focus,
+button.nav-link:hover, button.nav-link:focus,
+.side-navigation a.nav-link:hover, .side-navigation a.nav-link:focus {
 	color: #d8447a;
 }
 
 .nav-link.active-side-nav,
-.active-side-nav:hover {
+.active-side-nav:hover, .active-side-nav:focus {
 	color: #1df2dd;
 }
 
@@ -327,34 +348,39 @@ ul[id^='submenu'] li {
 	letter-spacing: -0.04em;
 }
 #welcome-heading.login-title {
-	margin-bottom:0;
+	margin-bottom: 0;
 }
 .login-blurb {
 	padding: 0 !important;
-    opacity: 0.8;
-    font-weight: 400 !important;
+	opacity: 0.8;
+	font-weight: 400 !important;
 }
 .card.override {
 	width: 70vw;
-    text-align: left;
-    margin: -30px auto 30px auto;
+	text-align: left;
+	margin: -30px auto 30px auto;
 }
 .card.override-badges {
-	width:70vw; 
-	margin:30px auto 60px auto; 
-	box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2);
+	width: 70vw;
+	margin: 30px auto 60px auto;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 .col.override {
 	padding: 1rem 2rem;
 }
 .privacy {
-	padding:30px 0 60px 0;
+	padding: 30px 0 60px 0;
 }
 .catalog-blurb {
-	width:67%; display:block; float:left; margin-right:2rem; padding-bottom:3rem;
+	width: 67%;
+	display: block;
+	float: left;
+	margin-right: 2rem;
+	padding-bottom: 3rem;
 }
 .catalog-badge {
-	float:inline-end; padding:0 1rem 8rem 2rem;
+	float: inline-end;
+	padding: 0 1rem 8rem 2rem;
 }
 
 #sessions-heading,
@@ -363,7 +389,7 @@ ul[id^='submenu'] li {
 	font-style: normal;
 	font-weight: 900;
 	font-size: 40px;
-  	opacity: 0.8;
+	opacity: 0.8;
 }
 
 .info-modal i {
@@ -400,28 +426,25 @@ ul[id^='submenu'] li {
 .active-top-nav {
 	color: #d8447a;
 	font-weight: 600 !important;
+	border-bottom: 4px solid #d8447a;
 }
 
 .job-btns a {
 	min-height: 62px;
 	width: 180px;
-	background-color: #31238c;
-	color: white;
 }
 
-.job-btns a:hover,
-/* .btn-register:hover, */
-.button-style,
+/* .button-style,
 .button-style-invert:hover {
 	background-color: #d9437a;
 	color: white;
-}
+} */
 
-.button-style:hover,
+/* .button-style:hover,
 .button-style-invert {
 	background-color: #31238c;
 	color: white;
-}
+} */
 
 /* .btn-register {
 	border-color: #d9437a;
@@ -500,77 +523,88 @@ ul[id^='submenu'] li {
 	background-repeat: no-repeat;
 	background-size: cover;
 }
+.login {
+	width: 410px;
+	margin: 2rem auto;
+	text-align: center;
+}
 
 .hr {
-	border: 1px solid #d9437a !important; 
-	width: 70vw; 
-	margin: auto; 
+	border: 1px solid #d9437a !important;
+	width: 70vw;
+	margin: auto;
 	opacity: 0.8;
 }
 
 .h1 {
-	padding-top:3rem; font-weight:900; opacity:0.9;
+	padding-top: 3rem;
+	font-weight: 900;
+	opacity: 0.9;
 }
 .login .h1 {
 	opacity: 0.8;
-    font-size: 2rem;
+	font-size: 2rem;
 }
 /* .h2 {#sessions-heading, #jobs-heading} */
 .login .h2 {
 	opacity: 0.7;
-    font-size: 1.25rem;
+	font-size: 1.25rem;
 	font-style: italic;
 	padding-bottom: 1.5rem;
 }
 .h3 {
-	padding:1.5rem 0 0.75rem 0; font-weight:700;
+	padding: 1.5rem 0 0.75rem 0;
+	font-weight: 700;
 }
 .login p {
-	padding-bottom:2rem
+	padding-bottom: 2rem;
 }
 .h4 {
- 	/* session - rfs.scss & r 0eboot.scss */
-	padding:1.5rem 0 1.75rem 0; font-weight:600; font-style:italic;
+	/* session - rfs.scss & r 0eboot.scss */
+	padding: 1.5rem 0 1.75rem 0;
+	font-weight: 600;
+	font-style: italic;
 }
 .h5 {
-	padding:1.5rem 0 0.75rem 0; font-weight:500;
+	padding: 1.5rem 0 0.75rem 0;
+	font-weight: 500;
 }
 /* reboot.scss 
 .h6 {}
 */
 
 .button-generic {
-    padding: 0.5rem 1.5rem;
-    border-radius: 0.4rem !important;
+	padding: 0.5rem 1.5rem;
+	border-radius: 0.4rem !important;
 	border: 0;
 }
-.primary:hover {
-	background-color: #D9437A;
-    color: white;
-	opacity:0.7;
+.primary:hover, .primary:focus {
+	background-color: #d9437a;
+	color: white;
+	opacity: 0.7;
 }
 .primary {
-    background-color: #D9437A;
-    color: white;
+	background-color: #d9437a;
+	color: white;
 }
-.secondary:hover {
-    background-color: #31238C;
-    color: white;
-	opacity:0.7;
+.secondary:hover, .secondary:focus {
+	background-color: #31238c;
+	color: white;
+	opacity: 0.7;
 }
 .secondary {
-    background-color: #31238C;
-    color: white;
+	background-color: #31238c;
+	color: white;
 }
-.tertiary:hover {
-    background-color: #31238C;
-    border: 0;
-    color: white;
-    outline: 1.25px solid white;
-    outline-offset: -6px;
+.tertiary:hover, .tertiary:focus {
+	background-color: #31238c;
+	border: 0;
+	color: white;
+	outline: 1.25px solid white;
+	outline-offset: -6px;
 }
 .tertiary {
-    background-color: white;
-    border: 2px solid #31238C !important;
-    color: #31238C;
+	background-color: white;
+	border: 2px solid #31238c !important;
+	color: #31238c;
 }
