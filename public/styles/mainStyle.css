@@ -81,7 +81,7 @@ a.dropdown-item.logout:hover {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 	text-align: center;
 }
-img#tutor-avatar {
+img#tutor-avatar, .img-thumbnail {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 	border: 1px solid rgba(75, 75, 75, 0.2) !important;
 }
