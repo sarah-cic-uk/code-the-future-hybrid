@@ -23,7 +23,7 @@
       <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
 
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="border-right: 2px solid #d9437a;padding-right: 10px;color: #1d0c59;">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
           <img src="./images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -70,7 +70,7 @@
         <div class="col-2"></div>
         <div class="col-4 py-4 px-4">
           <h1 id="welcome-heading">Welcome to <br>Code the Future</h1>
-          <h2 class="h4 pb-3">Let's learn to build a website together</h2>
+          <h2 class="h4 pb-3" style="opacity:0.8;">Let's learn to build a website together</h2>
           <p class="small">
             Welcome to the course! This 6-8 session course will teach you the
             basics of web development and give you insight into the role of a
@@ -93,7 +93,7 @@
           <div class="row py-3 px-4 info-modal">
 
             <div class="col" style="padding: 1rem 2rem;">
-              <div style="height:50px; width:100%;">
+              <div class="title-wrapper">
                 <i class="fs-1 bi-mortarboard-fill"></i>
                 <span class="fw-bold mb-2">Certificate and Badge</span>
               </div>
@@ -104,7 +104,7 @@
             </div>
 
             <div class="col" style="padding: 1rem 2rem;">
-              <div style="height:50px; width:100%;">
+              <div class="title-wrapper">
                 <i class="fs-1 bi-easel-fill"></i>
                 <span class="fw-bold mb-2">Expert Instructors</span>
               </div>
@@ -114,7 +114,7 @@
             </div>
 
             <div class="col" style="padding: 1rem 2rem;">
-              <div style="height:50px; width:100%;">
+              <div class="title-wrapper">
                 <i class="fs-1 bi-code-slash"></i>
                 <span class="fw-bold mb-2">Support applying for jobs</span>
               </div>
@@ -156,45 +156,43 @@
             <div id="carousel-sessions" class="carousel slide" data-ride="carousel">
               <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <div class="row">
-                      <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                          <img class="img-fluid card-img-top" alt="session 1" src="./images/sessions/session1.jpeg" />
-                          <div class="card-body">
-                            <h4 class="card-title">Session 1</h4>
-                            <p class="card-text">
-                              Set up your laptop like a developer.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                          <img class="img-fluid card-img-top" alt="session 2" src="./images/sessions/session2.png" />
-                          <div class="card-body">
-                            <h4 class="card-title">Session 2</h4>
-                            <p class="card-text">Create a basic webpage.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4 mb-3">
-                        <div class="card h-100">
-                          <img class="img-fluid card-img-top" alt="session 3" src="./images/sessions/session3.png" />
-                          <div class="card-body">
-                            <h4 class="card-title">Session 3</h4>
-                            <p class="card-text">
-                              Add various elements to your webpages (images,
-                              tables, hyperlinks etc).
-                            </p>
-                          </div>
+                  <div class="row">
+                    <div class="col-md-4 mb-3">
+                      <div class="card h-100">
+                        <img class="img-fluid card-img-top" alt="session 1" src="./images/sessions/session1.jpeg" />
+                        <div class="card-body">
+                          <h4 class="card-title">Session 1</h4>
+                          <p class="card-text">
+                            Set up your laptop like a developer.
+                          </p>
                         </div>
                       </div>
                     </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="card h-100">
+                        <img class="img-fluid card-img-top" alt="session 2" src="./images/sessions/session2.png" />
+                         <div class="card-body">
+                          <h4 class="card-title">Session 2</h4>
+                          <p class="card-text">Create a basic webpage.</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                      <div class="card h-100">
+                        <img class="img-fluid card-img-top" alt="session 3" src="./images/sessions/session3.png" />
+                        <div class="card-body">
+                          <h4 class="card-title">Session 3</h4>
+                          <p class="card-text">
+                            Add various elements to your webpages (images, ables, hyperlinks etc).
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                  <div class="carousel-item">
-
-                    <div class="row">
+                <div class="carousel-item">
+                  <div class="row">
                       <div class="col-md-4 mb-3">
                         <div class="card h-100">
                           <img class="img-fluid card-img-top" alt="session 4" src="./images/sessions/session4.jpeg" />
@@ -231,11 +229,10 @@
                         </div>
                       </div>
 
-                    </div>
-
                   </div>
+                </div>
 
-                  <div class="carousel-item">
+                <div class="carousel-item">
 
                     <div class="row">
                       <div class="col-md-4 mb-3">
@@ -261,7 +258,7 @@
                       </div>
                     </div>
 
-                  </div>
+                </div>
               </div>
             </div>
           </div> 
@@ -271,10 +268,10 @@
 
       <hr class="hr mb-4"/>
 
-      <section style="padding-top:3rem;" class="row">
-        <div style="width:70%; margin:1.5rem auto 3rem auto;">
+      <section class="row" style="padding-top:3rem;">
+        <div class="blurb-gutter">
 
-          <div style="width:75%; display:block; float:left; padding-right:4rem;">
+          <div class="certificate-blurb">
             <h3>Certificate & Badge</h3>
             <br />
             <p>
@@ -294,14 +291,14 @@
           </div>
 
           <div>
-            <img src="./images/credlyBadge.png" alt="Credly badge" width="200px" height="200px" style="float:right; " />
+            <img src="./images/credlyBadge.png" alt="Credly badge" width="200px" height="200px" style="float:right;" />
           </div>
 
         </div>
       </section>
 
       <section class="row">
-        <div style="width:70%; margin:1.5rem auto 3rem auto;">
+        <div class="blurb-gutter">
           <h5 class="h5">Badge support</h5>
 
           <div class="card override-badges">
