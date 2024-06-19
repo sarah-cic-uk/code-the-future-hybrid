@@ -20,9 +20,10 @@
   <div class="page-content">
 
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
         
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="border-right: 2px solid #d9437a; padding-right: 10px; color: #1d0c59; ">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
           <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -46,7 +47,7 @@
           </div>
 
           <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn me-3 button-generic primary"title="Login">Login</button>
+            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn me-3 button-generic primary" title="Login">Login</button>
             <div class="d-flex align-items-center">
 
               <div>
@@ -63,7 +64,7 @@
                 <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
                   <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
                   <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a></li>
-                  <li><a class="dropdown-item" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
+                  <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
                 </ul>
 
               </div>
@@ -73,9 +74,9 @@
         </div>
     </nav>
 
-    <main class="container-fluid">
+    <div class="container-fluid">
       <div class="row flex-nowrap page-content">
-        <div class="col py-3">
+        <main id="main" class="col py-3">
 
           <div class="container">
             <section>
@@ -176,9 +177,9 @@
             </section>
           </div>
           
-        </div>
+        </main>
       </div>
-    </main>
+    </div>
   </div>
 
   <script defer type="module">

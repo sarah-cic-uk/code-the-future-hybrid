@@ -20,12 +20,9 @@
 <body>
   <div class="page-body">
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
           <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -49,22 +46,21 @@
       <div class="row flex-nowrap page-content">
         <section class="gradient-form">
 
-          <main>
+          <main id="main">
             <div class="row d-flex justify-content-center align-items-center h-100">
               <div class="px-0">
                 <div class="text-black">
                   <div class="row g-0">
 
                     <div class="col-lg-6">
-                      <div class=" p-md-5 mx-md-4">
+                      <div class="p-md-5 mx-md-4">
 
                         <div class="text-center">
                           <img src="../images/logo.png" style="width: 285px;" alt="Code the Future logo">
                         </div>
 
                         <div class="login">
-                          <h1 class="h1">Login</h1>
-                          <h2 class="h2">Access to your Code the Future learning</h2>
+                          <h1 class="h2">Access to your Code the Future learning</h1>
                           <p>Login to access your cohorts sessions, view the course timetable and book 1:1s with tutors.</p>
                         </div>
 
@@ -105,6 +101,7 @@
                         </div>
                       </div>
                     </div>
+
                     <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                       <div class="text-white px-3 py-4 p-md-5 mx-md-4">
                         <h1 id="welcome-heading" class="login-title">Code the Future</h1>

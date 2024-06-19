@@ -23,13 +23,10 @@
 <body>
   <div class="page-body">
     <nav class="navbar navbar-expand-lg bg-light">
+      <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
       <div class="container-fluid">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
-          <img src="../../../../images/logo.png" height="60px" />
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#">
+          <img src="../../../../images/logo.png" height="60px" alt="CTF logo" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,35 +34,35 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page"
-              onclick="createPath('pages/sessions/session1/introduction.html')">
+            <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page" 
+              onclick="createPath('pages/sessions/session1/introduction.html')" title="Session 1">
               Session 1
-              <span id="session1-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+              <span id="session1-tooltip" class="box tooltip-text hidden" title="Session Opens Soon">Session Opens Soon</span>
             </button>
             <button class="nav-link border-end border-dark" name="session2-nav" aria-current="page"
-              onclick="createPath('pages/sessions/session2/introduction.html')">
+              onclick="createPath('pages/sessions/session2/introduction.html')" title="Session 2">
               Session 2
-              <span id="session2-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+              <span id="session2-tooltip" class="box tooltip-text hidden" title="Session Opens Soon">Session Opens Soon</span>
             </button>
             <button class="nav-link border-end border-dark" name="session3-nav" aria-current="page"
-              onclick="createPath('pages/sessions/session3/introduction.html')">
+              onclick="createPath('pages/sessions/session3/introduction.html')" title="Session 3">
               Session 3
-              <span id="session3-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+              <span id="session3-tooltip" class="box tooltip-text hidden" title="Session Opens Soon">Session Opens Soon</span>
             </button>
             <button class="nav-link border-end border-dark" name="session4-nav" aria-current="page"
-              onclick="createPath('pages/sessions/session4/introduction.html')">
+              onclick="createPath('pages/sessions/session4/introduction.html')" title="Session 4">
               Session 4
-              <span id="session4-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+              <span id="session4-tooltip" class="box tooltip-text hidden" title="Session Opens Soon">Session Opens Soon</span>
             </button>
             <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page"
-              onclick="createPath('pages/sessions/session5/introduction.html')">
+              onclick="createPath('pages/sessions/session5/introduction.html')" title="Session 5">
               Session 5
-              <span id="session5-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+              <span id="session5-tooltip" class="box tooltip-text hidden" title="Session Opens Soon">Session Opens Soon</span>
             </button>
             <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page"
-              onclick="createPath('pages/sessions/session6/introduction.html')">
+              onclick="createPath('pages/sessions/session6/introduction.html')" title="Showcase">
               Showcase
-              <span id="showcase-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+              <span id="showcase-tooltip" class="box tooltip-text hidden" title="Session Opens Soon">Session Opens Soon</span>
             </button>
           </div>
           <div class="d-flex align-items-center">
@@ -81,43 +78,42 @@
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
-                </li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My profile">My profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View cohort">View cohort</a></li>
+                <li><a class="dropdown-item logout" href="#" onclick="logUserOut()" title="Logout">Logout</a></li>
               </ul>
             </div>
           </div>
         </div>
       </div>
     </nav>
+    
     <div class="container-fluid">
       <div class="row flex-nowrap page-content">
-        <div class="col py-3">
+        <main id="main" class="col py-3">
           <div class="media-container d-flex">
             <div class="embed-responsive embed-responsive-16by9 text-center flex-grow-1">
               <video id="session-video" class="embed-responsive-item mx-a" controls width="70%">
                 <source type="video/mp4" />
               </video>
             </div>
+
             <div class="text-end">
-              <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle" width="100" height="100" />
-              <div class="tutor-name">
-                Amber Idumwonyi<br />
-                Senior Test Specialist
+              <div class="avatar-sessions-card">
+                <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle" width="100" height="100" />
+                <div class="tutor-name">
+                  <strong>Amber Idumwonyi</strong> <br />
+                  Senior Test Specialist
+                </div>
               </div>
             </div>
+            
           </div>
           <div class="embed-container embed-responsive" style="width: 100%; min-height: 90vh">
             <iframe class="embed-responsive-item" style="width: 100%; min-height: 90vh" id="github-iframe"
               name="github-iframe" src=""></iframe>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   </div>
@@ -167,7 +163,7 @@
       fetchMedia(pathReference, el);
 
       document.getElementById("tutor-avatar").src =
-        getPath() + "images/tutorAvatars/amber.png";
+        getPath() + "images/tutorAvatars/amber.jpg";
       updateSideNav();
     };
 

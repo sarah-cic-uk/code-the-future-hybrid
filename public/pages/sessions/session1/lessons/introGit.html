@@ -22,7 +22,9 @@
 
 <body>
     <div class="page-body">
+
         <nav class="navbar navbar-expand-lg bg-light">
+            <a href="#main" class="skip-to-main-content-link">Skip to main content</a>
             <div class="container-fluid">
                 <button onclick="createPath('index.html')" class="navbar-brand" href="#" style="
                 border: none;
@@ -31,51 +33,60 @@
                 color: #1d0c59;
                 background-color: transparent;
               ">
-                    <img src="../../../../images/logo.png" height=60px />
+                    <img src="../../../../images/logo.png" height="60px" alt="CTF logo" />
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
                         aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
+
                     <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
                         <div class="navbar-nav nav-justified">
                             <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page"
-                                onclick="createPath('pages/sessions/session1/introduction.html')">
+                                onclick="createPath('pages/sessions/session1/introduction.html')" title="Session 1">
                                 Session 1
-                                <span id="session1-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+                                <span id="session1-tooltip" class="box tooltip-text hidden"
+                                    title="Session Opens Soon">Session Opens Soon</span>
                             </button>
-                            <button class=" nav-link border-end border-dark" name="session2-nav" aria-current="page"
-                                onclick="createPath('pages/sessions/session2/introduction.html')">
+                            <button class="nav-link border-end border-dark" name="session2-nav" aria-current="page"
+                                onclick="createPath('pages/sessions/session2/introduction.html')" title="Session 2">
                                 Session 2
-                                <span id="session2-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+                                <span id="session2-tooltip" class="box tooltip-text hidden"
+                                    title="Session Opens Soon">Session Opens Soon</span>
                             </button>
                             <button class="nav-link border-end border-dark" name="session3-nav" aria-current="page"
-                                onclick="createPath('pages/sessions/session3/introduction.html')">
+                                onclick="createPath('pages/sessions/session3/introduction.html')" title="Session 3">
                                 Session 3
-                                <span id="session3-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+                                <span id="session3-tooltip" class="box tooltip-text hidden"
+                                    title="Session Opens Soon">Session Opens Soon</span>
                             </button>
                             <button class="nav-link border-end border-dark" name="session4-nav" aria-current="page"
-                                onclick="createPath('pages/sessions/session4/introduction.html')">
+                                onclick="createPath('pages/sessions/session4/introduction.html')" title="Session 4">
                                 Session 4
-                                <span id="session4-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+                                <span id="session4-tooltip" class="box tooltip-text hidden"
+                                    title="Session Opens Soon">Session Opens Soon</span>
                             </button>
                             <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page"
-                                onclick="createPath('pages/sessions/session5/introduction.html')">
+                                onclick="createPath('pages/sessions/session5/introduction.html')" title="Session 5">
                                 Session 5
-                                <span id="session5-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+                                <span id="session5-tooltip" class="box tooltip-text hidden"
+                                    title="Session Opens Soon">Session Opens Soon</span>
                             </button>
                             <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page"
-                                onclick="createPath('pages/sessions/session6/introduction.html')">
+                                onclick="createPath('pages/sessions/session6/introduction.html')" title="Showcase">
                                 Showcase
-                                <span id="showcase-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+                                <span id="showcase-tooltip" class="box tooltip-text hidden"
+                                    title="Session Opens Soon">Session Opens Soon</span>
                             </button>
                         </div>
+
                         <div class="d-flex align-items-center">
                             <!-- Logged in Avatar -->
                             <div>
                                 <p class="my-auto" id="profileName"></p>
                             </div>
+
                             <div class="profileBtn dropdown px-3">
                                 <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -83,16 +94,20 @@
                                         height="25" alt="Black and White Portrait of a Man" loading="lazy" />
                                 </a>
 
-                                <ul class="dropdown-menu  dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
-                                    <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My
-                                            Profile</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                                    <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')"
+                                            title="My profile">My profile</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')"
+                                            title="View cohort">View cohort</a></li>
+                                    <li><a class="dropdown-item logout" href="#" onclick="logUserOut()"
+                                            title="Logout">Logout</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div>
             </div>
         </nav>
+
         <div class="container-fluid">
             <div class="row flex-nowrap page-content">
                 <div class="col py-3">
@@ -102,11 +117,16 @@
                                 <source type="video/mp4">
                             </video>
                         </div>
+
                         <div class="text-end">
-                            <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle" width="100"
-                                height="100">
-                            <div class="tutor-name">Haseeb Jabbar <br />
-                                Full Stack Engineer</div>
+                            <div class="avatar-sessions-card">
+                                <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle" width="100"
+                                    height="100" />
+                                <div class="tutor-name">
+                                    <strong>Haseeb Jabbar</strong> <br />
+                                    Full Stack Engineer
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class='embed-container embed-responsive' style="width: 100%; min-height: 90vh;">
@@ -115,60 +135,61 @@
                     </div>
                 </div>
             </div>
+            </main>
         </div>
-    </div>
-    <script defer type="module">
-        import { fbAuth, fbStorage } from "../../../js/firebase.js"
-        window.fbAuth = fbAuth;
-        window.fbDB = fbDB;
-        window.fbStorage = fbStorage;
-    </script>
-    <script>
-        var converter = new showdown.Converter();
-        fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-1/intro_to_github.md')
-            .then(function (response) {
-                return response.json();
-            }).then(function (data) {
-                var iframe = document.getElementById('github-iframe');
-                const test = converter.makeHtml(atob(data['content']))
-                const encrypted = encodeURIComponent(data['content'])
-                iframe.srcdoc =
-                    '<link rel="stylesheet" type="text/css" href="../../../../styles/iframeStyle.css"/>' +
-                    test;
-            });
-    </script>
-    <script type="text/javascript">
-        const stylesheet = document.createElement('link');
-        stylesheet.rel = 'stylesheet';
-        stylesheet.type = 'text/css';
-        stylesheet.href = getPath() + 'styles/mainStyle.css';
-        document.head.appendChild(stylesheet);
 
-        window.onload = (event) => {
-            checkReleaseDates(window.fbDB);
-            auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
+        <script defer type="module">
+            import { fbAuth, fbStorage } from "../../../js/firebase.js"
+            window.fbAuth = fbAuth;
+            window.fbDB = fbDB;
+            window.fbStorage = fbStorage;
+        </script>
+        <script>
+            var converter = new showdown.Converter();
+            fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-1/intro_to_github.md')
+                .then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    var iframe = document.getElementById('github-iframe');
+                    const test = converter.makeHtml(atob(data['content']))
+                    const encrypted = encodeURIComponent(data['content'])
+                    iframe.srcdoc =
+                        '<link rel="stylesheet" type="text/css" href="../../../../styles/iframeStyle.css"/>' +
+                        test;
+                });
+        </script>
+        <script type="text/javascript">
+            const stylesheet = document.createElement('link');
+            stylesheet.rel = 'stylesheet';
+            stylesheet.type = 'text/css';
+            stylesheet.href = getPath() + 'styles/mainStyle.css';
+            document.head.appendChild(stylesheet);
+
+            window.onload = (event) => {
+                checkReleaseDates(window.fbDB);
+                auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
 
-            const pathReference = window.fbStorage.ref('media/introGit.mp4');
-            const el = document.getElementById('session-video');
-            fetchMedia(pathReference, el)
+                const pathReference = window.fbStorage.ref('media/introGit.mp4');
+                const el = document.getElementById('session-video');
+                fetchMedia(pathReference, el)
 
-            document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.png';
-            updateSideNav()
-        }
+                document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.png';
+                updateSideNav()
+            }
 
-        function createPath(options) {
-            window.location = getPath() + options;
-            return false;
-        }
+            function createPath(options) {
+                window.location = getPath() + options;
+                return false;
+            }
 
-        function logUserOut(event) {
-            logout(window.fbAuth)
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+            function logUserOut(event) {
+                logout(window.fbAuth)
+            }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
 </body>
 
 </html>
