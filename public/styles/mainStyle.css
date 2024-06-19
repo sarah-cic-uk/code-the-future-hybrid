@@ -60,6 +60,7 @@ a.dropdown-item.logout:hover {
 .page-content {
 	min-height: calc(100vh - 70px);
 	background-color: #f4f4f9;
+	overflow: hidden;
 }
 .CTA-group {
 	width: 100%;
@@ -252,7 +253,10 @@ img#tutor-avatar, .img-thumbnail {
 .sm-icon {
 	padding: 10px 0;
 }
-
+.text-white {
+    position: relative;
+    top: 20%;
+}
 /* login page */
 .gradient-custom-2 {
 	/* fallback for old browsers */
@@ -267,7 +271,6 @@ img#tutor-avatar, .img-thumbnail {
 		rgba(217, 67, 122, 1) 92%
 	);
 }
-
 @media (min-width: 769px) {
 	/** ???? rounded corners 
 		.gradient-custom-2 {
@@ -591,6 +594,7 @@ ul[id^='submenu'] li {
 	padding: 1.5rem 0 1.75rem 0;
 	font-weight: 600;
 	font-style: italic;
+	opacity:0.8;
 }
 .h5 {
 	padding: 1.5rem 0 0.75rem 0;
