@@ -64,31 +64,40 @@
                           <p>Login to access your cohorts sessions, view the course timetable and book 1:1s with tutors.</p>
                         </div>
 
-                        <form onsubmit="login(window.fbAuth)">
-                          <div class="form-outline mb-4">
-                            <label class="form-label" for="email">Username</label>
-                            <div class="input-group">
-                              <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                              <input type="email" id="email" name="email" class="form-control" placeholder="Registered email address" autocomplete="email" />
-                            </div>
-                          </div>
+                        <form id="user_login" onsubmit="login(window.fbAuth)">
+                          <fieldset>
+                            <legend>User login form</legend>
+                            <div class="form-outline mb-4">
+                              <label class="form-label" for="email">Username</label>
 
-                          <div class="form-outline mb-5">
-                            <label class="form-label" for="password">Password</label>
-                            <div class="input-group">
-                              <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                              <input type="password" id="password" name="password" class="form-control" autocomplete="current-password" />
-                              <span class="input-group-text" id="password-input">
-                                <i class="bi bi-eye-slash togglePassword"></i>
-                              </span>
+                              <div class="input-group">
+                                <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+                                <input type="email" id="email" name="email" class="form-control" placeholder="Registered email address" autocomplete="email" autofocus required />
+                              </div>
                             </div>
-                          </div>
+                        
+                            <div class="form-outline mb-5">
+                              <label class="form-label" for="password">Password</label>
 
-                          <div class="CTA-group mb-5">
-                            <a class="nav-link" href="password_reset.html" title="Forgot password?">Forgot password?</a>
-                            <button class="btn btn-block fa-lg mb-2 button-generic primary" type="submit" title="Login">Login</button>
-                          </div>
+                              <div class="input-group">
+                                <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                                <input type="password" id="password" name="password" class="form-control" autocomplete="current-password" required />
+                                
+                                <span class="input-group-text" id="password-input">
+                                  <i class="bi bi-eye-slash togglePassword"></i>
+                                </span>
+                              </div>
+                            </div>
+                        
+                            <div class="CTA-group mb-5">
+                              <a class="nav-link" href="password_reset.html" title="Forgot password?">Forgot password?</a>
+                              <button class="btn btn-block fa-lg mb-2 button-generic primary" type="submit" title="Login">Login</button>
+                            </div>
+                          </fieldset>
                         </form>
+
+
+
 
                         <div class="d-flex align-items-center justify-content-center pb-4">
                           <p class="mb-0 me-2">Don't have an account?</p>
@@ -114,84 +123,99 @@
       </div>
     </div>
 
+
+
+
     <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
       aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
+            <h4 class="modal-title w-100 font-weight-bold">Sign up to Code The Future</h4>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
           <div class="modal-body mx-3">
             <form class="needs-validation" novalidate>
-              <div class="form-group" style="margin-top:1rem;">
-                <label for="displayName">Display name <span class="text-danger">*</span></label>
-                <div class="input-group">
-                  <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                  <input type="text" class="form-control form-control-lg" name="displayName" id="displayName" autocomplete="new-name" required />
+              <fieldset>
+                <legend>Sign up to Code the Future</legend>
+                <div class="form-group" style="margin-top:1rem;">
+                  <label for="displayName">Display name <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+                    <input type="text" class="form-control form-control-lg" name="displayName" id="displayName"
+                      autocomplete="new-name" required />
+                  </div>
                 </div>
-              </div>
+            
+                <div class="form-group" style="margin-top:1rem;">
+                  <label for="newEmail">Email <span class="text-danger">*</span></label>
 
-              <div class="form-group" style="margin-top:1rem;">
-                <label for="newEmail">Email <span class="text-danger">*</span></label>
-                <div class="input-group flex-nowrap">
-                  <div class="input-group-text"><i class="bi bi-envelope-fill"></i></div>
-                  <input type="text" class="form-control form-control-lg" name="newEmail" id="newEmail" autocomplete="new-email" required />
+                  <div class="input-group flex-nowrap">
+                    <div class="input-group-text"><i class="bi bi-envelope-fill"></i></div>
+                    <input type="text" class="form-control form-control-lg" name="newEmail" id="newEmail" autocomplete="new-email" required />
+                  </div>
                 </div>
-              </div>
+            
+                <div class="form-group" style="margin-top:1rem;">
+                  <label for="newPassword">Password <span class="text-danger">*</span></label>
 
-              <div class="form-group" style="margin-top:1rem;">
-                <label for="newPassword">Password <span class="text-danger">*</span></label>
-                <div class="input-group flex-nowrap">
-                  <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                  <input type="password" class="form-control form-control-lg" name="newPassword" id="newPassword" autocomplete="new-password" required />
+                  <div class="input-group flex-nowrap">
+                    <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                    <input type="password" class="form-control form-control-lg" name="newPassword" id="newPassword"
+                      autocomplete="new-password" required />
+            
+                    <span class="input-group-text" id="newPasswordInput">
+                      <i class="bi bi-eye-slash toggleNewPassword"></i>
+                    </span>
+                  </div>
+                </div>
+            
+                <div class="form-group" style="margin-top:1rem;">
+                  <label for="passwordCheck">Confirm password <span class="text-danger">*</span></label>
+                 
+                  <div class="input-group flex-nowrap">
+                    <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
+                    <input type="password" class="form-control form-control-lg" id="passwordCheck" name="passwordCheck"
+                      autocomplete="new-password" required />
+            
+                    <span class="input-group-text" id="passwordCheckInput">
+                      <i class="bi bi-eye-slash togglePasswordCheck"></i>
+                    </span>
+                  </div>
+
+                  <div id="passwordMatch" class="hidden-feedback">Passwords must match.</div>
+                </div>
+            
+                <div class="form-group" style="margin-top:1rem;">
+                  <label for="cohortCode">Cohort access code <span class="text-danger">*</span></label>
                   
-                  <span class="input-group-text" id="newPasswordInput">
-                    <i class="bi bi-eye-slash toggleNewPassword"></i>
-                  </span>
+                  <div class="input-group flex-nowrap">
+                    <div class="input-group-text"><i class="bi bi-people-fill"></i></div>
+                    <input type="text" class="form-control form-control-lg" name="cohortCode" id="cohortCode" required />
+                  </div>
+
+                  <div id="cohortCodeCheck" class="hidden-feedback">Invalid code.</div>
                 </div>
-              </div>
-
-              <div class="form-group" style="margin-top:1rem;">
-                <label for="passwordCheck">Confirm password <span class="text-danger">*</span></label>
-                <div class="input-group flex-nowrap">
-                  <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                  <input type="password" class="form-control form-control-lg" id="passwordCheck" name="passwordCheck" autocomplete="new-password" required />
-                  
-                  <span class="input-group-text" id="passwordCheckInput">
-                    <i class="bi bi-eye-slash togglePasswordCheck"></i>
-                  </span>
+            
+                <div class="form-group py-4 text-center">
+                  <button class="btn button-generic primary" id="btnLogin" onclick="validateAndRegister(); return false;" title="Sign up">Sign up</button>
                 </div>
-                <div id="passwordMatch" class="hidden-feedback">Passwords must match.</div>
-              </div>
-
-              <div class="form-group" style="margin-top:1rem;">
-                <label for="cohortCode">Cohort access code <span class="text-danger">*</span></label>
-                <div class="input-group flex-nowrap">
-                  <div class="input-group-text"><i class="bi bi-people-fill"></i></div>
-                  <input type="text" class="form-control form-control-lg" name="cohortCode" id="cohortCode" required />
+            
+                <div class="float-end mb-1" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false"
+                  aria-controls="collapseExample">
+                  <a class="small" style="cursor: pointer;" title="View data privacy information">
+                    View data privacy information <i class="bi bi-shield-exclamation ms-1" style="color: #1d0c59;"></i>
+                  </a>
                 </div>
-                <div id="cohortCodeCheck" class="hidden-feedback">Invalid code</div>
-              </div>
-
-              <div class="form-group py-4 text-center">
-                <button class="btn button-generic primary" id="btnLogin" onclick="validateAndRegister()" title="Sign up">Sign up</button>
-              </div>
-
-              <div class="float-end mb-1" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">
-                <a class="small" style="cursor: pointer;" title="View data privacy information">
-                  View data privacy information <i class="bi bi-shield-exclamation ms-1" style="color: #1d0c59;"></i>
-                </a>
-              </div>
-
-              <div class="collapse" id="collapseExample" style="clear:both">
-                <div class="data-privacy-message alert alert-warning">
-                  <div>Your data will not be shared within IBM or with any external companies. Any information stored will
-                    be removed after 5 years of user inactivity.</div>
+            
+                <div class="collapse" id="collapseExample" style="clear:both">
+                  <div class="data-privacy-message alert alert-warning">
+                    <div>Your data will not be shared within IBM or with any external companies. Any information stored will
+                      be removed after 5 years of user inactivity.</div>
+                  </div>
                 </div>
-              </div>
+              </fieldset>
             </form>
           </div>
 
@@ -238,6 +262,7 @@
           const cohortCode = document.getElementById('cohortCode').value;
           const validCode = await validateCohortCode(cohortCode)
           console.log("1", validCode)
+
           if (!matchingPasswords) {
             document.getElementById('passwordMatch').classList.remove("hidden-feedback");
             document.getElementById('passwordMatch').classList.add("invalid-feedback");
@@ -259,13 +284,11 @@
       })
     }
 
-
     async function validateCohortCode(cohortCode) {
       const possibleCodes = await window.fbDB.ref('cohorts/').once('value')
       const possibleCodes1 = possibleCodes.val();
       return possibleCodes.find(obj => obj.code === cohortCode)?.id;
     }
-
 
     async function registerNewUser() {
 
@@ -317,9 +340,11 @@
       event.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+
       window.fbAuth.signInWithEmailAndPassword(email, password)
         .then(async (userCredential) => {
           localStorage.setItem('loggedIn', true);
+
           const user = window.fbAuth.currentUser;
           localStorage.setItem('displayName', user.displayName);
           window.location.replace("./sessions.html");
@@ -330,13 +355,16 @@
     };
   </script>
 
+
   <script>
     const toggleNewPassword = document.querySelector('.toggleNewPassword');
     const togglePasswordCheck = document.querySelector('.togglePasswordCheck');
+
     const password = document.querySelector('.togglePassword');
     const newPasswordEl = document.getElementById('newPassword');
     const passwordCheckEl = document.getElementById('passwordCheck');
     const passwordEl = document.getElementById('password');
+
     toggleNewPassword.addEventListener('click', (e) => {
       const type = newPasswordEl
         .getAttribute('type') === 'password' ?
@@ -344,6 +372,7 @@
       newPasswordEl.setAttribute('type', type);
       e.target.classList.toggle('bi-eye');
     });
+
     togglePasswordCheck.addEventListener('click', (e) => {
       const type = passwordCheckEl
         .getAttribute('type') === 'password' ?
@@ -351,6 +380,7 @@
       passwordCheckEl.setAttribute('type', type);
       e.target.classList.toggle('bi-eye');
     });
+
     password.addEventListener('click', (e) => {
       const type = passwordEl
         .getAttribute('type') === 'password' ?
@@ -368,3 +398,8 @@
 </body>
 
 </html>
+
+<style>
+  form#user_login { width: 100%; clear: both; }
+  legend {  display: block; text-indent: 100%; white-space: nowrap; overflow: hidden; margin: 0; font-size: 1rem; }
+</style>
