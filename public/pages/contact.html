@@ -73,38 +73,79 @@
           <div class="team-grid">
 
             <div class="container">
-              <section>
+              <div class="row">
                 <h1 class="h1">Contact</h1>
                 <h2 class="h4">Let's give you some extra support or advice</h2>
-              </section>
-
-              <div class="row">
                 <p>The tutors have provided their contact details for you to get in touch. They are available to answer your questions and offer expert knowledge for any tech or course related enquiries.</p>
               </div>
 
-                <div class="row card-container">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex">
-                                <img class="rounded-circle img-thumbnail" src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" height="100" width="100" />
-                            
-                            <ul class="col-md-5">
-                                <li class="tutor-name"><h5>Jessica Johnson</h5></li>
-                                <li class="tag">Front-end Developer</li>
-                                <li class="tutor-blurb">Passionate about helping students excel.</li>
-                            </ul>
+              <div class="row card-container">
 
-                            <ul class="col-md-4">
-                                <li class="slack-profile"><i class="bi bi-slack"></i> @JessJohnson</li>
-                                <li class="email"><i class="bi bi-envelope"></i> jessica.johnson-cic-uk@uk.ibm.com</li>
-                            </ul>
-                            </div>
-                        </div>
+
+                <div class="card">
+                  <div class="card-body">
+                    <span class="contact">
+                      <img class="rounded-circle img-thumbnail" src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" height="100" width="100" />
+                    </span>
+                    
+                    <div class="d-flex">
+                      <ul class="contact col-md-6">
+                        <li class="tutor-name"><h5>Jessica Johnson</h5></li>
+                        <li class="tag">Front-end Developer</li>
+                        <li class="tutor-blurb">Passionate about helping students excel.</li>
+                      </ul>
+                      <ul class="contact col-md-6">
+                        <li class="slack-profile"><i class="bi bi-slack"></i> <a href="" target="_blank" title="Slack profile">@JessJohnson</a></li>
+                        <li class="email"><i class="bi bi-envelope"></i> <a href="mailto:a.user-cic-uk@uk.ibm.com" target="_blank" title="Email the Tutor direct">jessica.johnson-cic-uk@uk.ibm.com</a></li>
+                      </ul>
                     </div>
+                  </div>
                 </div>
-            </div>
 
-          </div>
+                <div class="card">
+                  <div class="card-body">
+                    <span class="contact">
+                      <img class="rounded-circle img-thumbnail" src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" height="100" width="100" />
+                    </span>
+                    
+                    <div class="d-flex">
+                      <ul class="contact col-md-6">
+                        <li class="tutor-name"><h5>Jessica Johnson</h5></li>
+                        <li class="tag">Front-end Developer</li>
+                        <li class="tutor-blurb">Passionate about helping students excel.</li>
+                      </ul>
+                      <ul class="contact col-md-6">
+                        <li class="slack-profile"><i class="bi bi-slack"></i> <a href="" target="_blank" title="Slack profile">@JessJohnson</a></li>
+                        <li class="email"><i class="bi bi-envelope"></i> <a href="mailto:a.user-cic-uk@uk.ibm.com" target="_blank" title="Email the Tutor direct">jessica.johnson-cic-uk@uk.ibm.com</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="card">
+                  <div class="card-body">
+                    <span class="contact">
+                      <img class="rounded-circle img-thumbnail" src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" height="100" width="100" />
+                    </span>
+                    
+                    <div class="d-flex">
+                      <ul class="contact col-md-6">
+                        <li class="tutor-name"><h5>Jessica Johnson</h5></li>
+                        <li class="tag">Front-end Developer</li>
+                        <li class="tutor-blurb">Passionate about helping students excel.</li>
+                      </ul>
+                      <ul class="contact col-md-6">
+                        <li class="slack-profile"><i class="bi bi-slack"></i> <a href="" target="_blank" title="Slack profile">@JessJohnson</a></li>
+                        <li class="email"><i class="bi bi-envelope"></i> <a href="mailto:a.user-cic-uk@uk.ibm.com" target="_blank" title="Email the Tutor direct">jessica.johnson-cic-uk@uk.ibm.com</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+          </div> 
         </main>
       </div>
     </div>
@@ -193,8 +234,15 @@
 
 <style>
 .card-container { margin-top:2rem; }
-.card { padding: 0; margin: 0; background: pink; }
+.card { padding:0; margin:1rem 0; }
+.card:last-child { margin-bottom:4rem; }
 .card-body { margin:1rem; }
-ul { margin:0 1rem 0 3rem; list-style-type: none; border:1px solid rebeccapurple}
-ul li { margin:0; padding: 0; }
+ul.contact { margin:0 1rem 0 0; list-style-type:none; }
+ul.contact li { margin:0.5rem 0; }
+ul.contact li a { text-decoration:none; margin-left:0.5rem; }
+ul.contact li a:hover { text-decoration: underline; }
+li.tag { width:fit-content; border-top-right-radius:6px; border-bottom-right-radius:6px; border-left:6px solid #1D0C59; background:rgb(29 12 89 / 20%); text-indent:0.5rem; padding:0.15rem 1rem 0.15rem 0.15rem; }
+li.tutor-blurb { overflow-wrap:normal; }
+.contact img.rounded-circle.img-thumbnail { float:inline-start; }
+ul.contact li.slack-profile { margin-top:3rem; }
 </style>
