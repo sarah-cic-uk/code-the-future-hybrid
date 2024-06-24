@@ -79,14 +79,6 @@ table button {
     border-radius: 0.4rem !important;
 }
 
-#show-more {
-    padding: 1rem 0;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: #31238C;
-}
-
 #alt-session {
     display: flex;
     flex-direction: column;
