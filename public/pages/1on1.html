@@ -74,7 +74,7 @@
               <p>These sessions can be used to go back over session material, catch up if you missed a session, debug issues in your code, ask for support, or have a 1:1 conversation about life in Tech.</p>
             </section>
           
-            <section style="margin-top:3rem;">
+            <section style="margin-top:1rem;">
               <h3 class="h5">Select a Tutor</h3>
 
               <div>
@@ -85,7 +85,7 @@
             </section>
 
             <section style="margin-top:3rem;">
-              <h3 class="h5">Select a Session</h3>
+              <h3 class="h5">Select a 1:1 session</h3>
             
               <div>
                 <table id="tutorTable">
@@ -106,10 +106,8 @@
 
             <hr class="hr" style="margin-top:3rem;" />
         
-            <section style="margin-top:3rem;">
+            <section style="margin:3rem 0 5rem 0;">
               <h3 class="h5">Request an alternative 1:1 session</h3>
-
-              <div id="weekend-alert"></div>
 
               <div id="alt-session">
                 <div>
@@ -123,11 +121,8 @@
                 </div>
                 <button type="button" class="button-generic tertiary" title="Request 1:1 session">Request 1:1 session</button>
               </div>
-              
+              <div id="weekend-alert"></div>
             </section>
-            <!-- </div> -->
-
-
 
             <!-- Successful booking toast notifications -->
             <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -252,7 +247,7 @@
                         <td>${start.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', hour12:true})}</td>
                         <td>${oneToOne}</td>
                         <td>${systemOptions.timeZone}</td>
-                        <td><button onclick="handleSessionRequest(this, true, '${sessionId}', '${tutorId}')" title="Book 1:1 session">Book 1:1 session</button></td>
+                        <td class="alignment"><button type="button" class="btn button-generic secondary" onclick="handleSessionRequest(this, true, '${sessionId}', '${tutorId}')" title="Book 1:1 session">Book 1:1 session</button></td>
                       </tr>`
                     sessionRows.insertAdjacentHTML('beforeend', createNewRow);
                   }

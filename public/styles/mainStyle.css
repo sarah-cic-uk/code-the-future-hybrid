@@ -585,7 +585,7 @@ ul[id^='submenu'] li {
 	padding-bottom: 1.5rem;
 }
 .h3 {
-	padding: 1.5rem 0 0.75rem 0;
+	padding: 1rem 0 0.75rem 0;
 	font-weight: 700;
 }
 .login p {
@@ -593,13 +593,13 @@ ul[id^='submenu'] li {
 }
 .h4 {
 	/* session - rfs.scss & r 0eboot.scss */
-	padding: 1.5rem 0 1.75rem 0;
+	padding: 1rem 0 1.75rem 0;
 	font-weight: 600;
 	font-style: italic;
 	opacity:0.8;
 }
 .h5 {
-	padding: 1.5rem 0 0.75rem 0;
+	padding: 1rem 0 0.75rem 0;
 	font-weight: 500;
 }
 /* reboot.scss 
