@@ -1,19 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
-  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
-  <meta name="author" content="Sarah Neenan" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC">
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp">
+  <meta name="author" content="Sarah Neenan">
   <title>Code the Future</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
-  <script type="text/javascript" src="./js/app.js"></script>
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <script src="./js/app.js"></script>
   <!-- <script  src="./js/imports.js"></script> -->
   <script type="module" src="./js/firebase.js"></script>
+
+  <style>
+    .row>* {
+      padding: 0 !important;
+    }
+
+    form {
+      width: 100%;
+    }
+
+    legend {
+      display: block;
+      text-indent: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 0.375rem;
+    }
+
+    textarea::placeholder {
+      opacity: 0.5;
+      color: #212529;
+    }
+  </style>
 </head>
 
 <body>
@@ -25,21 +55,25 @@
               padding-right: 10px;
               color: #1d0c59;
             ">
-          <img src="../images/logo.png" height="60px" />
+          <img src="../images/logo.png" height="60" alt="CTF logo">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" href="#" onclick="createPath('index.html')" title="About CTF">About CTF</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')" title="Meet the tutors">Meet
+              the tutors</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')" title="Schedule a 1:1">Schedule a
+              1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')" title="Jobs at CIC">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')" title="Course Catalog">Course
+              Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')"
+              title="Sessions">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
             <!-- Logged in Avatar -->
@@ -50,18 +84,20 @@
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                  alt="Black and White Portrait of a Man" loading="lazy" />
+                  alt="Black and White Portrait of a Man" loading="lazy">
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
                 <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')" title="My Profile">My
+                    Profile</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')" title="View Cohort">View
+                    Cohort</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
+                  <a class="dropdown-item" href="#" onclick="logUserOut()" title="Log out">Log out</a>
                 </li>
               </ul>
             </div>
@@ -69,6 +105,7 @@
         </div>
       </div>
     </nav>
+
     <div class="container-fluid g-0 text-center">
       <div class="page-content p-4">
         <h1 id="profileHeading" class="p-2">Profile</h1>
@@ -79,167 +116,235 @@
             you better.
           </p>
         </div>
+
         <div class="container">
-          <div class="row align-items-center">
+          <div class="row">
 
-            <div class="col">
-              <form onsubmit="updateProfile()">
+            <div class="col col-md-6">
+              <form id="profile-bio">
                 <fieldset>
-                  <legend>Profile Form</legend>
-
+                  <legend>Profile bio</legend>
                   <label class="profile-question text-start" for="who">Tell us who you are:</label>
-                  <textarea id="who" name="who"></textarea>
+                  <textarea id="who" name="who" placeholder="Let us know more about yourself."></textarea>
 
                   <label class="profile-question text-start" for="what">What are you hoping to learn from this
                     course?</label>
-                  <textarea id="what" name="what"></textarea>
+                  <textarea id="what" name="what"
+                    placeholder="Let us know what made you sign up and what you would like to achieve from it."></textarea>
 
                   <label class="profile-question text-start" for="career">What are your career aspirations?</label>
-                  <textarea id="career" name="career"></textarea>
-                  <div style="width: 100%;">
-                    <div class="text-end">
-                      <button class="btn btn-block fa-lg mb-3" style="border: 1px solid #d9437a; color: black"
-                        type="reset" value="Cancel" title="Cancel changes">
-                        Cancel Changes
-                      </button>
-                      <button class="btn btn-block fa-lg mb-3" style="background-color: #d9437a; color: white"
-                        type="submit" value="Submit" title="Save profile">
-                        Save profile
-                      </button>
+                  <textarea id="career" name="career"
+                    placeholder="Let us know where you would like to see yourself in the future, what fascinating path could your career journey lead you?"></textarea>
+
+                  <div class="row" style="width:100%; margin:0 !important;">
+                    <div class="text-end" style="padding:0 !important;">
+                      <input type="reset" value="Reset changes" id="reset" class="btn nav-link" title="Reset changes" style="margin-right:1rem;">
+
+                      <input type="submit" value="Save profile" id="submit" class="btn btn-block fa-lg button-style"
+                        title="Save profile">
                     </div>
                   </div>
                 </fieldset>
               </form>
             </div>
-            <div class="col">
-              <div class="d-flex justify-content-center mb-4">
-                <img id="selectedAvatar" class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;"
-                  alt="example placeholder" />
+
+
+            <div class="col col-md-6">
+              <div class="d-flex justify-content-center mb-4" style="padding-top:5rem !important;">
+                <img id="selectedAvatar" class="rounded-circle"
+                  style="width: 200px; height: 200px; object-fit: cover; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)"
+                  alt="Student profile avatar">
               </div>
+
               <div class="text-center">
-                <div data-mdb-ripple-init class="mt-1 btn btn-rounded" style="background-color: #1d0c58; color: white">
+                <div data-mdb-ripple-init class="btn"
+                  style="background-color: #1d0c58; color: white; padding:0 1rem 1rem 1rem;">
+                  <label class="form-label text-white mb-1" for="formFile">Update profile picture</label>
                   <input class="form-control" type="file" id="formFile"
-                    onchange="displaySelectedImage(event, 'selectedAvatar')">
-                  <label class="form-label text-white m-1" for="profilePic">Update profile picture</label>
+                    onchange="displaySelectedImage(event, 'selectedAvatar')" accept=".png,.jpg,.jpeg,.webp,image/png">
                 </div>
               </div>
             </div>
+
           </div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- toast notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="update_success" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Great news!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Your bio has been updated.
+        </div>
+      </div>
+
+      <div id="avatar-update_success" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Great news!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Your profile picture has been updated.
+        </div>
+      </div>
+
+
+      <div id="update_error" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Oh no!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Your bio was not updated. Please try again!
+        </div>
+      </div>
+
+      <div id="avatar-update_error" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Oh no!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Your profile picture was not updated. Please try again!
         </div>
       </div>
     </div>
-    <script defer type="module">
-      import { fbAuth, fbDB } from "./js/firebase.js";
-      window.fbAuth = fbAuth;
-      window.fbDB = fbDB;
-    </script>
-    <script type="text/javascript">
-      const stylesheet = document.createElement("link");
-      stylesheet.rel = "stylesheet";
-      stylesheet.type = "text/css";
-      stylesheet.href = getPath() + "styles/mainStyle.css";
-      document.head.appendChild(stylesheet);
-      let currentUser = null;
-      const who = document.getElementById('who');
-      const what = document.getElementById('what');
-      const career = document.getElementById('career');
 
-      window.onload = (event) => {
-        console.log("Liad")
-        auth(
-          document.querySelector(".loginBtn"),
-          document.querySelector(".profileBtn"),
-          document.querySelector("#sessionsLink")
-        );
-        const user = localStorage.getItem("displayName");
-        document.getElementById("profileHeading").innerHTML = `${user}'s Profile`;
+  </div>
 
-        getProfile();
-      };
+  <script defer type="module">
+    import { fbAuth, fbDB } from "./js/firebase.js";
+    window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
+  </script>
 
-      function createPath(options) {
-        window.location = getPath() + options;
-        return false;
+  <script>
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    let currentUser = null;
+    const who = document.getElementById('who');
+    const what = document.getElementById('what');
+    const career = document.getElementById('career');
+
+
+    window.onload = (event) => {
+
+      auth(
+        document.querySelector(".loginBtn"),
+        document.querySelector(".profileBtn"),
+        document.querySelector("#sessionsLink")
+      );
+
+      const user = localStorage.getItem("displayName");
+
+      document.getElementById("profileHeading").innerHTML = `${user}'s Profile`;
+
+      getProfile();
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut(event) {
+      logout(window.fbAuth);
+    }
+
+    // toast notifications - successful bookings
+    const success = document.getElementById('update_success');
+    const error = document.getElementById('update_error');
+    const avatar_success = document.getElementById('avatar-update_success');
+    const avatar_error = document.getElementById('avatar-update_error');
+
+
+    function displaySelectedImage(event, elementId) {
+      const selectedImage = document.getElementById(elementId);
+      const fileInput = event.target;
+      currentUser = window.fbAuth.currentUser;
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          selectedImage.src = e.target.result;
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+        const storageRef = window.fbStorage.ref("profilePics/" + currentUser.uid);
+        storageRef.put(fileInput.files[0]);
+
+        const toast = new bootstrap.Toast(avatar_success);
+        toast.show();
+      } else {
+        const toast = new bootstrap.Toast(avatar_error);
+        toast.show();
       }
+    }
 
-      function logUserOut(event) {
-        logout(window.fbAuth);
-      }
+    async function getProfile() {
+      window.fbAuth.onAuthStateChanged(async function (user) {
+        if (user) {
+          currentUser = window.fbAuth.currentUser;
+          const profileData = await window.fbDB.ref('users/' + currentUser.uid + '/profile').once('value')
+          const profileValues = profileData.val();
 
-      function displaySelectedImage(event, elementId) {
-        const selectedImage = document.getElementById(elementId);
-        const fileInput = event.target;
-        if (fileInput.files && fileInput.files[0]) {
-          const reader = new FileReader();
+          who.innerHTML = profileValues.about
+          what.innerHTML = profileValues.learning
+          career.innerHTML = profileValues.aspirations
+          const profilePicElement = document.getElementById("selectedAvatar");
+          const pathReference = await window.fbStorage.ref("profilePics/" + currentUser.uid);
 
-          reader.onload = function (e) {
-            selectedImage.src = e.target.result;
-          };
-
-          reader.readAsDataURL(fileInput.files[0]);
-          const storageRef = window.fbStorage.ref("profilePics/" + fileInput.files[0].name.split('.')[0]);
-          storageRef.put(fileInput.files[0]);
-
+          if (pathReference) {
+            fetchMedia(pathReference, profilePicElement);
+          } else {
+            profilePicElement.setAttribute('src', 'https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg');
+          }
+        } else {
+          console.err('ERROR: User data not found')
         }
-      }
+      })
+    }
 
-      async function getProfile() {
-        window.fbAuth.onAuthStateChanged(async function (user) {
-          if (user) {
-            currentUser = window.fbAuth.currentUser;
-            const profileData = await window.fbDB.ref('users/' + currentUser.uid + '/profile').once('value')
-            const profileValues = profileData.val();
-            who.innerHTML = profileValues.about
-            what.innerHTML = profileValues.learning
-            career.innerHTML = profileValues.aspirations
-            const profilePicElement = document.getElementById("selectedAvatar");
-            const pathReference = await window.fbStorage.ref("profilePics/" + currentUser.uid);
-            if (pathReference) {
-              fetchMedia(pathReference, profilePicElement);
-            } else {
-              profilePicElement.setAttribute('src', 'https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg');
-            }
-          }
-          else {
-            console.err('ERROR: User data not found')
-          }
-        })
-      }
+    let form = document.getElementById('profile-bio');
 
-      async function updateProfile() {
-        let profileValues = {};
-        profileValues.about = who.value;
-        profileValues.learning = what.value;
-        profileValues.aspirations = career.value;
+    async function updateProfile(event) {
+      event.preventDefault();
+      let profileValues = {};
+      profileValues.about = who.value;
+      profileValues.learning = what.value;
+      profileValues.aspirations = career.value;
 
-        var updates = {};
-        updates['users/' + currentUser.uid + '/profile'] = profileValues;
+      var updates = {};
+      updates['users/' + currentUser.uid + '/profile'] = profileValues;
+      try {
         await window.fbDB.ref().update(updates);
+        const toast = new bootstrap.Toast(success);
+        toast.show();
+      } catch {
+        const toast = new bootstrap.Toast(error);
+        toast.show();
       }
+    }
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-      crossorigin="anonymous"></script>
+    form.addEventListener('submit', updateProfile)
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
-<style>
-  form {
-    width: 100%;
-  }
-
-  legend {
-    display: block;
-    text-indent: 100%;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  textarea {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    box-sizing: border-box;
-  }
-</style>
