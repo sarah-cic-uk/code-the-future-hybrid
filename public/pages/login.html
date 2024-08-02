@@ -45,6 +45,7 @@
       </div>
   </div>
   </nav>
+
   <div class="container-fluid">
     <div class="row flex-nowrap page-content">
       <section class="gradient-form">
@@ -314,8 +315,10 @@
       window.fbAuth.signInWithEmailAndPassword(email, password)
         .then(async (userCredential) => {
           localStorage.setItem('loggedIn', true);
-          const user = window.fbAuth.currentUser;
-          localStorage.setItem('displayName', user.displayName);
+          const user = window.fbAuth.currentUser.uid;
+          const profileData = await window.fbDB.ref('users/' + user ).once('value')
+
+          localStorage.setItem('displayName', profileData.val()['displayName']);
           window.location.replace("./sessions.html");
         })
         .catch((error) => {
