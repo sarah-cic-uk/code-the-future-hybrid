@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+
+  <title>Code the Future</title>
+
+  <link rel="stylesheet" href="../styles/1on1.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="module" src="./js/firebase.js"></script>
+
+  <style>
+    button#addAvailabilityBtn {
+      background-color: #d9437a;
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border: 0;
+      border-radius: 0.4rem !important;
+    }
+
+    table th,
+    table td {
+      text-align: center;
+      padding: 10px;
+    }
+
+    table {
+      margin-top: 20px;
+      width: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-content">
+
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#"
+          style="border-right: 2px solid #d9437a;padding-right: 10px;color: #1d0c59;">
+          <img src="../images/logo.png" height="60px" alt="CTF" />
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <!-- Logged in Avatar -->
+            <div>
+              <p class="my-auto" id="profileName"></p>
+            </div>
+
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
+                  alt="Black and White Portrait of a Man" loading="lazy" />
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid px-5" style="background-color: white; width: 80%; padding-bottom: 5rem">
+      <section>
+        <p class="h1" style="padding-top: 3rem; font-weight: 900">
+          Manage your 1:1 availability
+        </p>
+        <p class="lead" style="padding-top: 10px">Provide support to our students that fits into your schedule</p>
+
+        <p>Your availability is as valuable as our students' success, so please manage your time slots carefully as they
+          are visible in real-time. If you're no longer available, be sure to cancel the slot—this responsibility is
+          <strong>yours</strong> alone.
+        </p>
+        <p>If a student has already booked a session and you need to make changes, contact them promptly to reschedule
+          or cancel. Clear communication builds trust and keeps everyone informed.</p>
+        <p>We appreciate your dedication and professionalism in giving up your own time to support our students.</p>
+      </section>
+
+      <section style="margin-top:3rem;">
+        <div class="row mb-4">
+          <div class="col-md-3">
+            <h6 style="margin-bottom:0; padding-bottom:0;"><label for="datePicker" class="form-label">Select
+                date:</label></h6>
+            <input type="date" class="form-control" id="datePicker" />
+          </div>
+
+          <div class="col-md-3">
+            <h6 style="margin-bottom:0; padding-bottom:0;"><label for="timePicker" class="form-label">Select
+                time:</label></h6>
+            <input type="time" class="form-control" id="timePicker" />
+          </div>
+
+          <div class="col-md-3">
+            <h6 style="margin-bottom:0; padding-bottom:0;"><label for="duration" class="form-label">Session
+                duration:</label></h6>
+            <select class="form-control" id="duration">
+              <option>15 Mins</option>
+              <option>30 Mins</option>
+              <option>1 Hour</option>
+            </select>
+          </div>
+
+          <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-primary" id="addAvailabilityBtn">Add availability</button>
+          </div>
+        </div>
+
+        <div id="alert"></div>
+      </section>
+
+      <section style="padding-bottom: 4rem;">
+        <p class="h4" style="padding: 2rem 0 0.75rem; font-weight: 600">
+          Your time slots
+        </p>
+
+        <div>
+          <table id="tutorTable">
+            <thead>
+              <th>Date</th>
+              <th>Start time</th>
+              <th>Duration</th>
+              <th>Timezone</th>
+              <th></th>
+            </thead>
+
+            <tbody class="sessionTable">
+              <!-- time slots will be dynamically inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+
+    <!-- toast notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="booked-session" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Great news!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The time slot has been added to Firebase.
+        </div>
+      </div>
+
+      <!-- remove time slot CTA toast notification -->
+      <div id="remove-slot" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Are you sure?</strong>
+        </div>
+
+        <div class="toast-body">
+          Do you want to remove this time slot?
+          <div class="mt-2 pt-2 border-top">
+            <button type="button" class="btn btn-primary btn-sm">Yes</button>
+            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="toast">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- success removal toast notification -->
+      <div id="removed-session" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Great news!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The time slot was successfully removed from Firebase.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { fbDB } from "./js/firebase.js"
+    window.fbDB = fbDB;
+  </script>
+
+  <script>
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    window.onload = (event) => {
+      auth(
+        document.querySelector(".loginBtn"),
+        document.querySelector(".profileBtn"),
+        document.querySelector("#sessionsLink")
+      );
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    // Simulate the logged-in tutor's name (in a real app, this would come from the backend)
+    const loggedInTutor = "John Doe";
+
+    // Data structure to store availability for each tutor
+    const tutorAvailability = {};
+
+    // Set tutor ID manually in the local environment for now (in production, this would be dynamic)
+    const tutorId = "-O9FnHezh1DMTd6Wi3KW"; // Simulated Tutor ID
+
+    // Function to check and render the default "No time slots" message
+    function updateAvailabilityTable() {
+      const tableBody = document.querySelector('.sessionTable');
+      const availability = tutorAvailability[loggedInTutor] || {};
+
+      tableBody.innerHTML = ''; // Clear previous entries
+
+      // If no availability exists, show the default message
+      if (Object.keys(availability).length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5"> No time slots added yet. </td></tr>';
+        return;
+      }
+
+      // Otherwise, render the available slots
+      Object.keys(availability).forEach(slotId => {
+        const slot = availability[slotId];
+
+        const date = new Date(slot.date);
+        const time = new Date(`${slot.date}T${slot.time}`);
+
+        const formattedTime = isNaN(time.getTime())
+          ? slot.time // If time is invalid, show the time as provided
+          : time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+        const systemOptions = new Intl.DateTimeFormat().resolvedOptions();
+
+        const createNewRow = `
+        <tr>
+          <td>${date.toDateString()}</td>
+          <td>${formattedTime}</td>
+          <td>${slot.duration}</td>
+          <td>${slot.timezone}</td>
+          <td><button class="btn btn-danger" onclick="confirmRemove('${slotId}')" aria-label="Remove">
+                <i class="bi bi-trash" aria-hidden="true"></i>
+              </button></td>
+        </tr>
+      `;
+
+        tableBody.insertAdjacentHTML('beforeend', createNewRow);
+      });
+    }
+
+    // Fetch availability from Firebase on load
+    window.onload = async function () {
+      try {
+        const snapshot = await fbDB.ref(`tutors/${tutorId}/availability`).once('value');
+        if (snapshot.exists()) {
+          tutorAvailability[loggedInTutor] = snapshot.val() || {};
+        }
+      } catch (e) {
+        console.error('Error fetching availability:', e);
+      }
+
+      // Check and render the table after fetching data
+      updateAvailabilityTable();
+    };
+
+    // Function to show the toast for slot removal confirmation
+    function confirmRemove(slotId) {
+      // Show the toast
+      const toastEl = document.getElementById('remove-slot');
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+
+      // Handle the confirmation click
+      const yesBtn = toastEl.querySelector('.btn-primary');
+      yesBtn.onclick = async function () {
+        try {
+          // Remove from Firebase
+          await fbDB.ref(`tutors/${tutorId}/availability/${slotId}`).remove();
+
+          // Remove from local availability list
+          delete tutorAvailability[loggedInTutor][slotId];
+
+          updateAvailabilityTable();  // Refresh the table after removal
+
+          // Show success removal toast
+          const removedToastEl = document.getElementById('removed-session');
+          const removedToast = new bootstrap.Toast(removedToastEl);
+          removedToast.show();
+        } catch (error) {
+          console.error("Error removing slot from Firebase: ", error);
+        }
+
+        toast.hide(); // Hide the confirmation toast
+      };
+    }
+
+
+    // setting the calendar to allow a choice from todays date to the end of the current year
+    var today = new Date();
+    var formattedDate = today.toISOString().split('T')[0];
+    var year = new Date().getFullYear();
+
+    document.getElementById('datePicker').min = formattedDate
+    document.getElementById('datePicker').setAttribute("max", year + "-12-31");
+
+    // add event listener to the "Add availability" button
+    document.getElementById('addAvailabilityBtn').addEventListener('click', async function () {
+      const selectedDate = document.getElementById('datePicker').value;
+      const selectedTime = document.getElementById('timePicker').value;
+      const selectedDuration = document.getElementById('duration').value;
+
+      if (!selectedDate || !selectedTime) {
+        const alertContainer = document.querySelector("#alert");
+        const showAlert = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <div>Please choose both date and time.</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        alertContainer.innerHTML = ''; // clear any previous alerts
+        alertContainer.insertAdjacentHTML('beforeend', showAlert);
+        return;
+      }
+
+      // initialise availability list for the tutor if not already created
+      if (!tutorAvailability[loggedInTutor]) {
+        tutorAvailability[loggedInTutor] = {};
+      }
+
+      // check for duplicate slot
+      const isDuplicate = Object.values(tutorAvailability[loggedInTutor]).some(slot =>
+        slot.date === selectedDate && slot.time === selectedTime
+      );
+
+      if (isDuplicate) {
+        const alertContainer = document.querySelector("#alert");
+        const showAlert = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <div>This time slot has already been added. Please choose another one.</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        alertContainer.innerHTML = ''; // clear any previous alerts
+        alertContainer.insertAdjacentHTML('beforeend', showAlert);
+        return;
+      }
+
+      // convert selected time to a timestamp
+      const selectedStartTime = new Date(`${selectedDate}T${selectedTime}`).getTime();
+      const durationInMinutes = {
+        '15 Mins': 15,
+        '30 Mins': 30,
+        '1 Hour': 60,
+      }[selectedDuration];
+      const selectedEndTime = selectedStartTime + durationInMinutes * 60000; // convert minutes to milliseconds
+
+      // check for time conflicts with existing slots
+      const hasConflict = Object.values(tutorAvailability[loggedInTutor]).some(slot => {
+        const existingSlotStartTime = new Date(`${slot.date}T${slot.time}`).getTime();
+        const existingDurationInMinutes = {
+          '15 Mins': 15,
+          '30 Mins': 30,
+          '1 Hour': 60,
+        }[slot.duration];
+        const existingSlotEndTime = existingSlotStartTime + existingDurationInMinutes * 60000;
+
+        // check if the selected slot overlaps with the existing slot
+        return (selectedStartTime < existingSlotEndTime && selectedEndTime > existingSlotStartTime);
+      });
+
+      if (hasConflict) {
+        const alertContainer = document.querySelector("#alert");
+        const showAlert = `
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div>The selected time slot overlaps with an existing one. Please choose a different time.</div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`;
+        alertContainer.innerHTML = ''; // clear any previous alerts
+        alertContainer.insertAdjacentHTML('beforeend', showAlert);
+        return;
+      }
+
+      // create the new availability slot object
+      const systemOptions = new Intl.DateTimeFormat().resolvedOptions(); // define systemOptions here
+      const newSlot = {
+        date: selectedDate,
+        time: selectedTime,
+        duration: selectedDuration,
+        timezone: systemOptions.timeZone
+      };
+
+      // save the availability to firebase
+      const tutorRef = fbDB.ref(`tutors/${tutorId}/availability`).push();  // create a unique key for the new availability
+      try {
+        await tutorRef.set(newSlot);
+
+        // Add the new slot to the local availability list
+        tutorAvailability[loggedInTutor][tutorRef.key] = newSlot;
+
+        console.log("Time slot added to Firebase under the tutor's recordset");
+
+        // Show success toast
+        const toastEl = document.getElementById('booked-session');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+
+      } catch (e) {
+        console.error("Error adding to Firebase: ", e);
+      }
+
+      // update the table UI
+      updateAvailabilityTable();
+
+      // clear form fields after adding availability
+      document.getElementById('datePicker').value = '';
+      document.getElementById('timePicker').value = '';
+      document.getElementById('duration').value = '15 Mins'; // reset to default value
+    });
+
+    // dismiss the alert when both fields are filled
+    function checkFormCompletion() {
+      const selectedDate = document.getElementById('datePicker').value;
+      const selectedTime = document.getElementById('timePicker').value;
+      const alertContainer = document.querySelector("#alert");
+
+      // if both fields have values, clear the alert
+      if (selectedDate && selectedTime) {
+        alertContainer.innerHTML = '';
+      }
+    }
+
+    // attach event listeners to the date and time inputs to call checkFormCompletion
+    document.getElementById('datePicker').addEventListener('input', checkFormCompletion);
+    document.getElementById('timePicker').addEventListener('input', checkFormCompletion);
+
+    function logUserOut(event) {
+      const fbAuth = firebase.auth();
+      logout(fbAuth);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
