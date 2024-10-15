@@ -205,6 +205,17 @@
       </div>
     </div>
 
+    <!-- Failure toast notification -->
+    <div id="firebase-error-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <strong class="me-auto">Bad news!</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        There was an error processing that request. Please try again.
+      </div>
+    </div>
+
   </div>
 
   <script type="module">
@@ -232,16 +243,16 @@
       return false;
     }
 
-    // Simulate the logged-in tutor's name (in a real app, this would come from the backend)
+    // simulate the logged-in tutor's name (in a real app, this would come from the backend)
     const loggedInTutor = "John Doe";
 
-    // Data structure to store availability for each tutor
+    // data structure to store availability for each tutor
     const tutorAvailability = {};
 
-    // Set tutor ID manually in the local environment for now (in production, this would be dynamic)
+    // set tutor ID manually in the local environment for now (in production, this would be dynamic)
     const tutorId = "-O9FnHezh1DMTd6Wi3KW"; // Simulated Tutor ID
 
-    // Function to check and render the default "No time slots" message
+    // function to check and render the default "No time slots" message
     function updateAvailabilityTable() {
       const tableBody = document.querySelector('.sessionTable');
       const availability = tutorAvailability[loggedInTutor] || {};
@@ -283,7 +294,7 @@
       });
     }
 
-    // Fetch availability from Firebase on load
+    // fetch availability from Firebase on load
     window.onload = async function () {
       try {
         const snapshot = await fbDB.ref(`tutors/${tutorId}/availability`).once('value');
@@ -298,37 +309,12 @@
       updateAvailabilityTable();
     };
 
-    // Function to show the toast for slot removal confirmation
-    function confirmRemove(slotId) {
-      // Show the toast
-      const toastEl = document.getElementById('remove-slot');
+    // function to show generic Firebase error toast
+    function showFirebaseErrorToast() {
+      const toastEl = document.getElementById('firebase-error-toast');
       const toast = new bootstrap.Toast(toastEl);
       toast.show();
-
-      // Handle the confirmation click
-      const yesBtn = toastEl.querySelector('.btn-primary');
-      yesBtn.onclick = async function () {
-        try {
-          // Remove from Firebase
-          await fbDB.ref(`tutors/${tutorId}/availability/${slotId}`).remove();
-
-          // Remove from local availability list
-          delete tutorAvailability[loggedInTutor][slotId];
-
-          updateAvailabilityTable();  // Refresh the table after removal
-
-          // Show success removal toast
-          const removedToastEl = document.getElementById('removed-session');
-          const removedToast = new bootstrap.Toast(removedToastEl);
-          removedToast.show();
-        } catch (error) {
-          console.error("Error removing slot from Firebase: ", error);
-        }
-
-        toast.hide(); // Hide the confirmation toast
-      };
     }
-
 
     // setting the calendar to allow a choice from todays date to the end of the current year
     var today = new Date();
@@ -427,18 +413,19 @@
       try {
         await tutorRef.set(newSlot);
 
-        // Add the new slot to the local availability list
+        // add the new slot to the local availability list
         tutorAvailability[loggedInTutor][tutorRef.key] = newSlot;
 
         console.log("Time slot added to Firebase under the tutor's recordset");
 
-        // Show success toast
+        // show success toast
         const toastEl = document.getElementById('booked-session');
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
 
       } catch (e) {
         console.error("Error adding to Firebase: ", e);
+        showFirebaseErrorToast(); // show the error toast on failure
       }
 
       // update the table UI
@@ -449,6 +436,38 @@
       document.getElementById('timePicker').value = '';
       document.getElementById('duration').value = '15 Mins'; // reset to default value
     });
+
+
+    // function to show the toast for slot removal confirmation
+    function confirmRemove(slotId) {
+      // show the toast
+      const toastEl = document.getElementById('remove-slot');
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+
+      // handle the confirmation click
+      const yesBtn = toastEl.querySelector('.btn-primary');
+      yesBtn.onclick = async function () {
+        try {
+          // remove from Firebase
+          await fbDB.ref(`tutors/${tutorId}/availability/${slotId}`).remove();
+
+          // remove from local availability list
+          delete tutorAvailability[loggedInTutor][slotId];
+
+          updateAvailabilityTable();  // refresh the table after removal
+
+          // show success removal toast
+          const removedToastEl = document.getElementById('removed-session');
+          const removedToast = new bootstrap.Toast(removedToastEl);
+          removedToast.show();
+        } catch (error) {
+          console.error("Error removing slot from Firebase: ", error);
+        }
+
+        toast.hide(); // hide the confirmation toast
+      };
+    }
 
     // dismiss the alert when both fields are filled
     function checkFormCompletion() {
