@@ -295,7 +295,7 @@
       if (weekendAlertContainer) weekendAlertContainer.innerHTML = '';
     }
 
-    // Function to show alerts and clear previous alerts
+    // function to show alerts and clear previous alerts
     function showAlert(message, type = 'danger') {
       clearAlerts(); // clear any previous alerts before showing a new one
       const alertHTML = `
@@ -341,7 +341,7 @@
 
       // prevent weekend selection
       if (day === 0 || day === 6) {
-        showAlert('Tutors might accept a weekend session by arrangement, please choose a suitable weekday instead, or make contact with the Tutor via the CTF Slack channel.', 'info');
+        showAlert('Tutors are not accepting weekend sessions unless by pre-arrangement, please choose a suitable weekday instead.', 'info');
         dateInput.value = ''; // reset the date input
         return;
       }
@@ -358,7 +358,7 @@
         const currentTime = today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
         timeInput.min = currentTime; // restrict time input to future times
       } else {
-        timeInput.min = ''; // Cclear restriction if the selected date is not today
+        timeInput.min = ''; // clear restriction if the selected date is not today
       }
     }, 500)); // wait 500ms after typing stops before validating
 
@@ -446,41 +446,8 @@
           Date: ${requestedDate}
           Time: ${requestedTime}
           Duration: ${requestedDuration}`);
-    }
-
-    // function to write session request to Firebase
-    async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
-      const currentUser = fbAuth.currentUser;
-      const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
-
-      const sessionData = {
-        date: requestedDate,
-        time: requestedTime,
-        duration: requestedDuration,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        studentEmail: currentUser.email,
-        studentName: currentUser.displayName,
-        tutorName: tutor.displayName,
-        status: "requested",
-        sessionRequestId: sessionRequestRef.key,
-      };
-
-      // Write session request to Firebase
-      sessionRequestRef.set(sessionData, (error) => {
-        if (error) {
-          console.error("Error saving session request globally:", error);
-        } else {
-          console.log("Session request saved to global sessionRequests node");
-        }
-      });
-
-      // Remove the session request after writing
-      if (sessionData.sessionRequestId) {
-        await fbDB.ref(`sessionRequests/${sessionData.sessionRequestId}`).remove();
-        console.log('Session removed from sessionRequests.');
-      }
-    }
-
+    }    
+    
     const requestSessionBtn = document.querySelector("#alt-session button");
     requestSessionBtn.addEventListener("click", requestSession);
 
@@ -678,6 +645,7 @@
             Duration: ${requestedDuration}`);
     }
 
+
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
       const currentUser = fbAuth.currentUser;
       const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
@@ -699,21 +667,6 @@
         sessionRequestId: sessionRequestRef.key,  // store the sessionRequestId
       };
 
-      // write to the global sessionRequests node - Firebase
-      sessionRequestRef.set(sessionData, (error) => {
-        if (error) {
-          console.error("Error saving session request globally:", error);
-        } else {
-          console.log("Session request saved to global sessionRequests node");
-        }
-      });
-
-      if (sessionData.sessionRequestId) {
-        console.log('Session removed from sessionRequests.');
-      } else {
-        console.error('sessionRequestId is missing, unable to remove from sessionRequests.');
-      }
-
       // now, store this session request under the tutors requestedSessions node
       window.fbDB.ref("tutors").orderByChild("displayName").equalTo(tutor.displayName).once("value", (snapshot) => {
         const tutorData = snapshot.val();
@@ -732,6 +685,8 @@
         }
       });
     }
+
+
 
     // function to show generic Firebase error toast
     function showFirebaseErrorToast() {

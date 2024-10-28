@@ -143,7 +143,6 @@
             </div>
             <div class="alert-padding">
               <div id="alert"></div>
-              <div id="backToTheFuture-alert"></div>
             </div>
           </section>
 
@@ -261,17 +260,19 @@
 
     <!-- toast notifications -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+      <!-- success -->
       <div id="booked-session" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <strong class="me-auto">Great news!</strong>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-          The time slot has been added to Firebase.
+          The time slot has been added successfully to 'Schedule 1:1' and Firebase.
         </div>
       </div>
 
-      <!-- remove time slot CTA toast notification -->
+      <!-- ARE YOU SURE? remove time slot CTA toast notification -->
       <div id="remove-slot" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <strong class="me-auto">Are you sure?</strong>
@@ -297,6 +298,29 @@
           The time slot was successfully removed from Firebase.
         </div>
       </div>
+
+      <!-- confirm session toast -->
+      <div id="confirm-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Session confirmed</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The session has been successfully confirmed and added to your 'Booked sessions' tab.
+        </div>
+      </div>
+
+      <!-- Cancel session toast -->
+      <div id="cancel-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Session cancelled</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The session was successfully removed from Firebase.
+        </div>
+      </div>
+
 
       <!-- failure toast notification -->
       <div id="firebase-error-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -362,7 +386,7 @@
   </div>
 
   <script type="module">
-    import { fbDB } from "./js/firebase.js"
+    import { fbDB } from "./js/firebase.js";
     window.fbDB = fbDB;
   </script>
 
@@ -532,6 +556,7 @@
     dateInput.addEventListener('input', checkFormCompletion);
     timeInput.addEventListener('input', checkFormCompletion);
 
+
     // add event listener to the "Add availability" button
     document.getElementById('addAvailabilityBtn').addEventListener('click', async function () {
       const selectedDate = document.getElementById('txtDate').value;
@@ -539,76 +564,70 @@
       const selectedDuration = document.getElementById('duration').value;
 
       if (!selectedDate || !selectedTime) {
-        const alertContainer = document.querySelector("#alert");
-        const showAlert = `
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-              <div> Please choose both date and time. </div>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-        alertContainer.innerHTML = ''; // clear any previous alerts
-        alertContainer.insertAdjacentHTML('beforeend', showAlert);
+        showAlert("Please choose both date and time.", "warning");
         return;
       }
 
-      // initialise availability list for the tutor if not already created
-      if (!tutorAvailability[loggedInTutor]) {
-        tutorAvailability[loggedInTutor] = {};
+      const selectedStartTime = new Date(`${selectedDate}T${selectedTime}`).getTime();
+      const durationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[selectedDuration];
+      const selectedEndTime = selectedStartTime + durationInMinutes * 60000; // milliseconds
+
+      // prevent adding a date in the past
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // set todays date to midnight for accurate comparison
+      const selectedDateOnly = new Date(selectedDate);
+
+      if (selectedDateOnly < today) {
+        showAlert("You cannot add a time slot in the past. Please choose a valid future date.", "danger");
+        return; // stop further processing if the selected date is in the past
       }
 
-      // check for duplicate slot
+      // define systemOptions to retrieve the time zone information
+      const systemOptions = Intl.DateTimeFormat().resolvedOptions();
+
+      // check for conflicts in booked sessions
+      const bookedSessionsSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once('value');
+      const existingBookings = bookedSessionsSnapshot.val() || {}; // ensures existingBookings is an object
+
+      const hasBookingConflict = existingBookings && Object.values(existingBookings).some(booking => {
+        const bookingStartTime = new Date(`${booking.date}T${booking.time}`).getTime();
+        const bookingDurationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[booking.duration];
+        const bookingEndTime = bookingStartTime + bookingDurationInMinutes * 60000;
+
+        return (selectedStartTime < bookingEndTime && selectedEndTime > bookingStartTime);
+      });
+
+      if (hasBookingConflict) {
+        showAlert("This time slot is already booked by another student.", "danger");
+        return; // prevent further processing if a conflict is detected
+      }
+
+      // check for duplicate slot in availability
+      tutorAvailability[loggedInTutor] = tutorAvailability[loggedInTutor] || {}; // ensure it's defined
       const isDuplicate = Object.values(tutorAvailability[loggedInTutor]).some(slot =>
         slot.date === selectedDate && slot.time === selectedTime
       );
 
       if (isDuplicate) {
-        const alertContainer = document.querySelector("#alert");
-        const showAlert = `
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div>This time slot has already been added. Please choose another one.</div>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>`;
-        alertContainer.innerHTML = ''; // clear any previous alerts
-        alertContainer.insertAdjacentHTML('beforeend', showAlert);
+        showAlert("This time slot has already been added. Please choose another one.", "danger");
         return;
       }
 
-      // convert selected time to a timestamp
-      const selectedStartTime = new Date(`${selectedDate}T${selectedTime}`).getTime();
-      const durationInMinutes = {
-        '15 Mins': 15,
-        '30 Mins': 30,
-        '1 Hour': 60,
-      }[selectedDuration];
-      const selectedEndTime = selectedStartTime + durationInMinutes * 60000; // convert minutes to milliseconds
-
-      // check for time conflicts with existing slots
+      // check for time conflicts with other availability slots
       const hasConflict = Object.values(tutorAvailability[loggedInTutor]).some(slot => {
         const existingSlotStartTime = new Date(`${slot.date}T${slot.time}`).getTime();
-        const existingDurationInMinutes = {
-          '15 Mins': 15,
-          '30 Mins': 30,
-          '1 Hour': 60,
-        }[slot.duration];
+        const existingDurationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[slot.duration];
         const existingSlotEndTime = existingSlotStartTime + existingDurationInMinutes * 60000;
 
-        // check if the selected slot overlaps with the existing slot
         return (selectedStartTime < existingSlotEndTime && selectedEndTime > existingSlotStartTime);
       });
 
       if (hasConflict) {
-        const alertContainer = document.querySelector("#alert");
-        const showAlert = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              <div> The selected time slot overlaps with an existing one. Please choose a different time. </div>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-        alertContainer.innerHTML = ''; // clear any previous alerts
-        alertContainer.insertAdjacentHTML('beforeend', showAlert);
+        showAlert("The selected time slot overlaps with an existing one. Please choose a different time.", "danger");
         return;
       }
 
-      // create the new availability slot object
-      const systemOptions = new Intl.DateTimeFormat().resolvedOptions(); // define systemOptions here
+      // proceed to add availability if all checks are passed
       const newSlot = {
         date: selectedDate,
         time: selectedTime,
@@ -616,39 +635,35 @@
         timezone: systemOptions.timeZone
       };
 
-      // save the availability to firebase
-      const tutorRef = fbDB.ref(`tutors/${tutorId}/availability`).push();  // create a unique key for the new availability
+      const tutorRef = fbDB.ref(`tutors/${tutorId}/availability`).push();
+
       try {
         await tutorRef.set(newSlot);
-
-        // add the new slot to the local availability list
         tutorAvailability[loggedInTutor][tutorRef.key] = newSlot;
-
-        console.log("Time slot added to Firebase under the tutor's recordset");
+        updateAvailabilityTable();
 
         // show success toast
         const toastEl = document.getElementById('booked-session');
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
-
-      } catch (e) {
-        console.error("Error adding to Firebase: ", e);
-        showFirebaseErrorToast(); // show the error toast on failure
+      } catch (error) {
+        console.error("Error adding to Firebase:", error);
+        const toastEl = document.getElementById('firebase-error-toast');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
       }
-
-      // update the table UI
-      updateAvailabilityTable();
 
       // clear form fields after adding availability
       document.getElementById('txtDate').value = '';
       document.getElementById('timePicker').value = '';
-      document.getElementById('duration').value = '15 Mins'; // reset to default value
+      document.getElementById('duration').value = '15 Mins'; // Reset to default value
     });
+
 
     async function updateAvailabilityTable() {
       const tableBody = document.querySelector('.sessionTable');
       const availability = tutorAvailability[loggedInTutor] || {};
-      const today = new Date(); // get today's date
+      const today = new Date(); // get todays date
 
       tableBody.innerHTML = ''; // clear previous entries
 
@@ -944,47 +959,64 @@
       }
     }
 
-    // confirm requested session
+
     async function confirmSession(slotId) {
       try {
-        // fetch the session data from requestedSessions in Firebase
         const sessionSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).once('value');
         const sessionData = sessionSnapshot.val();
 
-        // check if sessionData exists before proceeding
         if (sessionData) {
-          // set the session status to 'booked'
-          sessionData.status = 'booked';
+          const selectedDate = sessionData.date;
+          const selectedTime = sessionData.time;
+          const selectedDuration = sessionData.duration;
 
-          // move the session data to bookedSessions in Firebase
+          const selectedStartTime = new Date(`${selectedDate}T${selectedTime}`).getTime();
+          const durationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[selectedDuration];
+          const selectedEndTime = selectedStartTime + durationInMinutes * 60000;
+
+          // check for existing bookings at this time
+          const bookedSessionsSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once('value');
+          const existingBookings = bookedSessionsSnapshot.val() || {};
+
+          const hasBookingConflict = Object.values(existingBookings).some(booking => {
+            const bookingStartTime = new Date(`${booking.date}T${booking.time}`).getTime();
+            const bookingDurationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[booking.duration];
+            const bookingEndTime = bookingStartTime + bookingDurationInMinutes * 60000;
+
+            return (selectedStartTime < bookingEndTime && selectedEndTime > bookingStartTime);
+          });
+
+          if (hasBookingConflict) {
+            showAlert("This session overlaps with another booking and cannot be confirmed.", "danger");
+            return;
+          }
+
+          // proceed to confirm booking if no conflicts exist
+          sessionData.status = "booked";
           const bookedSessionRef = fbDB.ref(`tutors/${tutorId}/bookedSessions`).push();
           await bookedSessionRef.set(sessionData);
-
-          // remove the session from requestedSessions in Firebase
           await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
 
-          // attempt to remove from global sessionRequests, if sessionRequestId exists
           const sessionRequestId = sessionData.sessionRequestId;
           if (sessionRequestId) {
             await fbDB.ref(`sessionRequests/${sessionRequestId}`).remove();
-            console.log('Session removed from global sessionRequests.');
-          } else {
-            console.warn('sessionRequestId is missing; unable to remove from sessionRequests.');
           }
 
-          console.log('Session confirmed, moved to bookedSessions, and removed from sessionRequests.');
-          // update the tables to reflect the change
           updateRequestedTable();
           updateBookedTable();
+
+          // show confirmation toast
+          const toastEl = document.getElementById('confirm-toast');
+          const toast = new bootstrap.Toast(toastEl);
+          toast.show();
         } else {
-          console.warn('Session data not found in requestedSessions.');
+          console.warn("Session data not found in requestedSessions.");
         }
       } catch (error) {
-        console.error('Error confirming session:', error);
+        console.error("Error confirming session:", error);
       }
     }
 
-    // cancel requested session
     async function cancelRequestedSession(slotId) {
       try {
         // fetch session data from requestedSessions to get the sessionRequestId
@@ -998,16 +1030,19 @@
             // remove the session from the global sessionRequests node
             await fbDB.ref(`sessionRequests/${sessionRequestId}`).remove();
             console.log(`Session with ID ${sessionRequestId} removed from global sessionRequests.`);
-          } else {
-            console.warn("No sessionRequestId found for this session; skipping removal from sessionRequests.");
           }
 
           // remove session from the tutors requestedSessions in Firebase
           await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
-          console.log('Requested session cancelled and removed from tutor\'s requestedSessions.');
+          console.log('Requested session cancelled and removed from tutors requestedSessions.');
 
           // update requested sessions table
           updateRequestedTable();
+
+          // show cancellation toast
+          const toastEl = document.getElementById('cancel-toast');
+          const toast = new bootstrap.Toast(toastEl);
+          toast.show();
         } else {
           console.warn('Session data not found in requestedSessions.');
         }
@@ -1085,23 +1120,23 @@
           });
           bookedCalendar.render();
         } else {
-          // Refresh booked sessions if switching back to calendar
+          // refresh booked sessions if switching back to calendar
           bookedCalendar.getEvents().forEach(booked => booked.remove());
           fetchBookedSessions().forEach(booked => bookedCalendar.addEvent(booked));
         }
       } else {
-        // Switch back to table view
+        // switch back to table view
         bookedTableView.style.display = 'block';
         bookedCalendarView.style.display = 'none';
         toggleLabel.textContent = 'Calendar view';
       }
     });
 
-    // fetch BOOKED sessions for FullCalendar from the table
+    // fetch BOOKED sessions from the table
     function fetchBookedSessions() {
       const rows = document.querySelectorAll('.bookedTable tr');
       const sessions = [];
-      const now = new Date(); // Get the current date and time
+      const now = new Date(); // get the current date and time
 
       rows.forEach(row => {
         const cells = row.getElementsByTagName('td');
@@ -1112,16 +1147,16 @@
           const timezone = cells[3].textContent.trim();
           const studentName = cells[4].textContent.trim();
 
-          // Log each row to ensure data is being picked up correctly
-          console.log('Row Data:', { date, time, duration, timezone, studentName });
+          // log each row to ensure data is being picked up correctly
+          console.log('Booked row data:', { date, time, duration, timezone, studentName });
 
-          // Safeguard for missing critical row data
+          // safeguard for missing critical row data
           if (!date || !time || !studentName) {
-            console.warn('Missing critical data for this row. Skipping.');
-            return; // Skip this row if any critical data is missing
+            console.warn('Missing critical data for this booked row. Skipping.');
+            return; // skip this row if any critical data is missing
           }
 
-          // Convert date from DD/MM/YYYY to YYYY-MM-DD
+          // convert date from DD/MM/YYYY to YYYY-MM-DD
           const [day, month, year] = date.split('/');
           date = `${year}-${month}-${day}`;
 
@@ -1132,23 +1167,23 @@
 
           const session = bookedSessions[loggedInTutor][sessionId];
 
-          // Log the session object to debug any potential issues
+          // log the session object to debug any potential issues
           console.log('Booked session data:', session);
 
-          // Safeguard for missing session object
+          // safeguard for missing session object
           if (!sessionId || !session) {
             console.warn(`No booked session found for a session with date: ${date}, time: ${time}, and student: ${studentName}`);
-            return; // Skip this entry if session data is missing
+            return; // skip this entry if session data is missing
           }
 
-          const studentEmail = session.studentEmail || 'Email not provided'; // Safeguard against undefined email
+          const studentEmail = session.studentEmail || 'Email not provided'; // safeguard against undefined email
 
           const dateTimeString = `${date}T${time}`;
           const startDateTime = new Date(dateTimeString);
 
-          // Skip past sessions
+          // skip past sessions
           if (startDateTime < now) {
-            return; // Skip past events
+            return; // skip past events
           }
 
           if (isNaN(startDateTime)) {
@@ -1165,11 +1200,11 @@
             endDateTime.setHours(endDateTime.getHours() + hours);
           }
 
-          // Convert startDateTime to 24-hour format for the title
+          // convert startDateTime to 24-hour format for the title
           const formattedStartTime = startDateTime.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false // Ensures 24-hour format
+            hour12: false // ensures 24-hour format
           });
 
           const title = `Session (${duration}) - ${formattedStartTime}`;
@@ -1183,16 +1218,15 @@
               duration: duration,
               timezone: timezone,
               studentName: studentName,
-              studentEmail: studentEmail // Add email to session properties, defaulting if missing
+              studentEmail: studentEmail // add email to session properties, defaulting if missing
             }
           });
         }
       });
 
-      console.log('Sessions:', sessions); // Log all sessions before returning
+      console.log('Sessions:', sessions); // log all sessions before returning
       return sessions;
     }
-
   </script>
 
   <script>
@@ -1205,12 +1239,12 @@
       const toggleLabelRequested = document.getElementById('toggleLabel-requested');
 
       if (this.checked) {
-        // Switch to calendar view for requested sessions
+        // switch to calendar view for requested sessions
         requestedTableView.style.display = 'none';
         requestedCalendarView.style.display = 'block';
         toggleLabelRequested.textContent = 'Table view';
 
-        // Initialise the calendar if not already initialised
+        // initialise the calendar if not already initialised
         if (!requestedCalendar) {
           requestedCalendar = new FullCalendar.Calendar(document.getElementById('calendar-requested'), {
             initialView: 'dayGridMonth',
@@ -1247,23 +1281,23 @@
           });
           requestedCalendar.render();
         } else {
-          // Refresh requested sessions if switching back to calendar
+          // refresh requested sessions if switching back to calendar
           requestedCalendar.getEvents().forEach(requested => requested.remove());
           fetchRequestedSessions().forEach(requested => requestedCalendar.addEvent(requested));
         }
       } else {
-        // Switch back to table view
+        // switch back to table view
         requestedTableView.style.display = 'block';
         requestedCalendarView.style.display = 'none';
         toggleLabelRequested.textContent = 'Calendar view';
       }
     });
 
-    // fetch REQUESTED sessions for FullCalendar from the table
+    // fetch REQUESTED sessions from the table
     function fetchRequestedSessions() {
       const rows = document.querySelectorAll('.requestedTable tr');
       const sessions = [];
-      const now = new Date(); // Get the current date and time
+      const now = new Date(); // get the current date and time
 
       rows.forEach(row => {
         const cells = row.getElementsByTagName('td');
@@ -1274,17 +1308,17 @@
           const timezone = cells[3].textContent.trim();
           const studentName = cells[4].textContent.trim();
 
-          // Safeguard for missing critical row data
+          // safeguard for missing critical row data
           if (!date || !time || !studentName) {
-            console.warn('Missing critical data for this row. Skipping.');
-            return; // Skip this row if any critical data is missing
+            console.warn('Missing critical requested data for this row. Skipping.');
+            return; // skip this row if any critical data is missing
           }
 
-          // Convert date from DD/MM/YYYY to YYYY-MM-DD
+          // convert date from DD/MM/YYYY to YYYY-MM-DD
           const [day, month, year] = date.split('/');
           date = `${year}-${month}-${day}`;
 
-          // Find the matching session ID
+          // find the matching session ID
           const sessionId = Object.keys(requestedSessions[loggedInTutor]).find(id => {
             const session = requestedSessions[loggedInTutor][id];
             return session.date === date && session.time === time && session.studentName === studentName;
@@ -1294,29 +1328,29 @@
 
           if (!sessionId || !session) {
             console.warn(`No requested session found for session with date: ${date}, time: ${time}, and student: ${studentName}`);
-            return; // Skip this entry if session data is missing
+            return; // skip this entry if session data is missing
           }
 
-          // Ensure requestedSessions exists and is initialized properly
+          // ensure requestedSessions exists and is initialised properly
           if (!requestedSessions || !requestedSessions[loggedInTutor]) {
             console.warn('requestedSessions or requestedSessions[loggedInTutor] is not defined.');
-            return sessions; // Return an empty session list if none found
+            return sessions; // return an empty session list if none found
           }
 
-          // Check if requestedSessions[loggedInTutor] has any sessions
+          // check if requestedSessions[loggedInTutor] has any sessions
           if (Object.keys(requestedSessions[loggedInTutor]).length === 0) {
             console.warn('No requested sessions found for the logged-in tutor.');
             return sessions; // Return an empty session list if none found
           }
 
 
-          const studentEmail = session.studentEmail || 'Email not provided'; // Safeguard against undefined email
+          const studentEmail = session.studentEmail || 'Email not provided'; // safeguard against undefined email
           const dateTimeString = `${date}T${time}`;
           const startDateTime = new Date(dateTimeString);
 
-          // Skip past sessions
+          // skip past sessions
           if (startDateTime < now) {
-            return; // Skip past events
+            return; // skip past events
           }
 
           const endDateTime = new Date(startDateTime);
@@ -1328,11 +1362,11 @@
             endDateTime.setHours(endDateTime.getHours() + hours);
           }
 
-          // Convert startDateTime to 24-hour format for the title
+          // convert startDateTime to 24-hour format for the title
           const formattedStartTime = startDateTime.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
-            hour12: false // Ensures 24-hour format
+            hour12: false // ensures 24-hour format
           });
 
           const title = `Session (${duration}) - ${formattedStartTime}`;
@@ -1346,13 +1380,13 @@
               duration: duration,
               timezone: timezone,
               studentName: studentName,
-              studentEmail: studentEmail // Add email to session properties, defaulting if missing
+              studentEmail: studentEmail // add email to session properties, defaulting if missing
             }
           });
         }
       });
 
-      // console.log('Requested sessions:', sessions); // Log all sessions before returning
+      // console.log('Requested sessions:', sessions); // log all sessions before returning
       return sessions;
     }
   </script>
