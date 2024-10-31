@@ -753,6 +753,7 @@
       tableBody.innerHTML = ''; // clear previous entries
 
       const bookedTab = document.getElementById('booked-tab');
+      const calendarToggle = document.getElementById('switch-booked');
       let bookedCount = 0;
 
       // iterate through the sessions and handle each one
@@ -825,6 +826,9 @@
       // if no future sessions exist, show this message
       if (bookedCount === 0) {
         tableBody.innerHTML = '<tr><td colspan="6"> There aren\'t any booked sessions to display. </td></tr>';
+        calendarToggle.classList.add('hidden'); // hide the toggle using the hidden class
+      } else {
+        calendarToggle.classList.remove('hidden'); // show the toggle if future sessions exist
       }
     }
 
@@ -870,6 +874,8 @@
       const tableBody = document.querySelector('.requestedTable');
       tableBody.innerHTML = ''; // clear previous entries
       const today = new Date(); // get today's date
+
+      const calendarToggle = document.getElementById('switch-requested');
 
       try {
         // fetch requested sessions from Firebase
@@ -948,6 +954,9 @@
         // if no future sessions exist, show this message
         if (!hasFutureSessions) {
           tableBody.innerHTML = '<tr><td colspan="6"> There aren\'t any requested sessions to display. </td></tr>';
+          calendarToggle.classList.add('hidden'); // hide the toggle using the hidden class
+        } else {
+          calendarToggle.classList.remove('hidden'); // show the toggle if future sessions exist
         }
 
         // update the tab label with the count of remaining future sessions
@@ -958,7 +967,6 @@
         console.error('Error fetching requested sessions:', error);
       }
     }
-
 
     async function confirmSession(slotId) {
       try {

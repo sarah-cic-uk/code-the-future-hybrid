@@ -111,6 +111,10 @@ input#toggleViewSwitch-booked, label#toggleLabel-booked,
 input#toggleViewSwitch-requested, label#toggleLabel-requested {
 	cursor: pointer;
 }
+#switch-requested.d-flex.hidden,
+#switch-booked.d-flex.hidden {
+    display: none !important;
+}
 #switch-booked.booked, 
 #switch-requested.requested  {
 	width: auto !important;
