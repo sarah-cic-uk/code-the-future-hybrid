@@ -6,42 +6,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC">
   <meta name="description" content="Code the Future free HTML/CSS coding bootcamp">
-  <meta name="author" content="Sarah Neenan">
+
   <title>Code the Future</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
   <script src="./js/app.js"></script>
-  <!-- <script  src="./js/imports.js"></script> -->
+
   <script type="module" src="./js/firebase.js"></script>
 
   <style>
-    .row>* {
-      padding: 0 !important;
+    body {
+      background-color: #f4f4f9;
     }
 
     form {
       width: 100%;
     }
 
-    legend {
-      display: block;
-      text-indent: 100%;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-
     textarea {
       width: 100%;
       padding: 12px 20px;
-      margin: 8px 0;
       box-sizing: border-box;
-      border-radius: 0.375rem;
     }
 
     textarea::placeholder {
       opacity: 0.5;
       color: #212529;
+    }
+
+    .rounded-circle {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .bordered-section {
+      border: 1px solid rgba(206, 212, 218, 0.42);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .profile-avatar {
+      border: 0.75px solid rgba(206, 212, 218, 0.42);
+      border-radius: 50%;
+      padding: 5px;
+      background: white;
+    }
+
+    .text h1#profileHeading {
+      padding-top: 0;
+      margin: 0;
+    }
+
+    .row.align-items-start {
+      align-items: start;
     }
   </style>
 </head>
@@ -106,72 +124,142 @@
       </div>
     </nav>
 
-    <div class="container-fluid g-0 text-center">
-      <div class="page-content p-4">
-        <h1 id="profileHeading" class="p-2">Profile</h1>
-        <div>
-          <p>
-            Let us know more about yourself, your aspirations and goals so
-            that the tutors and others from your Code the Future cohort can get to know
-            you better.
-          </p>
-        </div>
+    <div class="container-fluid px-5" style="background-color:white; width: 80%; padding-bottom: 3rem">
+      <main id="main" class="col py-3">
 
         <div class="container">
-          <div class="row">
-
-            <div class="col col-md-6">
-              <form id="profile-bio">
-                <fieldset>
-                  <legend>Profile bio</legend>
-                  <label class="profile-question text-start" for="who">Tell us who you are:</label>
-                  <textarea id="who" name="who" placeholder="Let us know more about yourself."></textarea>
-
-                  <label class="profile-question text-start" for="what">What are you hoping to learn from this
-                    course?</label>
-                  <textarea id="what" name="what"
-                    placeholder="Let us know what made you sign up and what you would like to achieve from it."></textarea>
-
-                  <label class="profile-question text-start" for="career">What are your career aspirations?</label>
-                  <textarea id="career" name="career"
-                    placeholder="Let us know where you would like to see yourself in the future, what fascinating path could your career journey lead you?"></textarea>
-
-                  <div class="row" style="width:100%; margin:0 !important;">
-                    <div class="text-end" style="padding:0 !important;">
-                      <input type="reset" value="Reset changes" id="reset" class="btn nav-link" title="Reset changes" style="margin-right:1rem;">
-
-                      <input type="submit" value="Save profile" id="submit" class="btn btn-block fa-lg button-style"
-                        title="Save profile">
-                    </div>
-                  </div>
-                </fieldset>
-              </form>
+          <div class="row align-items-start my-4">
+            <div class="col-lg-9">
+              <div class="text">
+                <h1 id="profileHeading" class="h1"></h1>
+                <h2 class="h4">Let us know more about yourself</h2>
+                <p>
+                  What are your aspirations and goals so that the tutors and other students from your Code the Future
+                  cohort
+                  can get to know you better.
+                </p>
+              </div>
             </div>
 
+            <div class="col-lg-3 text-center">
+              <div class="p-3 bordered-section" style="background-color: rgb(49 35 140 / 6%);">
+                <div class="d-flex justify-content-center mb-4">
+                  <img id="selectedAvatar" class="rounded-circle profile-avatar" alt="Cohort avatar"
+                    style="max-width:200px;" />
+                </div>
+                <div class="text-center">
+                  <!-- Button to trigger file input -->
+                  <button type="button" class="btn btn-rounded text-white" style="background-color: #1d0c58;"
+                    onclick="document.getElementById('formFile').click()" title="Upload a new profile image">
+                    Update profile image
+                  </button>
 
-            <div class="col col-md-6">
-              <div class="d-flex justify-content-center mb-4" style="padding-top:5rem !important;">
-                <img id="selectedAvatar" class="rounded-circle"
-                  style="width: 200px; height: 200px; object-fit: cover; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)"
-                  alt="Student profile avatar">
-              </div>
+                  <!-- Hidden file input -->
+                  <input type="file" id="formFile" style="display: none;"
+                    onchange="displaySelectedImage(event, 'selectedAvatar')" />
 
-              <div class="text-center">
-                <div data-mdb-ripple-init class="btn"
-                  style="background-color: #1d0c58; color: white; padding:0 1rem 1rem 1rem;">
-                  <label class="form-label text-white mb-1" for="formFile">Update profile picture</label>
-                  <input class="form-control" type="file" id="formFile"
-                    onchange="displaySelectedImage(event, 'selectedAvatar')" accept=".png,.jpg,.jpeg,.webp,image/png">
+                  <!-- Display the chosen file name here -->
+                  <span id="fileNameDisplay" class="d-block mt-2 text-muted" style="font-size: 0.9em;"></span>
                 </div>
               </div>
             </div>
-
           </div>
+
+          <!-- Form -->
+          <form id="profile-bio">
+            <div class="row">
+              <div class="col-lg-6 mb-4">
+                <!-- Personal info -->
+                <fieldset class="p-3 bordered-section" style="background-color: rgb(49 35 140 / 6%);">
+                  <legend class="h5" style="padding-top: 0 !important">Personal information</legend>
+
+                  <div class="form-group mt-3">
+                    <label class="profile-question text-start form-label" for="who">Tell us who you are</label>
+                    <div class="input-group">
+                      <textarea rows="3" class="form-control" id="who" name="who"
+                        placeholder="Let us know more about yourself."></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group mt-3">
+                    <label class="profile-question text-start form-label" for="what">What are you hoping to learn from
+                      this course?</label>
+                    <div class="input-group">
+                      <textarea rows="3" class="form-control" id="what" name="what"
+                        placeholder="Let us know what made you sign up and what you would like to achieve from it."></textarea>
+                    </div>
+                  </div>
+
+                  <div class="form-group mt-3">
+                    <label class="profile-question text-start form-label" for="career">What are your career
+                      aspirations?</label>
+                    <div class="input-group">
+                      <textarea rows="3" class="form-control" id="career" name="career"
+                        placeholder="Let us know where you would like to see yourself in the future."></textarea>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+
+              <div class="col-lg-6 mb-4">
+                <!-- Showcase project -->
+                <fieldset class="p-3 bordered-section" style="background-color: rgb(29 242 221 / 9%);">
+                  <legend class="h5" style="padding-top: 0 !important">Showcase project</legend>
+
+                  <div class="form-group mt-3">
+                    <label class="profile-question text-start form-label" for="gitUrl">Published Git URL</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                      <input type="text" class="form-control" id="gitUrl" name="gitUrl"
+                        placeholder="Enter your Git URL" />
+                      <button type="button" class="btn btn-outline-secondary" onclick="testGitUrl()"
+                        title="Test the Git URL">
+                        Test URL
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group mt-3">
+                    <label class="profile-question text-start form-label" for="gitTitle">Git Project Title</label>
+                    <div class="input-group">
+                      <span class="input-group-text"><i class="bi bi-journal-code"></i></span>
+                      <input type="text" class="form-control" id="gitTitle" name="gitTitle"
+                        placeholder="Enter the title of your Git project" />
+                    </div>
+                  </div>
+
+                  <div class="form-group mt-4">
+                    <label class="profile-question text-start form-label">Would you like to add this project to the
+                      showcase page?</label>
+                    <div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="showcase" id="showcaseYes" value="yes" />
+                        <label class="form-check-label" for="showcaseYes">Yes</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="showcase" id="showcaseNo" value="no"
+                          checked />
+                        <label class="form-check-label" for="showcaseNo">No</label>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+
+
+            <div class="row justify-content-center mt-4 mb-4">
+              <div class="CTA-group centered">
+                <input type="reset" value="Clear form" id="reset" class="btn nav-link" title="Clear all form fields" />
+                <input type="submit" value="Save profile" id="submit" class="btn button-generic primary"
+                  title="Save your profile changes" />
+              </div>
+            </div>
+          </form>
         </div>
 
-      </div>
+      </main>
     </div>
-
 
     <!-- toast notifications -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -215,9 +303,23 @@
           Your profile picture was not updated. Please try again!
         </div>
       </div>
+
+      <div id="invalid_url_toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Oh no!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          Your Git URL is not valid. Please try again!
+        </div>
+      </div>
     </div>
 
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
 
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js";
@@ -236,22 +338,104 @@
     const who = document.getElementById('who');
     const what = document.getElementById('what');
     const career = document.getElementById('career');
+    const form = document.getElementById('profile-bio');
 
+    // toast notifications
+    const successToast = new bootstrap.Toast(document.getElementById('update_success'));
+    const errorToast = new bootstrap.Toast(document.getElementById('update_error'));
+    const avatarSuccessToast = new bootstrap.Toast(document.getElementById('avatar-update_success'));
+    const avatarErrorToast = new bootstrap.Toast(document.getElementById('avatar-update_error'));
+    const invalidUrlToast = new bootstrap.Toast(document.getElementById('invalid_url_toast'));
 
     window.onload = (event) => {
-
       auth(
         document.querySelector(".loginBtn"),
         document.querySelector(".profileBtn"),
         document.querySelector("#sessionsLink")
       );
 
-      const user = localStorage.getItem("displayName");
-
-      document.getElementById("profileHeading").innerHTML = `${user}'s Profile`;
+      const userDisplayName = localStorage.getItem("displayName");
+      document.getElementById("profileHeading").textContent = `${userDisplayName}'s Profile`;
 
       getProfile();
+
+      form.addEventListener('submit', updateProfile);
     };
+
+    function displaySelectedImage(event, elementId) {
+      const selectedImage = document.getElementById(elementId);
+      const fileInput = event.target;
+      const fileNameDisplay = document.getElementById('fileNameDisplay');
+      currentUser = window.fbAuth.currentUser;
+
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        const fileName = fileInput.files[0].name;
+        fileNameDisplay.textContent = `Selected file: ${fileName}`;
+
+        reader.onload = function (e) {
+          selectedImage.src = e.target.result;
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+
+        const storageRef = window.fbStorage.ref("profilePics/" + currentUser.uid);
+        storageRef.put(fileInput.files[0]).then(() => {
+          avatarSuccessToast.show();
+        }).catch((error) => {
+          console.error("Image upload failed:", error);
+          avatarErrorToast.show();
+        });
+      } else {
+        avatarErrorToast.show();
+      }
+    }
+
+    async function getProfile() {
+      window.fbAuth.onAuthStateChanged(async (user) => {
+        if (user) {
+          currentUser = user;
+          const profileData = await window.fbDB.ref('users/' + currentUser.uid + '/profile').once('value');
+          const profileValues = profileData.val() || {};
+
+          who.value = profileValues.about || '';
+          what.value = profileValues.learning || '';
+          career.value = profileValues.aspirations || '';
+          document.getElementById('gitUrl').value = profileValues.siteURL || '';
+          document.getElementById('gitTitle').value = profileValues.siteTitle || '';
+          document.getElementById(profileValues.siteFlag === "yes" ? 'showcaseYes' : 'showcaseNo').checked = true;
+
+          const profilePicElement = document.getElementById("selectedAvatar");
+          const pathReference = await window.fbStorage.ref("profilePics/" + currentUser.uid);
+          fetchMedia(pathReference, profilePicElement);
+        } else {
+          console.error('User data not found');
+        }
+      });
+    }
+
+    async function updateProfile(event) {
+      event.preventDefault();
+
+      const profileValues = {
+        about: who.value,
+        learning: what.value,
+        aspirations: career.value,
+        siteURL: document.getElementById('gitUrl').value,
+        siteTitle: document.getElementById('gitTitle').value,
+        siteFlag: document.querySelector('input[name="showcase"]:checked').value
+      };
+
+      const updates = {};
+      updates['users/' + currentUser.uid + '/profile'] = profileValues;
+
+      try {
+        await window.fbDB.ref().update(updates);
+        successToast.show();
+      } catch (err) {
+        console.error("Profile update failed:", err);
+        errorToast.show();
+      }
+    }
 
     function createPath(options) {
       window.location = getPath() + options;
@@ -261,86 +445,55 @@
     function logUserOut(event) {
       logout(window.fbAuth);
     }
-
-    // toast notifications - successful bookings
-    const success = document.getElementById('update_success');
-    const error = document.getElementById('update_error');
-    const avatar_success = document.getElementById('avatar-update_success');
-    const avatar_error = document.getElementById('avatar-update_error');
-
-
-    function displaySelectedImage(event, elementId) {
-      const selectedImage = document.getElementById(elementId);
-      const fileInput = event.target;
-      currentUser = window.fbAuth.currentUser;
-
-      if (fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-          selectedImage.src = e.target.result;
-        };
-
-        reader.readAsDataURL(fileInput.files[0]);
-        const storageRef = window.fbStorage.ref("profilePics/" + currentUser.uid);
-        storageRef.put(fileInput.files[0]);
-
-        const toast = new bootstrap.Toast(avatar_success);
-        toast.show();
-      } else {
-        const toast = new bootstrap.Toast(avatar_error);
-        toast.show();
-      }
-    }
-
-    async function getProfile() {
-      window.fbAuth.onAuthStateChanged(async function (user) {
-        if (user) {
-          currentUser = window.fbAuth.currentUser;
-          const profileData = await window.fbDB.ref('users/' + currentUser.uid + '/profile').once('value')
-          const profileValues = profileData.val();
-
-          who.innerHTML = profileValues.about
-          what.innerHTML = profileValues.learning
-          career.innerHTML = profileValues.aspirations
-          const profilePicElement = document.getElementById("selectedAvatar");
-          const pathReference = await window.fbStorage.ref("profilePics/" + currentUser.uid);
-
-          if (pathReference) {
-            fetchMedia(pathReference, profilePicElement);
-          } else {
-            profilePicElement.setAttribute('src', 'https://mdbootstrap.com/img/Photos/Others/placeholder-avatar.jpg');
-          }
-        } else {
-          console.err('ERROR: User data not found')
-        }
-      })
-    }
-
-    let form = document.getElementById('profile-bio');
-
-    async function updateProfile(event) {
-      event.preventDefault();
-      let profileValues = {};
-      profileValues.about = who.value;
-      profileValues.learning = what.value;
-      profileValues.aspirations = career.value;
-
-      var updates = {};
-      updates['users/' + currentUser.uid + '/profile'] = profileValues;
-      try {
-        await window.fbDB.ref().update(updates);
-        const toast = new bootstrap.Toast(success);
-        toast.show();
-      } catch {
-        const toast = new bootstrap.Toast(error);
-        toast.show();
-      }
-    }
-
-    form.addEventListener('submit', updateProfile)
-
   </script>
+
+  <script>
+    function validateGitUrl(url) {
+      // regex for GitHub and GitHub Pages URLs, allowing without 'http' or 'https'
+      const regex = /^(https?:\/\/)?(www\.)?(([\w-]+\.github\.io\/?)([A-Za-z0-9._-]+\/?)?|github\.com\/[\w-]+\/[\w-]+\/?)$/;
+      return regex.test(url);
+    }
+
+    function testGitUrl() {
+      const gitUrlInput = document.getElementById('gitUrl');
+      let gitUrlValue = gitUrlInput.value.trim();
+      let formattedUrl = gitUrlValue;
+
+      // validate the Git URL, format it, and open in a new tab if valid
+      if (validateGitUrl(gitUrlValue)) {
+        if (!/^https?:\/\//i.test(gitUrlValue)) {
+          formattedUrl = 'https://' + gitUrlValue;
+        }
+        gitUrlInput.classList.remove('is-invalid');
+        window.open(formattedUrl, '_blank');
+      } else {
+        gitUrlInput.classList.add('is-invalid');
+        invalidUrlToast.show();
+      }
+    }
+
+    // ensure validation and strip protocol from the URL on form submit
+    document.getElementById('profile-bio').addEventListener('submit', function (event) {
+      const gitUrlInput = document.getElementById('gitUrl');
+      let gitUrlValue = gitUrlInput.value.trim();
+
+      // strip protocol if present because we dont want it in Firebase - it might be used on teh Showcase page with protocol it will break!
+      if (gitUrlValue.startsWith('http://') || gitUrlValue.startsWith('https://')) {
+        gitUrlValue = gitUrlValue.replace(/^https?:\/\//, '');
+        gitUrlInput.value = gitUrlValue; // set the stripped URL back in the input
+      }
+
+      // validate URL; prevent form submission if invalid
+      if (gitUrlValue && !validateGitUrl(gitUrlValue)) {
+        event.preventDefault();
+        gitUrlInput.classList.add('is-invalid');
+        invalidUrlToast.show();
+      } else {
+        gitUrlInput.classList.remove('is-invalid'); 
+      }
+    });
+  </script>
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
