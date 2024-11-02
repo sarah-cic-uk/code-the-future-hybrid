@@ -451,3 +451,18 @@ ul[id^=submenu] li {
   width: 100%;
   font-weight: bold;
 }
+
+#liveToast  {
+border: #c42031 3px solid;
+opacity: 1;
+background-color: #f8d7da;}
+
+#liveToast .btn-close {
+  float: right;
+  margin: 5px;
+  color: #d8447a;
+}
+
+#session-video, #tutor-avatar, .tutor-name {
+  display: none;
+}
