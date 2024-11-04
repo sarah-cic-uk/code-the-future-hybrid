@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+
+  <title>Code the Future</title>
+
+  <link rel="stylesheet" href="../styles/1on1.css" />
+
+  <!-- FullCalendar CSS & JS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="module" src="./js/firebase.js"></script>
+</head>
+
+<body>
+  <div class="page-content">
+
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#"
+          style="border-right: 2px solid #d9437a;padding-right: 10px;color: #1d0c59;">
+          <img src="../images/logo.png" height="60px" alt="CTF" />
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
+            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at CIC</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+          </div>
+
+          <div class="d-flex align-items-center">
+            <!-- Logged in Avatar -->
+            <div>
+              <p class="my-auto" id="profileName"></p>
+            </div>
+
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
+                  alt="Black and White Portrait of a Man" loading="lazy" />
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
+                </li>
+              </ul>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid px-5" style="background-color: white; width: 80%; padding-bottom: 5rem">
+      <section>
+        <p class="h1" style="padding-top: 3rem; font-weight: 900">
+          Manage 1:1 sessions
+        </p>
+        <p class="lead" style="padding-top: 10px">Provide support to our students that fits into your schedule</p>
+
+        <p>Your availability is as valuable as our students' success, so please manage your time slots carefully as they
+          are visible in real-time. If you're no longer available, be sure to cancel the slot—this responsibility is
+          <strong>yours</strong> alone.
+        </p>
+        <p>If a student has already booked a session and you need to make changes, contact them promptly to reschedule
+          or cancel. Clear communication builds trust and keeps everyone informed.</p>
+        <p>We appreciate your dedication and professionalism in giving up your own time to support our students.</p>
+      </section>
+
+      <ul class="nav nav-tabs" id="sessionTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="availability-tab" data-bs-toggle="tab" data-bs-target="#availability"
+            type="button" role="tab" aria-controls="availability" aria-selected="true">Availability</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="booked-tab" data-bs-toggle="tab" data-bs-target="#booked" type="button"
+            role="tab" aria-controls="booked" aria-selected="false">Booked sessions</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="request-tab" data-bs-toggle="tab" data-bs-target="#request" type="button"
+            role="tab" aria-controls="request" aria-selected="false">Requested sessions</button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="sessionTabContent">
+        <!-- Availability Tab -->
+        <div class="tab-pane fade show active" id="availability" role="tabpanel" aria-labelledby="availability-tab">
+          <section style="padding-top:3rem;">
+            <div class="row" style="margin:0 auto">
+              <div class="col-md-3">
+                <h6 style="margin-bottom:0; padding-bottom:0;"><label for="txtDate" class="form-label">Select
+                    date:</label></h6>
+                <input type="date" class="form-control" id="txtDate" />
+              </div>
+
+              <div class="col-md-3">
+                <h6 style="margin-bottom:0; padding-bottom:0;"><label for="timePicker" class="form-label">Select
+                    time:</label></h6>
+                <input type="time" class="form-control" id="timePicker" />
+              </div>
+
+              <div class="col-md-3">
+                <h6 style="margin-bottom:0; padding-bottom:0;"><label for="duration" class="form-label">Session
+                    duration:</label></h6>
+                <select class="form-control" id="duration">
+                  <option>15 Mins</option>
+                  <option>30 Mins</option>
+                  <option>1 Hour</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-primary" id="addAvailabilityBtn">Add availability</button>
+              </div>
+            </div>
+            <div class="alert-padding">
+              <div id="alert"></div>
+            </div>
+          </section>
+
+          <section>
+            <p class="h4" style="padding:0 0 0 0.75rem; font-weight: 600">
+              Your time slots
+            </p>
+
+            <div>
+              <table id="tutorTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="sessionTable">
+                  <!-- time slots will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- Booked sessions Tab -->
+        <div class="tab-pane fade" id="booked" role="tabpanel" aria-labelledby="booked-tab">
+          <section>
+            <p class="h4 d-flex" style="padding:2rem 0 0 0.75rem; font-weight: 600;">
+              Booked 1:1 sessions
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <p class="small" style="padding:0 0 0 0.75rem;">The following sessions are now booked with students.</p>
+
+              <div id="switch-booked" class="booked d-flex mb-1">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="toggleViewSwitch-booked">
+                  <label class="form-check-label" for="toggleViewSwitch-booked" id="toggleLabel-booked">Calendar
+                    view</label>
+                </div>
+              </div>
+            </div>
+
+            <div id="calendar-container-booked">
+              <div id="calendar-booked"></div>
+            </div>
+
+            <div id="bookedTableContainer">
+              <table id="bookedTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th>Student</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="bookedTable">
+                  <!-- booked sessions will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+
+        <!-- Request 1:1 session Tab -->
+        <div class="tab-pane fade" id="request" role="tabpanel" aria-labelledby="request-tab">
+          <section>
+            <p class="h4 d-flex" style="padding: 2rem 0 0 0.75rem; font-weight: 600">
+              Requested 1:1 sessions
+            </p>
+
+            <div class="d-flex justify-content-between align-items-center">
+              <p class="small" style="padding:0 0 0 0.75rem;">The following sessions have been requested by the
+                students, you need to confirm or cancel the session.</p>
+
+              <div id="switch-requested" class="requested d-flex mb-1">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="toggleViewSwitch-requested">
+                  <label class="form-check-label" for="toggleViewSwitch-requested" id="toggleLabel-requested">Calendar
+                    view</label>
+                </div>
+              </div>
+            </div>
+
+            <div id="calendar-container-requested">
+              <div id="calendar-requested"></div>
+            </div>
+
+            <div id="requestedTableContainer">
+              <table id="requestedTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th>Student</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="requestedTable">
+                  <!-- booked sessions will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+
+          </section>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- toast notifications -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+
+      <!-- success -->
+      <div id="booked-session" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Great news!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The time slot has been added successfully to 'Schedule 1:1' and Firebase.
+        </div>
+      </div>
+
+      <!-- ARE YOU SURE? remove time slot CTA toast notification -->
+      <div id="remove-slot" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Are you sure?</strong>
+        </div>
+
+        <div class="toast-body">
+          Do you want to remove this time slot?
+          <div class="mt-2 pt-2 border-top">
+            <button type="button" id="toast-yes" class="btn btn-primary btn-sm">Yes</button>
+            <button type="button" id="toast-cancel" class="btn btn-secondary btn-sm"
+              data-bs-dismiss="toast">Cancel</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- success removal toast notification -->
+      <div id="removed-session" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Great news!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The time slot was successfully removed from Firebase.
+        </div>
+      </div>
+
+      <!-- confirm session toast -->
+      <div id="confirm-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Session confirmed</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The session has been successfully confirmed and added to your 'Booked sessions' tab.
+        </div>
+      </div>
+
+      <!-- Cancel session toast -->
+      <div id="cancel-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Session cancelled</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          The session was successfully removed from Firebase.
+        </div>
+      </div>
+
+
+      <!-- failure toast notification -->
+      <div id="firebase-error-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <strong class="me-auto">Bad news!</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+          There was an error processing that request. Please try again.
+        </div>
+      </div>
+    </div>
+
+    <!-- bootstrap modal - booked session details -->
+    <div class="modal fade" id="bookedDetailsModal" tabindex="-1" aria-labelledby="bookedDetailsLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bookedDetailsLabel">Booked session: calendar entry</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Date:</strong> <span id="bookedDate"></span></p>
+            <p><strong>Start time:</strong> <span id="bookedStartTime"></span></p>
+            <p><strong>Duration:</strong> <span id="bookedDuration"></span></p>
+            <p><strong>Timezone:</strong> <span id="bookedTimezone"></span></p>
+            <p><strong>Student name:</strong> <span id="bookedStudent"></span></p>
+            <p><strong>Student email:</strong> <span><a id="bookedStudentEmail" href="" target="_blank"></a></span></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="modalClose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- bootstrap modal - requested session details -->
+    <div class="modal fade" id="requestedDetailsModal" tabindex="-1" aria-labelledby="requestedDetailsLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="requestedDetailsLabel">Requested session: calendar entry</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Date:</strong> <span id="requestedDate"></span></p>
+            <p><strong>Start time:</strong> <span id="requestedStartTime"></span></p>
+            <p><strong>Duration:</strong> <span id="requestedDuration"></span></p>
+            <p><strong>Timezone:</strong> <span id="requestedTimezone"></span></p>
+            <p><strong>Student name:</strong> <span id="requestedStudent"></span></p>
+            <p><strong>Student email:</strong> <span><a id="requestedStudentEmail" href="" target="_blank"></a></span>
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" id="modalClose" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import { fbDB } from "./js/firebase.js";
+    window.fbDB = fbDB;
+  </script>
+
+  <script>
+    window.onload = async function () {
+      const stylesheet = document.createElement("link");
+      stylesheet.rel = "stylesheet";
+      stylesheet.type = "text/css";
+      stylesheet.href = getPath() + "styles/mainStyle.css";
+      document.head.appendChild(stylesheet);
+
+      auth(
+        document.querySelector(".loginBtn"),
+        document.querySelector(".profileBtn"),
+        document.querySelector("#sessionsLink")
+      );
+
+      // render initial tables
+      updateAvailabilityTable();
+      updateBookedTable();
+
+      try {
+        // fetch availability
+        const availabilitySnapshot = await fbDB.ref(`tutors/${tutorId}/availability`).once('value');
+        if (availabilitySnapshot.exists()) {
+          tutorAvailability[loggedInTutor] = availabilitySnapshot.val() || {};
+        }
+
+        // fetch booked sessions
+        const bookedSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once('value');
+        if (bookedSnapshot.exists()) {
+          bookedSessions[loggedInTutor] = bookedSnapshot.val() || {};
+        }
+
+        // fetch requested sessions
+        const requestedSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions`).once('value');
+        if (requestedSnapshot.exists()) {
+          requestedSessions[loggedInTutor] = requestedSnapshot.val() || {};
+        }
+
+        // update tables after data is fetched
+        updateRequestedTable();
+        updateAvailabilityTable();
+        updateBookedTable();
+      } catch (e) {
+        console.error('Error fetching data:', e);
+      }
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    const loggedInTutor = "John Doe"; // simulated logged-in tutor name
+    const tutorId = "-O9FnHezh1DMTd6Wi3KW"; // simulated tutor ID
+    const tutorAvailability = {}; // to store tutor's availability
+    const bookedSessions = {}; // to store tutor's booked sessions
+    const requestedSessions = {};
+
+    // setting the calendar to allow a choice from today's date to the end of the current year
+    var today = new Date();
+    var formattedDate = today.toISOString().split('T')[0];
+    var year = new Date().getFullYear();
+
+    const dateInput = document.getElementById('txtDate');
+    const timeInput = document.getElementById('timePicker');
+    const alertContainer = document.querySelector("#alert");
+
+    dateInput.min = formattedDate;
+    dateInput.setAttribute("max", `${year}-12-31`);
+
+    // helper function to clear all alerts
+    function clearAlerts() {
+      if (alertContainer) alertContainer.innerHTML = '';
+    }
+
+    // function to show alerts and clear previous alerts
+    function showAlert(message, type = 'danger') {
+      clearAlerts(); // Cclear any previous alerts before showing a new one
+      const alertHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+          <div>${message}</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+      alertContainer.insertAdjacentHTML('beforeend', alertHTML);
+    }
+
+    // validate date input with debounced function
+    function isValidDate(dateStr) {
+      const date = new Date(dateStr);
+      return date instanceof Date && !isNaN(date);
+    }
+
+    function debounce(func, delay) {
+      let timeout;
+      return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), delay);
+      };
+    }
+
+    dateInput.addEventListener('input', debounce(function () {
+      clearAlerts();
+
+      const selectedDateStr = dateInput.value;
+      if (selectedDateStr.length < 10) return;
+
+      const selectedDate = new Date(selectedDateStr);
+      if (!isValidDate(selectedDateStr)) return;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const day = selectedDate.getDay();
+
+      // if (day === 0 || day === 6) {
+      //   showAlert('This message shows that you can't create a weekend bookings. Please choose a weekday.');
+      //   dateInput.value = '';
+      //   return;
+      // }
+
+      if (selectedDate < today) {
+        showAlert('You cannot select a date in the past. Please choose a valid date.');
+        dateInput.value = '';
+        return;
+      }
+
+      if (selectedDate.toDateString() === today.toDateString()) {
+        const currentTime = today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        timeInput.min = currentTime;
+      } else {
+        timeInput.min = '';
+      }
+    }, 500));
+
+    // Validate time input
+    timeInput.addEventListener('input', function () {
+      clearAlerts();
+
+      const selectedDateStr = dateInput.value;
+      if (!selectedDateStr) return;
+
+      const selectedDate = new Date(selectedDateStr);
+      const today = new Date();
+      const selectedTime = timeInput.value;
+
+      if (selectedDate.toDateString() === today.toDateString()) {
+        const currentTime = today.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        if (selectedTime && selectedTime < currentTime) {
+          showAlert('You cannot select a time in the past. Please choose a valid time.');
+          timeInput.value = '';
+        }
+      }
+    });
+
+    function checkFormCompletion() {
+      const selectedDate = dateInput.value;
+      const selectedTime = timeInput.value;
+
+      if (selectedDate && selectedTime) {
+        clearAlerts();
+      }
+    }
+
+    dateInput.addEventListener('input', checkFormCompletion);
+    timeInput.addEventListener('input', checkFormCompletion);
+
+
+    // add event listener to the "Add availability" button
+    document.getElementById('addAvailabilityBtn').addEventListener('click', async function () {
+      const selectedDate = document.getElementById('txtDate').value;
+      const selectedTime = document.getElementById('timePicker').value;
+      const selectedDuration = document.getElementById('duration').value;
+
+      if (!selectedDate || !selectedTime) {
+        showAlert("Please choose both date and time.", "warning");
+        return;
+      }
+
+      const selectedStartTime = new Date(`${selectedDate}T${selectedTime}`).getTime();
+      const durationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[selectedDuration];
+      const selectedEndTime = selectedStartTime + durationInMinutes * 60000; // milliseconds
+
+      // prevent adding a date in the past
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // set todays date to midnight for accurate comparison
+      const selectedDateOnly = new Date(selectedDate);
+
+      if (selectedDateOnly < today) {
+        showAlert("You cannot add a time slot in the past. Please choose a valid future date.", "danger");
+        return; // stop further processing if the selected date is in the past
+      }
+
+      // define systemOptions to retrieve the time zone information
+      const systemOptions = Intl.DateTimeFormat().resolvedOptions();
+
+      // check for conflicts in booked sessions
+      const bookedSessionsSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once('value');
+      const existingBookings = bookedSessionsSnapshot.val() || {}; // ensures existingBookings is an object
+
+      const hasBookingConflict = existingBookings && Object.values(existingBookings).some(booking => {
+        const bookingStartTime = new Date(`${booking.date}T${booking.time}`).getTime();
+        const bookingDurationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[booking.duration];
+        const bookingEndTime = bookingStartTime + bookingDurationInMinutes * 60000;
+
+        return (selectedStartTime < bookingEndTime && selectedEndTime > bookingStartTime);
+      });
+
+      if (hasBookingConflict) {
+        showAlert("This time slot is already booked by another student.", "danger");
+        return; // prevent further processing if a conflict is detected
+      }
+
+      // check for duplicate slot in availability
+      tutorAvailability[loggedInTutor] = tutorAvailability[loggedInTutor] || {}; // ensure it's defined
+      const isDuplicate = Object.values(tutorAvailability[loggedInTutor]).some(slot =>
+        slot.date === selectedDate && slot.time === selectedTime
+      );
+
+      if (isDuplicate) {
+        showAlert("This time slot has already been added. Please choose another one.", "danger");
+        return;
+      }
+
+      // check for time conflicts with other availability slots
+      const hasConflict = Object.values(tutorAvailability[loggedInTutor]).some(slot => {
+        const existingSlotStartTime = new Date(`${slot.date}T${slot.time}`).getTime();
+        const existingDurationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[slot.duration];
+        const existingSlotEndTime = existingSlotStartTime + existingDurationInMinutes * 60000;
+
+        return (selectedStartTime < existingSlotEndTime && selectedEndTime > existingSlotStartTime);
+      });
+
+      if (hasConflict) {
+        showAlert("The selected time slot overlaps with an existing one. Please choose a different time.", "danger");
+        return;
+      }
+
+      // proceed to add availability if all checks are passed
+      const newSlot = {
+        date: selectedDate,
+        time: selectedTime,
+        duration: selectedDuration,
+        timezone: systemOptions.timeZone
+      };
+
+      const tutorRef = fbDB.ref(`tutors/${tutorId}/availability`).push();
+
+      try {
+        await tutorRef.set(newSlot);
+        tutorAvailability[loggedInTutor][tutorRef.key] = newSlot;
+        updateAvailabilityTable();
+
+        // show success toast
+        const toastEl = document.getElementById('booked-session');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+      } catch (error) {
+        console.error("Error adding to Firebase:", error);
+        const toastEl = document.getElementById('firebase-error-toast');
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+      }
+
+      // clear form fields after adding availability
+      document.getElementById('txtDate').value = '';
+      document.getElementById('timePicker').value = '';
+      document.getElementById('duration').value = '15 Mins'; // Reset to default value
+    });
+
+
+    async function updateAvailabilityTable() {
+      const tableBody = document.querySelector('.sessionTable');
+      const availability = tutorAvailability[loggedInTutor] || {};
+      const today = new Date(); // get todays date
+
+      tableBody.innerHTML = ''; // clear previous entries
+
+      // if no availability exists, show the default message
+      if (Object.keys(availability).length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5"> No time slots added yet. </td></tr>';
+        return;
+      }
+
+      let hasFutureSlots = false;
+
+      // iterate over each available slot
+      const deletePromises = Object.keys(availability).map(async (slotId) => {
+        const slot = availability[slotId];
+
+        // combine date and time to form a full Date object
+        const slotDate = new Date(`${slot.date}T${slot.time}`);
+
+        // validate if slotDate is a valid Date object
+        if (isNaN(slotDate.getTime())) {
+          console.error(`Invalid date or time format for slot: ${slotId}`);
+          return; // skip if the date or time is invalid
+        }
+
+        // if the slot is in the past, remove it from Firebase
+        if (slotDate < today) {
+          try {
+            await fbDB.ref(`tutors/${tutorId}/availability/${slotId}`).remove();
+            console.log(`Past session ${slotId} removed from Firebase.`);
+          } catch (error) {
+            console.error(`Error removing past session ${slotId} from Firebase:`, error);
+          }
+          return; // ignore past sessions in the table
+        }
+
+        hasFutureSlots = true;
+
+        const formattedDate = slotDate.toLocaleDateString('en-GB', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
+        const formattedTime = slotDate.toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+        });
+
+        const timeZoneName = Intl.DateTimeFormat('en', {
+          timeZone: slot.timezone,
+          timeZoneName: 'short',
+        })
+          .formatToParts(slotDate)
+          .find(part => part.type === 'timeZoneName').value;
+
+        const createNewRow = `
+            <tr>
+              <td>${formattedDate}</td>
+              <td>${formattedTime}</td>
+              <td>${slot.duration}</td>
+              <td>${timeZoneName || 'UTC'}</td>
+              <td>
+                <button class="btn btn-outline-danger" onclick="confirmRemove('${slotId}', 'availability')" aria-label="Remove">
+                  <i class="bi bi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+            </tr>
+          `;
+
+        tableBody.insertAdjacentHTML('beforeend', createNewRow);
+      });
+
+      // wait for all Firebase deletions to complete
+      await Promise.all(deletePromises);
+
+      // if no future slots exist, show this message
+      if (!hasFutureSlots) {
+        tableBody.innerHTML = '<tr><td colspan="5"> No upcoming time slots available. </td></tr>';
+      }
+    }
+
+    async function updateBookedTable() {
+      const tableBody = document.querySelector('.bookedTable');
+      const sessions = bookedSessions[loggedInTutor] || {};
+      const today = new Date(); // get todays date
+
+      tableBody.innerHTML = ''; // clear previous entries
+
+      const bookedTab = document.getElementById('booked-tab');
+      const calendarToggle = document.getElementById('switch-booked');
+      let bookedCount = 0;
+
+      // iterate through the sessions and handle each one
+      for (let slotId of Object.keys(sessions)) {
+        const slot = sessions[slotId];
+
+        // validate the date and time before processing
+        if (!slot.date || !slot.time) {
+          console.error(`Invalid session data: Missing date or time for session ${slotId}`);
+          continue;
+        }
+
+        // combine the date and time into a Date object
+        const slotDate = new Date(`${slot.date}T${slot.time}`);
+
+        // check if the date or the time is valid
+        if (isNaN(slotDate.getTime())) {
+          console.error(`Invalid date or time format for session ${slotId}`);
+          continue; // skip if date or time is invalid
+        }
+
+        // if the session is in the past, delete it from Firebase
+        if (slotDate < today) {
+          try {
+            // then remove the past session from Firebase
+            await fbDB.ref(`tutors/${tutorId}/bookedSessions/${slotId}`).remove();
+            console.log(`Removed past session: ${slotId}`);
+          } catch (error) {
+            console.error(`Error removing session ${slotId} from Firebase:`, error);
+          }
+          continue; // skip displaying this past session
+        }
+
+        // session is in the future, so display it
+        bookedCount++; // increment the count for valid future sessions
+
+        const formattedDate = slotDate.toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const formattedTime = slotDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        const studentName = slot.studentName || 'Unknown';
+
+        let timeZoneName = 'UTC'; // default to UTC in case of missing timezone
+        try {
+          timeZoneName = Intl.DateTimeFormat('en', { timeZone: slot.timezone || 'UTC', timeZoneName: 'short' })
+            .formatToParts(slotDate)
+            .find(part => part.type === 'timeZoneName').value;
+        } catch (error) {
+          console.error(`Error formatting timezone for session ${slotId}:`, error);
+        }
+
+        const createNewRow = `
+          <tr>
+              <td>${formattedDate}</td>
+              <td>${formattedTime}</td>
+              <td>${slot.duration}</td>
+              <td>${timeZoneName}</td>
+              <td>${studentName}</td>
+              <td>
+                <button class="btn btn-outline-danger" onclick="confirmRemove('${slotId}', 'bookedSessions')" aria-label="Cancel">
+                  <i class="bi bi-trash" aria-hidden="true"></i>
+                </button>
+              </td>
+          </tr>`;
+
+        tableBody.insertAdjacentHTML('beforeend', createNewRow);
+      }
+
+      // update the booked tab with the correct count of future sessions
+      bookedTab.textContent = `Booked sessions (${bookedCount})`;
+
+      // if no future sessions exist, show this message
+      if (bookedCount === 0) {
+        tableBody.innerHTML = '<tr><td colspan="6"> There aren\'t any booked sessions to display. </td></tr>';
+        calendarToggle.classList.add('hidden'); // hide the toggle using the hidden class
+      } else {
+        calendarToggle.classList.remove('hidden'); // show the toggle if future sessions exist
+      }
+    }
+
+    // function to confirm removal of session (either availability or booked session)
+    function confirmRemove(slotId, type) {
+      const toastEl = document.getElementById('remove-slot');
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+
+      const yesBtn = toastEl.querySelector('.btn-primary');
+      yesBtn.onclick = async function () {
+        try {
+          const refPath = `tutors/${tutorId}/${type}/${slotId}`;
+          console.log(`Attempting to remove session from path: ${refPath}`);
+
+          // remove the session from Firebase based on type
+          await fbDB.ref(refPath).remove();
+
+          // remove from local state and update the table
+          if (type === 'availability') {
+            delete tutorAvailability[loggedInTutor][slotId];
+            updateAvailabilityTable();
+          } else if (type === 'bookedSessions') {
+            delete bookedSessions[loggedInTutor][slotId];
+            updateBookedTable();
+          }
+
+          // show success toast
+          const removedToastEl = document.getElementById('removed-session');
+          const removedToast = new bootstrap.Toast(removedToastEl);
+          removedToast.show();
+        } catch (error) {
+          console.error(`Error removing ${type}:`, error);
+          showFirebaseErrorToast();
+        }
+
+        toast.hide();
+      };
+    }
+
+    // function to update the 'Requested sessions' table
+    async function updateRequestedTable() {
+      const tableBody = document.querySelector('.requestedTable');
+      tableBody.innerHTML = ''; // clear previous entries
+      const today = new Date(); // get today's date
+
+      const calendarToggle = document.getElementById('switch-requested');
+
+      try {
+        // fetch requested sessions from Firebase
+        const requestedSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions`).once('value');
+        const requestedSessions = requestedSnapshot.val() || {};
+
+        // get the requested sessions tab
+        const requestTab = document.getElementById('request-tab');
+
+        // filter out past sessions
+        let hasFutureSessions = false;
+
+        // loop through each requested session
+        Object.keys(requestedSessions).forEach(async (slotId) => {
+          const slot = requestedSessions[slotId];
+
+          // combine date and time to form a full Date object
+          const slotDate = new Date(`${slot.date}T${slot.time}`);
+
+          // validate if slotDate is a valid Date object
+          if (isNaN(slotDate.getTime())) {
+            console.error(`Invalid date or time format for slot: ${slotId}`);
+            return; // skip if date or time is invalid
+          }
+
+          // skip and remove past dates and times
+          if (slotDate < today) {
+            // remove the session from Firebase
+            await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
+            return; // ignore past sessions
+          }
+
+          hasFutureSessions = true;
+
+          // render the session row if its in the future
+          const formattedDate = slotDate.toLocaleDateString('en-GB', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          });
+          const formattedTime = slotDate.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          });
+
+          const timeZoneName = Intl.DateTimeFormat('en', {
+            timeZone: slot.timezone,
+            timeZoneName: 'short',
+          })
+            .formatToParts(slotDate)
+            .find(part => part.type === 'timeZoneName').value;
+
+          const studentName = slot.studentName || 'Unknown';
+
+          const createNewRow = `
+            <tr>
+              <td>${formattedDate}</td>
+              <td>${formattedTime}</td>
+              <td>${slot.duration}</td>
+              <td>${timeZoneName}</td>
+              <td>${studentName}</td>
+              <td>
+                <button class="btn btn-outline-success" onclick="confirmSession('${slotId}')" aria-label="Confirm">
+                  <i class="bi bi-check-circle-fill"></i>
+                </button>
+                <button class="btn btn-outline-danger" onclick="cancelRequestedSession('${slotId}')" aria-label="Cancel">
+                  <i class="bi bi-x-circle-fill"></i>
+                </button>
+              </td>
+            </tr>`;
+
+          tableBody.insertAdjacentHTML('beforeend', createNewRow);
+        });
+
+        // if no future sessions exist, show this message
+        if (!hasFutureSessions) {
+          tableBody.innerHTML = '<tr><td colspan="6"> There aren\'t any requested sessions to display. </td></tr>';
+          calendarToggle.classList.add('hidden'); // hide the toggle using the hidden class
+        } else {
+          calendarToggle.classList.remove('hidden'); // show the toggle if future sessions exist
+        }
+
+        // update the tab label with the count of remaining future sessions
+        const requestedCount = hasFutureSessions ? Object.keys(requestedSessions).length : 0;
+        requestTab.textContent = `Requested sessions (${requestedCount})`;
+
+      } catch (error) {
+        console.error('Error fetching requested sessions:', error);
+      }
+    }
+
+    async function confirmSession(slotId) {
+      try {
+        const sessionSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).once('value');
+        const sessionData = sessionSnapshot.val();
+
+        if (sessionData) {
+          const selectedDate = sessionData.date;
+          const selectedTime = sessionData.time;
+          const selectedDuration = sessionData.duration;
+
+          const selectedStartTime = new Date(`${selectedDate}T${selectedTime}`).getTime();
+          const durationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[selectedDuration];
+          const selectedEndTime = selectedStartTime + durationInMinutes * 60000;
+
+          // check for existing bookings at this time
+          const bookedSessionsSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once('value');
+          const existingBookings = bookedSessionsSnapshot.val() || {};
+
+          const hasBookingConflict = Object.values(existingBookings).some(booking => {
+            const bookingStartTime = new Date(`${booking.date}T${booking.time}`).getTime();
+            const bookingDurationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[booking.duration];
+            const bookingEndTime = bookingStartTime + bookingDurationInMinutes * 60000;
+
+            return (selectedStartTime < bookingEndTime && selectedEndTime > bookingStartTime);
+          });
+
+          if (hasBookingConflict) {
+            showAlert("This session overlaps with another booking and cannot be confirmed.", "danger");
+            return;
+          }
+
+          // proceed to confirm booking if no conflicts exist
+          sessionData.status = "booked";
+          const bookedSessionRef = fbDB.ref(`tutors/${tutorId}/bookedSessions`).push();
+          await bookedSessionRef.set(sessionData);
+          await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
+
+          const sessionRequestId = sessionData.sessionRequestId;
+          if (sessionRequestId) {
+            await fbDB.ref(`sessionRequests/${sessionRequestId}`).remove();
+          }
+
+          updateRequestedTable();
+          updateBookedTable();
+
+          // show confirmation toast
+          const toastEl = document.getElementById('confirm-toast');
+          const toast = new bootstrap.Toast(toastEl);
+          toast.show();
+        } else {
+          console.warn("Session data not found in requestedSessions.");
+        }
+      } catch (error) {
+        console.error("Error confirming session:", error);
+      }
+    }
+
+    async function cancelRequestedSession(slotId) {
+      try {
+        // fetch session data from requestedSessions to get the sessionRequestId
+        const sessionSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).once('value');
+        const sessionData = sessionSnapshot.val();
+
+        if (sessionData) {
+          // get sessionRequestId from the session data to remove it from sessionRequests
+          const sessionRequestId = sessionData.sessionRequestId;
+          if (sessionRequestId) {
+            // remove the session from the global sessionRequests node
+            await fbDB.ref(`sessionRequests/${sessionRequestId}`).remove();
+            console.log(`Session with ID ${sessionRequestId} removed from global sessionRequests.`);
+          }
+
+          // remove session from the tutors requestedSessions in Firebase
+          await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
+          console.log('Requested session cancelled and removed from tutors requestedSessions.');
+
+          // update requested sessions table
+          updateRequestedTable();
+
+          // show cancellation toast
+          const toastEl = document.getElementById('cancel-toast');
+          const toast = new bootstrap.Toast(toastEl);
+          toast.show();
+        } else {
+          console.warn('Session data not found in requestedSessions.');
+        }
+      } catch (error) {
+        console.error('Error cancelling requested session:', error);
+      }
+    }
+
+    // function to show generic Firebase error toast
+    function showFirebaseErrorToast() {
+      const toastEl = document.getElementById('firebase-error-toast');
+      const toast = new bootstrap.Toast(toastEl);
+      toast.show();
+    }
+
+    // attach event listeners to the date and time inputs to call checkFormCompletion
+    document.getElementById('txtDate').addEventListener('input', checkFormCompletion);
+    document.getElementById('timePicker').addEventListener('input', checkFormCompletion);
+
+    function logUserOut(event) {
+      const fbAuth = firebase.auth();
+      logout(fbAuth);
+    }
+  </script>
+
+  <script>
+    let bookedCalendar;
+
+    // BOOKED CALENDAR 
+    document.getElementById('toggleViewSwitch-booked').addEventListener('change', function () {
+      const bookedTableView = document.querySelector('#bookedTableContainer');
+      const bookedCalendarView = document.getElementById('calendar-container-booked');
+      const toggleLabel = document.getElementById('toggleLabel-booked');
+
+      if (this.checked) {
+        // switch to calendar view
+        bookedTableView.style.display = 'none';
+        bookedCalendarView.style.display = 'block';
+        toggleLabel.textContent = 'Table view';
+
+        // initialise the calendar if not already initialised
+        if (!bookedCalendar) {
+          bookedCalendar = new FullCalendar.Calendar(document.getElementById('calendar-booked'), {
+            initialView: 'dayGridMonth',
+            events: fetchBookedSessions(),
+            eventTimeFormat: {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false
+            },
+            eventClick: function (info) {
+              const booked = info.event;
+
+              if (booked.start) {
+                const bookedDate = booked.start.toDateString();
+                const bookedStartTime = booked.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                const duration = booked.extendedProps.duration || 'N/A';
+                const timeZoneName = booked.extendedProps.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const studentName = booked.extendedProps.studentName;
+                const studentEmail = booked.extendedProps.studentEmail;
+
+                document.getElementById('bookedDate').textContent = bookedDate;
+                document.getElementById('bookedStartTime').textContent = bookedStartTime;
+                document.getElementById('bookedDuration').textContent = duration;
+                document.getElementById('bookedTimezone').textContent = timeZoneName;
+                document.getElementById('bookedStudent').textContent = studentName;
+                document.getElementById('bookedStudentEmail').innerHTML = `<a href="mailto:${studentEmail}">${studentEmail}</a>`;
+
+                const bookedModal = new bootstrap.Modal(document.getElementById('bookedDetailsModal'));
+                bookedModal.show();
+              } else {
+                console.error('Booked session start is undefined. Data:', booked);
+              }
+            }
+          });
+          bookedCalendar.render();
+        } else {
+          // refresh booked sessions if switching back to calendar
+          bookedCalendar.getEvents().forEach(booked => booked.remove());
+          fetchBookedSessions().forEach(booked => bookedCalendar.addEvent(booked));
+        }
+      } else {
+        // switch back to table view
+        bookedTableView.style.display = 'block';
+        bookedCalendarView.style.display = 'none';
+        toggleLabel.textContent = 'Calendar view';
+      }
+    });
+
+    // fetch BOOKED sessions from the table
+    function fetchBookedSessions() {
+      const rows = document.querySelectorAll('.bookedTable tr');
+      const sessions = [];
+      const now = new Date(); // get the current date and time
+
+      rows.forEach(row => {
+        const cells = row.getElementsByTagName('td');
+        if (cells.length > 0) {
+          let date = cells[0].textContent.trim();
+          const time = cells[1].textContent.trim();
+          const duration = cells[2].textContent.trim();
+          const timezone = cells[3].textContent.trim();
+          const studentName = cells[4].textContent.trim();
+
+          // log each row to ensure data is being picked up correctly
+          console.log('Booked row data:', { date, time, duration, timezone, studentName });
+
+          // safeguard for missing critical row data
+          if (!date || !time || !studentName) {
+            console.warn('Missing critical data for this booked row. Skipping.');
+            return; // skip this row if any critical data is missing
+          }
+
+          // convert date from DD/MM/YYYY to YYYY-MM-DD
+          const [day, month, year] = date.split('/');
+          date = `${year}-${month}-${day}`;
+
+          const sessionId = Object.keys(bookedSessions[loggedInTutor]).find(id => {
+            const session = bookedSessions[loggedInTutor][id];
+            return session.date === date && session.time === time && session.studentName === studentName;
+          });
+
+          const session = bookedSessions[loggedInTutor][sessionId];
+
+          // log the session object to debug any potential issues
+          console.log('Booked session data:', session);
+
+          // safeguard for missing session object
+          if (!sessionId || !session) {
+            console.warn(`No booked session found for a session with date: ${date}, time: ${time}, and student: ${studentName}`);
+            return; // skip this entry if session data is missing
+          }
+
+          const studentEmail = session.studentEmail || 'Email not provided'; // safeguard against undefined email
+
+          const dateTimeString = `${date}T${time}`;
+          const startDateTime = new Date(dateTimeString);
+
+          // skip past sessions
+          if (startDateTime < now) {
+            return; // skip past events
+          }
+
+          if (isNaN(startDateTime)) {
+            console.error("Invalid date or time:", dateTimeString);
+            return;
+          }
+
+          const endDateTime = new Date(startDateTime);
+          if (duration.includes('Mins')) {
+            const mins = parseInt(duration);
+            endDateTime.setMinutes(endDateTime.getMinutes() + mins);
+          } else if (duration.includes('Hour')) {
+            const hours = parseInt(duration);
+            endDateTime.setHours(endDateTime.getHours() + hours);
+          }
+
+          // convert startDateTime to 24-hour format for the title
+          const formattedStartTime = startDateTime.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false // ensures 24-hour format
+          });
+
+          const title = `Session (${duration}) - ${formattedStartTime}`;
+
+          sessions.push({
+            title: title,
+            start: startDateTime.toISOString(),
+            end: endDateTime.toISOString(),
+            allDay: false,
+            extendedProps: {
+              duration: duration,
+              timezone: timezone,
+              studentName: studentName,
+              studentEmail: studentEmail // add email to session properties, defaulting if missing
+            }
+          });
+        }
+      });
+
+      console.log('Sessions:', sessions); // log all sessions before returning
+      return sessions;
+    }
+  </script>
+
+  <script>
+    let requestedCalendar;
+
+    // REQUESTED SESSIONS CALENDAR
+    document.getElementById('toggleViewSwitch-requested').addEventListener('change', function () {
+      const requestedTableView = document.querySelector('#requestedTableContainer');
+      const requestedCalendarView = document.getElementById('calendar-container-requested');
+      const toggleLabelRequested = document.getElementById('toggleLabel-requested');
+
+      if (this.checked) {
+        // switch to calendar view for requested sessions
+        requestedTableView.style.display = 'none';
+        requestedCalendarView.style.display = 'block';
+        toggleLabelRequested.textContent = 'Table view';
+
+        // initialise the calendar if not already initialised
+        if (!requestedCalendar) {
+          requestedCalendar = new FullCalendar.Calendar(document.getElementById('calendar-requested'), {
+            initialView: 'dayGridMonth',
+            events: fetchRequestedSessions(),
+            eventTimeFormat: {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false
+            },
+            eventClick: function (info) {
+              const requested = info.event;
+
+              if (requested.start) {
+                const requestedDate = requested.start.toDateString();
+                const requestedStartTime = requested.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                const duration = requested.extendedProps.duration || 'N/A';
+                const timeZoneName = requested.extendedProps.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+                const studentName = requested.extendedProps.studentName;
+                const studentEmail = requested.extendedProps.studentEmail;
+
+                document.getElementById('requestedDate').textContent = requestedDate;
+                document.getElementById('requestedStartTime').textContent = requestedStartTime;
+                document.getElementById('requestedDuration').textContent = duration;
+                document.getElementById('requestedTimezone').textContent = timeZoneName;
+                document.getElementById('requestedStudent').textContent = studentName;
+                document.getElementById('requestedStudentEmail').innerHTML = `<a href="mailto:${studentEmail}">${studentEmail}</a>`;
+
+                const requestedModal = new bootstrap.Modal(document.getElementById('requestedDetailsModal'));
+                requestedModal.show();
+              } else {
+                console.error('Requested session start is undefined. Data:', requested);
+              }
+            }
+          });
+          requestedCalendar.render();
+        } else {
+          // refresh requested sessions if switching back to calendar
+          requestedCalendar.getEvents().forEach(requested => requested.remove());
+          fetchRequestedSessions().forEach(requested => requestedCalendar.addEvent(requested));
+        }
+      } else {
+        // switch back to table view
+        requestedTableView.style.display = 'block';
+        requestedCalendarView.style.display = 'none';
+        toggleLabelRequested.textContent = 'Calendar view';
+      }
+    });
+
+    // fetch REQUESTED sessions from the table
+    function fetchRequestedSessions() {
+      const rows = document.querySelectorAll('.requestedTable tr');
+      const sessions = [];
+      const now = new Date(); // get the current date and time
+
+      rows.forEach(row => {
+        const cells = row.getElementsByTagName('td');
+        if (cells.length > 0) {
+          let date = cells[0].textContent.trim();
+          const time = cells[1].textContent.trim();
+          const duration = cells[2].textContent.trim();
+          const timezone = cells[3].textContent.trim();
+          const studentName = cells[4].textContent.trim();
+
+          // safeguard for missing critical row data
+          if (!date || !time || !studentName) {
+            console.warn('Missing critical requested data for this row. Skipping.');
+            return; // skip this row if any critical data is missing
+          }
+
+          // convert date from DD/MM/YYYY to YYYY-MM-DD
+          const [day, month, year] = date.split('/');
+          date = `${year}-${month}-${day}`;
+
+          // find the matching session ID
+          const sessionId = Object.keys(requestedSessions[loggedInTutor]).find(id => {
+            const session = requestedSessions[loggedInTutor][id];
+            return session.date === date && session.time === time && session.studentName === studentName;
+          });
+
+          const session = requestedSessions[loggedInTutor][sessionId];
+
+          if (!sessionId || !session) {
+            console.warn(`No requested session found for session with date: ${date}, time: ${time}, and student: ${studentName}`);
+            return; // skip this entry if session data is missing
+          }
+
+          // ensure requestedSessions exists and is initialised properly
+          if (!requestedSessions || !requestedSessions[loggedInTutor]) {
+            console.warn('requestedSessions or requestedSessions[loggedInTutor] is not defined.');
+            return sessions; // return an empty session list if none found
+          }
+
+          // check if requestedSessions[loggedInTutor] has any sessions
+          if (Object.keys(requestedSessions[loggedInTutor]).length === 0) {
+            console.warn('No requested sessions found for the logged-in tutor.');
+            return sessions; // Return an empty session list if none found
+          }
+
+
+          const studentEmail = session.studentEmail || 'Email not provided'; // safeguard against undefined email
+          const dateTimeString = `${date}T${time}`;
+          const startDateTime = new Date(dateTimeString);
+
+          // skip past sessions
+          if (startDateTime < now) {
+            return; // skip past events
+          }
+
+          const endDateTime = new Date(startDateTime);
+          if (duration.includes('Mins')) {
+            const mins = parseInt(duration);
+            endDateTime.setMinutes(endDateTime.getMinutes() + mins);
+          } else if (duration.includes('Hour')) {
+            const hours = parseInt(duration);
+            endDateTime.setHours(endDateTime.getHours() + hours);
+          }
+
+          // convert startDateTime to 24-hour format for the title
+          const formattedStartTime = startDateTime.toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false // ensures 24-hour format
+          });
+
+          const title = `Session (${duration}) - ${formattedStartTime}`;
+
+          sessions.push({
+            title: title,
+            start: startDateTime.toISOString(),
+            end: endDateTime.toISOString(),
+            allDay: false,
+            extendedProps: {
+              duration: duration,
+              timezone: timezone,
+              studentName: studentName,
+              studentEmail: studentEmail // add email to session properties, defaulting if missing
+            }
+          });
+        }
+      });
+
+      // console.log('Requested sessions:', sessions); // log all sessions before returning
+      return sessions;
+    }
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
