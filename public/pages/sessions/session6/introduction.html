@@ -182,7 +182,7 @@
           const student = childSnapshot.val();
           const userId = childSnapshot.key;
 
-          if (student.profile && student.profile.siteFlag === "yes" ) {
+          if (student.profile && student.profile.siteFlag === true ) {
             // set up the card HTML with a default imageURL as a fallback
             const cardHTML = `
               <div class="col-lg-4 col-md-6 col-sm-12">
