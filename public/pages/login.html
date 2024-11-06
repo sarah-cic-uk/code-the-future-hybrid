@@ -6,32 +6,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
   <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
-  <meta name="author" content="Sarah Neenan" />
+
   <title>Code the Future</title>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+
   <script type="text/javascript" src="./js/app.js"></script>
-  <!-- <script  src="./js/imports.js"></script> -->
   <script type="module" src="./js/firebase.js"></script>
+  <style>
+    .form-label {
+      margin-bottom: 0 !important;
+    }
+    .input-group .form-control {
+      flex: 1;
+      min-width: 0;
+      padding-right: 2rem;
+    }
+    span.input-group-text.fixCorners {
+      border-top-right-radius: .375rem !important;
+      border-bottom-right-radius: .375rem !important;
+    }
+    .input-group-text {
+      cursor: pointer;
+      width: 2.5rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .is-valid,
+    .is-invalid {
+      padding-right: 2.5rem;
+    }
+    .is-valid {
+      border-color: green !important;
+    }
+    .is-invalid {
+      border-color: #da1e28 !important;
+    }
+    .invalid-feedback {
+      display: none;
+      color: #da1e28;
+      font-size: 0.75rem;
+    }
+    #message {
+      margin-top: 0.5rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+    .valid:before {
+      position: relative;
+      left: 0;
+      content: "\2713";
+    }
+    .valid {
+      color: green;
+    }
+    .invalid {
+      color: #da1e28;
+    }
+  </style>
 </head>
 
 <body>
   <div class="page-body">
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-              border-right: 2px solid #d9437a;
-              padding-right: 10px;
-              color: #1d0c59;
-            ">
-          <img src="../images/logo.png" height=60px />
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#"
+          style="border-right: 2px solid #d9437a; padding-right: 10px; color: #1d0c59;">
+          <img src="../images/logo.png" height="60px" alt="CTF" />
         </a>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
@@ -43,59 +96,57 @@
           </div>
         </div>
       </div>
-  </div>
-  </nav>
+    </nav>
 
-  <div class="container-fluid">
-    <div class="row flex-nowrap page-content">
-      <section class="gradient-form">
-        <div>
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+
+        <section class="gradient-form">
           <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="px-0" style="height:calc(100vh - 70px)">
+            <div class="px-0">
               <div class="text-black">
                 <div class="row g-0" style="height:calc(100vh - 70px)">
                   <div class="col-lg-6">
-                    <div class=" p-md-5 mx-md-4">
+                    <div class="p-md-5 mx-md-4">
 
                       <div class="text-center">
                         <img src="../images/logo.png" style="width: 285px;" alt="logo">
                         <h4 class="mt-4 mb-5 pb-1">Log in to access your learning</h4>
                       </div>
 
-                      <form onsubmit="login(window.fbAuth)">
-                        <div class="form-outline mb-4">
-                          <label class="form-label" for="email">Username</label>
+                      <form id="loginForm" onsubmit="login(window.fbAuth)">
+                        <div class="mb-3">
+                          <label for="email" class="form-label">Username</label>
                           <div class="input-group">
-                            <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                            <input type="email" id="email" class="form-control" placeholder="Registered email address"
-                              autocomplete="current-email" />
+                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                            <input type="email" class="form-control" id="email" placeholder="Registered email address" autocomplete="current-email" required>
                           </div>
                         </div>
 
-                        <div class="form-outline mb-5">
-                          <label class="form-label" for="password">Password</label>
+                        <div class="mb-3">
+                          <label for="password" class="form-label">Password</label>
                           <div class="input-group">
-                            <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                            <input type="password" id="password" class="form-control" autocomplete="current-password" />
-                            <span class="input-group-text" id="password-input">
-                              <i class="bi bi-eye-slash togglePassword"></i>
+                            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                            <input type="password" class="form-control" id="password" autocomplete="current-password" required>
+                            <span class="input-group-text fixCorners" onclick="togglePassword('password')">
+                              <i class="bi bi-eye-slash toggle-password"></i>
                             </span>
                           </div>
                         </div>
-
+                        
                         <div class="text-center pt-1 mb-1">
-                          <button class="btn btn-block fa-lg mb-3 button-style" type="submit">Log In</button>
+                          <button type="submit" class="btn primary">Log in</button>
                         </div>
                       </form>
 
+
                       <div class="text-center mb-5 pb-1">
-                        <a class="text-muted" href="passwordReset.html" title="Forgot password?">Forgot password?</a>
+                        <a class="nav-linPk text-muted" href="" title="Forgot password?">Forgot password?</a>
                       </div>
 
                       <div class="d-flex align-items-center justify-content-center pb-4">
                         <p class="mb-0 me-2">Don't have an account?</p>
-                        <button type="button" class="btn btn-register" data-bs-toggle="modal"
-                          data-bs-target="#registrationModal">
+                        <button type="button" class="btn btn-register" data-bs-toggle="modal" data-bs-target="#registrationModal">
                           Register
                         </button>
                       </div>
@@ -104,104 +155,112 @@
                   <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                     <div class="text-white px-3 py-4 p-md-5 mx-md-4">
                       <h4 class="mb-4">Log in to access your learning</h4>
-                      <p class="small mb-0" style="width: 400px">Log in to access your cohorts sessions, view the
-                        course timetable and book 1:1s with tutors </p>
+                      <p class="small mb-0" style="width: 400px">Access to your cohorts sessions, view the
+                        course timetable and book 1:1s with tutors.</p>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-    </div>
-  </div>
-  <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header text-center">
-          <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body mx-3">
-          <form class="needs-validation" novalidate>
-            <div class="form-group">
-              <label for="displayName">Display Name<span class="text-danger">*</span></label>
-              <div class="input-group">
-                <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                <input type="text" class="form-control form-control-lg" name="displayName" id="displayName"
-                  autocomplete="new-name" required>
-              </div>
-            </div>
-            <div class="form-group col-12">
-              <label for="newEmail">Email<span class="text-danger">*</span></label>
-              <div class="input-group flex-nowrap">
-                <div class="input-group-text"><i class="bi bi-envelope-fill"></i></div>
-                <input type="text" class="form-control form-control-lg" name="newEmail" id="newEmail" required
-                  autocomplete="new-email">
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Password<span class="text-danger">*</span></label>
-              <div class="input-group flex-nowrap">
-                <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                <input type="password" class="form-control form-control-lg" id="newPassword" required
-                  autocomplete="new-password" />
-                <span class="input-group-text" id="newPasswordInput">
-                  <i class="bi bi-eye-slash toggleNewPassword"></i>
-                </span>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Confirm Password<span class="text-danger">*</span></label>
-              <div class="input-group flex-nowrap">
-                <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                <input type="password" class="form-control form-control-lg" id="passwordCheck" name="passwordCheck"
-                  required autocomplete="new-password" />
-                <span class="input-group-text" id="passwordCheckInput">
-                  <i class="bi bi-eye-slash togglePasswordCheck"></i>
-                </span>
-              </div>
-              <div id="passwordMatch" class="hidden-feedback">Passwords must match</div>
-            </div>
-            <div class="form-group">
-              <label>Cohort Access Code<span class="text-danger">*</span></label>
-              <div class="input-group flex-nowrap">
-                <div class="input-group-text"><i class="bi bi-people-fill"></i></div>
-                <input type="text" class="form-control form-control-lg" name="cohortCode" id="cohortCode" required />
-              </div>
-              <div id="cohortCodeCheck" class="hidden-feedback">Invalid Code</div>
-            </div>
-            <div class="form-group py-4 text-center">
-              <button class="btn" style="background-color: #d9437a; color: white" id="btnLogin"
-                onclick="validateAndRegister()">Sign
-                up!</button>
-            </div>
-            <div class="float-end mb-1" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-              aria-expanded="false" aria-controls="collapseExample">
-              <a class="small" style="cursor: pointer;">
-                view data privacy information<i class="bi bi-shield-exclamation ms-1" style="color: #1d0c59;"></i>
-              </a>
-            </div>
+        </section>
 
-            <div class="collapse" id="collapseExample" style="clear:both">
-              <div class="data-privacy-message alert alert-warning">
-                <div>Your data will not be shared within IBM or with any external companies. Any information stored will
-                  be removed after 5 years of user inactivity</div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Code the Future - Sign up</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <form id="registrationForm" onsubmit="validateAndRegister(event)" novalidate>
+              <div class="mb-3">
+                <label for="displayName" class="form-label">Display name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="displayName" required>
+                <div class="invalid-feedback">Display name is required.</div>
               </div>
-            </div>
-          </form>
+
+              <div class="mb-3">
+                <label for="newEmail" class="form-label">Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="newEmail" required>
+                <div class="invalid-feedback">Valid email is required.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="newPassword" class="form-label">Password <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="newPassword" oninput="validatePassword()" required>
+                  <span class="input-group-text fixCorners" onclick="togglePassword('newPassword')">
+                    <i class="bi bi-eye-slash toggle-password"></i>
+                  </span>
+                  <div class="invalid-feedback">Password is required and must meet the criteria.</div>
+                </div>
+                <div id="message" class="alert alert-info">
+                  Password must include
+                  <span id="length" class="invalid">8+ characters</span>,
+                  <span id="capital" class="invalid">uppercase</span>,
+                  <span id="letter" class="invalid">lowercase</span>,
+                  <span id="number" class="invalid">number</span>, and
+                  <span id="character" class="invalid">special character</span>.
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirm password <span class="text-danger">*</span></label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="confirmPassword" oninput="validateConfirmPassword()"
+                    required>
+                  <span class="input-group-text fixCorners" onclick="togglePassword('confirmPassword')">
+                    <i class="bi bi-eye-slash toggle-password"></i>
+                  </span>
+                  <div class="invalid-feedback">Passwords must match.</div>
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label for="cohortCode" class="form-label">Cohort access code <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="cohortCode" required>
+                <div id="cohortCodeCheck" class="invalid-feedback">Invalid cohort code.</div>
+              </div>
+
+              <div class="form-group py-4 text-center">
+                <button type="submit" class="btn primary" id="btnLogin">Sign up</button>
+              </div>
+
+              <div class="float-end mb-3" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <a class="small" style="cursor: pointer;">
+                  View data privacy information<i class="bi bi-shield-exclamation ms-1" style="color: #1d0c59;"></i>
+                </a>
+              </div>
+
+              <div class="collapse" id="collapseExample" style="clear:both">
+                <div class="data-privacy-message alert alert-warning">
+                  Your data will not be shared within IBM or with any external companies. Any information stored will
+                    be removed after 5 years of user inactivity.
+                </div>
+              </div>
+            </form>
+
+          </div>
         </div>
       </div>
     </div>
-    <!--  -->
+
+
   </div>
+
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js"
     window.fbAuth = fbAuth;
     window.fbDB = fbDB;
   </script>
+
   <script defer type="text/javascript">
     const stylesheet = document.createElement('link');
     stylesheet.rel = 'stylesheet';
@@ -222,98 +281,193 @@
       logout(window.fbAuth)
     }
 
-    async function validateAndRegister() {
-      const forms = document.querySelectorAll('.needs-validation')
+    document.addEventListener("DOMContentLoaded", () => {
+      const fields = ["displayName", "newEmail", "newPassword", "confirmPassword", "cohortCode"];
+      fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        field.addEventListener("input", () => validateField(field));
+      });
 
-      Array.from(forms).forEach(async form => {
-        form.addEventListener('submit', async event => {
-          const password = document.getElementById('newPassword').value;
-          const passwordRepeat = document.getElementById('passwordCheck').value;
-          const matchingPasswords = password === passwordRepeat
-          const cohortCode = document.getElementById('cohortCode').value;
-          const validCode = await validateCohortCode(cohortCode)
-          console.log("1", validCode)
-          if (!matchingPasswords) {
-            document.getElementById('passwordMatch').classList.remove("hidden-feedback");
-            document.getElementById('passwordMatch').classList.add("invalid-feedback");
-            event.preventDefault()
-            event.stopPropagation()
-          } else if (!validCode) {
-            document.getElementById('cohortCodeCheck').classList.remove("hidden-feedback");
-            document.getElementById('cohortCodeCheck').classList.add("invalid-feedback");
-            event.preventDefault()
-            event.stopPropagation()
-          } else if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          } else {
-            registerNewUser()
-          }
-          form.classList.add('was-validated')
-        }, false)
-      })
-    }
+      document.getElementById("newPassword").addEventListener("input", validatePassword);
+      document.getElementById("confirmPassword").addEventListener("input", validateConfirmPassword);
+      document.getElementById("confirmPassword").addEventListener("paste", (e) => e.preventDefault());
+    });
 
+    function validateField(field) {
+      const feedback = field.nextElementSibling;
 
-    async function validateCohortCode(cohortCode) {
-      const possibleCodes = await window.fbDB.ref('cohorts/').once('value')
-      const possibleCodes1 = possibleCodes.val();
-      return possibleCodes.find(obj => obj.code === cohortCode)?.id;
-    }
-
-
-    async function registerNewUser() {
-
-      const email = document.getElementById('newEmail').value;
-      const password = document.getElementById('newPassword').value;
-      const passwordRepeat = document.getElementById('passwordCheck').value;
-      const name = document.getElementById('displayName').value;
-      const cohortCode = document.getElementById('cohortCode').value;
-      const validCode = await validateCohortCode(cohortCode)
-      try {
-
-        await window.fbAuth.createUserWithEmailAndPassword(email, password)
-          .catch((error) => {
-            console.log(error.code)
-            console.log(error.message)
-          })
-
-        const user = window.fbAuth.currentUser;
-
-        await user.sendEmailVerification().catch((err) =>
-          console.log(err)
-        );
-
-        await user.updateProfile({ displayName: name }).catch(
-          (err) => console.log(err)
-        );
-
-        window.fbAuth.onAuthStateChanged(async (user) => {
-          if (user) {
-            localStorage.setItem('loggedIn', true);
-            localStorage.setItem('displayName', user.displayName);
-            await addUserToDatabase(user, validCode);
-            window.location.replace("./sessions.html");
-          } else {
-            localStorage.removeItem('loggedIn');
-            localStorage.removeItem('displayName');
-          }
-        });
-      } catch (err) {
-        console.log(err);
+      if (field.checkValidity()) {
+        field.classList.add("is-valid");
+        field.classList.remove("is-invalid");
+        if (feedback && feedback.classList.contains("invalid-feedback")) {
+          feedback.style.display = "none";
+        }
+      } else {
+        field.classList.add("is-invalid");
+        field.classList.remove("is-valid");
+        if (feedback && feedback.classList.contains("invalid-feedback")) {
+          feedback.style.display = "block";
+        }
       }
-    };
+    }
+
+    function togglePassword(fieldId) {
+      const field = document.getElementById(fieldId);
+      const icon = field.nextElementSibling.querySelector("i");
+
+      field.type = field.type === "password" ? "text" : "password";
+      icon.classList.toggle("bi-eye");
+      icon.classList.toggle("bi-eye-slash");
+    }
+
+    function validatePassword() {
+      const password = document.getElementById("newPassword");
+      const criteria = {
+        length: password.value.length >= 8,
+        letter: /[a-z]/.test(password.value),
+        capital: /[A-Z]/.test(password.value),
+        number: /[0-9]/.test(password.value),
+        character: /[!@#$%^&*(),.?":{}|<>]/.test(password.value)
+      };
+
+      for (const [key, isValid] of Object.entries(criteria)) {
+        const element = document.getElementById(key);
+        element.classList.toggle("valid", isValid);
+        element.classList.toggle("invalid", !isValid);
+      }
+
+      const allValid = Object.values(criteria).every(Boolean);
+      password.classList.toggle("is-valid", allValid);
+      password.classList.toggle("is-invalid", !allValid);
+    }
+
+    function validateConfirmPassword() {
+      const password = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword");
+
+      if (confirmPassword.value === password && password.length > 0) {
+        confirmPassword.classList.add("is-valid");
+        confirmPassword.classList.remove("is-invalid");
+      } else {
+        confirmPassword.classList.add("is-invalid");
+        confirmPassword.classList.remove("is-valid");
+      }
+    }
+
+    function checkPasswordCriteria(password) {
+      return password.length >= 8 &&
+        /[a-z]/.test(password) &&
+        /[A-Z]/.test(password) &&
+        /[0-9]/.test(password) &&
+        /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    }
+
+    async function validateAndRegister(event) {
+      event.preventDefault();
+
+      const form = document.getElementById("registrationForm");
+      const displayName = document.getElementById("displayName").value.trim();
+      const email = document.getElementById("newEmail").value.trim();
+      const password = document.getElementById("newPassword").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const cohortCode = document.getElementById("cohortCode").value.trim();
+
+      let formIsValid = true;
+
+      const fields = ["displayName", "newEmail", "newPassword", "confirmPassword", "cohortCode"];
+      fields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        validateField(field);
+        if (!field.checkValidity()) {
+          formIsValid = false;
+        }
+      });
+
+      if (password !== confirmPassword) {
+        document.getElementById("confirmPassword").classList.add("is-invalid");
+        document.getElementById("confirmPassword").classList.remove("is-valid");
+        formIsValid = false;
+      } else {
+        document.getElementById("confirmPassword").classList.remove("is-invalid");
+        document.getElementById("confirmPassword").classList.add("is-valid");
+      }
+
+      const validCode = await validateCohortCode(cohortCode);
+      if (!validCode) {
+        document.getElementById("cohortCode").classList.add("is-invalid");
+        document.getElementById("cohortCode").classList.remove("is-valid");
+        formIsValid = false;
+      } else {
+        document.getElementById("cohortCode").classList.remove("is-invalid");
+        document.getElementById("cohortCode").classList.add("is-valid");
+      }
+
+      if (!formIsValid) {
+        return;
+      }
+
+      await registerNewUser(email, password, displayName, cohortCode);
+    }
+
+    async function registerNewUser(email, password, displayName, cohortCode) {
+      try {
+        const validCode = await validateCohortCode(cohortCode);
+        if (!validCode) {
+          alert("The cohort code is invalid. Please check with your coordinator.");
+          return;
+        }
+
+        const userCredential = await window.fbAuth.createUserWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        await user.sendEmailVerification();
+
+        await user.updateProfile({ displayName });
+
+        await addUserToDatabase(user, cohortCode);
+
+        localStorage.setItem('loggedIn', true);
+        localStorage.setItem('displayName', displayName);
+
+        window.location.replace("./sessions.html");
+      } catch (error) {
+        console.error("Error during registration:", error);
+        alert("Registration failed: " + error.message);
+      }
+    }
+
+    async function validateCohortCode(code) {
+      try {
+        if (!window.fbDB) {
+          throw new Error("Firebase database not initialised");
+        }
+
+        const snapshot = await window.fbDB.ref('cohorts/').once('value');
+        const cohorts = snapshot.val();
+        return cohorts && Object.values(cohorts).some(obj => obj.code === code);
+      } catch (error) {
+        console.error("Cohort code validation error:", error);
+        return false;
+      }
+    }
+
+
 
     async function addUserToDatabase(user, cohortId) {
-      await window.fbDB.ref('users/' + user.uid).set({ displayName: user.displayName, email: user.email, cohort: cohortId });
+      await window.fbDB.ref('users/' + user.uid).set({
+        displayName: user.displayName,
+        email: user.email,
+        cohort: cohortId
+      });
     }
 
-    function login(fbAuth) {
+    function login(event) {
       event.preventDefault();
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
+
       window.fbAuth.signInWithEmailAndPassword(email, password)
-        .then(async (userCredential) => {
+      .then(async (userCredential) => {
           localStorage.setItem('loggedIn', true);
           const user = window.fbAuth.currentUser.uid;
           const profileData = await window.fbDB.ref('users/' + user ).once('value')
@@ -321,39 +475,19 @@
           localStorage.setItem('displayName', profileData.val()['displayName']);
           window.location.replace("./sessions.html");
         })
-        .catch((error) => {
-          console.log("error signing in: ", error.message)
+        .catch(error => {
+          console.error("Log in error:", error.message);
         });
     };
   </script>
 
   <script>
-    const toggleNewPassword = document.querySelector('.toggleNewPassword');
-    const togglePasswordCheck = document.querySelector('.togglePasswordCheck');
-    const password = document.querySelector('.togglePassword');
-    const newPasswordEl = document.getElementById('newPassword');
-    const passwordCheckEl = document.getElementById('passwordCheck');
-    const passwordEl = document.getElementById('password');
-    toggleNewPassword.addEventListener('click', (e) => {
-      const type = newPasswordEl
-        .getAttribute('type') === 'password' ?
-        'text' : 'password';
-      newPasswordEl.setAttribute('type', type);
-      e.target.classList.toggle('bi-eye');
-    });
-    togglePasswordCheck.addEventListener('click', (e) => {
-      const type = passwordCheckEl
-        .getAttribute('type') === 'password' ?
-        'text' : 'password';
-      passwordCheckEl.setAttribute('type', type);
-      e.target.classList.toggle('bi-eye');
-    });
-    password.addEventListener('click', (e) => {
-      const type = passwordEl
-        .getAttribute('type') === 'password' ?
-        'text' : 'password';
-      passwordEl.setAttribute('type', type);
-      e.target.classList.toggle('bi-eye');
+    window.fbDB.ref('cohorts/').once('value')
+    .then(snapshot => {
+      console.log("Cohort data:", snapshot.val());
+    })
+    .catch(error => {
+      console.error("Error accessing cohort data:", error);
     });
   </script>
 
