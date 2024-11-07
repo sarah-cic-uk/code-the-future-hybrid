@@ -29,7 +29,7 @@
               padding-right: 10px;
               color: #1d0c59;
             ">
-          <img src="../../images/logo.png" height="60px" />
+          <img src="../../images/logo.png" height="60px" alt="CTF logo" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -215,7 +215,6 @@
       const githubPageLink = document.querySelector('.github-page-link');
       if (profileValues.siteFlag && profileValues.siteURL) {
         githubPageLink.href = `https://${profileValues.siteURL}`;
-        githubPageLink.title = profileValues.siteTitle || "GitHub Page";
       } else {
         document.querySelector('.github-page-column').classList.add('d-none');
       }
