@@ -116,10 +116,10 @@
 
                       <form id="loginForm" onsubmit="login(window.fbAuth)">
                         <div class="mb-3">
-                          <label for="email" class="form-label">Username</label>
+                          <label for="username" class="form-label">Username</label>
                           <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                            <input type="email" class="form-control" id="email" placeholder="Registered email address" autocomplete="current-email" required>
+                            <input class="form-control" type="email" id="username" name="username" autocomplete="username" placeholder="Registered email address" required>
                           </div>
                         </div>
 
@@ -127,7 +127,7 @@
                           <label for="password" class="form-label">Password</label>
                           <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                            <input type="password" class="form-control" id="password" autocomplete="current-password" required>
+                            <input class="form-control" type="password" id="password" name="password" autocomplete="current-password" required>
                             <span class="input-group-text fixCorners" onclick="togglePassword('password')">
                               <i class="bi bi-eye-slash toggle-password"></i>
                             </span>
@@ -182,20 +182,20 @@
             <form id="registrationForm" onsubmit="validateAndRegister(event)" novalidate>
               <div class="mb-3">
                 <label for="displayName" class="form-label">Display name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="displayName" required>
+                <input class="form-control" type="text" id="displayName" required>
                 <div class="invalid-feedback">Display name is required.</div>
               </div>
 
               <div class="mb-3">
                 <label for="newEmail" class="form-label">Email <span class="text-danger">*</span></label>
-                <input type="email" class="form-control" id="newEmail" required>
+                <input class="form-control" type="email" id="newEmail" required>
                 <div class="invalid-feedback">Valid email is required.</div>
               </div>
 
               <div class="mb-3">
                 <label for="newPassword" class="form-label">Password <span class="text-danger">*</span></label>
                 <div class="input-group">
-                  <input type="password" class="form-control" id="newPassword" oninput="validatePassword()" required>
+                  <input class="form-control" type="password" id="newPassword" oninput="validatePassword()" autocomplete="new-password" required>
                   <span class="input-group-text fixCorners" onclick="togglePassword('newPassword')">
                     <i class="bi bi-eye-slash toggle-password"></i>
                   </span>
@@ -214,8 +214,7 @@
               <div class="mb-3">
                 <label for="confirmPassword" class="form-label">Confirm password <span class="text-danger">*</span></label>
                 <div class="input-group">
-                  <input type="password" class="form-control" id="confirmPassword" oninput="validateConfirmPassword()"
-                    required>
+                  <input class="form-control" type="password" id="confirmPassword" oninput="validateConfirmPassword()" autocomplete="new-password" required>
                   <span class="input-group-text fixCorners" onclick="togglePassword('confirmPassword')">
                     <i class="bi bi-eye-slash toggle-password"></i>
                   </span>
@@ -225,9 +224,11 @@
 
               <div class="mb-3">
                 <label for="cohortCode" class="form-label">Cohort access code <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="cohortCode" required>
+                <input class="form-control" type="text" id="cohortCode" required>
                 <div id="cohortCodeCheck" class="invalid-feedback">Invalid cohort code.</div>
               </div>
+
+              <div id="alert"></div>
 
               <div class="form-group py-4 text-center">
                 <button type="submit" class="btn primary" id="btnLogin">Sign up</button>
@@ -251,7 +252,6 @@
         </div>
       </div>
     </div>
-
 
   </div>
 
@@ -354,14 +354,6 @@
       }
     }
 
-    function checkPasswordCriteria(password) {
-      return password.length >= 8 &&
-        /[a-z]/.test(password) &&
-        /[A-Z]/.test(password) &&
-        /[0-9]/.test(password) &&
-        /[!@#$%^&*(),.?":{}|<>]/.test(password);
-    }
-
     async function validateAndRegister(event) {
       event.preventDefault();
 
@@ -412,8 +404,14 @@
     async function registerNewUser(email, password, displayName, cohortCode) {
       try {
         const validCode = await validateCohortCode(cohortCode);
+        const alertContainer = document.querySelector("#alert");
         if (!validCode) {
-          alert("The cohort code is invalid. Please check with your coordinator.");
+          const alertHTML = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display:block">
+              <div> The cohort code is invalid. Please check with your Code the Future coordinator. </div>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
+            alertContainer.insertAdjacentHTML('beforeend', alertHTML);
           return;
         }
 
@@ -436,22 +434,11 @@
       }
     }
 
-    async function validateCohortCode(code) {
-      try {
-        if (!window.fbDB) {
-          throw new Error("Firebase database not initialised");
-        }
-
-        const snapshot = await window.fbDB.ref('cohorts/').once('value');
-        const cohorts = snapshot.val();
-        return cohorts && Object.values(cohorts).some(obj => obj.code === code);
-      } catch (error) {
-        console.error("Cohort code validation error:", error);
-        return false;
-      }
+    async function validateCohortCode(cohortCode) {
+      const possibleCodes = await window.fbDB.ref('cohorts/').once('value')
+      const possibleCodes1 = possibleCodes.val();
+      return possibleCodes.find(obj => obj.code === cohortCode)?.id;
     }
-
-
 
     async function addUserToDatabase(user, cohortId) {
       await window.fbDB.ref('users/' + user.uid).set({
@@ -461,9 +448,9 @@
       });
     }
 
-    function login(event) {
+    function login(fbAuth) {
       event.preventDefault();
-      const email = document.getElementById('email').value;
+      const email = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
       window.fbAuth.signInWithEmailAndPassword(email, password)
@@ -481,15 +468,6 @@
     };
   </script>
 
-  <script>
-    window.fbDB.ref('cohorts/').once('value')
-    .then(snapshot => {
-      console.log("Cohort data:", snapshot.val());
-    })
-    .catch(error => {
-      console.error("Error accessing cohort data:", error);
-    });
-  </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
