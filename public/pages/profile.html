@@ -61,6 +61,12 @@
     .row.align-items-start {
       align-items: start;
     }
+    button.btn.btn-outline-secondary:hover {
+      background-color: #31238c;
+      opacity: 0.7;
+      background-color:#31238c;
+      border-color: #31238c;
+    }
   </style>
 </head>
 
@@ -135,9 +141,9 @@
                 <h2 class="h4">Let us know more about yourself</h2>
                 <p>
                   What are your aspirations and goals so that the tutors and other students from your Code the Future
-                  cohort
-                  can get to know you better.
+                  cohort can get to know you better.
                 </p>
+                <p>The information you share here will be highlighted in other areas of the site. Your social links, for instance, will be visible on the members page, making it easy for your cohort to connect with you. Plus, once you complete your Git project, it can be showcased on the Code the Future website, inspiring future students with your work!</p>
               </div>
             </div>
 
@@ -148,31 +154,27 @@
                     style="max-width:200px;" />
                 </div>
                 <div class="text-center">
-                  <!-- Button to trigger file input -->
-                  <button type="button" class="btn btn-rounded text-white" style="background-color: #1d0c58;"
+                  <button type="button" class="btn btn-rounded text-white" style="background-color: #31268c;"
                     onclick="document.getElementById('formFile').click()" title="Upload a new profile image">
                     Update profile image
                   </button>
 
-                  <!-- Hidden file input -->
                   <input type="file" id="formFile" style="display: none;"
                     onchange="displaySelectedImage(event, 'selectedAvatar')" />
 
-                  <!-- Display the chosen file name here -->
                   <span id="fileNameDisplay" class="d-block mt-2 text-muted" style="font-size: 0.9em;"></span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Form -->
           <form id="profile-bio">
+
             <div class="row">
               <div class="col-lg-6 mb-4">
-                <!-- Personal info -->
                 <fieldset class="p-3 bordered-section" style="background-color: rgb(49 35 140 / 6%);">
                   <legend class="h5" style="padding-top: 0 !important">Personal information</legend>
-
+            
                   <div class="form-group mt-3">
                     <label class="profile-question text-start form-label" for="who">Tell us who you are</label>
                     <div class="input-group">
@@ -180,45 +182,76 @@
                         placeholder="Let us know more about yourself."></textarea>
                     </div>
                   </div>
-
+        
                   <div class="form-group mt-3">
-                    <label class="profile-question text-start form-label" for="what">What are you hoping to learn from
-                      this course?</label>
+                    <label class="profile-question text-start form-label" for="what">What are you hoping to learn from this course?</label>
                     <div class="input-group">
                       <textarea rows="3" class="form-control" id="what" name="what"
                         placeholder="Let us know what made you sign up and what you would like to achieve from it."></textarea>
                     </div>
                   </div>
-
+        
                   <div class="form-group mt-3">
-                    <label class="profile-question text-start form-label" for="career">What are your career
-                      aspirations?</label>
+                    <label class="profile-question text-start form-label" for="career">What are your career aspirations?</label>
                     <div class="input-group">
                       <textarea rows="3" class="form-control" id="career" name="career"
                         placeholder="Let us know where you would like to see yourself in the future."></textarea>
                     </div>
                   </div>
+
+                  <div class="form-group mt-3">
+                    <label class="profile-question text-start form-label" for="currentJob">What is your current job role?</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="currentJob" name="currentJob"
+                        placeholder="Let us know what you are doing daily" />
+                    </div>
+                  </div>
+        
+                  <div class="form-group mt-4">
+                    <label class="profile-question text-start form-label" for="studentLocation">Where in the world are you?</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="studentLocation" name="studentLocation"
+                        placeholder="Let us know your location" />
+                    </div>
+                  </div>
                 </fieldset>
               </div>
 
+
               <div class="col-lg-6 mb-4">
-                <!-- Showcase project -->
+                <fieldset class="p-3 bordered-section mb-4" style="background-color: rgb(217 67 122 / 9%);">
+                  <legend class="h5" style="padding-top: 0 !important">Social links</legend>
+                  <div class="form-group mt-4">
+                    <label class="profile-question text-start form-label" for="linkedIn">Add your LinkedIn profile</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="linkedIn" name="linkedIn"
+                        placeholder="Let others see your LinkedIn profile" />
+                    </div>
+                  </div>
+        
+                  <div class="form-group mt-4">
+                    <label class="profile-question text-start form-label" for="gitHubAccount">Add your GitHub profile</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="gitHubAccount" name="gitHubAccount"
+                        placeholder="Let others see your GitHub profile" />
+                    </div>
+                  </div>
+                </fieldset>
+
                 <fieldset class="p-3 bordered-section" style="background-color: rgb(29 242 221 / 9%);">
                   <legend class="h5" style="padding-top: 0 !important">Showcase project</legend>
-
+            
                   <div class="form-group mt-3">
                     <label class="profile-question text-start form-label" for="gitUrl">Published Git URL</label>
                     <div class="input-group">
                       <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
-                      <input type="text" class="form-control" id="gitUrl" name="gitUrl"
-                        placeholder="Enter your Git URL" />
-                      <button type="button" class="btn btn-outline-secondary" onclick="testGitUrl()"
-                        title="Test the Git URL">
+                      <input type="text" class="form-control" id="gitUrl" name="gitUrl" placeholder="Enter your Git URL" />
+                      <button type="button" class="btn btn-outline-secondary" onclick="testGitUrl()" title="Test the Git URL">
                         Test URL
                       </button>
                     </div>
                   </div>
-
+            
                   <div class="form-group mt-3">
                     <label class="profile-question text-start form-label" for="gitTitle">Git Project Title</label>
                     <div class="input-group">
@@ -227,27 +260,24 @@
                         placeholder="Enter the title of your Git project" />
                     </div>
                   </div>
-
+            
                   <div class="form-group mt-4">
-                    <label class="profile-question text-start form-label">Would you like to add this project to the
-                      showcase page?</label>
+                    <label class="profile-question text-start form-label">Would you like to add this project to the showcase page?</label>
                     <div>
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="showcase" id="showcaseYes" value="yes" />
                         <label class="form-check-label" for="showcaseYes">Yes</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="showcase" id="showcaseNo" value="no"
-                          checked />
+                        <input class="form-check-input" type="radio" name="showcase" id="showcaseNo" value="no" checked />
                         <label class="form-check-label" for="showcaseNo">No</label>
                       </div>
                     </div>
                   </div>
                 </fieldset>
-
               </div>
             </div>
-
+            
             <div class="row justify-content-center mt-4 mb-4">
               <div class="CTA-group centered">
                 <input type="reset" value="Clear form" id="reset" class="btn nav-link" title="Clear all form fields" />
@@ -255,6 +285,7 @@
                   title="Save your profile changes" />
               </div>
             </div>
+
           </form>
         </div>
 
@@ -338,9 +369,12 @@
     const who = document.getElementById('who');
     const what = document.getElementById('what');
     const career = document.getElementById('career');
+    const currentJob = document.getElementById('currentJob');
+    const studentLocation = document.getElementById('studentLocation');
+    const linkedIn = document.getElementById('linkedIn');
+    const gitHubAccount = document.getElementById('gitHubAccount');
     const form = document.getElementById('profile-bio');
 
-    // toast notifications
     const successToast = new bootstrap.Toast(document.getElementById('update_success'));
     const errorToast = new bootstrap.Toast(document.getElementById('update_error'));
     const avatarSuccessToast = new bootstrap.Toast(document.getElementById('avatar-update_success'));
@@ -400,6 +434,10 @@
           who.value = profileValues.about || '';
           what.value = profileValues.learning || '';
           career.value = profileValues.aspirations || '';
+          currentJob.value = profileValues.currentJob || '';
+          studentLocation.value = profileValues.studentLocation || '';
+          linkedIn.value = profileValues.linkedIn || '';
+          gitHubAccount.value = profileValues.gitHub || '';
           document.getElementById('gitUrl').value = profileValues.siteURL || '';
           document.getElementById('gitTitle').value = profileValues.siteTitle || '';
           document.getElementById(profileValues.siteFlag ? 'showcaseYes' : 'showcaseNo').checked = true;
@@ -420,6 +458,10 @@
         about: who.value,
         learning: what.value,
         aspirations: career.value,
+        currentJob: currentJob.value,
+        studentLocation: studentLocation.value,
+        linkedIn: linkedIn.value,
+        gitHub: gitHubAccount.value,
         siteURL: document.getElementById('gitUrl').value,
         siteTitle: document.getElementById('gitTitle').value,
         siteFlag: document.querySelector('input[name="showcase"]:checked').value === "yes"
@@ -459,7 +501,7 @@
       let gitUrlValue = gitUrlInput.value.trim();
       let formattedUrl = gitUrlValue;
 
-      // validate the Git URL, format it, and open in a new tab if valid
+      // validate the Git URL, format it, and open in a new tab IF valid
       if (validateGitUrl(gitUrlValue)) {
         if (!/^https?:\/\//i.test(gitUrlValue)) {
           formattedUrl = 'https://' + gitUrlValue;
