@@ -489,37 +489,34 @@ ul[id^='submenu'] li {
   background-color: #31238C;
   color: white;
 }
-
 .job-btns a:hover,
-.btn-register:hover,
 .button-style,
 .button-style-invert:hover {
   background-color: #d9437a;
   color: white;
 }
-
+.btn-register:hover,
 .button-style:hover,
 .button-style-invert {
   background-color: #31238C;
   color: white;
 }
-
 .btn-register {
-  border-color: #d9437a;
+  border-color: #31238C;
 }
 
 .hidden-feedback {
   display: none;
 }
 
-.invalid-feedback {
+/* .invalid-feedback {
   display: block;
   color: red;
   display: flex;
   justify-content: flex-end;
   font-size: small;
   padding-right: 5px;
-}
+} */
 
 .tooltip-text {
   visibility: hidden;
