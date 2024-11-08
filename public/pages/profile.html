@@ -440,7 +440,7 @@
           gitHubAccount.value = profileValues.gitHub || '';
           document.getElementById('gitUrl').value = profileValues.siteURL || '';
           document.getElementById('gitTitle').value = profileValues.siteTitle || '';
-          document.getElementById(profileValues.siteFlag === "yes" ? 'showcaseYes' : 'showcaseNo').checked = true;
+          document.getElementById(profileValues.siteFlag ? 'showcaseYes' : 'showcaseNo').checked = true;
 
           const profilePicElement = document.getElementById("selectedAvatar");
           const pathReference = await window.fbStorage.ref("profilePics/" + currentUser.uid);
@@ -464,7 +464,7 @@
         gitHub: gitHubAccount.value,
         siteURL: document.getElementById('gitUrl').value,
         siteTitle: document.getElementById('gitTitle').value,
-        siteFlag: document.querySelector('input[name="showcase"]:checked').value
+        siteFlag: document.querySelector('input[name="showcase"]:checked').value === "yes"
       };
 
       const updates = {};
