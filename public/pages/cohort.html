@@ -7,12 +7,35 @@
   <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
   <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
   <meta name="author" content="Sarah Neenan" />
+
   <title>Code the Future</title>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  
   <script type="text/javascript" src="./js/app.js"></script>
   <script type="module" src="./js/firebase.js"></script>
+  <style>
+    .pagination-container .btn {
+      margin: 0.2rem;
+      border-color: transparent;
+    }
+    .pagination-container .btn.active {
+      background-color: #d9437a;
+      color: white;
+    }
+    .pagination-container .btn.active:hover {
+      background-color: #d9437a;
+      color: white;
+      cursor: none;
+      pointer-events: none;
+    }
+    .pagination-container .btn-outline-secondary:hover {
+      background-color: #31238c;
+      color: white;
+    }
+  </style>
 </head>
 
 <body>
@@ -24,7 +47,7 @@
               padding-right: 10px;
               color: #1d0c59;
             ">
-          <img src="../images/logo.png" height="60px" />
+          <img src="../images/logo.png" height="60px" alt="CTF logo" />
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
           aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,21 +95,27 @@
     <div class="container-fluid page-content">
       <h1 class="text-center pt-4">Meet your Cohort</h1>
       <div class="row card-container">
-
+        <!-- cohort cards here -->
       </div>
     </div>
   </div>
+
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js";
     window.fbAuth = fbAuth;
     window.fbDB = fbDB;
   </script>
+  
   <script type="text/javascript">
     const stylesheet = document.createElement("link");
     stylesheet.rel = "stylesheet";
     stylesheet.type = "text/css";
     stylesheet.href = getPath() + "styles/mainStyle.css";
     document.head.appendChild(stylesheet);
+
+    const itemsPerPage = 8;
+    let currentPage = 1;
+    let cohortMembers = [];
 
     window.onload = async (event) => {
       auth(
@@ -98,59 +127,131 @@
       window.fbAuth.onAuthStateChanged(async function (user) {
         if (user) {
           const currentUser = window.fbAuth.currentUser;
-          const userData = await window.fbDB.ref('users/' + currentUser.uid).once('value')
+          const userData = await window.fbDB.ref('users/' + currentUser.uid).once('value');
           const cohortId = userData.val().cohort;
-          await getCohortData(cohortId);
+          await loadCohortData(cohortId);
 
-          var elements = document.getElementsByClassName("dynamic-link");
-          for (var i = 0; i < elements.length; i++) {
+          const elements = document.getElementsByClassName("dynamic-link");
+          for (let i = 0; i < elements.length; i++) {
             elements[i].addEventListener('click', (e) => redirect(e.target.name, e.target.id), false);
           }
-
         }
-      })
+      });
     };
 
+    async function loadCohortData(cohortId) {
+      cohortMembers = [];
+      const snapshot = await window.fbDB.ref('users').once("value");
 
-    async function getCohortData(cohortId) {
-      await window.fbDB.ref('users').once("value").then((snapshot) => {
-        snapshot.forEach((userSnapshot) => {
-          let userEntry = userSnapshot.val();
-          if (userEntry.cohort === cohortId) {
-            const cardContainer = document.querySelector(".card-container")
-            const createNewElement = `<div class="col card shadow m-2" style="height: fit-content">
-                <div class="card-body">
-                <div class="d-flex justify-content-center">
-                <img class="rounded-circle img-thumbnail" src="https://images.unsplash.com/photo-1579463148228-138296ac3b98?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" /> 
-                </div>  
-                <div class="text-center my-6">
-                <p class="d-block h5 mt-4">${userEntry.displayName}</p> 
-                <a href="#" name="${userEntry.displayName}" id="${userSnapshot.key}" class="btn-link dynamic-link">View Profile
-                </a> 
-                </div> 
-                </div>
-                </div>`
-            cardContainer.insertAdjacentHTML('beforeend', createNewElement);
-          }
-        });
+      snapshot.forEach((userSnapshot) => {
+        let userEntry = userSnapshot.val();
+        if (userEntry.cohort === cohortId) {
+          cohortMembers.push({ id: userSnapshot.key, ...userEntry });
+        }
       });
+
+      loadCohortPage(1);
+      renderPaginationControls();
+    }
+
+    function loadCohortPage(page) {
+      const cardContainer = document.querySelector(".card-container");
+      cardContainer.innerHTML = "";
+      currentPage = page;
+
+      const start = (page - 1) * itemsPerPage;
+      const end = start + itemsPerPage;
+      const pageMembers = cohortMembers.slice(start, end);
+
+      pageMembers.forEach(({ id, displayName, profile }) => {
+        const fallbackImageURL = profile ? profile.imageURL : null;
+        const cardHTML = `
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="card shadow m-2" style="height: fit-content">
+              <div class="card-body">
+                <p class="h5 text-center" style="padding-top:0;">${displayName}</p> 
+                <div class="d-flex justify-content-center">
+                  <img class="rounded-circle img-thumbnail" style="height: 200px; width: 200px;"
+                    src="https://avatar.iran.liara.run/public"
+                    alt="Profile picture of ${displayName}" data-user-id="${id}" />
+                </div>
+                <div class="text-center mt-4">
+                  <a href="#" name="${displayName}" id="${id}" class="btn-link dynamic-link" title="View profile">View profile</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        cardContainer.insertAdjacentHTML('beforeend', cardHTML);
+        setUserProfileImage(id, fallbackImageURL);
+      });
+      renderPaginationControls();
+    }
+
+    function renderPaginationControls() {
+      const paginationContainer = document.createElement("div");
+      paginationContainer.className = "pagination-container text-center mt-4";
+
+      const totalPages = Math.ceil(cohortMembers.length / itemsPerPage);
+      for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement("button");
+        pageButton.className = "btn btn-outline-secondary mx-1";
+        pageButton.textContent = i;
+
+        if (i === currentPage) {
+          pageButton.classList.add("active");
+        }
+
+        pageButton.onclick = () => {
+          currentPage = i;
+          loadCohortPage(i);
+        };
+
+        paginationContainer.appendChild(pageButton);
+      }
+
+      document.querySelector(".pagination-container")?.remove();
+      document.querySelector(".container-fluid.page-content").appendChild(paginationContainer);
+    }
+
+
+    async function setUserProfileImage(userId, fallbackImageURL) {
+      const imgElement = document.querySelector(`img[data-user-id="${userId}"]`);
+
+      if (imgElement) {
+        const pathReference = window.fbStorage.ref("profilePics/" + userId);
+
+        try {
+          const url = await pathReference.getDownloadURL();
+          imgElement.src = url;
+        } catch (error) {
+          if (error.code === 'storage/object-not-found') {
+            imgElement.src = fallbackImageURL || "https://avatar.iran.liara.run/public";
+          } else {
+            console.error(`Error fetching profile image for user ${userId}:`, error);
+          }
+        }
+      }
     }
 
     function createPath(options) {
-      window.location = getPath() + options;
-      return false;
+      window.open(getPath() + options, '_blank');
     }
+
     const redirect = (name, id) => {
-      createPath('pages/cohort/member.html?' + name + '&' + id)
-    }
+      window.open(getPath() + 'pages/cohort/member.html?' + name + '&' + id, '_blank');
+    };
 
     function logUserOut(event) {
       logout(window.fbAuth);
     }
   </script>
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
+
 </body>
 
 </html>
