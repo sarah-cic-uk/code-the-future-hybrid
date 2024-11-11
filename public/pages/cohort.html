@@ -35,6 +35,9 @@
       background-color: #31238c;
       color: white;
     }
+    .dynamic-link {
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -55,13 +58,12 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
           <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
             <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/sessions.html')" id="sessionsLink">Sessions</a>
           </div>
           <div class="d-flex align-items-center">
             <!-- Logged in Avatar -->
@@ -77,8 +79,7 @@
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
                 <li>
-                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My
-                    Profile</a>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
                 </li>
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
@@ -176,7 +177,7 @@
                     alt="Profile picture of ${displayName}" data-user-id="${id}" />
                 </div>
                 <div class="text-center mt-4">
-                  <a href="#" name="${displayName}" id="${id}" class="btn-link dynamic-link" title="View profile">View profile</a>
+                  <a href="javascript:void(0);" data-name="${displayName}" data-id="${id}" class="dynamic-link" title="View profile">View profile</a>
                 </div>
               </div>
             </div>
@@ -185,6 +186,16 @@
         cardContainer.insertAdjacentHTML('beforeend', cardHTML);
         setUserProfileImage(id, fallbackImageURL);
       });
+
+      document.querySelectorAll(".dynamic-link").forEach(link => {
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          const name = e.target.getAttribute("data-name");
+          const id = e.target.getAttribute("data-id");
+          redirect(name, id);
+        });
+      });
+
       renderPaginationControls();
     }
 
@@ -235,12 +246,18 @@
     }
 
     function createPath(options) {
-      window.open(getPath() + options, '_blank');
+      window.location = getPath() + options;
     }
 
-    const redirect = (name, id) => {
-      window.open(getPath() + 'pages/cohort/member.html?' + name + '&' + id, '_blank');
-    };
+    function redirect(name, id) {
+      if (!name || !id) {
+        console.error("Redirect error: Missing name or id", { name, id });
+        return;
+      }
+
+      const url = `${getPath()}pages/cohort/member.html?name=${encodeURIComponent(name)}&id=${encodeURIComponent(id)}`;
+      window.location.href = url;
+    }
 
     function logUserOut(event) {
       logout(window.fbAuth);
