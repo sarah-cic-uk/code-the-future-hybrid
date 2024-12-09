@@ -105,7 +105,7 @@
                         <div class="text-end">
                             <img id="tutor-avatar" alt="image" class="avatar-sm rounded-circle" width="100"
                                 height="100">
-                            <div class="tutor-name">Haseeb Jabbar <br />
+                            <div class="tutor-name">Sarah Neenan <br />
                                 Full Stack Engineer</div>
                         </div>
                     </div>
@@ -125,7 +125,7 @@
     </script>
     <script>
         var converter = new showdown.Converter();
-        fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-1/git_and_desktop.md')
+        fetch('https://api.github.com/repos/sarah-cic-uk/Code-the-Future/contents/session-1/first_repo.md')
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
@@ -149,11 +149,11 @@
             auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
 
-            const pathReference = window.fbStorage.ref('media/githubDesktop.mp4');
+            const pathReference = window.fbStorage.ref('media/firstRepo.mp4');
             const el = document.getElementById('session-video');
             fetchMedia(pathReference, el)
 
-            document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.png';
+            document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/sarah.png';
             updateSideNav()
         }
 
