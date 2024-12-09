@@ -528,7 +528,8 @@
     async function validateCohortCode(cohortCode) {
       const possibleCodes = await window.fbDB.ref('cohorts/').once('value');
       const possibleCodes1 = possibleCodes.val();
-      return possibleCodes.find((obj) => obj.code === cohortCode)?.id;
+      const codesArray = Object.values(possibleCodes1);
+      return codesArray.find((obj) => obj.code === cohortCode);
     }
 
     async function addUserToDatabase(user, cohortId) {
