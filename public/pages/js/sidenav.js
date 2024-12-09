@@ -40,6 +40,12 @@ template.innerHTML = `
             <i class="fs-4 bi-dash"></i>
             <span class="d-none d-sm-inline">Git & the Terminal</span></a>
         </li>
+        <li>
+          <a href="#" onclick="createPath('pages/sessions/session1/lessons/githubDesktop.html')"
+            class="nav-link p-0" name="githubDesktop">
+            <i class="fs-4 bi-dash"></i>
+            <span class="d-none d-sm-inline">GitHub Desktop</span></a>
+        </li>
       </ul>
     </li>
     <li class="nav-item pb-2">
