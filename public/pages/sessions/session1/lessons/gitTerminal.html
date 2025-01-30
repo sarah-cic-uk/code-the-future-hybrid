@@ -79,7 +79,6 @@
                 <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
                   alt="Black and White Portrait of a Man" loading="lazy" />
               </a>
-
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
@@ -100,8 +99,14 @@
       <div class="row flex-nowrap page-content">
         <div class="col py-3">
           <div class="media-container d-flex">
+            <div class="completion-button-container text-start">
+              <button id="completionButton" onclick="markComplete(window.location, this)">
+                <i class="bi bi-check-circle"></i>
+                Mark Complete
+              </button>
+            </div>
             <div class="embed-responsive embed-responsive-16by9 text-center flex-grow-1">
-              <video id="session-video" class="embed-responsive-item mx-a" controls width="70%">
+              <video id="session-video" class="embed-responsive-item mx-a" controls width="90%">
                 <source type="video/mp4" />
               </video>
             </div>
@@ -166,6 +171,7 @@
       document.getElementById("tutor-avatar").src =
         getPath() + "images/tutorAvatars/sarah.png";
       updateSideNav();
+      checkCompletionStatus();
     };
 
     function createPath(options) {

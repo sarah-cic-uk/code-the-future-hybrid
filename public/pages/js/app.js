@@ -110,3 +110,55 @@ function fetchMedia(pathReference, el) {
       // Handle any errors
     });
 }
+
+async function checkCompletionStatus() {
+  const user = window.fbAuth.currentUser;
+console.log(user)
+document.getElementById('completionButton').className = `completion-button ${getButtonStatus(window.location, user)}`;
+//TODO 
+}
+
+  async function markComplete(page, buttonElement) {
+  const user = window.fbAuth.currentUser;
+  const filename = page.pathname.match(/.*\/(.*)$/)[1].replace('.html', '');
+  console.log(filename)
+  const competePages = await window.fbDB.ref('users/' + user.uid + '/completions').once('value');
+  const competePagesVal = competePages.val();
+  const pagesArray = competePagesVal ? Object.values(competePagesVal) : [];
+  //if filename is not in pagesArray add it, if it is then remove it
+  if (pagesArray.includes(filename)) {
+    pagesArray.splice(pagesArray.indexOf(filename), 1);
+  } else {
+    pagesArray.push(filename);
+  }
+
+
+  console.log(competePages)
+  console.log(competePagesVal)
+  console.log(pagesArray)
+  await addCompletionToDatabase(user, pagesArray)
+  getButtonStatus(buttonElement, filename)
+}
+
+async function addCompletionToDatabase(user, data) {
+  await window.fbDB.ref('users/' + user.uid).update({
+    competions: data
+  });
+}
+
+async function getButtonStatus(button, currentPage){
+  const user = window.fbAuth.currentUser;
+
+
+  await window.fbDB.ref('users/' + user.uid + '/completions').once('value')
+    .then((snapshot) => {
+        const isComplete = snapshot.val()?.includes(currentPage); 
+        if (isComplete) {
+          button.classList.remove('button-status-incomplete');
+          button.classList.add('button-status-complete');
+      } else {
+          button.classList.remove('button-status-complete');
+          button.classList.add('button-status-incomplete');
+      }    });
+ 
+}
