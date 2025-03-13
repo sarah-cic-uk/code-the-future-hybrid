@@ -29,10 +29,22 @@ template.innerHTML = `
             <span class="d-none d-sm-inline">Intro to Git</span></a>
         </li>
         <li>
+          <a href="#" onclick="createPath('pages/sessions/session1/lessons/firstRepo.html')"
+            class="nav-link p-0" name="firstRepo">
+            <i class="fs-4 bi-dash"></i>
+            <span class="d-none d-sm-inline">First Repo</span></a>
+        </li>
+        <li>
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/hostingGithub.html')"
             class="nav-link p-0" name="hostingGithub">
             <i class="fs-4 bi-dash"></i>
             <span class="d-none d-sm-inline">Hosting on GitHub</span></a>
+        </li>
+         <li>
+          <a href="#" onclick="createPath('pages/sessions/session1/lessons/gitVScode.html')"
+            class="nav-link p-0" name="gitVScode">
+            <i class="fs-4 bi-dash"></i>
+            <span class="d-none d-sm-inline">Using Git in VScode</span></a>
         </li>
         <li>
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/gitTerminal.html')"
