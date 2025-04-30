@@ -1,4 +1,4 @@
-const template = document.createElement('template');
+const template = document.createElement("template");
 
 template.innerHTML = `
 <div class="col-auto px-sm-2 px-0 side-navigation" id="side-navigation" style="color: white">
@@ -20,7 +20,7 @@ template.innerHTML = `
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/introIDE.html')"
             class="nav-link p-0" name="introIDE">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">Laptop Setup</span></a>
+            <span class="d-none d-sm-inline">Laptop setup</span></a>
         </li>
         <li>
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/introGit.html')"
@@ -32,7 +32,7 @@ template.innerHTML = `
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/firstRepo.html')"
             class="nav-link p-0" name="firstRepo">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">First Repo</span></a>
+            <span class="d-none d-sm-inline">First repo</span></a>
         </li>
         <li>
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/hostingGithub.html')"
@@ -40,7 +40,7 @@ template.innerHTML = `
             <i class="fs-4 bi-dash"></i>
             <span class="d-none d-sm-inline">Hosting on GitHub</span></a>
         </li>
-         <li>
+        <li>
           <a href="#" onclick="createPath('pages/sessions/session1/lessons/gitVScode.html')"
             class="nav-link p-0" name="gitVScode">
             <i class="fs-4 bi-dash"></i>
@@ -120,13 +120,13 @@ template.innerHTML = `
           <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_forms.html')"
             class="nav-link p-0" name="html_forms">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">Forms and Validation</span></a>
+            <span class="d-none d-sm-inline">Forms & Validation</span></a>
         </li>
         <li>
           <a href="#" onclick="createPath('pages/sessions/session3/lessons/html_hyperlinks.html')"
             class="nav-link p-0" name="html_hyperlinks">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">Hyperlinks and Multi-page sites</span></a>
+            <span class="d-none d-sm-inline">Hyperlinks & Multi-page sites</span></a>
         </li>
       </ul>
     </li>
@@ -164,7 +164,7 @@ template.innerHTML = `
           <a href="#" onclick="createPath('pages/sessions/session4/lessons/cssActivities.html')"
             class="nav-link p-0" name="cssActivities">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">CSS Activity</span></a>
+            <span class="d-none d-sm-inline">CSS activity</span></a>
         </li>
       </ul>
     </li>
@@ -190,13 +190,13 @@ template.innerHTML = `
           <a href="#" onclick="createPath('pages/sessions/session5/lessons/accessibilityTools.html')"
             class="nav-link p-0" name="accessibilityTools">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">Accessibility Tools</span></a>
+            <span class="d-none d-sm-inline">Accessibility tools</span></a>
         </li>
         <li>
           <a href="#" onclick="createPath('pages/sessions/session5/lessons/accessibilityExample.html')"
             class="nav-link p-0" name="accessibilityExample">
             <i class="fs-4 bi-dash"></i>
-            <span class="d-none d-sm-inline">Real-World Example</span></a>
+            <span class="d-none d-sm-inline">Real-World example</span></a>
         </li>
       </ul>
     </li>
@@ -222,7 +222,7 @@ template.innerHTML = `
         <a href="#" onclick="createPath('pages/sessions/session6/lessons/additionalHelp.html')"
           class="nav-link p-0" name="additionalHelp">
           <i class="fs-4 bi-dash"></i>
-          <span class="d-none d-sm-inline">Additional Help</span></a>
+          <span class="d-none d-sm-inline">Additional help</span></a>
       </li>
       </ul>
     </li>
@@ -231,4 +231,69 @@ template.innerHTML = `
 </div>
 `;
 
-document.querySelector('.page-content').prepend(template.content);
+document.querySelector(".page-content").prepend(template.content);
+
+document.addEventListener("DOMContentLoaded", async () => {
+	await waitForFbAuth();
+	updateSideNavCompletionStatus();
+});
+
+async function waitForFbAuth() {
+	return new Promise((resolve) => {
+		const interval = setInterval(() => {
+			if (window.fbAuth && window.fbDB && window.fbAuth.currentUser) {
+				clearInterval(interval);
+				resolve();
+			}
+		}, 50);
+	});
+}
+
+async function updateSideNavCompletionStatus() {
+  const user = window.fbAuth.currentUser;
+  if (!user) return;
+
+  const ref = window.fbDB.ref(`users/${user.uid}/completedSessions/session1`);
+  const snapshot = await ref.once("value");
+  const completed = snapshot.val() || {};
+
+  const completedLessons = Object.keys(completed);
+  const allLessons = [
+    "session1-overview",
+    "introIDE",
+    "introGit",
+    "firstRepo",
+    "hostingGithub",
+    "gitVScode",
+    "gitTerminal",
+    "githubDesktop",
+  ];
+
+  const optionalLessons = ["gitTerminal", "githubDesktop"];
+
+  const requiredLessons = allLessons.filter((name) => !optionalLessons.includes(name));
+
+  // Update individual lesson items
+  completedLessons.forEach((lessonName) => {
+    const el = document.querySelector(`[name="${lessonName}"]`);
+    if (el) {
+      const icon = el.querySelector("i");
+      const label = el.querySelector("span");
+      if (icon) icon.className = "fs-4 bi-check-circle text-success";
+      if (label) label.classList.add("text-success");
+    }
+  });
+
+  // Check if all required lessons completed
+  const isSessionComplete = requiredLessons.every((name) => completedLessons.includes(name));
+
+  if (isSessionComplete) {
+    const sessionBtn = document.querySelector('button[name="session1"]');
+    if (sessionBtn) {
+      const icon = sessionBtn.querySelector("i");
+      const label = sessionBtn.querySelector("span");
+      if (icon) icon.className = "fs-4 bi-check-circle-fill text-success";
+      if (label) label.classList.add("text-success");
+    }
+  }
+}

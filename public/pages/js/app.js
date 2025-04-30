@@ -1,18 +1,18 @@
-
 function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
   if (localStorage.getItem('loggedIn') === "true") {
     if (loginBtn) loginBtn.style.display = "none";
-    if (loginBtn) profileBtn.style.display = "block";
+    if (profileBtn) profileBtn.style.display = "block";
     if (sessionsBtn) sessionsBtn.style.display = "inline-flex";
-    const profileName = localStorage.getItem('displayName')
+    const profileName = localStorage.getItem('displayName');
     document.querySelector('#profileName').innerHTML = profileName;
-  }
-  else {
+  } else {
     if (loginBtn) loginBtn.style.display = "block";
-    if (loginBtn) profileBtn.style.display = "none";
+    if (profileBtn) profileBtn.style.display = "none";
     if (sessionsBtn) sessionsBtn.style.display = "none";
     if (needsAuth) {
-      if (window.location.pathname.match(/.*\/(.*)$/)[1] !== "login.html") { window.location.replace(`${getPath()}pages/login.html`) };
+      if (window.location.pathname.match(/.*\/(.*)$/)[1] !== "login.html") {
+        window.location.replace(`${getPath()}pages/login.html`);
+      }
     }
   }
 }
@@ -30,9 +30,9 @@ function logout(fbAuth) {
     localStorage.setItem('loggedIn', false);
     window.location.replace(`${getPath()}pages/login.html`);
   }).catch((error) => {
-    console.log("error signing out: ", error.message)
+    console.log("error signing out: ", error.message);
   });
-};
+}
 
 function updateSideNav() {
   const filename = window.location.pathname.match(/.*\/(.*)$/)[1];
@@ -44,12 +44,13 @@ function updateSideNav() {
   document.getElementsByName(name)[0].classList.add("active-side-nav");
   document.getElementsByName(session)[0].classList.add("active-side-nav");
   document.getElementsByName(session + '-nav')[0].classList.add("active-top-nav");
-};
+}
 
 function updateSideNavOverview() {
   const session = window.location.pathname.match(/session\d/)[0];
   const submenu = 'submenu' + session.match(/\d/);
-  console.log(submenu)
+
+  console.log(submenu);
   document.getElementById(submenu).classList.add("show");
   document.getElementsByName(session + '-overview')[0].classList.add("active-side-nav");
   document.getElementsByName(session)[0].classList.add("active-side-nav");
@@ -66,37 +67,38 @@ async function checkReleaseDates(fbDB) {
       errorCode: error.code,
       errorMessage: error.message
     }));
+
   // session buttons
   document.querySelectorAll(".release-date-btn").forEach((btn) => {
-    if (Date.now() <
-      userCohort.sessionReleaseDates[btn.name]) {
+    if (Date.now() < userCohort.sessionReleaseDates[btn.name]) {
       btn.disabled = true;
       btn.classList.add('hover-text');
       document.getElementById(`${btn.name}-btn-tooltip`).classList.remove('hidden');
-      document.getElementById(`${btn.name}-btn-tooltip`).innerHTML = `Session Opens ${new Date(userCohort.sessionReleaseDates[btn.name]).toLocaleString().split(',')[0]}`;
+      document.getElementById(`${btn.name}-btn-tooltip`).innerHTML =
+        `Session Opens ${new Date(userCohort.sessionReleaseDates[btn.name]).toLocaleString().split(',')[0]}`;
     }
   });
+
   // sidebar links
   document.querySelectorAll(".nav-item button").forEach((item) => {
-    if (
-      Date.now() <
-      userCohort.sessionReleaseDates[item.name]) {
+    if (Date.now() < userCohort.sessionReleaseDates[item.name]) {
       item.disabled = true;
       item.classList.add('hover-text');
       document.getElementById(`${item.name}-tooltip`).classList.remove('hidden');
-      document.getElementById(`${item.name}-tooltip`).innerHTML = `Session Opens ${new Date(userCohort.sessionReleaseDates[item.name]).toLocaleString().split(',')[0]}`;
+      document.getElementById(`${item.name}-tooltip`).innerHTML =
+        `Session Opens ${new Date(userCohort.sessionReleaseDates[item.name]).toLocaleString().split(',')[0]}`;
     }
   });
-  // nav-bar links
+
+  // navbar links
   document.querySelectorAll(".navbar-nav button").forEach((item) => {
-    const session = item.name.split('-')[0]
-    if (
-      Date.now() <
-      userCohort.sessionReleaseDates[session]) {
+    const session = item.name.split('-')[0];
+    if (Date.now() < userCohort.sessionReleaseDates[session]) {
       item.disabled = true;
       item.classList.add('hover-text');
       document.getElementById(`${session}-tooltip`).classList.remove('hidden');
-      document.getElementById(`${session}-tooltip`).innerHTML = `Session Opens ${new Date(userCohort.sessionReleaseDates[session]).toLocaleString().split(',')[0]}`;
+      document.getElementById(`${session}-tooltip`).innerHTML =
+        `Session Opens ${new Date(userCohort.sessionReleaseDates[session]).toLocaleString().split(',')[0]}`;
     }
   });
 }
@@ -107,58 +109,6 @@ function fetchMedia(pathReference, el) {
       el.setAttribute('src', url);
     })
     .catch((error) => {
-      // Handle any errors
+      console.error("Error fetching media:", error);
     });
-}
-
-async function checkCompletionStatus() {
-  const user = window.fbAuth.currentUser;
-console.log(user)
-document.getElementById('completionButton').className = `completion-button ${getButtonStatus(window.location, user)}`;
-//TODO 
-}
-
-  async function markComplete(page, buttonElement) {
-  const user = window.fbAuth.currentUser;
-  const filename = page.pathname.match(/.*\/(.*)$/)[1].replace('.html', '');
-  console.log(filename)
-  const competePages = await window.fbDB.ref('users/' + user.uid + '/completions').once('value');
-  const competePagesVal = competePages.val();
-  const pagesArray = competePagesVal ? Object.values(competePagesVal) : [];
-  //if filename is not in pagesArray add it, if it is then remove it
-  if (pagesArray.includes(filename)) {
-    pagesArray.splice(pagesArray.indexOf(filename), 1);
-  } else {
-    pagesArray.push(filename);
-  }
-
-
-  console.log(competePages)
-  console.log(competePagesVal)
-  console.log(pagesArray)
-  await addCompletionToDatabase(user, pagesArray)
-  getButtonStatus(buttonElement, filename)
-}
-
-async function addCompletionToDatabase(user, data) {
-  await window.fbDB.ref('users/' + user.uid).update({
-    competions: data
-  });
-}
-
-async function getButtonStatus(button, currentPage){
-  const user = window.fbAuth.currentUser;
-
-
-  await window.fbDB.ref('users/' + user.uid + '/completions').once('value')
-    .then((snapshot) => {
-        const isComplete = snapshot.val()?.includes(currentPage); 
-        if (isComplete) {
-          button.classList.remove('button-status-incomplete');
-          button.classList.add('button-status-complete');
-      } else {
-          button.classList.remove('button-status-complete');
-          button.classList.add('button-status-incomplete');
-      }    });
- 
 }
