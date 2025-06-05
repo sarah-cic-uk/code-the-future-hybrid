@@ -13,7 +13,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
-  
+
   <script type="text/javascript" src="./js/app.js"></script>
   <script type="module" src="./js/firebase.js"></script>
   <style>
@@ -21,20 +21,24 @@
       margin: 0.2rem;
       border-color: transparent;
     }
+
     .pagination-container .btn.active {
       background-color: #d9437a;
       color: white;
     }
+
     .pagination-container .btn.active:hover {
       background-color: #d9437a;
       color: white;
       cursor: none;
       pointer-events: none;
     }
+
     .pagination-container .btn-outline-secondary:hover {
       background-color: #31238c;
       color: white;
     }
+
     .dynamic-link {
       cursor: pointer;
     }
@@ -106,7 +110,7 @@
     window.fbAuth = fbAuth;
     window.fbDB = fbDB;
   </script>
-  
+
   <script type="text/javascript">
     const stylesheet = document.createElement("link");
     stylesheet.rel = "stylesheet";
@@ -172,8 +176,7 @@
               <div class="card-body">
                 <p class="h5 text-center" style="padding-top:0;">${displayName}</p> 
                 <div class="d-flex justify-content-center">
-                  <img class="rounded-circle img-thumbnail" style="height: 200px; width: 200px;"
-                    src="https://avatar.iran.liara.run/public"
+                  <img class="rounded-circle avatar-dimensions img-thumbnail" src="../images/blank_avatar.jpg"
                     alt="Profile picture of ${displayName}" data-user-id="${id}" />
                 </div>
                 <div class="text-center mt-4">
@@ -237,13 +240,15 @@
           imgElement.src = url;
         } catch (error) {
           if (error.code === 'storage/object-not-found') {
-            imgElement.src = fallbackImageURL || "https://avatar.iran.liara.run/public";
+            imgElement.src = fallbackImageURL || "../images/blank_avatar.jpg";
           } else {
             console.error(`Error fetching profile image for user ${userId}:`, error);
           }
         }
       }
     }
+
+
 
     function createPath(options) {
       window.location = getPath() + options;
