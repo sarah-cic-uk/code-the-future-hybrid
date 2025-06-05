@@ -18,11 +18,13 @@ function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
 }
 
 function getPath() {
-  const BASE_URL = window.location.origin;
-  const PATH = BASE_URL.includes('github')
-    ? '/code-the-future-hybrid/'
-    : BASE_URL.includes('app') ? '/' : '/public/';
-  return PATH;
+	const BASE_URL = window.location.origin;
+	const PATH = BASE_URL.includes('github')
+		? '/code-the-future-hybrid/'
+		: BASE_URL.includes('app')
+		? '/'
+		: '/public/';
+	return PATH;
 }
 
 function logout(fbAuth) {
@@ -35,10 +37,10 @@ function logout(fbAuth) {
 }
 
 function updateSideNav() {
-  const filename = window.location.pathname.match(/.*\/(.*)$/)[1];
-  const name = filename.substring(0, filename.indexOf("."));
-  const session = window.location.pathname.match(/session\d/)[0];
-  const submenu = 'submenu' + session.match(/\d/);
+	const filename = window.location.pathname.match(/.*\/(.*)$/)[1];
+	const name = filename.substring(0, filename.indexOf('.'));
+	const session = window.location.pathname.match(/session\d/)[0];
+	const submenu = 'submenu' + session.match(/\d/);
 
   document.getElementById(submenu).classList.add("show");
   document.getElementsByName(name)[0].classList.add("active-side-nav");
@@ -112,3 +114,38 @@ function fetchMedia(pathReference, el) {
       console.error("Error fetching media:", error);
     });
 }
+
+async function sendEmailRequest(to, subject, text, html) {
+  // Validate email inputs
+  if (!to || !subject || (!text && !html)) {
+    console.error("Invalid email payload. 'To', 'Subject', and either 'Text' or 'HTML' are required.");
+    return;
+  }
+
+  const emailPayload = {
+    to,
+    subject,
+    text,
+    html,
+  };
+
+  try {
+    const response = await fetch('https://code-the-future-hybrid.web.app/send-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(emailPayload),
+    });
+
+    if (response.ok) {
+      const result = await response.json();
+      console.log("Email sent successfully:", result);
+    } else {
+      console.error("Failed to send email. Server response:", await response.text());
+    }
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+}
+
