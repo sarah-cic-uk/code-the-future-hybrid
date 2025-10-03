@@ -377,8 +377,8 @@ button.nav-link:focus,
 
 @media (min-width: 576px) {
 	.side-navigation {
-		max-width: 210px;
-		min-width: 210px;
+		max-width: 223px;
+		min-width: 223px;
 	}
 
 	.navbar-brand {
