@@ -101,20 +101,6 @@
       <div class="row flex-nowrap page-content">
         <div class="col py-3">
           <div id="session-banner"></div>
-          <div class="media-container d-flex">
-            <div class="embed-responsive embed-responsive-16by9 text-center flex-grow-1">
-              <video class="embed-responsive-item mx-a" width="90%" controls="" id="session-video">
-                <source type="video/mp4" />
-              </video>
-            </div>
-            <div class="text-end">
-              <img alt="image" class="avatar-sm rounded-circle" height="100" id="tutor-avatar" width="100" />
-              <div class="tutor-name">
-                Tutor name <br />
-                Tutor Job Role
-              </div>
-            </div>
-          </div>
           <div class="embed-container">
             <iframe id="github-iframe" name="github-iframe" src=""></iframe>
             <div id="session-navigation"></div>
@@ -155,15 +141,7 @@
         document.querySelector(".profileBtn"),
         document.querySelector("#sessionsLink")
       );
-
-      const pathReference = window.fbStorage.ref("media/gitTerminal.mp4");
-      const el = document.getElementById("session-video");
-      fetchMedia(pathReference, el);
-
-      document.getElementById("tutor-avatar").src =
-        getPath() + "images/tutorAvatars/sarah.png";
-      updateSideNav();
-      checkCompletionStatus();
+      updateSideNavOverview();
     };
 
     function createPath(options) {
