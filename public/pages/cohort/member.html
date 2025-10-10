@@ -130,7 +130,7 @@
 
                   <div class="social-column col github-column">
                     <div class="count-data text-center">
-                      <a href="" target="_blank" title="Visit Personal GitHub">
+                      <a href="" target="_blank" title="Visit personal GitHub">
                         <i class="icon fs-2 bi bi-github"></i>
                       </a>
                       <p class="m-0px font-w-600">GitHub</p>
@@ -139,7 +139,7 @@
 
                   <div class="social-column col github-page-column">
                     <div class="count-data text-center">
-                      <a class="github-page-link" href="#" target="_blank" title="Visit Published GitHub Page">
+                      <a class="github-page-link" href="" target="_blank" title="Visit published GitHub Page">
                         <i class="icon fs-2 fas fa-globe"></i>
                       </a>
                       <p class="m-0px font-w-600">GitHub Page</p>
@@ -176,31 +176,44 @@
     const career = document.getElementById('career');
     const pageTitle = document.getElementById('page-title');
 
-    window.onload = async (event) => {
-      auth(
-        null,
-        document.querySelector(".profileBtn"),
-        document.querySelector("#sessionsLink")
-      );
+		window.onload = async (event) => {
+			auth(
+				null,
+				document.querySelector(".profileBtn"),
+				document.querySelector("#sessionsLink")
+			);
 
-      const memberName = window.location.search.slice(1).split("&")[0].replace(/%20/g, ' ')
-      await getUserProfile(window.location.search.slice(1).split("&")[1], memberName);
-    };
+			const urlParams = new URLSearchParams(window.location.search);
+			const memberName = urlParams.get('name') || "Profile";
+			const memberId = urlParams.get('id');
 
-    async function getUserProfile(member, memberName) {
-      const profileData = await window.fbDB.ref('users/' + member + '/profile').once('value');
+			if (memberId) {
+				await getUserProfile(memberId, memberName);
+			} else {
+				console.error("No member ID provided in URL");
+				document.getElementById('page-title').innerText = "Profile not found!";
+			}
+		};
+
+
+    async function getUserProfile(memberId, memberName) {
+      const profileData = await window.fbDB.ref('users/' + memberId + '/profile').once('value');
       const profileValues = profileData.val();
 
-      document.getElementById('who').innerHTML = profileValues.about;
-      document.getElementById('what').innerHTML = profileValues.learning;
-      document.getElementById('career').innerHTML = profileValues.aspirations;
+      document.getElementById('who').innerHTML = profileValues.about || "Not specified.";
+      document.getElementById('what').innerHTML = profileValues.learning || "Not specified.";
+      document.getElementById('career').innerHTML = profileValues.aspirations || "Not specified.";
       document.getElementById('page-title').innerHTML = memberName;
-      document.getElementById('current-job').innerHTML = profileValues.currentJob || 'Not specified';
-      document.getElementById('student-location').innerHTML = profileValues.studentLocation || 'Not specified';
+      document.getElementById('current-job').innerHTML = profileValues.currentJob || "Not specified.";
+      document.getElementById('student-location').innerHTML = profileValues.studentLocation || "Not specified.";
+
+			const counterDiv = document.querySelector('.counter');
+			let hasSocialLinks = false;
 
       const linkedInLink = document.querySelector('.linkedin-column a');
       if (profileValues.linkedIn) {
         linkedInLink.href = profileValues.linkedIn;
+				hasSocialLinks = true;
       } else {
         document.querySelector('.linkedin-column').classList.add('d-none');
       }
@@ -208,6 +221,7 @@
       const gitHubLink = document.querySelector('.github-column a');
       if (profileValues.gitHub) {
         gitHubLink.href = profileValues.gitHub;
+				hasSocialLinks = true;
       } else {
         document.querySelector('.github-column').classList.add('d-none');
       }
@@ -215,17 +229,23 @@
       const githubPageLink = document.querySelector('.github-page-link');
       if (profileValues.siteFlag && profileValues.siteURL) {
         githubPageLink.href = `https://${profileValues.siteURL}`;
+				hasSocialLinks = true;
       } else {
         document.querySelector('.github-page-column').classList.add('d-none');
       }
 
-      const pathReference = window.fbStorage.ref("profilePics/" + member);
+			if (!hasSocialLinks) {
+				counterDiv.classList.add('d-none');
+			}
+
+      const pathReference = window.fbStorage.ref("profilePics/" + memberId);
       const el = document.getElementById("profile-pic");
       try {
         await fetchMedia(pathReference, el);
       } catch (error) {
         if (error.code === "storage/object-not-found") {
           el.src = "https://avatar.iran.liara.run/public";
+					console.warn("Using fallback image for missing profile picture.");
         } else {
           console.error("Error fetching profile image:", error);
         }
