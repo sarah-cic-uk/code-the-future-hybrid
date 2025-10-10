@@ -350,13 +350,11 @@ form i {
 .nav-link span {
 	vertical-align: text-bottom;
 }
-a.nav-link:hover,
-a.nav-link:focus,
-button.nav-link:hover,
-button.nav-link:focus,
-.side-navigation a.nav-link:hover,
-.side-navigation a.nav-link:focus {
-	color: #d8447a;
+a.nav-link:hover, a.nav-link:focus,
+button.nav-link:hover, button.nav-link:focus,
+.side-navigation a.nav-link:hover, .side-navigation a.nav-link:focus {
+  color: #d8447a;
+  cursor:pointer;
 }
 
 .nav-link.active-side-nav,
@@ -658,10 +656,9 @@ ul[id^="submenu"] li {
 }
 
 .h4 {
-	/* session - rfs.scss & r 0eboot.scss */
-	padding: 1.5rem 0 1.75rem 0;
-	font-weight: 600;
-	font-style: italic;
+  /* session - rfs.scss & r 0eboot.scss */
+  padding: 1.5rem 0 1.75rem 0;
+  font-weight: 600;
 }
 
 .h5 {
