@@ -36,6 +36,7 @@
 .navbar {
 	height: 70px;
 	background-color: #eae9f3 !important;
+	border-bottom: 2px solid #011640;
 }
 
 .navbar-nav button {
@@ -324,13 +325,38 @@ form i {
 	margin-left: 10px;
 }
 
-.navbar {
-	border-bottom: 2px solid #011640;
-}
 
 .navbar-nav {
 	width: 80%;
 	height: 70px;
+}
+
+@media (max-width: 990px) {
+	.navbar>.container-fluid {
+		background: #eae9f3;
+		}
+
+	div#navbarNavAltMarkup {
+		background: #eae9f3;
+				z-index: 100;
+		}
+
+	.navbar-collapse {
+			background: white !important;
+			border-bottom: 1px solid #eae9f3;
+			z-index: 100;
+		}
+
+		.navbar-nav.nav-justified {
+			background: #eae9f3;
+			width: 100%;
+			height: auto;
+		}
+
+		#profile-button {
+			float: right !important;
+			margin-right: 0.5rem;
+		}
 }
 
 .navbar-nav .nav-link {

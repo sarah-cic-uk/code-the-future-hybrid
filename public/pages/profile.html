@@ -61,10 +61,11 @@
     .row.align-items-start {
       align-items: start;
     }
+
     button.btn.btn-outline-secondary:hover {
       background-color: #31238c;
       opacity: 0.7;
-      background-color:#31238c;
+      background-color: #31238c;
       border-color: #31238c;
     }
   </style>
@@ -99,10 +100,11 @@
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')"
               title="Sessions">Sessions</a>
           </div>
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center" div id="profile-button">
             <!-- Logged in Avatar -->
             <div>
-              <p class="my-auto" id="profileName"></p>
+              <p class=" my-auto" id="profileName">
+              </p>
             </div>
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
@@ -143,7 +145,10 @@
                   What are your aspirations and goals so that the tutors and other students from your Code the Future
                   cohort can get to know you better.
                 </p>
-                <p>The information you share here will be highlighted in other areas of the site. Your social links, for instance, will be visible on the members page, making it easy for your cohort to connect with you. Plus, once you complete your Git project, it can be showcased on the Code the Future website, inspiring future students with your work!</p>
+                <p>The information you share here will be highlighted in other areas of the site. Your social links, for
+                  instance, will be visible on the members page, making it easy for your cohort to connect with you.
+                  Plus, once you complete your Git project, it can be showcased on the Code the Future website,
+                  inspiring future students with your work!</p>
               </div>
             </div>
 
@@ -174,7 +179,7 @@
               <div class="col-lg-6 mb-4">
                 <fieldset class="p-3 bordered-section" style="background-color: rgb(49 35 140 / 6%);">
                   <legend class="h5" style="padding-top: 0 !important">Personal information</legend>
-            
+
                   <div class="form-group mt-3">
                     <label class="profile-question text-start form-label" for="who">Tell us who you are</label>
                     <div class="input-group">
@@ -182,17 +187,19 @@
                         placeholder="Let us know more about yourself."></textarea>
                     </div>
                   </div>
-        
+
                   <div class="form-group mt-3">
-                    <label class="profile-question text-start form-label" for="what">What are you hoping to learn from this course?</label>
+                    <label class="profile-question text-start form-label" for="what">What are you hoping to learn from
+                      this course?</label>
                     <div class="input-group">
                       <textarea rows="3" class="form-control" id="what" name="what"
                         placeholder="Let us know what made you sign up and what you would like to achieve from it."></textarea>
                     </div>
                   </div>
-        
+
                   <div class="form-group mt-3">
-                    <label class="profile-question text-start form-label" for="career">What are your career aspirations?</label>
+                    <label class="profile-question text-start form-label" for="career">What are your career
+                      aspirations?</label>
                     <div class="input-group">
                       <textarea rows="3" class="form-control" id="career" name="career"
                         placeholder="Let us know where you would like to see yourself in the future."></textarea>
@@ -200,15 +207,17 @@
                   </div>
 
                   <div class="form-group mt-3">
-                    <label class="profile-question text-start form-label" for="currentJob">What is your current job role?</label>
+                    <label class="profile-question text-start form-label" for="currentJob">What is your current job
+                      role?</label>
                     <div class="input-group">
                       <input type="text" class="form-control" id="currentJob" name="currentJob"
                         placeholder="Let us know what you are doing daily" />
                     </div>
                   </div>
-        
+
                   <div class="form-group mt-4">
-                    <label class="profile-question text-start form-label" for="studentLocation">Where in the world are you?</label>
+                    <label class="profile-question text-start form-label" for="studentLocation">Where in the world are
+                      you?</label>
                     <div class="input-group">
                       <input type="text" class="form-control" id="studentLocation" name="studentLocation"
                         placeholder="Let us know your location" />
@@ -222,15 +231,17 @@
                 <fieldset class="p-3 bordered-section mb-4" style="background-color: rgb(217 67 122 / 9%);">
                   <legend class="h5" style="padding-top: 0 !important">Social links</legend>
                   <div class="form-group mt-4">
-                    <label class="profile-question text-start form-label" for="linkedIn">Add your LinkedIn profile</label>
+                    <label class="profile-question text-start form-label" for="linkedIn">Add your LinkedIn
+                      profile</label>
                     <div class="input-group">
                       <input type="text" class="form-control" id="linkedIn" name="linkedIn"
                         placeholder="Let others see your LinkedIn profile" />
                     </div>
                   </div>
-        
+
                   <div class="form-group mt-4">
-                    <label class="profile-question text-start form-label" for="gitHubAccount">Add your GitHub profile</label>
+                    <label class="profile-question text-start form-label" for="gitHubAccount">Add your GitHub
+                      profile</label>
                     <div class="input-group">
                       <input type="text" class="form-control" id="gitHubAccount" name="gitHubAccount"
                         placeholder="Let others see your GitHub profile" />
@@ -240,18 +251,20 @@
 
                 <fieldset class="p-3 bordered-section" style="background-color: rgb(29 242 221 / 9%);">
                   <legend class="h5" style="padding-top: 0 !important">Showcase project</legend>
-            
+
                   <div class="form-group mt-3">
                     <label class="profile-question text-start form-label" for="gitUrl">Published Git URL</label>
                     <div class="input-group">
                       <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
-                      <input type="text" class="form-control" id="gitUrl" name="gitUrl" placeholder="Enter your Git URL" />
-                      <button type="button" class="btn btn-outline-secondary" onclick="testGitUrl()" title="Test the Git URL">
+                      <input type="text" class="form-control" id="gitUrl" name="gitUrl"
+                        placeholder="Enter your Git URL" />
+                      <button type="button" class="btn btn-outline-secondary" onclick="testGitUrl()"
+                        title="Test the Git URL">
                         Test URL
                       </button>
                     </div>
                   </div>
-            
+
                   <div class="form-group mt-3">
                     <label class="profile-question text-start form-label" for="gitTitle">Git Project Title</label>
                     <div class="input-group">
@@ -260,16 +273,18 @@
                         placeholder="Enter the title of your Git project" />
                     </div>
                   </div>
-            
+
                   <div class="form-group mt-4">
-                    <label class="profile-question text-start form-label">Would you like to add this project to the showcase page?</label>
+                    <label class="profile-question text-start form-label">Would you like to add this project to the
+                      showcase page?</label>
                     <div>
                       <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="showcase" id="showcaseYes" value="yes" />
                         <label class="form-check-label" for="showcaseYes">Yes</label>
                       </div>
                       <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="showcase" id="showcaseNo" value="no" checked />
+                        <input class="form-check-input" type="radio" name="showcase" id="showcaseNo" value="no"
+                          checked />
                         <label class="form-check-label" for="showcaseNo">No</label>
                       </div>
                     </div>
@@ -277,7 +292,7 @@
                 </fieldset>
               </div>
             </div>
-            
+
             <div class="row justify-content-center mt-4 mb-4">
               <div class="CTA-group centered">
                 <input type="reset" value="Clear form" id="reset" class="btn nav-link" title="Clear all form fields" />
@@ -349,8 +364,8 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-  crossorigin="anonymous"></script>
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
 
   <script defer type="module">
     import { fbAuth, fbDB } from "./js/firebase.js";
@@ -531,7 +546,7 @@
         gitUrlInput.classList.add('is-invalid');
         invalidUrlToast.show();
       } else {
-        gitUrlInput.classList.remove('is-invalid'); 
+        gitUrlInput.classList.remove('is-invalid');
       }
     });
   </script>
