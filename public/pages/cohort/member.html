@@ -45,16 +45,17 @@
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center" div id="profile-button">
             <!-- Logged in Avatar -->
             <div>
-              <p class="my-auto" id="profileName"></p>
+              <p class=" my-auto" id="profileName">
+              </p>
             </div>
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                  alt="Black and White Portrait of a Man" loading="lazy" />
+                <img src="images/blank_avatar.jpg" class="rounded-circle" height="25" alt="Default avatar"
+                  loading="lazy" />
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
@@ -176,24 +177,24 @@
     const career = document.getElementById('career');
     const pageTitle = document.getElementById('page-title');
 
-		window.onload = async (event) => {
-			auth(
-				null,
-				document.querySelector(".profileBtn"),
-				document.querySelector("#sessionsLink")
-			);
+    window.onload = async (event) => {
+      auth(
+        null,
+        document.querySelector(".profileBtn"),
+        document.querySelector("#sessionsLink")
+      );
 
-			const urlParams = new URLSearchParams(window.location.search);
-			const memberName = urlParams.get('name') || "Profile";
-			const memberId = urlParams.get('id');
+      const urlParams = new URLSearchParams(window.location.search);
+      const memberName = urlParams.get('name') || "Profile";
+      const memberId = urlParams.get('id');
 
-			if (memberId) {
-				await getUserProfile(memberId, memberName);
-			} else {
-				console.error("No member ID provided in URL");
-				document.getElementById('page-title').innerText = "Profile not found!";
-			}
-		};
+      if (memberId) {
+        await getUserProfile(memberId, memberName);
+      } else {
+        console.error("No member ID provided in URL");
+        document.getElementById('page-title').innerText = "Profile not found!";
+      }
+    };
 
 
     async function getUserProfile(memberId, memberName) {
@@ -207,13 +208,13 @@
       document.getElementById('current-job').innerHTML = profileValues.currentJob || "Not specified.";
       document.getElementById('student-location').innerHTML = profileValues.studentLocation || "Not specified.";
 
-			const counterDiv = document.querySelector('.counter');
-			let hasSocialLinks = false;
+      const counterDiv = document.querySelector('.counter');
+      let hasSocialLinks = false;
 
       const linkedInLink = document.querySelector('.linkedin-column a');
       if (profileValues.linkedIn) {
         linkedInLink.href = profileValues.linkedIn;
-				hasSocialLinks = true;
+        hasSocialLinks = true;
       } else {
         document.querySelector('.linkedin-column').classList.add('d-none');
       }
@@ -221,7 +222,7 @@
       const gitHubLink = document.querySelector('.github-column a');
       if (profileValues.gitHub) {
         gitHubLink.href = profileValues.gitHub;
-				hasSocialLinks = true;
+        hasSocialLinks = true;
       } else {
         document.querySelector('.github-column').classList.add('d-none');
       }
@@ -229,14 +230,14 @@
       const githubPageLink = document.querySelector('.github-page-link');
       if (profileValues.siteFlag && profileValues.siteURL) {
         githubPageLink.href = `https://${profileValues.siteURL}`;
-				hasSocialLinks = true;
+        hasSocialLinks = true;
       } else {
         document.querySelector('.github-page-column').classList.add('d-none');
       }
 
-			if (!hasSocialLinks) {
-				counterDiv.classList.add('d-none');
-			}
+      if (!hasSocialLinks) {
+        counterDiv.classList.add('d-none');
+      }
 
       const pathReference = window.fbStorage.ref("profilePics/" + memberId);
       const el = document.getElementById("profile-pic");
@@ -245,7 +246,7 @@
       } catch (error) {
         if (error.code === "storage/object-not-found") {
           el.src = "https://avatar.iran.liara.run/public";
-					console.warn("Using fallback image for missing profile picture.");
+          console.warn("Using fallback image for missing profile picture.");
         } else {
           console.error("Error fetching profile image:", error);
         }
@@ -293,6 +294,7 @@
     .about-text h3 {
       font-size: 35px;
     }
+
     .about-text h6 {
       font-size: 18px;
     }
@@ -326,7 +328,7 @@
     font-size: 15px;
   }
 
-    .about-avatar {
+  .about-avatar {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -335,7 +337,7 @@
   #profile-pic {
     max-width: 450px;
     width: 100%;
-    height:auto;
+    height: auto;
     object-fit: cover;
     border-radius: 50%;
     border: 1px solid rgba(75, 75, 75, 0.2) !important;

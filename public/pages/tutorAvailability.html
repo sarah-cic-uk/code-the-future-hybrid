@@ -49,17 +49,18 @@
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
 
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center" div id="profile-button">
             <!-- Logged in Avatar -->
             <div>
-              <p class="my-auto" id="profileName"></p>
+              <p class=" my-auto" id="profileName">
+              </p>
             </div>
 
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                  alt="Black and White Portrait of a Man" loading="lazy" />
+                <img src="images/blank_avatar.jpg" class="rounded-circle" height="25" alt="Default avatar"
+                  loading="lazy" />
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
@@ -1108,9 +1109,9 @@
 
         if (!hasFutureSessions) {
           tableBody.innerHTML = '<tr><td colspan="6"> There aren\'t any requested sessions to display. </td></tr>';
-          calendarToggle.classList.add('hidden'); 
+          calendarToggle.classList.add('hidden');
         } else {
-          calendarToggle.classList.remove('hidden'); 
+          calendarToggle.classList.remove('hidden');
         }
 
         const requestedCount = hasFutureSessions ? Object.keys(requestedSessions).length : 0;
