@@ -73,6 +73,7 @@
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
                 </li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#" onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
                 <li>
                   <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
                 </li>
@@ -457,7 +458,7 @@
     requestSessionBtn.addEventListener("click", requestSession);
 
     function getTutors(firstTutor = true, previouslySelectedTutor = null) {
-      const dbRef = window.fbDB.ref("tutors");
+      const dbRef = window.fbDB.ref("users").orderByChild("tutor").equalTo(true);
       dbRef.once("value", (snapshot) => {
         const data = snapshot.val();
         const scrollbox = document.getElementById("scrollbox");
@@ -547,7 +548,11 @@
           });
 
           const tutorImage = document.createElement("img");
-          tutorImage.src = `../images/tutorAvatars/${tutor.avatar}`;
+          window.fbStorage.ref(`profilePics/${tutorId}`).getDownloadURL().then(url => {
+            tutorImage.src = url;
+          }).catch(() => {
+            tutorImage.src = "../images/blank_avatar.jpg";
+          });
           tutorImage.height = 70;
           tutorImage.width = 70;
           tutorImage.style.borderRadius = "100%";

@@ -164,4 +164,17 @@ async function loadProfilePictures() {
   const pathReference = window.fbStorage.ref("profilePics/" + currentUser.uid);
   
   profilePicElements.forEach(el => fetchMedia(pathReference, el));
+  
+  // Check if user is a tutor and show/hide tutor menu item
+  try {
+    const userSnapshot = await window.fbDB.ref(`users/${currentUser.uid}`).once('value');
+    const userData = userSnapshot.val();
+    const tutorMenuItem = document.getElementById('tutor-menu-item');
+    
+    if (tutorMenuItem && userData && userData.tutor) {
+      tutorMenuItem.style.display = 'block';
+    }
+  } catch (error) {
+    console.error('Error checking tutor status:', error);
+  }
 }
