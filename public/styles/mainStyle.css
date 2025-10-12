@@ -859,3 +859,8 @@ i.text-success ~ span.text-success {
 i.text-success ~ span.ms-3.text-success {
   text-indent:0 !important;
 }
+
+#profile-pic-avatar {
+	width: 25px;
+	height: 25px;
+}

@@ -5,6 +5,13 @@ function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
     if (sessionsBtn) sessionsBtn.style.display = "inline-flex";
     const profileName = localStorage.getItem('displayName');
     document.querySelector('#profileName').innerHTML = profileName;
+    
+    // Load profile pictures for all profile-pic-avatar elements
+    if (window.fbAuth && window.fbStorage) {
+      window.fbAuth.onAuthStateChanged(user => {
+        if (user) loadProfilePictures();
+      });
+    }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
     if (profileBtn) profileBtn.style.display = "none";
@@ -149,3 +156,12 @@ async function sendEmailRequest(to, subject, text, html) {
   }
 }
 
+async function loadProfilePictures() {
+  const currentUser = window.fbAuth.currentUser;
+  if (!currentUser) return;
+  
+  const profilePicElements = document.querySelectorAll('img[id="profile-pic-avatar"]');
+  const pathReference = window.fbStorage.ref("profilePics/" + currentUser.uid);
+  
+  profilePicElements.forEach(el => fetchMedia(pathReference, el));
+}
