@@ -449,7 +449,7 @@
           tutorAvailability[loggedInTutor] = availabilitySnapshot.val() || {};
         }
 
-        const bookedSnapshot = await fbDB.ref(`users/${userId}/tutorSessionsConfirmed`).once("value");
+        const bookedSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once("value");
         if (bookedSnapshot.exists()) {
           bookedSessions[loggedInTutor] = bookedSnapshot.val() || {};
         }
@@ -616,7 +616,7 @@
       const systemOptions = Intl.DateTimeFormat().resolvedOptions();
 
       // check for conflicts in booked sessions
-      const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/tutorSessionsConfirmed`).once('value');
+      const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once('value');
       const existingBookings = bookedSessionsSnapshot.val() || {}; // ensures existingBookings is an object
 
       const hasBookingConflict = existingBookings && Object.values(existingBookings).some(booking => {
@@ -793,13 +793,12 @@
     async function updateBookedTable() {
       const tableBody = document.querySelector('.bookedTable');
       tableBody.innerHTML = '';
-
+console.log("update boked table...")
       const bookedTab = document.getElementById('booked-tab');
       const calendarToggle = document.getElementById('switch-booked');
       const today = new Date();
 
       let bookedCount = 0;
-
 
       // Handle missing `loggedInTutor`
       if (!loggedInTutor) {
@@ -820,8 +819,6 @@
         calendarToggle.classList.add('hidden'); // Hide calendar toggle
         return;
       }
-
-
 
       // iterate through the sessions and handle each one
       for (let slotId of Object.keys(sessions)) {
@@ -846,7 +843,7 @@
         if (slotDate < today) {
           try {
             // then remove the past session from Firebase
-            await fbDB.ref(`users/${userId}/tutorSessionsConfirmed/${slotId}`).remove();
+            await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).remove();
             console.log(`Removed past session: ${slotId}`);
           } catch (error) {
             console.error(`Error removing session ${slotId} from Firebase:`, error);
@@ -903,13 +900,13 @@
 
     async function cancelBookedSession(slotId) {
       try {
-        const sessionSnapshot = await fbDB.ref(`users/${userId}/tutorSessionsConfirmed/${slotId}`).once('value');
+        const sessionSnapshot = await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).once('value');
         const sessionData = sessionSnapshot.val();
 
         if (sessionData) {
           const { studentEmail, studentName, date, time, duration } = sessionData;
 
-          await fbDB.ref(`users/${userId}/tutorSessionsConfirmed/${slotId}`).remove();
+          await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).remove();
           console.log(`Booked session with ID ${slotId} removed from Firebase.`);
 
           // === Add Email Notification ===
@@ -1128,7 +1125,7 @@
           const selectedEndTime = selectedStartTime + durationInMinutes * 60000;
 
           // check for existing bookings at this time
-          const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/tutorSessionsConfirmed`).once('value');
+          const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once('value');
           const existingBookings = bookedSessionsSnapshot.val() || {};
 
           const hasBookingConflict = Object.values(existingBookings).some(booking => {
@@ -1146,7 +1143,7 @@
 
           // proceed to confirm booking if no conflicts exist
           sessionData.status = "booked";
-          const bookedSessionRef = fbDB.ref(`users/${userId}/tutorSessionsConfirmed`).push();
+          const bookedSessionRef = fbDB.ref(`users/${userId}/bookedSessions`).push();
           await bookedSessionRef.set(sessionData);
           await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).remove();
 
@@ -1249,30 +1246,8 @@
     }
 
 
-    async function sendEmail(from, to, subject, text, html) {
-      const emailPayload = {
-        from: "no-reply@code-the-future-hybrid.web.app",
-        to,
-        subject,
-        text,
-        html
-      };
-
-      try {
-        const response = await fetch("https://code-the-future-hybrid.web.app/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(emailPayload)
-        });
-
-        if (response.ok) {
-          console.log(`Email sent successfully to ${to}`);
-        } else {
-          console.error(`Failed to send email:`, await response.json());
-        }
-      } catch (error) {
-        console.error(`Error sending email:`, error);
-      }
+    async function sendEmail(to, subject, text, html) {
+      await sendEmailRequest(to, subject, text, html);
     }
 
     const appUrl = "https://code-the-future-hybrid.web.app";

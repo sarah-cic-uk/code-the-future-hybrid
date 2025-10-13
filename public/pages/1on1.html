@@ -62,8 +62,7 @@
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt="Default avatar"
-                  loading="lazy" />
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt="Default avatar" loading="lazy" />
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
@@ -73,7 +72,8 @@
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
                 </li>
-                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#" onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
                 <li>
                   <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
                 </li>
@@ -262,6 +262,8 @@
   </script>
 
   <script>
+    let selectedTutor;
+
     window.onload = (event) => {
       const stylesheet = document.createElement("link");
       stylesheet.rel = "stylesheet";
@@ -461,6 +463,7 @@
       const dbRef = window.fbDB.ref("users").orderByChild("tutor").equalTo(true);
       dbRef.once("value", (snapshot) => {
         const data = snapshot.val();
+        console.log("DATA", data)
         const scrollbox = document.getElementById("scrollbox");
         scrollbox.replaceChildren();
 
@@ -543,7 +546,7 @@
             tutorTiles.forEach(tile => tile.classList.remove("selected"));
             this.classList.add("selected");
 
-            selectedTutor = tutor;
+            selectedTutor =  {...tutor, tutorId: tutorId };
             updateTable(selectedTutor, tutorId);
           });
 
@@ -569,7 +572,7 @@
 
           if (tutorId == previouslySelectedTutor || firstTutor) {
             tutorTile.classList.add("selected");
-            selectedTutor = tutor;
+            selectedTutor =  {...tutor, tutorId: tutorId };
             updateTable(tutor, tutorId);
             firstTutor = false;
           }
@@ -596,7 +599,7 @@
         const requestedTime = row.cells[1].textContent;
         const requestedDuration = row.cells[2].textContent;
 
-        const sessionRef = fbDB.ref(`tutors/${tutorId}/availability/${sessionId}`);
+        const sessionRef = fbDB.ref(`users/${tutorId}/availability/${sessionId}`);
         sessionRef.once("value", async (snapshot) => {
           const sessionData = snapshot.val();
 
@@ -621,7 +624,7 @@
 
             sessionRef.remove((error) => {
               if (!error) {
-                const bookedSessionRef = fbDB.ref(`tutors/${tutorId}/bookedSessions`).push();
+                const bookedSessionRef = fbDB.ref(`users/${tutorId}/bookedSessions`).push();
                 bookedSessionRef.set(unifiedSessionData, async (error) => {
                   if (!error) {
                     console.log("Session successfully booked");
@@ -654,7 +657,7 @@
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
       const currentUser = fbAuth.currentUser;
       const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
-
+      console.log("writeSessionRequestToDatabase", tutor)
       const userId = currentUser.uid;
       const userEmail = currentUser.email;
       const userName = currentUser.displayName;
@@ -673,11 +676,11 @@
       };
 
       // now, store this session request under the tutors requestedSessions node
-      window.fbDB.ref("tutors").orderByChild("displayName").equalTo(tutor.displayName).once("value", (snapshot) => {
+      window.fbDB.ref(`users/${tutor.tutorId}`).once("value", (snapshot) => {
         const tutorData = snapshot.val();
+        console.log("TUTOR DATA:", tutorData)
         if (tutorData) {
-          const tutorId = Object.keys(tutorData)[0];  // assuming one match for the display name
-          const tutorSessionRef = window.fbDB.ref(`tutors/${tutorId}/requestedSessions`).push();
+          const tutorSessionRef = window.fbDB.ref(`users/${tutor.tutorId}/requestedSessions`).push();
           tutorSessionRef.set(sessionData, (error) => {
             if (error) {
               console.error("Error saving session request under tutor's node:", error);
