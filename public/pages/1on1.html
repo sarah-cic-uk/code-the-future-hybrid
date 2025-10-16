@@ -104,52 +104,126 @@
           session time that works best for you.</p>
       </section>
 
-      <section>
-        <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
-          Select a Tutor
-        </p>
+      <ul class="nav nav-tabs" id="sessionTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="available-tab" data-bs-toggle="tab" data-bs-target="#available"
+            type="button" role="tab" aria-controls="available" aria-selected="true">Available sessions</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="booked-tab" data-bs-toggle="tab" data-bs-target="#booked" type="button"
+            role="tab" aria-controls="booked" aria-selected="false">Booked sessions</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="requested-tab" data-bs-toggle="tab" data-bs-target="#requested" type="button"
+            role="tab" aria-controls="requested" aria-selected="false">Requested sessions</button>
+        </li>
+      </ul>
 
-        <div>
-          <div id="scrollbox" style="overflow-y:auto" class="tutor-selector">
-            <!-- dynamic avatars here -->
-          </div>
-        </div>
-      </section>
+      <div class="tab-content" id="sessionTabContent">
+        <!-- Available sessions Tab -->
+        <div class="tab-pane fade show active" id="available" role="tabpanel" aria-labelledby="available-tab">
+          <section>
+            <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
+              Select a Tutor
+            </p>
 
-      <section>
-        <div class="row">
-          <p class="h4" style="width:50%; padding:3rem 0 0 0.75rem; font-style:normal;">
-            Select a Session
-          </p>
-
-          <div id="switch" class="d-flex mb-1">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="toggleViewSwitch">
-              <label class="form-check-label" for="toggleViewSwitch" id="toggleLabel">Calendar view</label>
+            <div>
+              <div id="scrollbox" style="overflow-y:auto" class="tutor-selector">
+                <!-- dynamic avatars here -->
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div id="calendar-container">
-            <div id="calendar"></div> <!-- Calendar view -->
-          </div>
+          <section>
+            <div class="row">
+              <p class="h4" style="width:50%; padding:3rem 0 0 0.75rem; font-style:normal;">
+                Select a Session
+              </p>
+
+              <div id="switch" class="d-flex mb-1">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="toggleViewSwitch">
+                  <label class="form-check-label" for="toggleViewSwitch" id="toggleLabel">Calendar view</label>
+                </div>
+              </div>
+
+              <div id="calendar-container">
+                <div id="calendar"></div> <!-- Calendar view -->
+              </div>
+            </div>
+
+            <div id="tutorTableContainer">
+              <table id="tutorTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="sessionTable">
+                  <!-- tutor specific rows -->
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
 
-        <div id="tutorTableContainer">
-          <table id="tutorTable">
-            <thead>
-              <th>Date</th>
-              <th>Start time</th>
-              <th>Duration</th>
-              <th>Timezone</th>
-              <th></th>
-            </thead>
+        <!-- Booked sessions Tab -->
+        <div class="tab-pane fade" id="booked" role="tabpanel" aria-labelledby="booked-tab">
+          <section>
+            <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
+              Your booked sessions
+            </p>
+            <p class="small" style="padding:0 0 0 0.75rem;">Sessions you have successfully booked with tutors.</p>
 
-            <tbody class="sessionTable">
-              <!-- tutor specific rows -->
-            </tbody>
-          </table>
+            <div id="bookedTableContainer">
+              <table id="bookedTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th>Tutor</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="bookedTable">
+                  <!-- booked sessions will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
-      </section>
+
+        <!-- Requested sessions Tab -->
+        <div class="tab-pane fade" id="requested" role="tabpanel" aria-labelledby="requested-tab">
+          <section>
+            <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
+              Your requested sessions
+            </p>
+            <p class="small" style="padding:0 0 0 0.75rem;">Sessions you have requested that are awaiting tutor confirmation.</p>
+
+            <div id="requestedTableContainer">
+              <table id="requestedTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th>Tutor</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="requestedTable">
+                  <!-- requested sessions will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
 
       <section style="margin-top:1rem; padding-bottom:4rem;">
         <p class="h4" style="padding:3rem 0 0.75rem; font-style:normal;">
@@ -194,6 +268,7 @@
         <div id="alert"></div>
 
       </section>
+    </div>
     </div>
 
     <!-- toast notifications -->
@@ -619,7 +694,7 @@
               timezone: sessionData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
               studentEmail: studentEmail,
               studentName: studentName,
-              tutorName: sessionData.tutorName || "Unknown tutor",
+              tutorName: selectedTutor.displayName || "Unknown tutor",
               status: "booked",
               sessionRequestId: sessionData.sessionRequestId || null,
             };
@@ -659,7 +734,6 @@
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
       const currentUser = fbAuth.currentUser;
       const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
-      console.log("writeSessionRequestToDatabase", tutor)
       const userId = currentUser.uid;
       const userEmail = currentUser.email;
       const userName = currentUser.displayName;
@@ -680,7 +754,6 @@
       // now, store this session request under the tutors requestedSessions node
       window.fbDB.ref(`users/${tutor.tutorId}`).once("value", (snapshot) => {
         const tutorData = snapshot.val();
-        console.log("TUTOR DATA:", tutorData)
         if (tutorData) {
           const tutorSessionRef = window.fbDB.ref(`users/${tutor.tutorId}/requestedSessions`).push();
           tutorSessionRef.set(sessionData, (error) => {
