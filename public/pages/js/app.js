@@ -178,3 +178,4 @@ async function loadProfilePictures() {
     console.error('Error checking tutor status:', error);
   }
 }
+

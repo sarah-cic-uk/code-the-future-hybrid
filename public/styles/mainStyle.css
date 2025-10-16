@@ -873,3 +873,7 @@ i.text-success~span.ms-3.text-success {
 	width: 25px;
 	height: 25px;
 }
+
+#jobs-nav-link {
+	display: none;
+}
