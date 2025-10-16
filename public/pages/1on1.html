@@ -63,7 +63,8 @@
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
-                  src="../images/blank_avatar.jpg" loading="lazy" />
+                  src="../images/blank_avatar.jpg"
+                  loading="lazy" />
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
@@ -547,7 +548,7 @@
             tutorTiles.forEach(tile => tile.classList.remove("selected"));
             this.classList.add("selected");
 
-            selectedTutor =  {...tutor, tutorId: tutorId };
+            selectedTutor = { ...tutor, tutorId: tutorId };
             updateTable(selectedTutor, tutorId);
           });
 
@@ -573,7 +574,7 @@
 
           if (tutorId == previouslySelectedTutor || firstTutor) {
             tutorTile.classList.add("selected");
-            selectedTutor =  {...tutor, tutorId: tutorId };
+            selectedTutor = { ...tutor, tutorId: tutorId };
             updateTable(tutor, tutorId);
             firstTutor = false;
           }

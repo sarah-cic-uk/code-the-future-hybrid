@@ -5,7 +5,7 @@ function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
     if (sessionsBtn) sessionsBtn.style.display = "inline-flex";
     const profileName = localStorage.getItem('displayName');
     document.querySelector('#profileName').innerHTML = profileName;
-    
+
     // Load profile pictures for all profile-pic-avatar elements
     if (window.fbAuth && window.fbStorage) {
       window.fbAuth.onAuthStateChanged(user => {
@@ -25,13 +25,13 @@ function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
 }
 
 function getPath() {
-	const BASE_URL = window.location.origin;
-	const PATH = BASE_URL.includes('github')
-		? '/code-the-future-hybrid/'
-		: BASE_URL.includes('app')
-		? '/'
-		: '/public/';
-	return PATH;
+  const BASE_URL = window.location.origin;
+  const PATH = BASE_URL.includes('github')
+    ? '/code-the-future-hybrid/'
+    : BASE_URL.includes('app')
+      ? '/'
+      : '/public/';
+  return PATH;
 }
 
 function logout(fbAuth) {
@@ -44,10 +44,10 @@ function logout(fbAuth) {
 }
 
 function updateSideNav() {
-	const filename = window.location.pathname.match(/.*\/(.*)$/)[1];
-	const name = filename.substring(0, filename.indexOf('.'));
-	const session = window.location.pathname.match(/session\d/)[0];
-	const submenu = 'submenu' + session.match(/\d/);
+  const filename = window.location.pathname.match(/.*\/(.*)$/)[1];
+  const name = filename.substring(0, filename.indexOf('.'));
+  const session = window.location.pathname.match(/session\d/)[0];
+  const submenu = 'submenu' + session.match(/\d/);
 
   document.getElementById(submenu).classList.add("show");
   document.getElementsByName(name)[0].classList.add("active-side-nav");
@@ -159,18 +159,18 @@ async function sendEmailRequest(to, subject, text, html) {
 async function loadProfilePictures() {
   const currentUser = window.fbAuth.currentUser;
   if (!currentUser) return;
-  
+
   const profilePicElements = document.querySelectorAll('img[id="profile-pic-avatar"]');
   const pathReference = window.fbStorage.ref("profilePics/" + currentUser.uid);
-  
+
   profilePicElements.forEach(el => fetchMedia(pathReference, el));
-  
+
   // Check if user is a tutor and show/hide tutor menu item
   try {
     const userSnapshot = await window.fbDB.ref(`users/${currentUser.uid}`).once('value');
     const userData = userSnapshot.val();
     const tutorMenuItem = document.getElementById('tutor-menu-item');
-    
+
     if (tutorMenuItem && userData && userData.tutor) {
       tutorMenuItem.style.display = 'block';
     }

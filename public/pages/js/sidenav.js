@@ -240,137 +240,137 @@ template.innerHTML = `
 document.querySelector(".page-content").prepend(template.content);
 
 document.addEventListener("DOMContentLoaded", async () => {
-	await waitForFbAuth();
-	updateSideNavCompletionStatus();
+  await waitForFbAuth();
+  updateSideNavCompletionStatus();
 });
 
 async function waitForFbAuth() {
-	return new Promise((resolve) => {
-		const interval = setInterval(() => {
-			if (window.fbAuth && window.fbDB && window.fbAuth.currentUser) {
-				clearInterval(interval);
-				resolve();
-			}
-		}, 50);
-	});
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (window.fbAuth && window.fbDB && window.fbAuth.currentUser) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 50);
+  });
 }
 
 async function updateSideNavCompletionStatus() {
-	const user = window.fbAuth.currentUser;
-	if (!user) return;
+  const user = window.fbAuth.currentUser;
+  if (!user) return;
 
-	const sessions = [
-		"session1",
-		"session2",
-		"session3",
-		"session4",
-		"session5",
-		"session6",
-	];
+  const sessions = [
+    "session1",
+    "session2",
+    "session3",
+    "session4",
+    "session5",
+    "session6",
+  ];
 
-	for (const session of sessions) {
-		const ref = window.fbDB.ref(
-			`users/${user.uid}/completedSessions/${session}`
-		);
-		const snapshot = await ref.once("value");
-		const completed = snapshot.val() || {};
+  for (const session of sessions) {
+    const ref = window.fbDB.ref(
+      `users/${user.uid}/completedSessions/${session}`
+    );
+    const snapshot = await ref.once("value");
+    const completed = snapshot.val() || {};
 
-		const completedLessons = Object.keys(completed);
+    const completedLessons = Object.keys(completed);
 
-		const allLessons = {
-			session1: [
-				"session1-overview",
-				"introIDE",
-				"introGit",
-				"firstRepo",
-				"hostingGithub",
-				"gitVScode",
-				"gitTerminal",
-				"githubDesktop",
-			],
-			session2: [
-				"session2-overview",
-				"htmlBasics",
-				"firstWebpage",
-				"chromeDevTools",
-			],
-			session3: [
-				"session3-overview",
-				"html_images",
-				"html_tables",
-				"html_forms",
-				"html_hyperlinks",
-			],
-			session4: [
-				"session4-overview",
-				"introToCSS",
-				"layoutsInCSS",
-				"advancedCSS",
-				"cssActivities",
-			],
-			session5: [
-				"session5-overview",
-				"accessibility",
-				"accessibilityTools",
-				"accessibilityExample",
-			],
-			session6: ["session6-overview", "projectPlanning", "additionalHelp"],
-		};
+    const allLessons = {
+      session1: [
+        "session1-overview",
+        "introIDE",
+        "introGit",
+        "firstRepo",
+        "hostingGithub",
+        "gitVScode",
+        "gitTerminal",
+        "githubDesktop",
+      ],
+      session2: [
+        "session2-overview",
+        "htmlBasics",
+        "firstWebpage",
+        "chromeDevTools",
+      ],
+      session3: [
+        "session3-overview",
+        "html_images",
+        "html_tables",
+        "html_forms",
+        "html_hyperlinks",
+      ],
+      session4: [
+        "session4-overview",
+        "introToCSS",
+        "layoutsInCSS",
+        "advancedCSS",
+        "cssActivities",
+      ],
+      session5: [
+        "session5-overview",
+        "accessibility",
+        "accessibilityTools",
+        "accessibilityExample",
+      ],
+      session6: ["session6-overview", "projectPlanning", "additionalHelp"],
+    };
 
-		const optionalLessons = {
-			session1: ["gitTerminal", "githubDesktop"],
-			session5: ["accessibilityExample"],
-			session6: ["additionalHelp"],
-		};
+    const optionalLessons = {
+      session1: ["gitTerminal", "githubDesktop"],
+      session5: ["accessibilityExample"],
+      session6: ["additionalHelp"],
+    };
 
-		const lessonNameToElementName = {
-			session1: { "session1-overview": "session1-overview" },
-			session2: { "session2-overview": "session2-overview" },
-			session3: { "session3-overview": "session3-overview" },
-			session4: { "session4-overview": "session4-overview" },
-			session5: { "session5-overview": "session5-overview" },
-			session6: { "session6-overview": "session6-overview" },
-		};
+    const lessonNameToElementName = {
+      session1: { "session1-overview": "session1-overview" },
+      session2: { "session2-overview": "session2-overview" },
+      session3: { "session3-overview": "session3-overview" },
+      session4: { "session4-overview": "session4-overview" },
+      session5: { "session5-overview": "session5-overview" },
+      session6: { "session6-overview": "session6-overview" },
+    };
 
-		for (const session of sessions) {
-			const ref = window.fbDB.ref(
-				`users/${user.uid}/completedSessions/${session}`
-			);
-			const snapshot = await ref.once("value");
-			const completed = snapshot.val() || {};
-			const completedLessons = Object.keys(completed);
+    for (const session of sessions) {
+      const ref = window.fbDB.ref(
+        `users/${user.uid}/completedSessions/${session}`
+      );
+      const snapshot = await ref.once("value");
+      const completed = snapshot.val() || {};
+      const completedLessons = Object.keys(completed);
 
-			const requiredLessons = allLessons[session].filter(
-				(name) => !optionalLessons[session]?.includes(name)
-			);
+      const requiredLessons = allLessons[session].filter(
+        (name) => !optionalLessons[session]?.includes(name)
+      );
 
-			// Restore correct lookup for overview entries
-			completedLessons.forEach((lessonName) => {
-				const lookupName =
-					lessonNameToElementName[session]?.[lessonName] || lessonName;
-				const el = document.querySelector(`[name="${lookupName}"]`);
-				if (el) {
-					const icon = el.querySelector("i");
-					const label = el.querySelector("span");
-					if (icon) icon.className = "fs-4 bi-check-circle text-success";
-					if (label) label.classList.add("text-success");
-				}
-			});
+      // Restore correct lookup for overview entries
+      completedLessons.forEach((lessonName) => {
+        const lookupName =
+          lessonNameToElementName[session]?.[lessonName] || lessonName;
+        const el = document.querySelector(`[name="${lookupName}"]`);
+        if (el) {
+          const icon = el.querySelector("i");
+          const label = el.querySelector("span");
+          if (icon) icon.className = "fs-4 bi-check-circle text-success";
+          if (label) label.classList.add("text-success");
+        }
+      });
 
-			// Check if all required lessons completed
-			const isSessionComplete = requiredLessons.every((name) =>
-				completedLessons.includes(name)
-			);
+      // Check if all required lessons completed
+      const isSessionComplete = requiredLessons.every((name) =>
+        completedLessons.includes(name)
+      );
 
-			if (isSessionComplete) {
-				const sessionBtn = document.querySelector(`button[name="${session}"]`);
-				if (sessionBtn) {
-					const icon = sessionBtn.querySelector("i");
-					const label = sessionBtn.querySelector("span");
-					if (icon) icon.className = "fs-4 bi-check-circle-fill text-success";
-					if (label) label.classList.add("text-success");
-				}
-			}
-		}
-	}
+      if (isSessionComplete) {
+        const sessionBtn = document.querySelector(`button[name="${session}"]`);
+        if (sessionBtn) {
+          const icon = sessionBtn.querySelector("i");
+          const label = sessionBtn.querySelector("span");
+          if (icon) icon.className = "fs-4 bi-check-circle-fill text-success";
+          if (label) label.classList.add("text-success");
+        }
+      }
+    }
+  }
 }

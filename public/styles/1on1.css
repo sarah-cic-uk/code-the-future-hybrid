@@ -1,6 +1,7 @@
 .page-content {
 	background-color: white;
 }
+
 .tutor-tile {
 	display: flex;
 	flex-direction: column;
@@ -10,10 +11,12 @@
 	gap: 0.5rem;
 	cursor: pointer;
 }
+
 .selected {
 	background-color: white;
 	box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.25);
 }
+
 .tutor-selector,
 .calendar-selector {
 	background-color: #eae9f3;
@@ -23,38 +26,48 @@
 	border-radius: 10px;
 	box-shadow: 0 0 30px rgba(31, 45, 61, 0.125);
 }
+
 #scrollbox::-webkit-scrollbar {
 	width: 0em;
 }
+
 #scrollbox::-webkit-scrollbar:horizontal {
 	height: 0em;
 }
+
 #scrollbox::-webkit-scrollbar,
 #scrollbox::-webkit-scrollbar-thumb {
 	overflow: visible;
 	border-radius: 4px;
 }
+
 #scrollbox::-webkit-scrollbar-thumb {
 	background: rgba(0, 0, 0, 0.2);
 }
+
 table {
 	width: 100%;
 	table-layout: fixed;
 }
+
 thead {
 	background-color: #31238c;
 	color: white;
 }
+
 tr {
 	border-bottom: 1px solid #e0e0e0 !important;
 }
+
 tr:nth-child(even) {
 	background-color: #c5cee2;
 }
+
 th,
 td {
 	padding: 1rem;
 }
+
 table button {
 	background-color: white;
 	border: solid 1px #d9437a;
@@ -63,24 +76,29 @@ table button {
 	padding: 0.3rem 0.5rem;
 	border-radius: 0.4rem !important;
 }
+
 .modal-body p {
 	display: flex;
 	justify-content: space-between;
 	align-items: baseline;
 	margin-bottom: 1rem;
 }
+
 .modal-body strong {
 	flex-basis: 30%;
 	text-align: left;
 }
+
 .modal-body span {
 	flex-basis: 65%;
 	text-align: left;
 	margin-left: 1rem;
 }
+
 .alert-padding {
 	padding: 1rem
 }
+
 #toast-cancel {
 	font-weight: 500;
 	padding: 0.5rem;
@@ -89,9 +107,11 @@ table button {
 	border: solid 1px #d9437a;
 	color: #31238c;
 }
+
 #toast-yes {
 	padding: 0.5rem !important;
 }
+
 #alt-session button,
 #addAvailabilityBtn,
 #modalClose,
@@ -102,64 +122,80 @@ table button {
 	border: 0;
 	border-radius: 0.4rem !important;
 }
+
 .form-check-input:checked {
 	background-color: #198754 !important;
 	border-color: #198754 !important;
 }
-input#toggleViewSwitch, label#toggleLabel, 
-input#toggleViewSwitch-booked, label#toggleLabel-booked, 
-input#toggleViewSwitch-requested, label#toggleLabel-requested {
+
+input#toggleViewSwitch,
+label#toggleLabel,
+input#toggleViewSwitch-booked,
+label#toggleLabel-booked,
+input#toggleViewSwitch-requested,
+label#toggleLabel-requested {
 	cursor: pointer;
 }
+
 #switch-requested.d-flex.hidden,
 #switch-booked.d-flex.hidden {
-    display: none !important;
+	display: none !important;
 }
-#switch-booked.booked, 
-#switch-requested.requested  {
+
+#switch-booked.booked,
+#switch-requested.requested {
 	width: auto !important;
 	padding: 0 0.5rem 0 0;
 }
-#switch, 
-#switch-booked.d-flex, 
+
+#switch,
+#switch-booked.d-flex,
 #switch-requested.d-flex {
 	width: 48%;
 	display: flex !important;
 	flex-direction: column-reverse;
 	align-items: flex-end;
 }
-#calendar, 
-#calendar-booked, 
+
+#calendar,
+#calendar-booked,
 #calendar-requested {
 	width: 100%;
 	height: 600px;
 }
-#calendar-container, 
-#calendar-container-booked, 
+
+#calendar-container,
+#calendar-container-booked,
 #calendar-container-requested {
 	display: none;
 }
+
 .fc-day-today .fc-daygrid-day-number {
 	background-color: #d9437a;
 	color: #ffffff !important;
 	font-weight: bold;
 }
+
 td.fc-daygrid-day.fc-day.fc-day-today {
 	background: #d9437a;
 }
+
 .fc .fc-daygrid-event-harness {
 	background: #d6f3fd;
 	border: 1px solid #b0c8f4;
 	cursor: pointer;
 }
-.fc .fc-button-group > .fc-button {
+
+.fc .fc-button-group>.fc-button {
 	margin: 0 0.75rem 0 0 !important;
 }
+
 .fc .fc-button-primary:disabled {
 	background-color: slategray !important;
 	border: solid 1px slategray !important;
 	color: lightgray !important;
 }
+
 .fc .fc-button-primary {
 	background-color: white !important;
 	border: solid 1px #d9437a !important;
@@ -168,50 +204,63 @@ td.fc-daygrid-day.fc-day.fc-day-today {
 	padding: 0.3rem 0.5rem;
 	border-radius: 0.4rem !important;
 }
+
 .fc .fc-toolbar-title {
 	font-size: 1.35rem !important;
 }
+
 .fc-header-toolbar.fc-toolbar {
 	width: 98%;
 	align-items: center;
 	margin: 0 0 0 auto;
 	padding-top: 1rem;
 }
+
 .fc .fc-col-header-cell-cushion {
 	color: white;
 	text-decoration: none;
 }
+
 .fc .fc-daygrid-day-number {
 	text-decoration: none;
 	color: black;
 }
+
 .fc-day-weekend {
 	background-color: #f0f0f0 !important;
 }
+
 .fc-day-weekend .fc-daygrid-day-number {
 	color: #999999 !important;
 }
+
 .fc {
 	max-width: 100%;
 	margin: 0 auto;
 }
+
 #tutorTable {
 	width: 100%;
 }
+
 ul#sessionTabs li.nav-item {
 	margin: 0 0.25rem;
 }
+
 ul#sessionTabs li.nav-item:first-child {
 	margin-left: 0;
 }
+
 ul#sessionTabs {
 	margin-top: 2rem;
 }
+
 div#sessionTabContent {
 	border-right: 1px solid #dee2e6;
 	border-bottom: 1px solid #dee2e6;
 	border-left: 1px solid #dee2e6;
 }
+
 @media (max-width: 768px) {
 	.form-control {
 		margin-bottom: 1rem !important;

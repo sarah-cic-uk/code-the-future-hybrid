@@ -118,11 +118,13 @@ img#tutor-avatar {
 	object-fit: cover;
 	border: 1px solid rgba(75, 75, 75, 0.2) !important;
 }
+
 .avatar-dimensions {
 	width: 200px;
 	height: 200px;
 	object-fit: cover;
 }
+
 .menu-card {
 	min-height: 200px;
 }
@@ -295,13 +297,11 @@ img#tutor-avatar {
 	background: rgb(1, 22, 64);
 
 	/* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(
-		90deg,
-		rgba(1, 22, 64, 1) 0%,
-		rgba(29, 12, 89, 1) 25%,
-		rgba(49, 35, 140, 1) 73%,
-		rgba(217, 67, 122, 1) 92%
-	);
+	background: linear-gradient(90deg,
+			rgba(1, 22, 64, 1) 0%,
+			rgba(29, 12, 89, 1) 25%,
+			rgba(49, 35, 140, 1) 73%,
+			rgba(217, 67, 122, 1) 92%);
 }
 
 @media (min-width: 769px) {
@@ -334,29 +334,29 @@ form i {
 @media (max-width: 990px) {
 	.navbar>.container-fluid {
 		background: #eae9f3;
-		}
+	}
 
 	div#navbarNavAltMarkup {
 		background: #eae9f3;
-				z-index: 100;
-		}
+		z-index: 100;
+	}
 
 	.navbar-collapse {
-			background: white !important;
-			border-bottom: 1px solid #eae9f3;
-			z-index: 100;
-		}
+		background: white !important;
+		border-bottom: 1px solid #eae9f3;
+		z-index: 100;
+	}
 
-		.navbar-nav.nav-justified {
-			background: #eae9f3;
-			width: 100%;
-			height: auto;
-		}
+	.navbar-nav.nav-justified {
+		background: #eae9f3;
+		width: 100%;
+		height: auto;
+	}
 
-		#profile-button {
-			float: right !important;
-			margin-right: 0.5rem;
-		}
+	#profile-button {
+		float: right !important;
+		margin-right: 0.5rem;
+	}
 }
 
 .navbar-nav .nav-link {
@@ -376,11 +376,15 @@ form i {
 .nav-link span {
 	vertical-align: text-bottom;
 }
-a.nav-link:hover, a.nav-link:focus,
-button.nav-link:hover, button.nav-link:focus,
-.side-navigation a.nav-link:hover, .side-navigation a.nav-link:focus {
-  color: #d8447a;
-  cursor:pointer;
+
+a.nav-link:hover,
+a.nav-link:focus,
+button.nav-link:hover,
+button.nav-link:focus,
+.side-navigation a.nav-link:hover,
+.side-navigation a.nav-link:focus {
+	color: #d8447a;
+	cursor: pointer;
 }
 
 .nav-link.active-side-nav,
@@ -628,11 +632,9 @@ ul[id^="submenu"] li {
 }
 
 #hero-img {
-	background-image: linear-gradient(
-			to right,
+	background-image: linear-gradient(to right,
 			rgba(49, 35, 140, 1),
-			rgba(244, 239, 239, 0.5)
-		),
+			rgba(244, 239, 239, 0.5)),
 		url("../images/hero_img.jpg");
 	height: auto;
 	background-position: center;
@@ -682,9 +684,9 @@ ul[id^="submenu"] li {
 }
 
 .h4 {
-  /* session - rfs.scss & r 0eboot.scss */
-  padding: 1.5rem 0 1.75rem 0;
-  font-weight: 600;
+	/* session - rfs.scss & r 0eboot.scss */
+	padding: 1.5rem 0 1.75rem 0;
+	font-weight: 600;
 }
 
 .h5 {
@@ -701,6 +703,7 @@ ul[id^="submenu"] li {
 	border-radius: 0.4rem !important;
 	border: 0;
 }
+
 .primary:hover,
 .primary:focus {
 	background-color: #d9437a;
@@ -712,6 +715,7 @@ ul[id^="submenu"] li {
 	background-color: #d9437a;
 	color: white;
 }
+
 .secondary:hover,
 .secondary:focus {
 	background-color: #31238c;
@@ -723,6 +727,7 @@ ul[id^="submenu"] li {
 	background-color: #31238c;
 	color: white;
 }
+
 .tertiary:hover,
 .tertiary:focus {
 	background-color: #31238c;
@@ -737,6 +742,7 @@ ul[id^="submenu"] li {
 	border: 2px solid #31238c !important;
 	color: #31238c;
 }
+
 /*
 .completion-button-container {
   min-width: fit-content;
@@ -782,82 +788,85 @@ ul[id^="submenu"] li {
 
 /** fix the screen hieght to be able to see the button */
 .embed-container {
-  width: 100%;
-  height: 85vh; /* instead of inline width + pointer-events */
-  display: flex;
-  flex-direction: column;
+	width: 100%;
+	height: 85vh;
+	/* instead of inline width + pointer-events */
+	display: flex;
+	flex-direction: column;
 }
 
 .embed-container iframe {
-  flex-grow: 1;
-  width: 100%;
-  border: none;
+	flex-grow: 1;
+	width: 100%;
+	border: none;
 }
 
 
 /** session tracker */
 .session-nav-container {
-  text-align: center; 
-  margin: 2rem 1rem 0 1rem;
-  padding-bottom: 1rem;
+	text-align: center;
+	margin: 2rem 1rem 0 1rem;
+	padding-bottom: 1rem;
 }
 
 .session-nav-layout {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: auto;
-  margin: 0 auto;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: auto;
+	margin: 0 auto;
 }
 
 .session-nav-section {
-  flex: 1;
-  text-align: center;
+	flex: 1;
+	text-align: center;
 }
 
 .session-nav-section.left {
-  text-align: left;
+	text-align: left;
 }
 
 .session-nav-section.center {
-  text-align: center;
+	text-align: center;
 }
 
 .session-nav-section.right {
-  text-align: right;
+	text-align: right;
 }
 
 .completed-banner {
-  background-color: #e6f7e6;
-  color: #2e7d32;
-  font-weight: 500;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  text-align: center;
-  border: 1px solid #198754;
-  width: auto;
-  margin: 0 auto 1rem auto;
+	background-color: #e6f7e6;
+	color: #2e7d32;
+	font-weight: 500;
+	font-size: 1rem;
+	padding: 0.5rem 1rem;
+	text-align: center;
+	border: 1px solid #198754;
+	width: auto;
+	margin: 0 auto 1rem auto;
 }
 
 .completed-icon {
-  font-size: 1.5rem;
-  margin-right: 6px;
-  vertical-align: middle;
+	font-size: 1.5rem;
+	margin-right: 6px;
+	vertical-align: middle;
 }
 
 .completed-label {
-  color: #198754;
-  font-weight: 500;
+	color: #198754;
+	font-weight: 500;
 }
 
 .text-success {
-  color: limegreen !important;
+	color: limegreen !important;
 }
-i.text-success ~ span.text-success {
-  text-indent:5px;
+
+i.text-success~span.text-success {
+	text-indent: 5px;
 }
-i.text-success ~ span.ms-3.text-success {
-  text-indent:0 !important;
+
+i.text-success~span.ms-3.text-success {
+	text-indent: 0 !important;
 }
 
 #profile-pic-avatar {
