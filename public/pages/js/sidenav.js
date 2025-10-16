@@ -232,6 +232,13 @@ template.innerHTML = `
         </li>
         </ul>
       </li>
+      <li class="nav-item pb-2">
+        <a href="#" onclick="createPath('index.html')" 
+          data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="exitSession">
+          <i class="fs-4 bi-box-arrow-left"></i>
+          <span class="ms-3 d-none d-sm-inline">Exit Sessions</span>
+        </a>
+      </li>
     </ul>
   </div>
 </div>
