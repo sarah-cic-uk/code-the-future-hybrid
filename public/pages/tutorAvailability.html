@@ -42,8 +42,7 @@
           <div class="navbar-nav nav-justified">
             <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
             <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
-            <a class="nav-link  active-top-nav" aria-current="page" href="#"
-              onclick="createPath('pages/1on1.html')">Manage 1:1s</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
             <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
@@ -59,7 +58,8 @@
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt="Default avatar" loading="lazy" />
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg" loading="lazy" />
               </a>
 
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
@@ -69,6 +69,8 @@
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
                 </li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
                 <li>
                   <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
                 </li>
@@ -793,7 +795,7 @@
     async function updateBookedTable() {
       const tableBody = document.querySelector('.bookedTable');
       tableBody.innerHTML = '';
-console.log("update boked table...")
+      console.log("update boked table...")
       const bookedTab = document.getElementById('booked-tab');
       const calendarToggle = document.getElementById('switch-booked');
       const today = new Date();
