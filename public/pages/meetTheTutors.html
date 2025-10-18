@@ -38,24 +38,27 @@
             <a class="nav-link active-top-nav" aria-current="page" href="#"
               onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/faq.html')">FAQ</a>
           </div>
-          <div class="d-flex align-items-center">
-            <button type="button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style">
+          <div class="d-flex align-items-center" div id="profile-button">
+            <button type=" button" onclick="createPath('pages/login.html')" class="loginBtn btn me-3 button-style">
               Log In
             </button>
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-center" div id="profile-button">
               <!-- Logged in Avatar -->
               <div>
-                <p class="my-auto" id="profileName"></p>
+                <p class=" my-auto" id="profileName">
+                </p>
               </div>
               <div class="profileBtn dropdown px-3">
                 <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle" height="25"
-                    alt="Black and White Portrait of a Man" loading="lazy" />
+                  <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg"
+                    src="../images/blank_avatar.jpg" loading="lazy" />
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
@@ -65,6 +68,8 @@
                   <li>
                     <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
                   </li>
+                  <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                      onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
                   <li>
                     <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
                   </li>
@@ -156,35 +161,6 @@
                 </div>
                 <div class="col-md-4 col-lg-4 item">
                   <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/MichaelWeller.jpeg);
-                      ">
-                    <div class="profile">
-                      <h3 class="name">Michael Weller</h3>
-                      <p class="title">Full Stack Engineer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Michael Weller</h3>
-                      <p class="description">
-                        I joined the CIC in early December 2020 as an
-                        application developer. I've worked on a wide range of
-                        roles and accounts, working in L2 support, cloud
-                        solutions, app development and finally web development
-                        since the start of this year. I've had sprinkles of
-                        experience throughout my career from using HTML/CSS to
-                        JavaScript/TypeScript with frameworks like React and
-                        Angular. I hope now to try to apply my web development
-                        knowledge through tutoring.
-                      </p>
-                      <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
-                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
                         background-image: url(../images/tutorProfiles/remya.jpeg);
                       ">
                     <div class="profile">
@@ -254,25 +230,6 @@
                           title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
                         <a href="https://github.com/J4cquelineJones" data-toggle="tooltip" title="Personal Github"><i
                             class="sm-icon bi-github"></i></a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-4 col-lg-4 item">
-                  <div class="box tutor-profile" style="
-                        background-image: url(../images/tutorProfiles/haseeb.png);
-                      ">
-                    <div class="profile">
-                      <h3 class="name">Haseeb Jabbar</h3>
-                      <p class="title">Full Stack Engineer</p>
-                    </div>
-                    <div class="cover">
-                      <h3 class="name">Haseeb Jabbar</h3>
-                      <p class="description">I joined IBM in 2021 as an apprentice with no prior experience in development. Over the past few years, IBM has provided me with numerous opportunities to learn and grow as a developer. I began by mastering the basics of HTML, CSS, and JavaScript and went on to work on various public sector projects, creating web applications using frameworks like React and Node.js. My journey has led me to a deep passion for DevOps, where I now focus on deploying applications to end users. As a fully blind developer, I rely on screen reading technology to program and am committed to sharing my knowledge with others.</p>
-                      <div class="social">
-                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
-                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
-                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
                       </div>
                     </div>
                   </div>
@@ -439,6 +396,38 @@
                           title="Connect on LinkedIn"><i class="sm-icon bi-linkedin"></i></a>
                         <a href="https://github.com/Makeve" data-toggle="tooltip" title="Personal Github"><i
                             class="sm-icon bi-github"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4 col-lg-4 item">
+                  <div class="box tutor-profile"
+                    style="background-image: url(../images/tutorProfiles/graceBurdett.jpg);">
+                    <div class="profile">
+                      <h3 class="name">Grace Burdett</h3>
+                      <p class="title">Associate Platform Engineer</p>
+                    </div>
+                    <div class="cover">
+                      <h3 class="name">Grace Burdett</h3>
+                      <p class="description">
+                        After finishing my A-Levels I joined IBM Technology is a Platform Engineer in IBM's Client
+                        Engineering team. I recently
+                        completed my Degree Apprenticeship in Software Engineering while working full-time, balancing
+                        hands-on experience with
+                        academic learning. During my time at IBM, I have worked on a variety of Proof of Concept
+                        projects for clients across the
+                        UK, gaining practical skills in areas like integration tooling, front-end and backend
+                        development. I am passionate about
+                        using technology to solve real problems and enjoy collaborating with teams to build innovative,
+                        client-focused
+                        solutions. Aside from my day job I love to help out others especially passing on my tech
+                        knowledge through tutoring and
+                        teaching courses!
+                      </p>
+                      <div class="social">
+                        <a href="#"><i class="sm-icon bi-facebook"></i></a>
+                        <a href="#"><i class="sm-icon bi-twitter"></i></a>
+                        <a href="#"><i class="sm-icon bi-instagram"></i></a>
                       </div>
                     </div>
                   </div>

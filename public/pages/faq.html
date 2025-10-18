@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+
+  <title>Code the Future</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="module" src="./js/firebase.js"></script>
+
+  <style>
+    #faqAccordion {
+      --bs-accordion-active-color: #011640;
+    }
+
+    .accordion-button,
+    .accordion-button:not(.collapsed) {
+      background-color: #eae9f3 !important;
+      color: #011640 !important;
+      font-weight: 600 !important;
+    }
+
+    .accordion-button::after {
+      transition: transform 0.3s ease;
+      color: #011640 !important;
+      font-weight: 600 !important;
+    }
+
+    .accordion-button:not(.collapsed)::after {
+      transform: rotate(180deg);
+      color: #011640 !important;
+      font-weight: 600 !important;
+    }
+
+    .accordion-button:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-content">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" style="
+							border-right: 2px solid #d9437a;
+							padding-right: 10px;
+							color: #1d0c59;
+						">
+          <img src="../images/logo.png" height="60px" alt="CTF" />
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <a class="nav-link" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
+            <a class="nav-link" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
+            <a class="nav-link active-top-nav" aria-current="page" onclick="createPath('pages/faq.html')"
+              title="FAQ">FAQs</a>
+          </div>
+
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div>
+              <p class=" my-auto" id="profileName">
+              </p>
+            </div>
+
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg"
+                  loading="lazy" />
+              </a>
+
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid px-5" style="background-color: white; width: 80%; padding-bottom: 3rem">
+      <section>
+        <p class="h1" style="padding-top: 3rem; font-weight: 900">
+          Frequently Asked Questions
+        </p>
+        <p class="lead" style="padding-top: 10px">
+          Let's answer some of the common questions we generally get asked
+        </p>
+      </section>
+
+      <div class="d-flex justify-content-end my-3">
+        <a class="nav-link" id="toggleButton" onclick="toggleAccordion()">Expand all</a>
+      </div>
+
+      <section>
+        <div class="accordion" id="faqAccordion">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="false" aria-controls="collapseOne">
+                What is Code the Future?
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Code the Future is a free coding bootcamp focused on HTML and CSS. It offers structured guidance and
+                personalised support to help individuals learn essential web development skills and prepare for careers
+                in tech.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                aria-expanded="false" aria-controls="collapseTwo">
+                Who is this online course for?
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                This online course is designed for students of all levels,
+                from beginners to advanced. Whether you're just starting out
+                or looking to enhance your skills, this course is perfect for
+                you.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingThree">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                aria-expanded="false" aria-controls="collapseThree">
+                What will I learn on this course?
+              </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                In this course, you will learn the fundamentals of web
+                development, as well as advanced techniques and strategies.
+                You will gain a deep understanding of the concepts and develop
+                practical skills that you can apply in real-world scenarios.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFour">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                aria-expanded="false" aria-controls="collapseFour">
+                How long is the course?
+              </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                The course is self-paced, allowing you to learn at your own
+                convenience. On average, most students complete the course
+                within 6-8 weeks. However, you can take longer if needed or
+                finish it sooner if you dedicate more time to it.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingFive">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                aria-expanded="false" aria-controls="collapseFive">
+                Is there any prerequisite for this course?
+              </button>
+            </h2>
+            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                No, there are no prerequisites for this course except access
+                to an available computer system to complete the online coding
+                tasks. It is designed to accommodate students of all levels,
+                including beginners with no prior knowledge of coding.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSix">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix"
+                aria-expanded="false" aria-controls="collapseSix">
+                Can I access the course materials after completing the course?
+              </button>
+            </h2>
+            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Yes, once you complete the course, you will have lifetime
+                access to all the course materials, including video lectures,
+                assignments, and additional resources. You can revisit the
+                content anytime to refresh your knowledge or review specific
+                topics.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingSeven">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven"
+                aria-expanded="false" aria-controls="collapseSeven">
+                Is there any support available during the course?
+              </button>
+            </h2>
+            <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Absolutely! We provide dedicated support throughout the
+                course. Our team of experienced tutors is available to answer
+                your questions, provide 1:1 sessions, and offer guidance
+                whenever you need it. You can reach out via the CTF Slack channel,
+                email, or through the course platform.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEight">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight"
+                aria-expanded="false" aria-controls="collapseEight">
+                Who are the tutors?
+              </button>
+            </h2>
+            <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Our tutors are experienced professionals from IBM,
+                bringing industry insights and expertise to guide students
+                through each module. You can meet them on the "Meet the
+                Tutors" page.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingNine">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNine"
+                aria-expanded="false" aria-controls="collapseNine">
+                How can I schedule a 1:1 session with a tutor?
+              </button>
+            </h2>
+            <div id="collapseNine" class="accordion-collapse collapse" aria-labelledby="headingNine"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                You can schedule a 1:1 session with a tutor via the "Schedule
+                a 1:1" page, where you will find available time slots and
+                booking options.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTen">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTen"
+                aria-expanded="false" aria-controls="collapseTen">
+                How can I showcase my project on the Code the Future website?
+              </button>
+            </h2>
+            <div id="collapseTen" class="accordion-collapse collapse" aria-labelledby="headingTen"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                After completing the course project, you can submit it for review under
+                your profile settings. If you approve, it will be displayed on
+                the "Showcase" page, allowing future students to see your
+                work.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingEleven">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven"
+                aria-expanded="false" aria-controls="collapseEleven">
+                Can I get help if I am stuck on a coding problem?
+              </button>
+            </h2>
+            <div id="collapseEleven" class="accordion-collapse collapse" aria-labelledby="headingEleven"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Yes! You can reach out to tutors during their office hours, or
+                schedule a 1:1 session for personalised help. There is also a
+                community channel in Slack where you can ask for assistance from other
+                students.
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwelve">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwelve"
+                aria-expanded="false" aria-controls="collapseTwelve">
+                What are the career support options after completing the
+                bootcamp?
+              </button>
+            </h2>
+            <div id="collapseTwelve" class="accordion-collapse collapse" aria-labelledby="headingTwelve"
+              data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                Upon completing the bootcamp, you will have access to career
+                guidance resources, such as resume reviews, interview
+                preparation sessions, and information about job opportunities
+                at IBM.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script type="module">
+    import { fbAuth, fbDB } from './js/firebase.js';
+    window.fbDB = fbDB;
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.accordion-header').forEach(header => {
+        header.classList.remove('collapsed');
+      });
+    });
+
+    let isExpanded = false;
+
+    function toggleAccordion() {
+      const collapseElements = document.querySelectorAll('.accordion-collapse');
+      const toggleButton = document.getElementById('toggleButton');
+
+      collapseElements.forEach((collapse) => {
+        if (isExpanded) {
+          new bootstrap.Collapse(collapse, { hide: true });
+        } else {
+          new bootstrap.Collapse(collapse, { show: true });
+        }
+      });
+
+      isExpanded = !isExpanded;
+      toggleButton.textContent = isExpanded ? 'Collapse all' : 'Expand all';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const collapseElements = document.querySelectorAll('.accordion-collapse');
+      collapseElements.forEach((collapse) => {
+        collapse.classList.remove('show');
+        collapse.previousElementSibling.classList.add('collapsed');
+        collapse.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    window.onload = () => {
+      const stylesheet = document.createElement('link');
+      stylesheet.rel = 'stylesheet';
+      stylesheet.type = 'text/css';
+      stylesheet.href = getPath() + 'styles/mainStyle.css';
+      document.head.appendChild(stylesheet);
+
+      auth(
+        document.querySelector('.loginBtn'),
+        document.querySelector('.profileBtn'),
+        document.querySelector('#sessionsLink')
+      );
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      const fbAuth = firebase.auth();
+      logout(fbAuth);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
