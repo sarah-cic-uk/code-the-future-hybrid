@@ -536,11 +536,17 @@
     }
 
     async function addUserToDatabase(user, cohortId) {
-      await window.fbDB.ref('users/' + user.uid).set({
+      const userData = {
         displayName: user.displayName,
         email: user.email,
         cohort: cohortId,
-      });
+      };
+      
+      if (cohortId === 'cTfTut0rCod3!1') {
+        userData.tutor = true;
+      }
+      
+      await window.fbDB.ref('users/' + user.uid).set(userData);
     }
 
     function login(fbAuth) {
