@@ -744,12 +744,13 @@ ul[id^="submenu"] li {
 }
 
 .pathway-descriptions {
-  background-color: #f0f5f9;
-  border: 1px solid #31238c;
-  border-radius: 10px;
-  padding: 6px;
-  margin-right: 16px;
+	background-color: #f0f5f9;
+	border: 1px solid #31238c;
+	border-radius: 10px;
+	padding: 6px;
+	margin-right: 16px;
 }
+
 /*
 .completion-button-container {
   min-width: fit-content;
