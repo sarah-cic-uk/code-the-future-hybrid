@@ -46,7 +46,7 @@
             <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
             <a class="nav-link  active-top-nav" aria-current="page" href="#"
               onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" id="jobs-nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
             <a class="nav-link" href="#" onclick="createPath('pages/faq.html')">FAQ</a>
@@ -62,7 +62,8 @@
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img src="../images/blank_avatar.jpg" class="rounded-circle" height="25" alt="Default avatar"
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg"
                   loading="lazy" />
               </a>
 
@@ -73,6 +74,8 @@
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
                 </li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
                 <li>
                   <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
                 </li>
@@ -101,52 +104,126 @@
           session time that works best for you.</p>
       </section>
 
-      <section>
-        <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
-          Select a Tutor
-        </p>
+      <ul class="nav nav-tabs" id="sessionTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="available-tab" data-bs-toggle="tab" data-bs-target="#available"
+            type="button" role="tab" aria-controls="available" aria-selected="true">Available sessions</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="booked-tab" data-bs-toggle="tab" data-bs-target="#booked" type="button"
+            role="tab" aria-controls="booked" aria-selected="false">Booked sessions</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="requested-tab" data-bs-toggle="tab" data-bs-target="#requested" type="button"
+            role="tab" aria-controls="requested" aria-selected="false">Requested sessions</button>
+        </li>
+      </ul>
 
-        <div>
-          <div id="scrollbox" style="overflow-y:auto" class="tutor-selector">
-            <!-- dynamic avatars here -->
-          </div>
-        </div>
-      </section>
+      <div class="tab-content" id="sessionTabContent">
+        <!-- Available sessions Tab -->
+        <div class="tab-pane fade show active" id="available" role="tabpanel" aria-labelledby="available-tab">
+          <section>
+            <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
+              Select a Tutor
+            </p>
 
-      <section>
-        <div class="row">
-          <p class="h4" style="width:50%; padding:3rem 0 0 0.75rem; font-style:normal;">
-            Select a Session
-          </p>
-
-          <div id="switch" class="d-flex mb-1">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="toggleViewSwitch">
-              <label class="form-check-label" for="toggleViewSwitch" id="toggleLabel">Calendar view</label>
+            <div>
+              <div id="scrollbox" style="overflow-y:auto" class="tutor-selector">
+                <!-- dynamic avatars here -->
+              </div>
             </div>
-          </div>
+          </section>
 
-          <div id="calendar-container">
-            <div id="calendar"></div> <!-- Calendar view -->
-          </div>
+          <section>
+            <div class="row">
+              <p class="h4" style="width:50%; padding:3rem 0 0 0.75rem; font-style:normal;">
+                Select a Session
+              </p>
+
+              <div id="switch" class="d-flex mb-1">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" id="toggleViewSwitch">
+                  <label class="form-check-label" for="toggleViewSwitch" id="toggleLabel">Calendar view</label>
+                </div>
+              </div>
+
+              <div id="calendar-container">
+                <div id="calendar"></div> <!-- Calendar view -->
+              </div>
+            </div>
+
+            <div id="tutorTableContainer">
+              <table id="tutorTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="sessionTable">
+                  <!-- tutor specific rows -->
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
 
-        <div id="tutorTableContainer">
-          <table id="tutorTable">
-            <thead>
-              <th>Date</th>
-              <th>Start time</th>
-              <th>Duration</th>
-              <th>Timezone</th>
-              <th></th>
-            </thead>
+        <!-- Booked sessions Tab -->
+        <div class="tab-pane fade" id="booked" role="tabpanel" aria-labelledby="booked-tab">
+          <section>
+            <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
+              Your booked sessions
+            </p>
+            <p class="small" style="padding:0 0 0 0.75rem;">Sessions you have successfully booked with tutors.</p>
 
-            <tbody class="sessionTable">
-              <!-- tutor specific rows -->
-            </tbody>
-          </table>
+            <div id="bookedTableContainer">
+              <table id="bookedTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th>Tutor</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="bookedTable">
+                  <!-- booked sessions will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
-      </section>
+
+        <!-- Requested sessions Tab -->
+        <div class="tab-pane fade" id="requested" role="tabpanel" aria-labelledby="requested-tab">
+          <section>
+            <p class="h4" style="padding:2rem 0 0 0.75rem; font-style:normal;">
+              Your requested sessions
+            </p>
+            <p class="small" style="padding:0 0 0 0.75rem;">Sessions you have requested that are awaiting tutor confirmation.</p>
+
+            <div id="requestedTableContainer">
+              <table id="requestedTable">
+                <thead>
+                  <th>Date</th>
+                  <th>Start time</th>
+                  <th>Duration</th>
+                  <th>Timezone</th>
+                  <th>Tutor</th>
+                  <th></th>
+                </thead>
+
+                <tbody class="requestedTable">
+                  <!-- requested sessions will be dynamically inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
 
       <section style="margin-top:1rem; padding-bottom:4rem;">
         <p class="h4" style="padding:3rem 0 0.75rem; font-style:normal;">
@@ -191,6 +268,7 @@
         <div id="alert"></div>
 
       </section>
+    </div>
     </div>
 
     <!-- toast notifications -->
@@ -261,6 +339,8 @@
   </script>
 
   <script>
+    let selectedTutor;
+
     window.onload = (event) => {
       const stylesheet = document.createElement("link");
       stylesheet.rel = "stylesheet";
@@ -457,9 +537,10 @@
     requestSessionBtn.addEventListener("click", requestSession);
 
     function getTutors(firstTutor = true, previouslySelectedTutor = null) {
-      const dbRef = window.fbDB.ref("tutors");
+      const dbRef = window.fbDB.ref("users").orderByChild("tutor").equalTo(true);
       dbRef.once("value", (snapshot) => {
         const data = snapshot.val();
+        console.log("DATA", data)
         const scrollbox = document.getElementById("scrollbox");
         scrollbox.replaceChildren();
 
@@ -542,12 +623,16 @@
             tutorTiles.forEach(tile => tile.classList.remove("selected"));
             this.classList.add("selected");
 
-            selectedTutor = tutor;
+            selectedTutor = { ...tutor, tutorId: tutorId };
             updateTable(selectedTutor, tutorId);
           });
 
           const tutorImage = document.createElement("img");
-          tutorImage.src = `../images/tutorAvatars/${tutor.avatar}`;
+          window.fbStorage.ref(`profilePics/${tutorId}`).getDownloadURL().then(url => {
+            tutorImage.src = url;
+          }).catch(() => {
+            tutorImage.src = "../images/blank_avatar.jpg";
+          });
           tutorImage.height = 70;
           tutorImage.width = 70;
           tutorImage.style.borderRadius = "100%";
@@ -564,7 +649,7 @@
 
           if (tutorId == previouslySelectedTutor || firstTutor) {
             tutorTile.classList.add("selected");
-            selectedTutor = tutor;
+            selectedTutor = { ...tutor, tutorId: tutorId };
             updateTable(tutor, tutorId);
             firstTutor = false;
           }
@@ -591,7 +676,7 @@
         const requestedTime = row.cells[1].textContent;
         const requestedDuration = row.cells[2].textContent;
 
-        const sessionRef = fbDB.ref(`tutors/${tutorId}/availability/${sessionId}`);
+        const sessionRef = fbDB.ref(`users/${tutorId}/availability/${sessionId}`);
         sessionRef.once("value", async (snapshot) => {
           const sessionData = snapshot.val();
 
@@ -609,14 +694,14 @@
               timezone: sessionData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
               studentEmail: studentEmail,
               studentName: studentName,
-              tutorName: sessionData.tutorName || "Unknown tutor",
+              tutorName: selectedTutor.displayName || "Unknown tutor",
               status: "booked",
               sessionRequestId: sessionData.sessionRequestId || null,
             };
 
             sessionRef.remove((error) => {
               if (!error) {
-                const bookedSessionRef = fbDB.ref(`tutors/${tutorId}/bookedSessions`).push();
+                const bookedSessionRef = fbDB.ref(`users/${tutorId}/bookedSessions`).push();
                 bookedSessionRef.set(unifiedSessionData, async (error) => {
                   if (!error) {
                     console.log("Session successfully booked");
@@ -649,7 +734,6 @@
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
       const currentUser = fbAuth.currentUser;
       const sessionRequestRef = window.fbDB.ref("sessionRequests").push();
-
       const userId = currentUser.uid;
       const userEmail = currentUser.email;
       const userName = currentUser.displayName;
@@ -668,11 +752,10 @@
       };
 
       // now, store this session request under the tutors requestedSessions node
-      window.fbDB.ref("tutors").orderByChild("displayName").equalTo(tutor.displayName).once("value", (snapshot) => {
+      window.fbDB.ref(`users/${tutor.tutorId}`).once("value", (snapshot) => {
         const tutorData = snapshot.val();
         if (tutorData) {
-          const tutorId = Object.keys(tutorData)[0];  // assuming one match for the display name
-          const tutorSessionRef = window.fbDB.ref(`tutors/${tutorId}/requestedSessions`).push();
+          const tutorSessionRef = window.fbDB.ref(`users/${tutor.tutorId}/requestedSessions`).push();
           tutorSessionRef.set(sessionData, (error) => {
             if (error) {
               console.error("Error saving session request under tutor's node:", error);

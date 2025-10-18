@@ -172,41 +172,41 @@ function navigateTo(targetPath) {
 
 // === Extract correct session name from pathname ===
 function getCurrentSessionName() {
-  return window.location.pathname.split("/").find((part) => /^session\d+$/.test(part));
+	return window.location.pathname.split("/").find((part) => /^session\d+$/.test(part));
 }
 
 // === Replace old session detection logic in helpers ===
 async function saveLessonComplete(lessonName) {
-  const user = window.fbAuth.currentUser;
-  if (!user) return;
+	const user = window.fbAuth.currentUser;
+	if (!user) return;
 
-  const session = getCurrentSessionName();
-  const ref = window.fbDB.ref(`users/${user.uid}/completedSessions/${session}`);
-  await ref.update({ [lessonName]: true });
+	const session = getCurrentSessionName();
+	const ref = window.fbDB.ref(`users/${user.uid}/completedSessions/${session}`);
+	await ref.update({ [lessonName]: true });
 }
 
 async function isLessonComplete(lessonName) {
-  const user = window.fbAuth.currentUser;
-  if (!user) return false;
+	const user = window.fbAuth.currentUser;
+	if (!user) return false;
 
-  const session = getCurrentSessionName();
-  const ref = window.fbDB.ref(`users/${user.uid}/completedSessions/${session}`);
-  const snapshot = await ref.once("value");
-  const data = snapshot.val() || {};
+	const session = getCurrentSessionName();
+	const ref = window.fbDB.ref(`users/${user.uid}/completedSessions/${session}`);
+	const snapshot = await ref.once("value");
+	const data = snapshot.val() || {};
 
-  return !!data[lessonName];
+	return !!data[lessonName];
 }
 
 function extractLessonName(path) {
-  const parts = path.split("/");
-  const filename = parts.pop().replace(".html", "");
-  const session = parts.findLast(p => /^session\d+$/.test(p));
+	const parts = path.split("/");
+	const filename = parts.pop().replace(".html", "");
+	const session = parts.findLast(p => /^session\d+$/.test(p));
 
-  if (filename === "introduction" && session) {
-    return `${session}-overview`;
-  }
+	if (filename === "introduction" && session) {
+		return `${session}-overview`;
+	}
 
-  return filename;
+	return filename;
 }
 
 

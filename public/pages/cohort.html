@@ -42,6 +42,14 @@
     .dynamic-link {
       cursor: pointer;
     }
+
+    .card-body img {
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+    }
   </style>
 </head>
 
@@ -65,7 +73,7 @@
             <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
             <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
             <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" href="#" onclick="createPath('pages/sessions.html')" id="sessionsLink">Sessions</a>
           </div>
@@ -78,7 +86,8 @@
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img src="images/blank_avatar.jpg" class="rounded-circle" height="25" alt="Default avatar"
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg"
                   loading="lazy" />
               </a>
 
@@ -89,6 +98,8 @@
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
                 </li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
                 <li>
                   <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
                 </li>
@@ -177,7 +188,7 @@
               <div class="card-body">
                 <p class="h5 text-center" style="padding-top:0;">${displayName}</p> 
                 <div class="d-flex justify-content-center">
-                  <img class="rounded-circle avatar-dimensions img-thumbnail" src="../images/blank_avatar.jpg"
+                  <img class="rounded-circle avatar-dimensions img-thumbnail" id="profile-pic"
                     alt="Profile picture of ${displayName}" data-user-id="${id}" />
                 </div>
                 <div class="text-center mt-4">
@@ -241,7 +252,7 @@
           imgElement.src = url;
         } catch (error) {
           if (error.code === 'storage/object-not-found') {
-            imgElement.src = fallbackImageURL || "../images/blank_avatar.jpg";
+            imgElement.src = "../images/blank_avatar.jpg";
           } else {
             console.error(`Error fetching profile image for user ${userId}:`, error);
           }

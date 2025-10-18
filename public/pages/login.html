@@ -108,7 +108,7 @@
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
               tutors</a>
             <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" href="#" onclick="createPath('pages/faq.html')">FAQ</a>
           </div>
@@ -536,11 +536,17 @@
     }
 
     async function addUserToDatabase(user, cohortId) {
-      await window.fbDB.ref('users/' + user.uid).set({
+      const userData = {
         displayName: user.displayName,
         email: user.email,
         cohort: cohortId,
-      });
+      };
+      
+      if (cohortId === 'cTfTut0rCod3!1') {
+        userData.tutor = true;
+      }
+      
+      await window.fbDB.ref('users/' + user.uid).set(userData);
     }
 
     function login(fbAuth) {

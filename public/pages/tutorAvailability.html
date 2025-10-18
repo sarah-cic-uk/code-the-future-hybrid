@@ -42,9 +42,8 @@
           <div class="navbar-nav nav-justified">
             <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
             <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
-            <a class="nav-link  active-top-nav" aria-current="page" href="#"
-              onclick="createPath('pages/1on1.html')">Manage 1:1s</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
             <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
@@ -59,7 +58,8 @@
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img src="images/blank_avatar.jpg" class="rounded-circle" height="25" alt="Default avatar"
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg"
                   loading="lazy" />
               </a>
 
@@ -70,6 +70,8 @@
                 <li>
                   <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a>
                 </li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
                 <li>
                   <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
                 </li>
@@ -395,41 +397,7 @@
 
   <script>
     let loggedInTutor;
-    let tutorId;
-
-    async function fetchTutorId() {
-      const currentUser = firebase.auth().currentUser;
-
-      if (!currentUser) {
-        console.error("No authenticated user found. Cannot fetch tutorId.");
-        return null;
-      }
-
-      try {
-        const tutorSnapshot = await fbDB
-          .ref("tutors")
-          .orderByChild("email")
-          .equalTo(currentUser.email)
-          .once("value");
-
-        const tutors = tutorSnapshot.val();
-
-        if (tutors) {
-          const tutorIdFromDb = Object.keys(tutors)[0];
-          loggedInTutor = tutors[tutorIdFromDb].displayName || currentUser.displayName;
-          tutorId = tutorIdFromDb;
-
-          console.log("Tutor ID and name fetched:", tutorId, loggedInTutor);
-          return tutorId;
-        } else {
-          console.error("No tutor found for the authenticated user.");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error fetching tutorId:", error);
-        return null;
-      }
-    }
+    let userId;
 
     window.onload = async function () {
       const stylesheet = document.createElement("link");
@@ -444,36 +412,52 @@
         document.querySelector("#sessionsLink")
       );
 
-      await fetchTutorId();
+      window.fbAuth.onAuthStateChanged(async function (user) {
+        // Check if user is an authorised tutor
+        const currentUser = fbAuth.currentUser;
+        loggedInTutor = currentUser.displayName;
+        userId = currentUser.uid;
+        if (!currentUser) {
+          document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Access Denied</h3><p>You must be logged in to access this page.</p></div></div>';
+          return;
+        }
+        try {
+          const userSnapshot = await fbDB.ref(`users/${currentUser.uid}`).once('value');
+          const userData = userSnapshot.val();
+          if (!userData || !userData.tutor) {
+            document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Access Denied</h3><p>You are not authorized to access this page. Only tutors can view tutor availability.</p></div></div>';
+            return;
+          }
+        } catch (error) {
+          document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Error</h3><p>Unable to verify your authorization. Please try again later.</p></div></div>';
+          return;
+        }
 
-      if (!tutorId) {
-        console.error("Tutor ID not found. Stopping further execution.");
-        return;
-      }
+        updateAvailabilityTable();
+        updateBookedTable();
+        initialiseTutorData();
+      })
 
-      updateAvailabilityTable();
-      updateBookedTable();
-      initialiseTutorData();
     };
 
     async function initialiseTutorData() {
-      if (!tutorId) {
+      if (!userId) {
         console.error("Tutor ID is undefined. Cannot initialize tutor data.");
         return;
       }
 
       try {
-        const availabilitySnapshot = await fbDB.ref(`tutors/${tutorId}/availability`).once("value");
+        const availabilitySnapshot = await fbDB.ref(`users/${userId}/availability`).once("value");
         if (availabilitySnapshot.exists()) {
           tutorAvailability[loggedInTutor] = availabilitySnapshot.val() || {};
         }
 
-        const bookedSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once("value");
+        const bookedSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once("value");
         if (bookedSnapshot.exists()) {
           bookedSessions[loggedInTutor] = bookedSnapshot.val() || {};
         }
 
-        const requestedSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions`).once("value");
+        const requestedSnapshot = await fbDB.ref(`users/${userId}/requestedSessions`).once("value");
         if (requestedSnapshot.exists()) {
           requestedSessions[loggedInTutor] = requestedSnapshot.val() || {};
         }
@@ -635,7 +619,7 @@
       const systemOptions = Intl.DateTimeFormat().resolvedOptions();
 
       // check for conflicts in booked sessions
-      const bookedSessionsSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once('value');
+      const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once('value');
       const existingBookings = bookedSessionsSnapshot.val() || {}; // ensures existingBookings is an object
 
       const hasBookingConflict = existingBookings && Object.values(existingBookings).some(booking => {
@@ -684,7 +668,10 @@
         timezone: systemOptions.timeZone
       };
 
-      const tutorRef = fbDB.ref(`tutors/${tutorId}/availability`).push();
+      // if we ever want to update on behalf of others:
+      // const userSnapshot = await fbDB.ref('users').orderByChild('tutorId').equalTo(tutorId).once('value');
+      // const userId = Object.keys(userSnapshot.val())[0];
+      const tutorRef = fbDB.ref(`users/${userId}/availability`).push();
 
       try {
         await tutorRef.set(newSlot);
@@ -721,6 +708,9 @@
       }
 
       const availability = tutorAvailability[loggedInTutor] || {};
+      console.log(availability)
+      console.log(loggedInTutor)
+      console.log(tutorAvailability)
       const today = new Date();
 
       // Handle no availability data
@@ -747,7 +737,7 @@
         // if the slot is in the past, remove it from Firebase
         if (slotDate < today) {
           try {
-            await fbDB.ref(`tutors/${tutorId}/availability/${slotId}`).remove();
+            await fbDB.ref(`users/${userId}/availability/${slotId}`).remove();
             console.log(`Past session ${slotId} removed from Firebase.`);
           } catch (error) {
             console.error(`Error removing past session ${slotId} from Firebase:`, error);
@@ -806,13 +796,12 @@
     async function updateBookedTable() {
       const tableBody = document.querySelector('.bookedTable');
       tableBody.innerHTML = '';
-
+      console.log("update boked table...")
       const bookedTab = document.getElementById('booked-tab');
       const calendarToggle = document.getElementById('switch-booked');
       const today = new Date();
 
       let bookedCount = 0;
-
 
       // Handle missing `loggedInTutor`
       if (!loggedInTutor) {
@@ -833,8 +822,6 @@
         calendarToggle.classList.add('hidden'); // Hide calendar toggle
         return;
       }
-
-
 
       // iterate through the sessions and handle each one
       for (let slotId of Object.keys(sessions)) {
@@ -859,7 +846,7 @@
         if (slotDate < today) {
           try {
             // then remove the past session from Firebase
-            await fbDB.ref(`tutors/${tutorId}/bookedSessions/${slotId}`).remove();
+            await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).remove();
             console.log(`Removed past session: ${slotId}`);
           } catch (error) {
             console.error(`Error removing session ${slotId} from Firebase:`, error);
@@ -916,13 +903,13 @@
 
     async function cancelBookedSession(slotId) {
       try {
-        const sessionSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions/${slotId}`).once('value');
+        const sessionSnapshot = await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).once('value');
         const sessionData = sessionSnapshot.val();
 
         if (sessionData) {
           const { studentEmail, studentName, date, time, duration } = sessionData;
 
-          await fbDB.ref(`tutors/${tutorId}/bookedSessions/${slotId}`).remove();
+          await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).remove();
           console.log(`Booked session with ID ${slotId} removed from Firebase.`);
 
           // === Add Email Notification ===
@@ -957,7 +944,7 @@
       const yesBtn = toastEl.querySelector('.btn-primary');
       yesBtn.onclick = async function () {
         try {
-          const refPath = `tutors/${tutorId}/${type}/${slotId}`;
+          const refPath = `users/${userId}/${type}/${slotId}`;
           console.log(`Attempting to remove session from path: ${refPath}`);
 
           // Fetch session data before removing (only for bookedSessions or requestedSessions)
@@ -1014,7 +1001,7 @@
       const requestTab = document.getElementById('request-tab');
       const today = new Date();
 
-      if (!loggedInTutor || !tutorId) {
+      if (!loggedInTutor || !userId) {
         console.warn("No logged-in tutor or tutor ID found. Displaying empty state.");
         tableBody.innerHTML = '<tr><td colspan="6"> No sessions available. Please log in to view requested sessions. </td></tr>';
         requestTab.textContent = "Requested sessions (0)";
@@ -1025,7 +1012,7 @@
       let hasFutureSessions = false;
 
       try {
-        const requestedSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions`).once('value');
+        const requestedSnapshot = await fbDB.ref(`users/${userId}/requestedSessions`).once('value');
         const requestedSessions = requestedSnapshot.val() || {};
 
         if (!requestedSessions || Object.keys(requestedSessions).length === 0) {
@@ -1053,7 +1040,7 @@
 
           if (slotDate < today) {
             try {
-              await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
+              await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).remove();
               console.log(`Removed past session: ${slotId}`);
             } catch (error) {
               console.error(`Error removing past session ${slotId}:`, error);
@@ -1125,7 +1112,7 @@
 
     async function confirmSession(slotId) {
       try {
-        const sessionSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).once('value');
+        const sessionSnapshot = await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).once('value');
         const sessionData = sessionSnapshot.val();
 
         if (sessionData) {
@@ -1141,7 +1128,7 @@
           const selectedEndTime = selectedStartTime + durationInMinutes * 60000;
 
           // check for existing bookings at this time
-          const bookedSessionsSnapshot = await fbDB.ref(`tutors/${tutorId}/bookedSessions`).once('value');
+          const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once('value');
           const existingBookings = bookedSessionsSnapshot.val() || {};
 
           const hasBookingConflict = Object.values(existingBookings).some(booking => {
@@ -1159,9 +1146,9 @@
 
           // proceed to confirm booking if no conflicts exist
           sessionData.status = "booked";
-          const bookedSessionRef = fbDB.ref(`tutors/${tutorId}/bookedSessions`).push();
+          const bookedSessionRef = fbDB.ref(`users/${userId}/bookedSessions`).push();
           await bookedSessionRef.set(sessionData);
-          await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
+          await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).remove();
 
           const sessionRequestId = sessionData.sessionRequestId;
           if (sessionRequestId) {
@@ -1211,7 +1198,7 @@
     async function cancelRequestedSession(slotId) {
       try {
         // fetch session data from requestedSessions to get the sessionRequestId
-        const sessionSnapshot = await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).once('value');
+        const sessionSnapshot = await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).once('value');
         const sessionData = sessionSnapshot.val();
 
         if (sessionData) {
@@ -1226,7 +1213,7 @@
           }
 
           // remove session from the tutors requestedSessions in Firebase
-          await fbDB.ref(`tutors/${tutorId}/requestedSessions/${slotId}`).remove();
+          await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).remove();
           console.log('Requested session cancelled and removed from tutors requestedSessions.');
 
           // === Add Email Notification ===
@@ -1262,30 +1249,8 @@
     }
 
 
-    async function sendEmail(from, to, subject, text, html) {
-      const emailPayload = {
-        from: "no-reply@code-the-future-hybrid.web.app",
-        to,
-        subject,
-        text,
-        html
-      };
-
-      try {
-        const response = await fetch("https://code-the-future-hybrid.web.app/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(emailPayload)
-        });
-
-        if (response.ok) {
-          console.log(`Email sent successfully to ${to}`);
-        } else {
-          console.error(`Failed to send email:`, await response.json());
-        }
-      } catch (error) {
-        console.error(`Error sending email:`, error);
-      }
+    async function sendEmail(to, subject, text, html) {
+      await sendEmailRequest(to, subject, text, html);
     }
 
     const appUrl = "https://code-the-future-hybrid.web.app";
