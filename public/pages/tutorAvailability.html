@@ -24,8 +24,44 @@
 </head>
 
 <body>
-  <div class="page-content">
+  <script>
+    const API_BASE =
+      location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://ctf-email-service.onrender.com";
 
+    const sendEmailRequest = async (to, subject, text, html) => {
+      if (!to || !subject || (!text && !html)) {
+        console.error("Invalid email payload");
+        return;
+      }
+      try {
+        const res = await fetch(`${API_BASE}/send-email`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ to, subject, text, html })
+        });
+
+        if (!res.ok) {
+          console.error("Failed to send email:", await res.text());
+          return null;
+        }
+
+        const data = await res.json().catch(() => ({}));
+        console.log("Email sent successfully:", data);
+        return data;
+      } catch (e) {
+        console.error("Error sending email:", e);
+        return null;
+      }
+    };
+
+    window.sendEmailRequest = sendEmailRequest;
+    window.sendEmail = (to, subject, text, html) =>
+      sendEmailRequest(to, subject, text, html);
+  </script>
+
+  <div class="page-content">
     <nav class="navbar navbar-expand-lg bg-light">
       <div class="container-fluid g-0">
         <a onclick="createPath('index.html')" class="navbar-brand" href="#"
@@ -386,51 +422,12 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <script type="module">
     import { fbDB } from "./js/firebase.js";
     window.fbDB = fbDB;
   </script>
-
-  <script>
-    const API_BASE =
-      location.hostname === "localhost"
-        ? "http://localhost:3000"
-        : "https://ctf-email-service.onrender.com";
-
-    const sendEmailRequest = async (to, subject, text, html) => {
-      if (!to || !subject || (!text && !html)) {
-        console.error("Invalid email payload");
-        return;
-      }
-      try {
-        const res = await fetch(`${API_BASE}/send-email`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ to, subject, text, html })
-        });
-
-        if (!res.ok) {
-          console.error("Failed to send email:", await res.text());
-          return null;
-        }
-
-        const data = await res.json().catch(() => ({}));
-        console.log("Email sent successfully:", data);
-        return data;
-      } catch (e) {
-        console.error("Error sending email:", e);
-        return null;
-      }
-    };
-
-    window.sendEmailRequest = sendEmailRequest;
-    window.sendEmail = (to, subject, text, html) =>
-      sendEmailRequest(to, subject, text, html);
-  </script>
-
 
   <script>
     let loggedInTutor;
