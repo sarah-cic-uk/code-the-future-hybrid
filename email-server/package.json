@@ -1,4 +1,11 @@
 {
+  "name": "ctf-email-server",
+  "version": "1.0.0",
+  "description": "Node email microservice for Code the Future",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
@@ -7,24 +14,11 @@
     "firebase": "^10.7.2",
     "nodemailer": "^6.10.1"
   },
-  "name": "code-the-future-hybrid",
-  "version": "1.0.0",
-  "description": "",
-  "main": "emailService.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sarah-cic-uk/code-the-future-hybrid.git"
+    "url": "https://github.com/J4cquelineJones/ctf-email-server"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/sarah-cic-uk/code-the-future-hybrid/issues"
-  },
-  "homepage": "https://github.com/sarah-cic-uk/code-the-future-hybrid#readme"
+  "keywords": [ "email", "express", "nodemailer", "code-the-future" ],
+  "author": "Jacqueline Jones",
+  "license": "ISC"
 }
