@@ -125,7 +125,7 @@ function fetchMedia(pathReference, el) {
 const API_BASE =
   location.hostname === "localhost"
     ? "http://localhost:3000"
-    : "https://code-the-future-hybrid.onrender.com";
+    : "https://ctf-email-service.onrender.com";
 
 async function sendEmailRequest(to, subject, text, html) {
   if (!to || !subject || (!text && !html)) {

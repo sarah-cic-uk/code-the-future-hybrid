@@ -923,7 +923,7 @@
       const API_BASE =
         location.hostname === "localhost"
           ? "http://localhost:3000"
-          : "https://code-the-future-hybrid.onrender.com";
+          : "https://ctf-email-service.onrender.com";
 
       async function sendEmailRequest(to, subject, text, html, from = "no-reply@code-the-future-hybrid.web.app") {
         if (!to || !subject || (!text && !html)) {
