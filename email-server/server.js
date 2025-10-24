@@ -10,23 +10,25 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const allowed = [
-  /^https:\/\/code-the-future-hybrid\.web\.app$/,
-  /^https:\/\/code-the-future-hybrid--.*\.web\.app$/,
-  /^http:\/\/localhost:\d+$/,
+const allowedOrigins = [
+  'https://code-the-future-hybrid.web.app',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
 ];
 
-app.use(
-  cors({
-    origin(origin, cb) {
-      if (!origin) return cb(null, true);
-      const ok = allowed.some((r) => (r.test ? r.test(origin) : r === origin));
-      cb(ok ? null : new Error("CORS: origin not allowed"), ok);
-    },
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+app.use(cors({
+  origin: [
+    "https://code-the-future-hybrid.web.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ],
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+  credentials: false
+}));
+
+app.options('*', cors());
+
 
 app.options("/send-email", (req, res) => res.sendStatus(204));
 
