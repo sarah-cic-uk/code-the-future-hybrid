@@ -137,7 +137,7 @@ async function sendEmailRequest(to, subject, text, html) {
   };
 
   try {
-    const response = await fetch('https://code-the-future-hybrid.web.app/send-email', {
+    const response = await fetch('https://code-the-future-hybrid.onrender.com/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
