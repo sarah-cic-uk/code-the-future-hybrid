@@ -48,7 +48,7 @@
             <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
           </div>
 
-          <div class="d-flex align-items-center" div id="profile-button">
+          <div class="d-flex align-items-center" id="profile-button">
             <!-- Logged in Avatar -->
             <div>
               <p class=" my-auto" id="profileName">
@@ -58,8 +58,7 @@
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
-                  src="../images/blank_avatar.jpg"
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt="" src="../images/blank_avatar.jpg"
                   loading="lazy" />
               </a>
 
@@ -394,6 +393,44 @@
     import { fbDB } from "./js/firebase.js";
     window.fbDB = fbDB;
   </script>
+
+  <script>
+    const API_BASE =
+      location.hostname === "localhost"
+        ? "http://localhost:3000"
+        : "https://code-the-future-hybrid.onrender.com";
+
+    const sendEmailRequest = async (to, subject, text, html) => {
+      if (!to || !subject || (!text && !html)) {
+        console.error("Invalid email payload");
+        return;
+      }
+      try {
+        const res = await fetch(`${API_BASE}/send-email`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ to, subject, text, html })
+        });
+
+        if (!res.ok) {
+          console.error("Failed to send email:", await res.text());
+          return null;
+        }
+
+        const data = await res.json().catch(() => ({}));
+        console.log("Email sent successfully:", data);
+        return data;
+      } catch (e) {
+        console.error("Error sending email:", e);
+        return null;
+      }
+    };
+
+    window.sendEmailRequest = sendEmailRequest;
+    window.sendEmail = (to, subject, text, html) =>
+      sendEmailRequest(to, subject, text, html);
+  </script>
+
 
   <script>
     let loggedInTutor;
@@ -1249,9 +1286,9 @@
     }
 
 
-    async function sendEmail(to, subject, text, html) {
-      await sendEmailRequest(to, subject, text, html);
-    }
+    // async function sendEmail(to, subject, text, html) {
+    //   await sendEmailRequest(to, subject, text, html);
+    // }
 
     const appUrl = "https://code-the-future-hybrid.web.app";
 
@@ -1323,6 +1360,9 @@
 
       return { subject, text, html };
     }
+
+
+
 
     // attach event listeners to the date and time inputs to call checkFormCompletion
     document.getElementById('txtDate').addEventListener('input', checkFormCompletion);

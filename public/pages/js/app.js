@@ -122,35 +122,33 @@ function fetchMedia(pathReference, el) {
     });
 }
 
+const API_BASE =
+  location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : "https://code-the-future-hybrid.onrender.com";
+
 async function sendEmailRequest(to, subject, text, html) {
-  // Validate email inputs
   if (!to || !subject || (!text && !html)) {
-    console.error("Invalid email payload. 'To', 'Subject', and either 'Text' or 'HTML' are required.");
+    console.error("Invalid email payload. 'to', 'subject', and either 'text' or 'html' are required.");
     return;
   }
 
-  const emailPayload = {
-    to,
-    subject,
-    text,
-    html,
-  };
+  const emailPayload = { to, subject, text, html };
 
   try {
-    const response = await fetch('https://code-the-future-hybrid.onrender.com/send-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const response = await fetch(`${API_BASE}/send-email`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(emailPayload),
     });
 
-    if (response.ok) {
-      const result = await response.json();
-      console.log("Email sent successfully:", result);
-    } else {
+    if (!response.ok) {
       console.error("Failed to send email. Server response:", await response.text());
+      return;
     }
+
+    const result = await response.json();
+    console.log("Email sent successfully:", result);
   } catch (error) {
     console.error("Error sending email:", error);
   }
