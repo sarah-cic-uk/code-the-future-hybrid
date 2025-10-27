@@ -657,7 +657,7 @@
 
       // send emails
       await sendBookedEmail_Tutor(tutorEmail, unified.studentName, unified.date, unified.time, unified.duration);
-      await sendBookedEmail_Student(selectedTutor, unified.date, unified.time, unified.duration);
+      await sendBookedEmail_Student(selectedTutor, unified.studentName, unified.date, unified.time, unified.duration);
     }
 
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
@@ -696,15 +696,15 @@
     }
 
     // Initialize EmailJS
-    emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
+    emailjs.init('N0cfshULW4gnpvhdY'); // Replace with your EmailJS public key
 
     // ===== SELECT a SESSION <<---- from tutor_availability
     async function sendSelectSession_BookedConfirmationEmail_Tutor(tutorEmail, studentName, requestedDate, requestedTime, requestedDuration) {
       try {
-        await emailjs.send('service_id', 'template_id', {
+        await emailjs.send('service_gos1bro', 'template_tz92f3l', {
           to_email: tutorEmail,
-          subject: 'Code The Future: Select a Session - 1:1 booked confirmation',
-          student_name: studentName,
+          recipient_name: tutor.displayName,
+          attendee_name: studentName,
           session_date: requestedDate,
           session_time: requestedTime,
           session_duration: requestedDuration
@@ -715,14 +715,14 @@
       }
     }
 
-    async function sendBookedEmail_Student(tutor, date, time, duration) {
+    async function sendBookedEmail_Student(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
       try {
         const studentEmail = firebase.auth().currentUser.email;
         
-        await emailjs.send('service_id', 'template_id', {
+        await emailjs.send('service_gos1bro', 'template_nlqu6we', { //student booking confirmation
           to_email: studentEmail,
-          subject: 'Code the Future: Select a Session - 1:1 booked confirmation',
-          tutor_name: tutor.displayName,
+          recipient_name: studentName,
+          attendee_name: tutor.displayName,
           session_date: requestedDate,
           session_time: requestedTime,
           session_duration: requestedDuration
@@ -733,11 +733,10 @@
       }
     }
 
-    async function sendAlternateRequestEmail_Tutor(tutor, studentName, date, time, duration) {
+    async function sendAlternateRequestEmail_Tutor(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
       try {
-        await emailjs.send('service_id', 'template_id', {
+        await emailjs.send('service_gos1bro', 'template_tz92f3l', { //Tutor ad hoc request
           to_email: tutor.email,
-          subject: 'Code the Future: Request an alternative 1:1 session',
           tutor_name: tutor.displayName,
           student_name: studentName,
           session_date: requestedDate,
@@ -756,7 +755,6 @@
       const calendarView = document.getElementById('calendar-container');
       const toggleLabel = document.getElementById('toggleLabel');
 
-      if (this.checked) {
         tableView.style.display = 'none';
         calendarView.style.display = 'block';
         toggleLabel.textContent = 'Table view';
