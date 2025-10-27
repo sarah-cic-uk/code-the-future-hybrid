@@ -695,6 +695,35 @@
       });
     }
 
+        // alt session request button
+    document.querySelector("#alt-session button").addEventListener("click", async () => {
+      const requestedDate = dateInput.value;
+      const requestedTime = timeInput.value;
+      const requestedDuration = document.querySelector("#duration").value;
+
+      clearAlerts();
+      if (!requestedDate || !requestedTime) {
+        emptyValuesAlert.innerHTML = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <div>Please choose both date and time.</div>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>`;
+        return;
+      }
+
+      new bootstrap.Toast(document.getElementById('request-session')).show();
+      await writeSessionRequestToDatabase(selectedTutor, requestedDate, requestedTime, requestedDuration);
+
+      const studentName = (window.fbAuth.currentUser && window.fbAuth.currentUser.displayName) || "Unknown";
+      await sendAlternateRequestEmail_Tutor(selectedTutor, studentName, requestedDate, requestedTime, requestedDuration);
+
+      // reset form
+      dateInput.value = '';
+      timeInput.value = '';
+      document.getElementById('duration').value = '15 Mins';
+      await populateStudentBookedAndRequested(); // refresh Requested tab
+    });
+
     // ---------- Booked / Requested tabs (for the current student) ----------
     async function populateStudentBookedAndRequested() {
       const currentUser = window.fbAuth.currentUser;
