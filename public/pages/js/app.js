@@ -129,30 +129,15 @@ async function sendEmailRequest(to, subject, text, html) {
     return;
   }
 
-  const emailPayload = {
-    to,
-    subject,
-    text,
-    html,
-  };
-
   try {
-    const response = await fetch('https://code-the-future-hybrid.web.app/send-email', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(emailPayload),
+    await emailjs.send('service_id', 'template_id', {
+      to_email: to,
+      subject: subject,
+      message: html || text
     });
-
-    if (response.ok) {
-      const result = await response.json();
-      console.log("Email sent successfully:", result);
-    } else {
-      console.error("Failed to send email. Server response:", await response.text());
-    }
+    console.log('Email sent successfully');
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error('Error sending email:', error);
   }
 }
 
