@@ -695,6 +695,77 @@
       });
     }
 
+    // ---------- Booked / Requested tabs (for the current student) ----------
+    async function populateStudentBookedAndRequested() {
+      const currentUser = window.fbAuth.currentUser;
+      if (!currentUser) return;
+
+      const myEmail = currentUser.email;
+      const usersSnap = await window.fbDB.ref("users").orderByChild("tutor").equalTo(true).once("value");
+      const tutors = usersSnap.val() || {};
+
+      // Clear tables
+      const bookedBody = document.querySelector("#bookedTable .bookedTable");
+      const requestedBody = document.querySelector("#requestedTable .requestedTable");
+      bookedBody.replaceChildren();
+      requestedBody.replaceChildren();
+
+      const now = new Date();
+
+      // iterate each tutor node and filter by current student
+      await Promise.all(Object.keys(tutors).map(async (tid) => {
+        const bookedSnap = await window.fbDB.ref(`users/${tid}/bookedSessions`).once("value");
+        const reqSnap = await window.fbDB.ref(`users/${tid}/requestedSessions`).once("value");
+        const t = tutors[tid];
+
+        const booked = bookedSnap.val() || {};
+        Object.keys(booked).forEach(id => {
+          const s = booked[id];
+          if (s.studentEmail === myEmail) {
+            const d = new Date(`${s.date}T${s.time}`);
+            if (isNaN(d) || d < now) return; // skip past/invalid
+            const dateStr = new Date(s.date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            const tzName = s.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            bookedBody.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td>${dateStr}</td>
+              <td>${timeStr}</td>
+              <td>${s.duration}</td>
+              <td>${tzName}</td>
+              <td>${s.tutorName || t.displayName || 'Tutor'}</td>
+              <td align="right"><span class="badge bg-success">Booked</span></td>
+            </tr>
+          `);
+          }
+        });
+
+        const requested = reqSnap.val() || {};
+        Object.keys(requested).forEach(id => {
+          const s = requested[id];
+          if (s.studentEmail === myEmail) {
+            const d = new Date(`${s.date}T${s.time}`);
+            if (isNaN(d) || d < now) return;
+            const dateStr = new Date(s.date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
+            const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+            const tzName = s.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+            requestedBody.insertAdjacentHTML('beforeend', `
+            <tr>
+              <td>${dateStr}</td>
+              <td>${timeStr}</td>
+              <td>${s.duration}</td>
+              <td>${tzName}</td>
+              <td>${s.tutorName || t.displayName || 'Tutor'}</td>
+              <td align="right"><span class="badge bg-warning text-dark">Pending</span></td>
+            </tr>
+          `);
+          }
+        });
+      }));
+    }
+
     // Initialize EmailJS
     emailjs.init('N0cfshULW4gnpvhdY'); // Replace with your EmailJS public key
 
