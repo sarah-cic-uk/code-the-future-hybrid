@@ -674,7 +674,7 @@
         studentName: currentUser.displayName || "Unknown",
         tutorName: tutor.displayName,
         status: "requested",  // mark this as a requested session
-        sessionRequestId: sessionRequestRef.key,  // store the sessionRequestId
+        sessionRequestId: sessionRef,  // store the sessionRequestId
       };
 
       // now, store this session request under the tutors requestedSessions node
