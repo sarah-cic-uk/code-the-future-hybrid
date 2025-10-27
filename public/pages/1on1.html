@@ -801,7 +801,7 @@
     async function sendSelectSession_BookedConfirmationEmail_Tutor(tutorEmail, studentName, requestedDate, requestedTime, requestedDuration) {
       try {
         await emailjs.send('service_gos1bro', 'template_tz92f3l', {
-          to_email: tutorEmail,
+          email: tutorEmail,
           recipient_name: tutor.displayName,
           attendee_name: studentName,
           session_date: requestedDate,
@@ -819,7 +819,7 @@
         const studentEmail = firebase.auth().currentUser.email;
 
         await emailjs.send('service_gos1bro', 'template_nlqu6we', { //student booking confirmation
-          to_email: studentEmail,
+          email: studentEmail,
           recipient_name: studentName,
           attendee_name: tutor.displayName,
           session_date: requestedDate,
@@ -833,9 +833,10 @@
     }
 
     async function sendAlternateRequestEmail_Tutor(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
+      console.log(tutor)
       try {
         await emailjs.send('service_gos1bro', 'template_tz92f3l', { //Tutor ad hoc request
-          to_email: tutor.email,
+          email: tutor.email,
           tutor_name: tutor.displayName,
           student_name: studentName,
           session_date: requestedDate,
