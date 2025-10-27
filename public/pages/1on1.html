@@ -718,7 +718,7 @@
     async function sendBookedEmail_Student(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
       try {
         const studentEmail = firebase.auth().currentUser.email;
-        
+
         await emailjs.send('service_gos1bro', 'template_nlqu6we', { //student booking confirmation
           to_email: studentEmail,
           recipient_name: studentName,
@@ -755,6 +755,11 @@
       const calendarView = document.getElementById('calendar-container');
       const toggleLabel = document.getElementById('toggleLabel');
 
+      tableView.style.display = 'none';
+      calendarView.style.display = 'block';
+      toggleLabel.textContent = 'Table view';
+
+      if (this.checked) {
         tableView.style.display = 'none';
         calendarView.style.display = 'block';
         toggleLabel.textContent = 'Table view';
@@ -780,6 +785,7 @@
           calendar.getEvents().forEach(ev => ev.remove());
           fetchCalendarEvents().forEach(ev => calendar.addEvent(ev));
         }
+
       } else {
         tableView.style.display = 'block';
         calendarView.style.display = 'none';
