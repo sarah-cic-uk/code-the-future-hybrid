@@ -19,6 +19,7 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
   <script type="module" src="./js/firebase.js"></script>
 </head>
@@ -656,7 +657,7 @@
 
       // send emails
       await sendBookedEmail_Tutor(tutorEmail, unified.studentName, unified.date, unified.time, unified.duration);
-      await sendBookedEmail_Student(selectedTutor, unified.date, unified.time, unified.duration);
+      await sendBookedEmail_Student(selectedTutor, unified.studentName, unified.date, unified.time, unified.duration);
     }
 
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
@@ -672,15 +673,28 @@
         studentEmail: currentUser.email,
         studentName: currentUser.displayName || "Unknown",
         tutorName: tutor.displayName,
-        status: "requested",
-        sessionRequestId: reqRef.key
+        status: "requested",  // mark this as a requested session
       };
 
-      await reqRef.set(sessionData);
-      await window.fbDB.ref(`users/${tutor.tutorId}/requestedSessions`).push().set(sessionData);
+      // now, store this session request under the tutors requestedSessions node
+      window.fbDB.ref(`users/${tutor.tutorId}`).once("value", (snapshot) => {
+        const tutorData = snapshot.val();
+        if (tutorData) {
+          const tutorSessionRef = window.fbDB.ref(`users/${tutor.tutorId}/requestedSessions`).push();
+          tutorSessionRef.set(sessionData, (error) => {
+            if (error) {
+              console.error("Error saving session request under tutor's node:", error);
+            } else {
+              console.log(`Session request saved under tutor ${tutor.displayName}`);
+            }
+          });
+        } else {
+          console.error(`Tutor with displayName "${tutor.displayName}" not found.`);
+        }
+      });
     }
 
-    // alt session request button
+        // alt session request button
     document.querySelector("#alt-session button").addEventListener("click", async () => {
       const requestedDate = dateInput.value;
       const requestedTime = timeInput.value;
@@ -780,64 +794,59 @@
       }));
     }
 
-    // ---------- Email helpers ----------
-    async function sendBookedEmail_Tutor(tutorEmail, studentName, date, time, duration) {
-      try {
-        const subject = 'Code The Future: 1:1 booked confirmation';
-        const text = `Dear Tutor,\n\nAn available 1:1 session has been booked by ${studentName}.\n\nDetails:\nDate: ${date}\nTime: ${time}\nDuration: ${duration}\n\nPlease log in to Code the Future to manage your 1:1s.\n\nBest wishes,\nCTF Team`;
-        const html = `<p>Dear Tutor,</p>
-        <p>A 1:1 session has been booked by <strong>${studentName}</strong>.</p>
-        <ul><li><strong>Date:</strong> ${date}</li><li><strong>Time:</strong> ${time}</li><li><strong>Duration:</strong> ${duration}</li></ul>
-        <p>Please log in to Code the Future to manage your 1:1s.</p>
-        <p>Best wishes,<br/>CTF Team</p>`;
+    // Initialize EmailJS
+    emailjs.init('N0cfshULW4gnpvhdY'); // Replace with your EmailJS public key
 
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ from: "no-reply@code-the-future-hybrid.web.app", to: tutorEmail, subject, text, html })
+    // ===== SELECT a SESSION <<---- from tutor_availability
+    async function sendSelectSession_BookedConfirmationEmail_Tutor(tutorEmail, studentName, requestedDate, requestedTime, requestedDuration) {
+      try {
+        await emailjs.send('service_gos1bro', 'template_tz92f3l', {
+          email: tutorEmail,
+          recipient_name: tutor.displayName,
+          attendee_name: studentName,
+          session_date: requestedDate,
+          session_time: requestedTime,
+          session_duration: requestedDuration
         });
-        if (!res.ok) console.error('Failed to send tutor email', await res.text());
-      } catch (e) { console.error('Tutor email error', e); }
+        console.log('Tutor email sent successfully');
+      } catch (error) {
+        console.error('Error sending tutor email:', error);
+      }
     }
 
-    async function sendBookedEmail_Student(tutor, date, time, duration) {
+    async function sendBookedEmail_Student(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
       try {
-        const subject = 'Code the Future: 1:1 booked confirmation';
-        const text = `Dear Student,\n\nYour 1:1 session with ${tutor.displayName} has been confirmed.\n\nDetails:\nDate: ${date}\nTime: ${time}\nDuration: ${duration}\n\nBest wishes,\nCTF Team`;
-        const html = `<p>Dear Student,</p>
-        <p>Your 1:1 session with <strong>${tutor.displayName}</strong> has been confirmed.</p>
-        <ul><li><strong>Date:</strong> ${date}</li><li><strong>Time:</strong> ${time}</li><li><strong>Duration:</strong> ${duration}</li></ul>
-        <p>Best wishes,<br/>CTF Team</p>`;
+        const studentEmail = firebase.auth().currentUser.email;
 
-        const studentEmail = (window.fbAuth.currentUser && window.fbAuth.currentUser.email) || null;
-        if (!studentEmail) return;
-
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ from: "no-reply@code-the-future-hybrid.web.app", to: studentEmail, subject, text, html })
+        await emailjs.send('service_gos1bro', 'template_nlqu6we', { //student booking confirmation
+          email: studentEmail,
+          recipient_name: studentName,
+          attendee_name: tutor.displayName,
+          session_date: requestedDate,
+          session_time: requestedTime,
+          session_duration: requestedDuration
         });
-        if (!res.ok) console.error('Failed to send student email', await res.text());
-      } catch (e) { console.error('Student email error', e); }
+        console.log('Student email sent successfully');
+      } catch (error) {
+        console.error('Error sending student email:', error);
+      }
     }
 
-    async function sendAlternateRequestEmail_Tutor(tutor, studentName, date, time, duration) {
+    async function sendAlternateRequestEmail_Tutor(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
+      console.log(tutor)
       try {
-        const subject = 'Code the Future: Request an alternative 1:1 session';
-        const text = `Dear ${tutor.displayName},\n\n${studentName} has requested an alternative 1:1 session.\n\nDetails:\nDate: ${date}\nTime: ${time}\nDuration: ${duration}\n\nPlease log in to CTF to confirm or cancel.\n\nBest wishes,\nCTF Team`;
-        const html = `<p>Dear ${tutor.displayName},</p>
-        <p><strong>${studentName}</strong> has requested an alternative session.</p>
-        <ul><li><strong>Date:</strong> ${date}</li><li><strong>Time:</strong> ${time}</li><li><strong>Duration:</strong> ${duration}</li></ul>
-        <p>Please log in to CTF &gt; Manage 1:1s to confirm or cancel.</p>
-        <p>Best wishes,<br/>CTF Team</p>`;
-
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ from: "no-reply@code-the-future-hybrid.web.app", to: tutor.email, subject, text, html })
+        await emailjs.send('service_gos1bro', 'template_tz92f3l', { //Tutor ad hoc request
+          email: tutor.email,
+          tutor_name: tutor.displayName,
+          student_name: studentName,
+          session_date: requestedDate,
+          session_time: requestedTime,
+          session_duration: requestedDuration
         });
-        if (!res.ok) console.error('Failed to send alternate request email', await res.text());
-      } catch (e) { console.error('Alternate email error', e); }
+        console.log('Alternative 1:1 session request email sent successfully to tutor');
+      } catch (error) {
+        console.error('Error sending alternative 1:1 session request email to tutor:', error);
+      }
     }
 
     // ---------- Calendar toggle ----------
@@ -845,6 +854,10 @@
       const tableView = document.querySelector('#tutorTableContainer');
       const calendarView = document.getElementById('calendar-container');
       const toggleLabel = document.getElementById('toggleLabel');
+
+      tableView.style.display = 'none';
+      calendarView.style.display = 'block';
+      toggleLabel.textContent = 'Table view';
 
       if (this.checked) {
         tableView.style.display = 'none';
@@ -872,6 +885,7 @@
           calendar.getEvents().forEach(ev => ev.remove());
           fetchCalendarEvents().forEach(ev => calendar.addEvent(ev));
         }
+
       } else {
         tableView.style.display = 'block';
         calendarView.style.display = 'none';
