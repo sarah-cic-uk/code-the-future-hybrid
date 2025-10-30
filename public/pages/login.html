@@ -567,6 +567,10 @@
             'displayName',
             profileData.val()['displayName']
           );
+          localStorage.setItem(
+            'cohort',
+            profileData.val()['cohort']
+          );
           window.location.replace('./sessions.html');
         })
         .catch((error) => {

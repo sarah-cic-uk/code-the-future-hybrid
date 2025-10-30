@@ -56,8 +56,7 @@
                 <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                   aria-expanded="false">
                   <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
-                  src="../images/blank_avatar.jpg"
-                    src="../images/blank_avatar.jpg" loading="lazy" />
+                    src="../images/blank_avatar.jpg" src="../images/blank_avatar.jpg" loading="lazy" />
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
@@ -95,8 +94,8 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session1/introduction.html')"
-                      class="btn btn-primary float-end">Get Started</a>
+                    <button href="#" onclick="createPath('pages/sessions/session1/introduction.html')" name="btn-session1"
+                      class="release-date-btn btn btn-primary float-end">Get Started</button>
                   </div>
                 </div>
               </div>
@@ -109,8 +108,8 @@
                     <p class="session-description">Create a basic webpage</p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session2/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <button href="#" onclick="createPath('pages/sessions/session2/introduction.html')" name="btn-session2"
+                      class="release-date-btn btn btn-primary float-end">Go</button>
                   </div>
                 </div>
               </div>
@@ -126,8 +125,8 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session3/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <button href="#" onclick="createPath('pages/sessions/session3/introduction.html')" name="btn-session3"
+                      class="release-date-btn btn btn-primary float-end">Go</button>
                   </div>
                 </div>
               </div>
@@ -144,8 +143,8 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session4/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <button href="#" onclick="createPath('pages/sessions/session4/introduction.html')" name="btn-session4"
+                      class="release-date-btn btn btn-primary float-end">Go</button>
                   </div>
                 </div>
               </div>
@@ -160,8 +159,8 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session5/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <button href="#" onclick="createPath('pages/sessions/session5/introduction.html')"
+                      name="btn-session5" class="release-date-btn btn btn-primary float-end">Go</button>
                   </div>
                 </div>
               </div>
@@ -178,8 +177,8 @@
                     </p>
                   </div>
                   <div class="card-footer">
-                    <a href="#" onclick="createPath('pages/sessions/session6/introduction.html')"
-                      class="btn btn-primary float-end">Go</a>
+                    <button href="#" onclick="createPath('pages/sessions/session6/introduction.html')" name="btn-session6"
+                      class="release-date-btn btn btn-primary float-end">Go</button>
                   </div>
                 </div>
               </div>
@@ -201,6 +200,7 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
+      checkReleaseDates(window.fbDB);
       auth(
         null,
         document.querySelector(".profileBtn"),

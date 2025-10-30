@@ -67,49 +67,47 @@ function updateSideNavOverview() {
 }
 
 async function checkReleaseDates(fbDB) {
-  const userCohort = await fbDB
-    .ref("/cohorts")
-    .child(window.localStorage.cohort)
-    .once("value")
-    .then((snapshot) => snapshot.val())
-    .catch((error) => ({
-      errorCode: error.code,
-      errorMessage: error.message
-    }));
-
+  const cohortsSnapshot = await fbDB.ref("/cohorts").once("value");
+  const allCohorts = cohortsSnapshot.val();
+  const userCohort = Object.values(allCohorts).find(cohort => cohort.code === window.localStorage.cohort);
+  console.log(document.querySelectorAll(".release-date-btn"))
+  if (!userCohort) return;
   // session buttons
-  document.querySelectorAll(".release-date-btn").forEach((btn) => {
-    if (Date.now() < userCohort.sessionReleaseDates[btn.name]) {
+  for (const btn of document.querySelectorAll(".release-date-btn")) {
+    console.log(btn)
+    const session = btn.name.split('-')[1];
+console.log( userCohort.sessionReleaseDates[session])
+console.log( session)
+
+    if (Date.now() < userCohort.sessionReleaseDates[session]) {
       btn.disabled = true;
-      btn.classList.add('hover-text');
-      document.getElementById(`${btn.name}-btn-tooltip`).classList.remove('hidden');
-      document.getElementById(`${btn.name}-btn-tooltip`).innerHTML =
-        `Session Opens ${new Date(userCohort.sessionReleaseDates[btn.name]).toLocaleString().split(',')[0]}`;
+      btn.style.float = 'right';
+      btn.title = `Session Opens ${new Date(userCohort.sessionReleaseDates[session]).toLocaleString().split(',')[0]}`;
     }
-  });
+  }
 
   // sidebar links
-  document.querySelectorAll(".nav-item button").forEach((item) => {
-    if (Date.now() < userCohort.sessionReleaseDates[item.name]) {
+  for (const item of document.querySelectorAll(".nav-item button")) {
+    if (userCohort.sessionReleaseDates && Date.now() < userCohort.sessionReleaseDates[item.name]) {
       item.disabled = true;
       item.classList.add('hover-text');
       document.getElementById(`${item.name}-tooltip`).classList.remove('hidden');
       document.getElementById(`${item.name}-tooltip`).innerHTML =
         `Session Opens ${new Date(userCohort.sessionReleaseDates[item.name]).toLocaleString().split(',')[0]}`;
     }
-  });
+  }
 
   // navbar links
-  document.querySelectorAll(".navbar-nav button").forEach((item) => {
+  for (const item of document.querySelectorAll(".navbar-nav button")) {
     const session = item.name.split('-')[0];
-    if (Date.now() < userCohort.sessionReleaseDates[session]) {
+    if (userCohort.sessionReleaseDates && Date.now() < userCohort.sessionReleaseDates[session]) {
       item.disabled = true;
       item.classList.add('hover-text');
       document.getElementById(`${session}-tooltip`).classList.remove('hidden');
       document.getElementById(`${session}-tooltip`).innerHTML =
         `Session Opens ${new Date(userCohort.sessionReleaseDates[session]).toLocaleString().split(',')[0]}`;
     }
-  });
+  }
 }
 
 function fetchMedia(pathReference, el) {
@@ -148,7 +146,9 @@ async function loadProfilePictures() {
   const profilePicElements = document.querySelectorAll('img[id="profile-pic-avatar"]');
   const pathReference = window.fbStorage.ref("profilePics/" + currentUser.uid);
 
-  profilePicElements.forEach(el => fetchMedia(pathReference, el));
+  for (const el of profilePicElements) {
+    fetchMedia(pathReference, el);
+  }
 
   // Check if user is a tutor and show/hide tutor menu item
   try {
