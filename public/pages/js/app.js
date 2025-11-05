@@ -71,6 +71,7 @@ async function checkReleaseDates(fbDB) {
   const allCohorts = cohortsSnapshot.val();
   const userCohort = Object.values(allCohorts).find(cohort => cohort.code === window.localStorage.cohort);
   console.log(document.querySelectorAll(".release-date-btn"))
+  console.log(userCohort)
   if (!userCohort) return;
   // session buttons
   for (const btn of document.querySelectorAll(".release-date-btn")) {
@@ -158,6 +159,12 @@ async function loadProfilePictures() {
 
     if (tutorMenuItem && userData && userData.tutor) {
       tutorMenuItem.style.display = 'block';
+    }
+
+    // Ensure cohort data is in localStorage
+    if (!localStorage.getItem('cohort') && userData && userData.cohort) {
+      localStorage.setItem('cohort', userData.cohort);
+      localStorage.setItem('displayName', userData.displayName);
     }
   } catch (error) {
     console.error('Error checking tutor status:', error);
