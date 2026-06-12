@@ -797,16 +797,16 @@ ul[id^="submenu"] li {
 /** fix the screen hieght to be able to see the button */
 .embed-container {
 	width: 100%;
-	height: 85vh;
 	/* instead of inline width + pointer-events */
 	display: flex;
 	flex-direction: column;
 }
 
 .embed-container iframe {
-	flex-grow: 1;
 	width: 100%;
 	border: none;
+	min-height: 100vh;
+	overflow: visible;
 }
 
 
