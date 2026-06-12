@@ -233,6 +233,45 @@ template.innerHTML = `
         </ul>
       </li>
       <li class="nav-item pb-2">
+        <button href="#submenu7" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session7">
+          <i class="fs-4 bi-cpu"></i>
+          <span class="ms-3 d-none d-sm-inline">AI Session</span>
+          <span id="session7-tooltip" class="tooltip-text hidden">Session Opens Soon</span>
+        </button>
+        <ul class="collapse nav flex-column ms-1" id="submenu7" data-bs-parent="#menu">
+          <li class="w-100">
+            <a href="#" onclick="createPath('pages/sessions/session7/introduction.html')" class="nav-link p-0" name="session7-overview">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Overview</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/sessions/session7/lessons/goodUses.html')" class="nav-link p-0" name="goodUses">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">What AI is good for</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/sessions/session7/lessons/humanFirst.html')" class="nav-link p-0" name="humanFirst">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Why humans still matter</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/sessions/session7/lessons/promptPractice.html')" class="nav-link p-0" name="promptPractice">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Prompt practice</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/sessions/session7/lessons/modelsTokensCosts.html')" class="nav-link p-0" name="modelsTokensCosts">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Models, tokens and costs</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/sessions/session7/lessons/reviewAndRepeat.html')" class="nav-link p-0" name="reviewAndRepeat">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Review and repeat</span></a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item pb-2">
         <a href="#" onclick="createPath('index.html')" 
           data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="exitSession">
           <i class="fs-4 bi-box-arrow-left"></i>
@@ -273,6 +312,7 @@ async function updateSideNavCompletionStatus() {
     "session4",
     "session5",
     "session6",
+    "session7",
   ];
 
   for (const session of sessions) {
@@ -322,6 +362,14 @@ async function updateSideNavCompletionStatus() {
         "accessibilityExample",
       ],
       session6: ["session6-overview", "projectPlanning", "additionalHelp"],
+      session7: [
+        "session7-overview",
+        "goodUses",
+        "humanFirst",
+        "promptPractice",
+        "modelsTokensCosts",
+        "reviewAndRepeat",
+      ],
     };
 
     const optionalLessons = {
@@ -337,6 +385,7 @@ async function updateSideNavCompletionStatus() {
       session4: { "session4-overview": "session4-overview" },
       session5: { "session5-overview": "session5-overview" },
       session6: { "session6-overview": "session6-overview" },
+      session7: { "session7-overview": "session7-overview" },
     };
 
     for (const session of sessions) {

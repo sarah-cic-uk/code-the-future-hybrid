@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+  <title>Code the Future</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script defer="" src="../../../js/sidenav.js" type="text/javascript"></script>
+  <script src="../../../js/imports.js"></script>
+  <script src="../../../js/app.js" type="text/javascript"></script>
+  
+  <style>
+    .lesson-header {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      border-left: 5px solid #10b981;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+    }
+
+    .lesson-kicker {
+      color: #d9437a;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(217, 67, 122, 0.1);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .content-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(29, 12, 89, 0.12);
+      border-color: #10b981;
+    }
+
+    .content-card.human-theme {
+      border-left: 4px solid #10b981;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .content-card.ai-theme {
+      border-left: 4px solid #1d0c59;
+      background: linear-gradient(135deg, #ffffff 0%, #f4f7ff 100%);
+    }
+
+    .content-card.career-theme {
+      border-left: 4px solid #d9437a;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f7 100%);
+    }
+
+    .content-card.activity-card {
+      border-left: 4px solid #f59e0b;
+      background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1.5rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(135deg, #1d0c59 0%, #011640 100%);
+      color: white;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+    }
+
+    .comparison-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: white;
+      vertical-align: top;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table tr:hover td {
+      background: #f9fafb;
+    }
+
+    .comparison-table .ai-col {
+      background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+    }
+
+    .comparison-table .human-col {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    }
+
+    blockquote {
+      border-left: 4px solid #10b981;
+      padding-left: 1.5rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #1d0c59;
+      background: rgba(16, 185, 129, 0.05);
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #10b981 50%, transparent 100%);
+      margin: 2rem 0;
+    }
+
+    .badge-custom {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .badge-human {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .badge-ai {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .badge-career {
+      background: linear-gradient(135deg, #d9437a 0%, #be185d 100%);
+      color: white;
+    }
+
+    .badge-activity {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="border-right: 2px solid #d9437a; padding-right: 10px; color: #1d0c59;">
+          <img src="../../../../images/logo.png" height="60px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page" onclick="createPath('pages/sessions/session1/introduction.html')">Session 1<span id="session1-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session2-nav" aria-current="page" onclick="createPath('pages/sessions/session2/introduction.html')">Session 2<span id="session2-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session3-nav" aria-current="page" onclick="createPath('pages/sessions/session3/introduction.html')">Session 3<span id="session3-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session4-nav" aria-current="page" onclick="createPath('pages/sessions/session4/introduction.html')">Session 4<span id="session4-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page" onclick="createPath('pages/sessions/session5/introduction.html')">Session 5<span id="session5-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page" onclick="createPath('pages/sessions/session6/introduction.html')">Showcase<span id="showcase-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+          </div>
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div><p class=" my-auto" id="profileName"></p></div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"><img id="profile-pic-avatar" class="rounded-circle" height="25" alt="" src="../../../../images/blank_avatar.jpg" src="../../../../images/blank_avatar.jpg" loading="lazy" /></a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <div class="col py-3">
+          <div id="session-banner"></div>
+          <div class="container py-3">
+            <div class="row justify-content-center">
+              <div class="col-lg-10">
+                <div class="lesson-header">
+                  <p class="lesson-kicker">AI Session - Lesson 2</p>
+                  <h1 class="h2 fw-bold mb-3">Why humans still matter</h1>
+                  <p class="lead mb-2">AI can suggest code, but people still decide what to build, whether it is right, and how the final product should feel.</p>
+                  <p class="mb-0">
+                    A good developer is not someone who never uses help. A good developer is someone who can work
+                    with tools, collaborate with others, and still take responsibility for the result.
+                  </p>
+                </div>
+
+                <section>
+                  <h2 class="h3 mb-4">AI vs Human Responsibilities</h2>
+                  
+                  <table class="comparison-table">
+                    <thead>
+                      <tr>
+                        <th>What AI Should NOT Do Alone</th>
+                        <th>What Humans Must Do</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="ai-col">Choose the final design without discussion</td>
+                        <td class="human-col">Provide context about the customer or user</td>
+                      </tr>
+                      <tr>
+                        <td class="ai-col">Replace testing, checking, or debugging</td>
+                        <td class="human-col">Apply judgement about what is sensible or safe</td>
+                      </tr>
+                      <tr>
+                        <td class="ai-col">Make you skip learning the basics</td>
+                        <td class="human-col">Handle communication and teamwork</td>
+                      </tr>
+                      <tr>
+                        <td class="ai-col">Stop you from asking another person for a second opinion</td>
+                        <td class="human-col">Understand the bigger project goal</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+
+                <hr class="section-divider">
+
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-4 p-md-5">
+                    <h2 class="h3 mb-4">Human Strengths in Development</h2>
+
+                    <div class="row g-4 mt-2">
+                      <div class="col-lg-6">
+                        <div class="content-card human-theme">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-human">Human Skills</span>
+                            What makes you valuable
+                          </h3>
+                          <ul class="mb-0">
+                            <li><strong>Context awareness:</strong> Understanding user needs and business goals</li>
+                            <li><strong>Critical thinking:</strong> Evaluating whether solutions actually work</li>
+                            <li><strong>Collaboration:</strong> Working with teams and stakeholders</li>
+                            <li><strong>Accountability:</strong> Taking ownership of the final product</li>
+                            <li><strong>Creativity:</strong> Solving problems in innovative ways</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="content-card activity-card">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-activity">Activity</span>
+                            Compare human vs AI review
+                          </h3>
+                          <ol>
+                            <li>Pick one earlier course skill (HTML structure or CSS layout)</li>
+                            <li>Write down how a human would review it before AI touches it</li>
+                            <li>Ask AI what it would change</li>
+                            <li>Compare the two answers</li>
+                          </ol>
+                          <p class="mb-0"><strong>Key insight:</strong> Human judgement should win when the answers disagree.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <h2 class="h3 mb-4">Career Perspective</h2>
+
+                    <div class="row g-4 mt-2">
+                      <div class="col-md-6">
+                        <div class="content-card career-theme">
+                          <h3 class="h5">Job interview angle</h3>
+                          <blockquote>
+                            If you are asked about AI in an interview, it is stronger to say how you used it as a support
+                            tool than to say you let it do everything.
+                          </blockquote>
+                          <p class="mb-0"><strong>Why:</strong> Employers want to know you can think independently and take ownership.</p>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="content-card human-theme">
+                          <h3 class="h5">Best mindset</h3>
+                          <p>AI helps you move faster, but human conversation, feedback, and judgement are what turn a
+                            draft into a polished product.</p>
+                          <p class="mb-0"><strong>Remember:</strong> You are the developer. AI is just one of your tools.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="session-navigation"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    window.onload = () => {
+      checkReleaseDates(window.fbDB);
+      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
+      updateSideNav();
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout(window.fbAuth);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+  <script type="module">
+    import { fbAuth, fbStorage, fbDB } from "../../../js/firebase.js";
+    window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
+    window.fbStorage = fbStorage;
+  </script>
+  <script defer="" src="../../../js/sessionNavigation.js"></script>
+</body>
+
+</html>

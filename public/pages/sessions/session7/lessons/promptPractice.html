@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+  <title>Code the Future</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script defer="" src="../../../js/sidenav.js" type="text/javascript"></script>
+  <script src="../../../js/imports.js"></script>
+  <script src="../../../js/app.js" type="text/javascript"></script>
+  
+  <style>
+    .lesson-header {
+      background: linear-gradient(135deg, #fef2f7 0%, #ffffff 100%);
+      border-left: 5px solid #d9437a;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(217, 67, 122, 0.08);
+    }
+
+    .lesson-kicker {
+      color: #d9437a;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(217, 67, 122, 0.1);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .content-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(29, 12, 89, 0.12);
+      border-color: #d9437a;
+    }
+
+    .content-card.good-prompt {
+      border-left: 4px solid #10b981;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .content-card.bad-prompt {
+      border-left: 4px solid #ef4444;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+    }
+
+    .content-card.tip-card {
+      border-left: 4px solid #f59e0b;
+      background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+    }
+
+    .content-card.career-card {
+      border-left: 4px solid #d9437a;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f7 100%);
+    }
+
+    blockquote {
+      border-left: 4px solid #d9437a;
+      padding-left: 1.5rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #1d0c59;
+      background: rgba(217, 67, 122, 0.05);
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #d9437a 50%, transparent 100%);
+      margin: 2rem 0;
+    }
+
+    .badge-custom {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .badge-good {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .badge-bad {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .badge-tip {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+    }
+
+    .badge-career {
+      background: linear-gradient(135deg, #d9437a 0%, #be185d 100%);
+      color: white;
+    }
+
+    kbd {
+      background: #f3f4f6;
+      border: 2px solid #d1d5db;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      color: #1d0c59;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      display: block;
+      margin: 0.5rem 0;
+      line-height: 1.6;
+    }
+
+    .prompt-example {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+    }
+
+    .prompt-example.good {
+      border-color: #10b981;
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    }
+
+    .prompt-example.bad {
+      border-color: #ef4444;
+      background: linear-gradient(135deg, #fef2f2 0%, #ffffff 100%);
+    }
+
+    ol.workflow-steps {
+      counter-reset: step-counter;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ol.workflow-steps li {
+      counter-increment: step-counter;
+      margin-bottom: 1.5rem;
+      padding-left: 3rem;
+      position: relative;
+    }
+
+    ol.workflow-steps li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: linear-gradient(135deg, #d9437a 0%, #be185d 100%);
+      color: white;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(217, 67, 122, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="border-right: 2px solid #d9437a; padding-right: 10px; color: #1d0c59;">
+          <img src="../../../../images/logo.png" height="60px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page" onclick="createPath('pages/sessions/session1/introduction.html')">Session 1<span id="session1-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session2-nav" aria-current="page" onclick="createPath('pages/sessions/session2/introduction.html')">Session 2<span id="session2-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session3-nav" aria-current="page" onclick="createPath('pages/sessions/session3/introduction.html')">Session 3<span id="session3-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session4-nav" aria-current="page" onclick="createPath('pages/sessions/session4/introduction.html')">Session 4<span id="session4-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page" onclick="createPath('pages/sessions/session5/introduction.html')">Session 5<span id="session5-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page" onclick="createPath('pages/sessions/session6/introduction.html')">Showcase<span id="showcase-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+          </div>
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div><p class=" my-auto" id="profileName"></p></div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"><img id="profile-pic-avatar" class="rounded-circle" height="25" alt="" src="../../../../images/blank_avatar.jpg" src="../../../../images/blank_avatar.jpg" loading="lazy" /></a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <div class="col py-3">
+          <div id="session-banner"></div>
+          <div class="container py-3">
+            <div class="row justify-content-center">
+              <div class="col-lg-10">
+                <div class="lesson-header">
+                  <p class="lesson-kicker">AI Session - Lesson 3</p>
+                  <h1 class="h2 fw-bold mb-3">Prompt practice</h1>
+                  <p class="lead mb-2">Good prompts help AI give better answers. The more context, constraints, and goals you give it, the more useful the result usually becomes.</p>
+                  <p class="mb-0">
+                    A prompt is like giving instructions to a teammate. If you are clear, specific, and honest about
+                    what you already know, the response is more likely to be useful.
+                  </p>
+                </div>
+
+                <section>
+                  <h2 class="h3 mb-4">Prompt Comparison: Bad vs Good</h2>
+                  
+                  <div class="row g-4">
+                    <div class="col-md-6">
+                      <div class="content-card bad-prompt">
+                        <h3 class="h5">
+                          <span class="badge-custom badge-bad">Bad Prompt</span>
+                          Too vague
+                        </h3>
+                        <div class="prompt-example bad">
+                          <kbd>"Fix this."</kbd>
+                        </div>
+                        <p class="mb-0"><strong>Why it's bad:</strong> No context, no specifics, no indication of what you've tried or what the problem actually is.</p>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="content-card good-prompt">
+                        <h3 class="h5">
+                          <span class="badge-custom badge-good">Good Prompt</span>
+                          Clear and specific
+                        </h3>
+                        <div class="prompt-example good">
+                          <kbd>"My buttons are stacking vertically on mobile. Explain why that might happen and show me one CSS change to test first."</kbd>
+                        </div>
+                        <p class="mb-0"><strong>Why it's good:</strong> Describes the problem, asks for explanation, requests one specific solution to try.</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <hr class="section-divider">
+
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-4 p-md-5">
+                    <h2 class="h3 mb-4">Strong Prompt Formula</h2>
+                    
+                    <div class="content-card tip-card mb-4">
+                      <h3 class="h5">
+                        <span class="badge-custom badge-tip">Template</span>
+                        Use this structure
+                      </h3>
+                      <div class="prompt-example">
+                        <kbd>"I am building <strong>[thing]</strong>. I have already tried <strong>[x]</strong>. Please explain <strong>[problem]</strong> in simple terms and give me one next step."</kbd>
+                      </div>
+                      <p class="mb-0">This formula provides context, shows your effort, and requests a manageable next step.</p>
+                    </div>
+
+                    <h3 class="h4 mb-3">Prompt Checklist</h3>
+                    <div class="row g-4">
+                      <div class="col-md-6">
+                        <ul>
+                          <li><strong>Say what you are building</strong> - Give context about your project</li>
+                          <li><strong>Say what you already tried</strong> - Show your thinking process</li>
+                        </ul>
+                      </div>
+                      <div class="col-md-6">
+                        <ul>
+                          <li><strong>Ask for one small step at a time</strong> - Keep it manageable</li>
+                          <li><strong>Ask it to explain in simple language</strong> - Ensure you understand</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <h2 class="h3 mb-4">Recommended Workflow</h2>
+
+                    <div class="row g-4">
+                      <div class="col-lg-6">
+                        <div class="content-card tip-card">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-tip">Process</span>
+                            Three-step habit
+                          </h3>
+                          <ol class="workflow-steps">
+                            <li><strong>Ask AI for a draft</strong> - Get initial suggestions</li>
+                            <li><strong>Check it line by line</strong> - Understand every part</li>
+                            <li><strong>Improve it yourself</strong> - Add your own thinking and style</li>
+                          </ol>
+                          <p class="mb-0">A strong workflow lets AI build the rough skeleton, then you keep checking, improving, and adding your own ideas.</p>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="content-card good-prompt">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-good">Activity</span>
+                            Compare and choose
+                          </h3>
+                          <ol>
+                            <li>Build a tiny HTML section on your own first</li>
+                            <li>Ask AI to improve it</li>
+                            <li>Keep the version you understand best</li>
+                            <li>Explain why you chose it</li>
+                          </ol>
+                          <p class="mb-0"><strong>Important:</strong> If AI gives you code you cannot read, ask it to slow down or rewrite it in simpler steps.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <h2 class="h3 mb-4">Pro Tips</h2>
+
+                    <div class="row g-4">
+                      <div class="col-md-6">
+                        <div class="content-card tip-card">
+                          <h3 class="h5">Second-opinion trick</h3>
+                          <p class="mb-0">
+                            If the answer matters, ask a second AI or another person to sanity check it before you use
+                            it. Different checks catch different mistakes.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="content-card career-card">
+                          <h3 class="h5">Interview-ready line</h3>
+                          <blockquote class="mb-0">
+                            "I use AI for the heavy lifting, but I still review the code carefully, improve it myself,
+                            and verify the final result before I move on."
+                          </blockquote>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="session-navigation"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    window.onload = () => {
+      checkReleaseDates(window.fbDB);
+      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
+      updateSideNav();
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout(window.fbAuth);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+  <script type="module">
+    import { fbAuth, fbStorage, fbDB } from "../../../js/firebase.js";
+    window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
+    window.fbStorage = fbStorage;
+  </script>
+  <script defer="" src="../../../js/sessionNavigation.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+  <title>Code the Future</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script src="../../js/sidenav.js" type="text/javascript" defer></script>
+  <script type="text/javascript" src="../../js/app.js"></script>
+  <script src="../../js/imports.js"></script>
+  <script type="module" src="../../js/firebase.js"></script>
+
+  <style>
+    .session-hero {
+      background: linear-gradient(135deg, #f4f7ff 0%, #edf7f5 100%);
+      border: 3px solid #d9437a;
+      border-radius: 1.25rem;
+      padding: 2.5rem;
+      box-shadow: 0 12px 30px rgba(29, 12, 89, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .session-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: linear-gradient(90deg, #1d0c59 0%, #d9437a 50%, #1d0c59 100%);
+    }
+
+    .session-kicker {
+      color: #d9437a;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(217, 67, 122, 0.1);
+      border-radius: 0.5rem;
+    }
+
+    .session-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(29, 12, 89, 0.08);
+      height: 100%;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .session-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(29, 12, 89, 0.15);
+      border-color: #d9437a;
+    }
+
+    .session-card.ai-theme {
+      border-left: 4px solid #1d0c59;
+      background: linear-gradient(135deg, #ffffff 0%, #f4f7ff 100%);
+    }
+
+    .session-card.human-theme {
+      border-left: 4px solid #10b981;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .session-card.career-theme {
+      border-left: 4px solid #d9437a;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f7 100%);
+    }
+
+    .session-callout {
+      background: linear-gradient(135deg, #1d0c59 0%, #011640 100%);
+      color: #fff;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 3px solid #d9437a;
+      box-shadow: 0 8px 20px rgba(29, 12, 89, 0.2);
+    }
+
+    .session-callout .fw-bold {
+      color: #d9437a;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .activity-card {
+      background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
+    }
+
+    .activity-card h2 {
+      color: #1d0c59;
+      border-bottom: 3px solid #f59e0b;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .interview-card {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+      border: 2px solid #10b981;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+    }
+
+    .interview-card h2 {
+      color: #1d0c59;
+    }
+
+    blockquote {
+      border-left: 4px solid #d9437a;
+      padding-left: 1.5rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #1d0c59;
+      background: rgba(217, 67, 122, 0.05);
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1.5rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(135deg, #1d0c59 0%, #011640 100%);
+      color: white;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+    }
+
+    .comparison-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: white;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table tr:hover td {
+      background: #f9fafb;
+    }
+
+    .comparison-table .ai-col {
+      background: linear-gradient(135deg, #f4f7ff 0%, #ffffff 100%);
+    }
+
+    .comparison-table .human-col {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);
+    }
+
+    mark {
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      font-weight: 700;
+      color: #1d0c59;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #d9437a 50%, transparent 100%);
+      margin: 2rem 0;
+    }
+
+    details {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin: 1rem 0;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    details[open] {
+      border-color: #d9437a;
+      box-shadow: 0 4px 12px rgba(217, 67, 122, 0.15);
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: #1d0c59;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      transition: all 0.3s ease;
+      list-style: none;
+      display: flex;
+      align-items: center;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+      content: '▶';
+      margin-right: 0.75rem;
+      color: #d9437a;
+      transition: transform 0.3s ease;
+      font-size: 0.8rem;
+    }
+
+    details[open] summary::before {
+      transform: rotate(90deg);
+    }
+
+    summary:hover {
+      background: rgba(217, 67, 122, 0.05);
+    }
+
+    .badge-custom {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0.25rem;
+    }
+
+    .badge-ai {
+      background: linear-gradient(135deg, #1d0c59 0%, #4c1d95 100%);
+      color: white;
+    }
+
+    .badge-human {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .badge-career {
+      background: linear-gradient(135deg, #d9437a 0%, #be185d 100%);
+      color: white;
+    }
+
+    dl {
+      margin: 0;
+    }
+
+    dt {
+      color: #1d0c59;
+      font-weight: 700;
+      margin-top: 0.75rem;
+      font-size: 1rem;
+    }
+
+    dt:first-child {
+      margin-top: 0;
+    }
+
+    dd {
+      color: #4b5563;
+      margin-left: 1.5rem;
+      margin-bottom: 0.5rem;
+      padding-left: 0.75rem;
+      border-left: 3px solid #e5e7eb;
+    }
+
+    dd:hover {
+      border-left-color: #d9437a;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
+              border-right: 2px solid #d9437a;
+              padding-right: 10px;
+              color: #1d0c59;
+            ">
+          <img src="../../../images/logo.png" height="60px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session1/introduction.html')">
+              Session 1
+              <span id="session1-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+            </button>
+            <button class="nav-link border-end border-dark" name="session2-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session2/introduction.html')">
+              Session 2
+              <span id="session2-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+            </button>
+            <button class="nav-link border-end border-dark" name="session3-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session3/introduction.html')">
+              Session 3
+              <span id="session3-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+            </button>
+            <button class="nav-link border-end border-dark" name="session4-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session4/introduction.html')">
+              Session 4
+              <span id="session4-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+            </button>
+            <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session5/introduction.html')">
+              Session 5
+              <span id="session5-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+            </button>
+            <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session6/introduction.html')">
+              Showcase
+              <span id="showcase-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>
+            </button>
+          </div>
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div>
+              <p class=" my-auto" id="profileName"></p>
+            </div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../../../../images/blank_avatar.jpg" src="../../../../images/blank_avatar.jpg" loading="lazy" />
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <div class="col py-3">
+          <div id="session-banner"></div>
+          <div class="container-fluid px-0">
+            <div class="session-hero mb-4">
+              <p class="session-kicker mb-2">AI Session</p>
+              <h1 class="display-6 fw-bold mb-3">Using AI without losing your own voice</h1>
+              <p class="lead mb-3">
+                This session shows you when AI can help, when it should stay out of the way, and how to keep people
+                in charge of the final result.
+              </p>
+              <p class="mb-0">
+                The goal is not to become dependent on AI. The goal is to become a developer who knows when to use
+                it, when to question it, and how to explain every decision clearly in a team or job interview.
+              </p>
+            </div>
+
+            <div class="row g-4 mb-4">
+              <div class="col-lg-4">
+                <div class="card session-card ai-theme p-3 h-100">
+                  <h2 class="h5">
+                    <span class="badge-custom badge-ai">AI</span>
+                    What AI helps with
+                  </h2>
+                  <p>AI is useful when you already have a <mark>goal</mark> and want help getting there faster.</p>
+                  <ul class="mb-0">
+                    <li>Explaining code in plain English</li>
+                    <li>Brainstorming ideas for a page or feature</li>
+                    <li>Finding mistakes or suggesting improvements</li>
+                    <li>Drafting a first version that you can reshape yourself</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="card session-card human-theme p-3 h-100">
+                  <h2 class="h5">
+                    <span class="badge-custom badge-human">Human</span>
+                    What people still do
+                  </h2>
+                  <p>Humans still <mark>own the work</mark>. That is what employers care about.</p>
+                  <ul class="mb-0">
+                    <li>Choose the goal and define what good looks like</li>
+                    <li>Decide if the answer is actually correct</li>
+                    <li>Test the result and fix what breaks</li>
+                    <li>Talk through trade-offs with teammates and clients</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="card session-card career-theme p-3 h-100">
+                  <h2 class="h5">
+                    <span class="badge-custom badge-career">Career</span>
+                    Why this matters in jobs
+                  </h2>
+                  <p>Interviewers want to know whether you can <mark>think, collaborate, and verify</mark>, not just copy output.</p>
+                  <ul class="mb-0">
+                    <li>Say how you checked an AI answer</li>
+                    <li>Explain when you ignored AI and why</li>
+                    <li>Show that you can work independently first</li>
+                    <li>Show that you can improve work with feedback</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <div class="row g-4 mb-4">
+              <div class="col-lg-7">
+                <div class="activity-card">
+                  <h2 class="h4">Your activities</h2>
+                  <p class="mb-3">This session includes a <mark>compare-and-improve workflow</mark> so you can feel the difference yourself.</p>
+                  
+                  <details>
+                    <summary>Activity 1: Build without AI first</summary>
+                    <p class="mt-2 mb-0">Build a small task without AI first so you can see your own process and understand the fundamentals.</p>
+                  </details>
+
+                  <details>
+                    <summary>Activity 2: Rebuild with AI assistance</summary>
+                    <p class="mt-2 mb-0">Repeat the same task with AI and compare speed, clarity, and confidence. Notice what changed.</p>
+                  </details>
+
+                  <details>
+                    <summary>Activity 3: Revisit and improve</summary>
+                    <p class="mt-2 mb-0">Revisit an earlier lesson with AI support and explain what changed in your own words.</p>
+                  </details>
+
+                  <details>
+                    <summary>Activity 4: Human review</summary>
+                    <p class="mt-2 mb-0">Review the final answer with another person before calling it finished. Human feedback is essential.</p>
+                  </details>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <div class="session-callout h-100 d-flex flex-column justify-content-between">
+                  <div>
+                    <p class="fw-bold mb-2">The key message</p>
+                    <blockquote class="mb-0" style="border-left-color: #d9437a; background: rgba(255, 255, 255, 0.1); color: white;">
+                      AI is a tool for developers, not a replacement for them. The best results come from people
+                      choosing the goal, checking the work, and shaping the final product together.
+                    </blockquote>
+                  </div>
+                  <div class="mt-3">
+                    <p class="mb-0">When you are ready, start the session and move through the lessons in order.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="section-divider">
+
+            <div class="row g-4 mb-4">
+              <div class="col-md-6">
+                <div class="interview-card">
+                  <h2 class="h4">Interview answer starter</h2>
+                  <p class="mb-2">If someone asks how you use AI, a strong answer sounds like this:</p>
+                  <blockquote>
+                    "I use AI to help me understand problems and speed up small tasks, but I always check the result,
+                    test the code, and make sure I can explain what it does."
+                  </blockquote>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card session-card p-4">
+                  <h2 class="h4">What you should be able to do by the end</h2>
+                  <dl class="mb-0">
+                    <dt>Write better prompts</dt>
+                    <dd>Craft clear, specific requests that get useful AI responses</dd>
+                    
+                    <dt>Spot AI mistakes</dt>
+                    <dd>Identify when AI suggestions are incorrect or incomplete</dd>
+                    
+                    <dt>Compare approaches</dt>
+                    <dd>Evaluate manual solutions versus AI-assisted ones</dd>
+                    
+                    <dt>Explain your process</dt>
+                    <dd>Clearly communicate your decisions to others</dd>
+                  </dl>
+                </div>
+              </div>
+            </div>
+
+            <div id="session-navigation"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    window.onload = () => {
+      checkReleaseDates(window.fbDB);
+      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
+      updateSideNavOverview();
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout(window.fbAuth);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+  <script defer="" src="../../js/sessionNavigation.js"></script>
+</body>
+
+</html>

@@ -34,6 +34,31 @@ function getPath() {
   return PATH;
 }
 
+document.addEventListener("DOMContentLoaded", injectSession7Nav);
+
+function injectSession7Nav() {
+  const navbar = document.querySelector(".navbar-nav.nav-justified");
+
+  if (!navbar || navbar.querySelector('[name="session7-nav"]')) return;
+  if (!navbar.querySelector('[name="session1-nav"]')) return;
+
+  const session7Button = document.createElement("button");
+  session7Button.className = "nav-link border-end border-dark";
+  session7Button.name = "session7-nav";
+  session7Button.setAttribute("aria-current", "page");
+  session7Button.onclick = function () {
+    createPath('pages/sessions/session7/introduction.html');
+  };
+  session7Button.innerHTML = 'AI Session<span id="session7-tooltip" class="box tooltip-text hidden">Session Opens Soon</span>';
+
+  const showcaseButton = navbar.querySelector('[name="showcase-nav"]');
+  if (showcaseButton) {
+    navbar.insertBefore(session7Button, showcaseButton.nextSibling);
+  } else {
+    navbar.appendChild(session7Button);
+  }
+}
+
 function logout(fbAuth) {
   fbAuth.signOut().then(() => {
     localStorage.setItem('loggedIn', false);

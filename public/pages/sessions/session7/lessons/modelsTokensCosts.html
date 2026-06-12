@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+  <title>Code the Future</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script defer="" src="../../../js/sidenav.js" type="text/javascript"></script>
+  <script src="../../../js/imports.js"></script>
+  <script src="../../../js/app.js" type="text/javascript"></script>
+  
+  <style>
+    .lesson-header {
+      background: linear-gradient(135deg, #fff7ed 0%, #ffffff 100%);
+      border-left: 5px solid #f59e0b;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.08);
+    }
+
+    .lesson-kicker {
+      color: #d9437a;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(217, 67, 122, 0.1);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .content-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(29, 12, 89, 0.12);
+      border-color: #f59e0b;
+    }
+
+    .content-card.warning-card {
+      border-left: 4px solid #ef4444;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f2 100%);
+    }
+
+    .content-card.tip-card {
+      border-left: 4px solid #10b981;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .content-card.info-card {
+      border-left: 4px solid #3b82f6;
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    }
+
+    .content-card.career-card {
+      border-left: 4px solid #d9437a;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f7 100%);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 1.5rem 0;
+      border-radius: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(135deg, #1d0c59 0%, #011640 100%);
+      color: white;
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+    }
+
+    .comparison-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      background: white;
+      vertical-align: top;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-table tr:hover td {
+      background: #f9fafb;
+    }
+
+    blockquote {
+      border-left: 4px solid #f59e0b;
+      padding-left: 1.5rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #1d0c59;
+      background: rgba(245, 158, 11, 0.05);
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #f59e0b 50%, transparent 100%);
+      margin: 2rem 0;
+    }
+
+    .badge-custom {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .badge-warning {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .badge-tip {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .badge-info {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+    }
+
+    .badge-career {
+      background: linear-gradient(135deg, #d9437a 0%, #be185d 100%);
+      color: white;
+    }
+
+    dl {
+      margin: 0;
+    }
+
+    dt {
+      color: #1d0c59;
+      font-weight: 700;
+      margin-top: 0.75rem;
+      font-size: 1rem;
+    }
+
+    dt:first-child {
+      margin-top: 0;
+    }
+
+    dd {
+      color: #4b5563;
+      margin-left: 1.5rem;
+      margin-bottom: 0.5rem;
+      padding-left: 0.75rem;
+      border-left: 3px solid #e5e7eb;
+    }
+
+    dd:hover {
+      border-left-color: #f59e0b;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="border-right: 2px solid #d9437a; padding-right: 10px; color: #1d0c59;">
+          <img src="../../../../images/logo.png" height="60px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page" onclick="createPath('pages/sessions/session1/introduction.html')">Session 1<span id="session1-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session2-nav" aria-current="page" onclick="createPath('pages/sessions/session2/introduction.html')">Session 2<span id="session2-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session3-nav" aria-current="page" onclick="createPath('pages/sessions/session3/introduction.html')">Session 3<span id="session3-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session4-nav" aria-current="page" onclick="createPath('pages/sessions/session4/introduction.html')">Session 4<span id="session4-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page" onclick="createPath('pages/sessions/session5/introduction.html')">Session 5<span id="session5-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page" onclick="createPath('pages/sessions/session6/introduction.html')">Showcase<span id="showcase-tooltip" class="box tooltip-text hidden">Session Opens Soon</span></button>
+          </div>
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div><p class=" my-auto" id="profileName"></p></div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"><img id="profile-pic-avatar" class="rounded-circle" height="25" alt="" src="../../../../images/blank_avatar.jpg" src="../../../../images/blank_avatar.jpg" loading="lazy" /></a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <div class="col py-3">
+          <div id="session-banner"></div>
+          <div class="container py-3">
+            <div class="row justify-content-center">
+              <div class="col-lg-10">
+                <div class="lesson-header">
+                  <p class="lesson-kicker">AI Session - Lesson 4</p>
+                  <h1 class="h2 fw-bold mb-3">Models, tokens and costs</h1>
+                  <p class="lead mb-2">
+                    Different AI tools charge differently, think differently, and handle code in different ways. The
+                    safest choice is not always the biggest or most expensive model.
+                  </p>
+                  <p class="mb-0">
+                    Think of models like different tools in a toolbox. Some are fast and cheap, some are smarter but
+                    cost more, and some are better for code or longer explanations.
+                  </p>
+                </div>
+
+                <section>
+                  <h2 class="h3 mb-4">Understanding Key Concepts</h2>
+                  
+                  <div class="row g-4">
+                    <div class="col-lg-4">
+                      <div class="content-card info-card">
+                        <h3 class="h5">
+                          <span class="badge-custom badge-info">Models</span>
+                        </h3>
+                        <dl>
+                          <dt>Small / Fast Models</dt>
+                          <dd>Good for simple tasks and quick checks</dd>
+                          
+                          <dt>Larger Models</dt>
+                          <dd>Better for tricky reasoning or longer code</dd>
+                          
+                          <dt>Pricing Tiers</dt>
+                          <dd>Free tiers, paid tiers, or usage limits</dd>
+                        </dl>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="content-card info-card">
+                        <h3 class="h5">
+                          <span class="badge-custom badge-info">Tokens</span>
+                        </h3>
+                        <p>
+                          Tokens are chunks of text the AI reads and writes. More text in your prompt or pasted code
+                          usually means more tokens, which can mean more cost.
+                        </p>
+                        <p class="mb-0">
+                          <strong>Important:</strong> Long conversations also use tokens because the model has to remember the earlier messages.
+                        </p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="content-card warning-card">
+                        <h3 class="h5">
+                          <span class="badge-custom badge-warning">Cost Surprises</span>
+                        </h3>
+                        <ul class="mb-0">
+                          <li>Big pasted files use lots of tokens quickly</li>
+                          <li>Long answers cost more than short ones</li>
+                          <li>Several retries in a row can add up</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <hr class="section-divider">
+
+                <section>
+                  <h2 class="h3 mb-4">Model Comparison</h2>
+                  
+                  <table class="comparison-table">
+                    <thead>
+                      <tr>
+                        <th>Model Type</th>
+                        <th>Best For</th>
+                        <th>Cost</th>
+                        <th>Speed</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><strong>Small Models</strong></td>
+                        <td>Quick questions, simple explanations, basic code completion</td>
+                        <td>Low / Free</td>
+                        <td>Fast</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Medium Models</strong></td>
+                        <td>Code review, debugging, moderate complexity tasks</td>
+                        <td>Moderate</td>
+                        <td>Medium</td>
+                      </tr>
+                      <tr>
+                        <td><strong>Large Models</strong></td>
+                        <td>Complex reasoning, architecture decisions, detailed analysis</td>
+                        <td>Higher</td>
+                        <td>Slower</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+
+                <hr class="section-divider">
+
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-4 p-md-5">
+                    <h2 class="h3 mb-4">How to Avoid Unexpected Costs</h2>
+
+                    <div class="row g-4 mt-2">
+                      <div class="col-lg-6">
+                        <div class="content-card tip-card">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-tip">Best Practices</span>
+                          </h3>
+                          <ul class="mb-0">
+                            <li>Use the smallest model that does the job</li>
+                            <li>Keep prompts focused and short when you can</li>
+                            <li>Paste only the code you need help with</li>
+                            <li>Ask for a brief answer first, then ask for more if needed</li>
+                            <li>Check pricing, usage limits, and free tiers before you start</li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="content-card info-card">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-info">Safe Workflow</span>
+                          </h3>
+                          <ol class="mb-0">
+                            <li>Start with a small task</li>
+                            <li>Use a low-cost or free option first</li>
+                            <li>Check the answer before asking again</li>
+                            <li>Only switch to a bigger model if the problem is actually hard</li>
+                          </ol>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <h2 class="h3 mb-4">Professional Mindset</h2>
+
+                    <div class="row g-4 mt-2">
+                      <div class="col-lg-4">
+                        <div class="content-card tip-card">
+                          <h3 class="h5">Best practice</h3>
+                          <p class="mb-0">
+                            If you are paying for AI, treat it like any other tool with a budget: <strong>plan it, watch it, and
+                            stop it from running away on you.</strong>
+                          </p>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="content-card career-card">
+                          <h3 class="h5">Interview-ready line</h3>
+                          <blockquote class="mb-0">
+                            "I choose the cheapest tool that can do the job, keep my prompts tight, and watch token
+                            usage so I avoid surprise bills."
+                          </blockquote>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="content-card info-card">
+                          <h3 class="h5">Remember</h3>
+                          <p class="mb-0">
+                            The best AI setup is the one that helps you <strong>learn, build, and stay in control</strong> of the cost.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="session-navigation"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    window.onload = () => {
+      checkReleaseDates(window.fbDB);
+      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
+      updateSideNav();
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout(window.fbAuth);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+  <script type="module">
+    import { fbAuth, fbStorage, fbDB } from "../../../js/firebase.js";
+    window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
+    window.fbStorage = fbStorage;
+  </script>
+  <script defer="" src="../../../js/sessionNavigation.js"></script>
+</body>
+
+</html>

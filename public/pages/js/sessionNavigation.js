@@ -41,6 +41,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		{ path: "sessions/session6/introduction.html", type: "intro", session: 6 },
 		{ path: "sessions/session6/lessons/projectPlanning.html", type: "lesson" },
 		{ path: "sessions/session6/lessons/additionalHelp.html", type: "lesson", optional: true, },
+		{ path: "sessions/session7/introduction.html", type: "intro", session: 7 },
+		{ path: "sessions/session7/lessons/goodUses.html", type: "lesson" },
+		{ path: "sessions/session7/lessons/humanFirst.html", type: "lesson" },
+		{ path: "sessions/session7/lessons/promptPractice.html", type: "lesson" },
+		{ path: "sessions/session7/lessons/modelsTokensCosts.html", type: "lesson" },
+		{ path: "sessions/session7/lessons/reviewAndRepeat.html", type: "lesson" },
 	];
 
 	const currentPath = window.location.pathname.replace(/^.*pages\//, "");

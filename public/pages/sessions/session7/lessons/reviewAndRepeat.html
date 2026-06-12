@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+  <title>Code the Future</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <script defer="" src="../../../js/sidenav.js" type="text/javascript"></script>
+  <script src="../../../js/imports.js"></script>
+  <script src="../../../js/app.js" type="text/javascript"></script>
+
+  <style>
+    .lesson-header {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dbeafe 100%);
+      border-left: 5px solid #10b981;
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.08);
+    }
+
+    .lesson-kicker {
+      color: #d9437a;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: rgba(217, 67, 122, 0.1);
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .content-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      height: 100%;
+      transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(29, 12, 89, 0.12);
+      border-color: #10b981;
+    }
+
+    .content-card.success-card {
+      border-left: 4px solid #10b981;
+      background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    }
+
+    .content-card.activity-card {
+      border-left: 4px solid #f59e0b;
+      background: linear-gradient(135deg, #ffffff 0%, #fff7ed 100%);
+    }
+
+    .content-card.career-card {
+      border-left: 4px solid #d9437a;
+      background: linear-gradient(135deg, #ffffff 0%, #fef2f7 100%);
+    }
+
+    .content-card.workflow-card {
+      border-left: 4px solid #3b82f6;
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    }
+
+    blockquote {
+      border-left: 4px solid #10b981;
+      padding-left: 1.5rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: #1d0c59;
+      background: rgba(16, 185, 129, 0.05);
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent 0%, #10b981 50%, transparent 100%);
+      margin: 2rem 0;
+    }
+
+    .badge-custom {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-right: 0.5rem;
+    }
+
+    .badge-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .badge-activity {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white;
+    }
+
+    .badge-career {
+      background: linear-gradient(135deg, #d9437a 0%, #be185d 100%);
+      color: white;
+    }
+
+    .badge-workflow {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+    }
+
+    ol.workflow-steps {
+      counter-reset: step-counter;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ol.workflow-steps li {
+      counter-increment: step-counter;
+      margin-bottom: 1.5rem;
+      padding-left: 3rem;
+      position: relative;
+    }
+
+    ol.workflow-steps li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .completion-banner {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+      margin: 2rem 0;
+    }
+
+    .completion-banner h2 {
+      color: white;
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#"
+          style="border-right: 2px solid #d9437a; padding-right: 10px; color: #1d0c59;">
+          <img src="../../../../images/logo.png" height="60px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <button class="nav-link border-end border-dark" name="session1-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session1/introduction.html')">Session 1<span id="session1-tooltip"
+                class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session2-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session2/introduction.html')">Session 2<span id="session2-tooltip"
+                class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session3-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session3/introduction.html')">Session 3<span id="session3-tooltip"
+                class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session4-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session4/introduction.html')">Session 4<span id="session4-tooltip"
+                class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="session5-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session5/introduction.html')">Session 5<span id="session5-tooltip"
+                class="box tooltip-text hidden">Session Opens Soon</span></button>
+            <button class="nav-link border-end border-dark" name="showcase-nav" aria-current="page"
+              onclick="createPath('pages/sessions/session6/introduction.html')">Showcase<span id="showcase-tooltip"
+                class="box tooltip-text hidden">Session Opens Soon</span></button>
+          </div>
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div>
+              <p class=" my-auto" id="profileName"></p>
+            </div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false"><img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../../../../images/blank_avatar.jpg" src="../../../../images/blank_avatar.jpg"
+                  loading="lazy" /></a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby=" dropdownMenuLink">
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a></li>
+                <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row flex-nowrap page-content">
+        <div class="col py-3">
+          <div id="session-banner"></div>
+          <div class="container py-3">
+            <div class="row justify-content-center">
+              <div class="col-lg-10">
+                <div class="lesson-header">
+                  <p class="lesson-kicker">AI Session - Lesson 5</p>
+                  <h1 class="h2 fw-bold mb-3">Review and repeat</h1>
+                  <p class="lead mb-2">The strongest AI workflow is: build, check, improve, and talk about the result.
+                    AI should make review easier, not replace it.</p>
+                  <p class="mb-0">
+                    This final lesson is about building confidence. First you prove that you can do the work yourself,
+                    then you use AI to speed up or sharpen your result, and finally you explain what changed.
+                  </p>
+                </div>
+
+                <div class="completion-banner">
+                  <h2>Congratulations on Completing AI Session!</h2>
+                  <p class="mb-0">You now understand how to use AI as a tool while maintaining your skills and
+                    professional value.</p>
+                </div>
+
+                <section>
+                  <h2 class="h3 mb-4">The Healthy AI Workflow</h2>
+
+                  <div class="content-card workflow-card mb-4">
+                    <h3 class="h5">
+                      <span class="badge-custom badge-workflow">Process</span>
+                      Four-step approach
+                    </h3>
+                    <ol class="workflow-steps">
+                      <li><strong>Try it yourself first</strong> - Build your understanding and baseline</li>
+                      <li><strong>Use AI to compare, explain, or improve</strong> - Get alternative perspectives</li>
+                      <li><strong>Test the result</strong> - Verify everything works as expected</li>
+                      <li><strong>Talk through the final choice with a human</strong> - Get real feedback</li>
+                    </ol>
+                  </div>
+                </section>
+
+                <hr class="section-divider">
+
+                <div class="card shadow-sm border-0">
+                  <div class="card-body p-4 p-md-5">
+                    <h2 class="h3 mb-4">Final Activity</h2>
+
+                    <div class="row g-4 mt-2">
+                      <div class="col-lg-6">
+                        <div class="content-card activity-card">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-activity">Practice</span>
+                            Revisit an earlier section
+                          </h3>
+                          <ol>
+                            <li>Choose an earlier lesson from the course</li>
+                            <li>Rebuild one small part on your own</li>
+                            <li>Ask AI how to improve it</li>
+                            <li>Compare the two versions</li>
+                            <li>Keep the one that is clearest to you</li>
+                          </ol>
+                          <p class="mb-0"><strong>Examples:</strong> HTML structure, headings, links, or a simple CSS
+                            layout.</p>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="content-card success-card">
+                          <h3 class="h5">
+                            <span class="badge-custom badge-success">Checklist</span>
+                            Human review comes first
+                          </h3>
+                          <ul class="mb-0">
+                            <li><strong>Check that the code still works</strong> - Test functionality</li>
+                            <li><strong>Explain the changes in your own words</strong> - Ensure understanding</li>
+                            <li><strong>Ask another person for feedback</strong> - Get external perspective</li>
+                            <li><strong>Only finish when it makes sense</strong> - To a human reader</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row g-4 mt-2">
+                      <p>NOTE: Sessions 1-6 were creating manually using skills taught in the course. The AI Session was
+                        built entirely through AI supervision!</p>
+                    </div>
+                    <hr class="section-divider">
+
+                    <h2 class="h3 mb-4">Career Readiness</h2>
+
+                    <div class="row g-4 mt-2">
+                      <div class="col-md-6">
+                        <div class="content-card career-card">
+                          <h3 class="h5">What to say in an interview</h3>
+                          <blockquote>
+                            "I first solved the problem myself, then I used AI to compare ideas, and I kept the version
+                            that was easiest to test and explain."
+                          </blockquote>
+                          <p class="mb-0">This shows you understand the value of both independent work and AI
+                            assistance.</p>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="content-card success-card">
+                          <h3 class="h5">Why this is exciting</h3>
+                          <p>
+                            AI can make you faster, but the real skill is knowing how to <strong>steer it, check it, and
+                              turn
+                              rough ideas into something polished and professional</strong>.
+                          </p>
+                          <p class="mb-0">You now have both the technical skills and the AI literacy to succeed as a
+                            modern developer.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr class="section-divider">
+
+                    <div class="completion-banner">
+                      <h2>You're Ready!</h2>
+                      <p class="mb-3">You've learned to code, understand accessibility, plan projects, and use AI
+                        responsibly.</p>
+                      <p class="mb-0"><strong>Next step:</strong> Apply these skills to your showcase project and
+                        demonstrate your capabilities to potential employers.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="session-navigation"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    window.onload = () => {
+      checkReleaseDates(window.fbDB);
+      auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"));
+      updateSideNav();
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout(window.fbAuth);
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+  <script type="module">
+    import { fbAuth, fbStorage, fbDB } from "../../../js/firebase.js";
+    window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
+    window.fbStorage = fbStorage;
+  </script>
+  <script defer="" src="../../../js/sessionNavigation.js"></script>
+</body>
+
+</html>
