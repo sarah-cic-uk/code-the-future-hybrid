@@ -1,0 +1,27 @@
+{
+  "name": "firebase-to-aws-migration",
+  "version": "1.0.0",
+  "description": "Migration scripts for Code the Future from Firebase to AWS",
+  "main": "index.js",
+  "scripts": {
+    "export": "node 1-export-firebase-data.js",
+    "transform": "node 2-transform-data.js",
+    "create-aws": "node 3-create-aws-resources.js",
+    "import-db": "node 4-import-to-dynamodb.js",
+    "migrate-users": "node 5-migrate-cognito-users.js",
+    "migrate-storage": "bash 6-migrate-storage.sh",
+    "full-migration": "npm run export && npm run transform && npm run create-aws && npm run import-db && npm run migrate-users && npm run migrate-storage"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0",
+    "@aws-sdk/client-cognito-identity-provider": "^3.500.0",
+    "@aws-sdk/client-dynamodb": "^3.500.0",
+    "@aws-sdk/lib-dynamodb": "^3.500.0",
+    "@aws-sdk/client-s3": "^3.500.0",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {},
+  "keywords": ["migration", "firebase", "aws"],
+  "author": "",
+  "license": "ISC"
+}

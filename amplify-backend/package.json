@@ -1,0 +1,15 @@
+{
+  "name": "amplify-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "sandbox": "ampx sandbox",
+    "deploy": "ampx pipeline-deploy --branch main",
+    "generate": "ampx generate graphql-client-code --out ../public/pages/js/aws/amplify-client.ts"
+  },
+  "devDependencies": {
+    "@aws-amplify/backend": "^1.23.0",
+    "@aws-amplify/backend-cli": "^1.8.3",
+    "typescript": "^5.9.3"
+  }
+}
