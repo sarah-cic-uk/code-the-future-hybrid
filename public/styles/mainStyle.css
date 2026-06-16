@@ -90,6 +90,65 @@ a.dropdown-item.logout:hover {
 }
 
 /* sessions & meet the tutors */
+/* Session Completion Tracking */
+.session-completion-section {
+	margin: 2rem 0;
+	padding: 0;
+}
+
+.completion-card {
+	background: linear-gradient(135deg, #1d0c59 0%, #31238c 100%);
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 4px 12px rgba(29, 12, 89, 0.2);
+	border: 2px solid #d9437a;
+}
+
+.completion-content {
+	text-align: center;
+}
+
+.completion-content h4 {
+	color: white;
+	margin-bottom: 1.5rem;
+	font-weight: 600;
+}
+
+.completion-content .btn {
+	min-width: 250px;
+	padding: 0.75rem 2rem;
+	font-size: 1.1rem;
+	font-weight: 600;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	margin-bottom: 1rem;
+}
+
+.completion-content .btn-primary {
+	background-color: #d9437a;
+	border-color: #d9437a;
+}
+
+.completion-content .btn-primary:hover:not(:disabled) {
+	background-color: #c13368;
+	border-color: #c13368;
+	transform: translateY(-2px);
+	box-shadow: 0 4px 8px rgba(217, 67, 122, 0.3);
+}
+
+.completion-content .btn-success {
+	background-color: #28a745;
+	border-color: #28a745;
+	cursor: default;
+}
+
+.completion-status {
+	color: #eae9f3;
+	margin-top: 0.5rem;
+	margin-bottom: 0;
+	font-size: 0.95rem;
+}
+
 .avatar-sessions-card {
 	background: white;
 	width: auto;

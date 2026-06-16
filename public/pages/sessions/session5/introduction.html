@@ -17,6 +17,7 @@
   <script src="../../js/sidenav.js" type="text/javascript" defer></script>
   <script type="text/javascript" src="../../js/app.js"></script>
   <script src="../../js/imports.js"></script>
+  <script src="../../js/progressTracking.js"></script>
 </head>
 
 <body>
@@ -143,6 +144,15 @@
         document.querySelector("#sessionsLink")
       );
       updateSideNavOverview();
+      
+      // Initialize session completion tracking
+      if (window.fbAuth) {
+        window.fbAuth.onAuthStateChanged(user => {
+          if (user) {
+            initializeSessionCompletionUI(5);
+          }
+        });
+      }
     };
 
     function createPath(options) {

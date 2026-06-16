@@ -176,14 +176,27 @@ async function loadProfilePictures() {
     fetchMedia(pathReference, el);
   }
 
-  // Check if user is a tutor and show/hide tutor menu item
+  // Check if user is a tutor/teacher and show/hide menu items
   try {
     const userSnapshot = await window.fbDB.ref(`users/${currentUser.uid}`).once('value');
     const userData = userSnapshot.val();
+    
+    // Show tutor menu item for tutors (course creators)
     const tutorMenuItem = document.getElementById('tutor-menu-item');
-
     if (tutorMenuItem && userData && userData.tutor) {
       tutorMenuItem.style.display = 'block';
+    }
+
+    // Show teacher menu item for teachers (school teachers)
+    const teacherMenuItem = document.getElementById('teacher-menu-item');
+    if (teacherMenuItem && userData && userData.teacher) {
+      teacherMenuItem.style.display = 'block';
+    }
+
+    // Show admin menu item for tutors (course creators have admin access)
+    const adminMenuItem = document.getElementById('admin-menu-item');
+    if (adminMenuItem && userData && userData.tutor) {
+      adminMenuItem.style.display = 'block';
     }
 
     // Ensure cohort data is in localStorage
@@ -192,7 +205,7 @@ async function loadProfilePictures() {
       localStorage.setItem('displayName', userData.displayName);
     }
   } catch (error) {
-    console.error('Error checking tutor status:', error);
+    console.error('Error checking user status:', error);
   }
 }
 

@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future - Admin Cohort View" />
+  <meta name="author" content="Sarah Neenan" />
+
+  <title>All Cohorts (Admin) - Code the Future</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+
+  <script type="text/javascript" src="./js/app.js"></script>
+  <script type="module" src="./js/firebase.js"></script>
+  <script src="./js/progressTracking.js"></script>
+
+  <style>
+    body {
+      background-color: #f4f4f9;
+    }
+
+    .page-header {
+      background: linear-gradient(135deg, #1d0c59 0%, #31238c 100%);
+      color: white;
+      padding: 2rem 0;
+      margin-bottom: 2rem;
+      border-bottom: 4px solid #d9437a;
+    }
+
+    .global-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      border-left: 4px solid #d9437a;
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1d0c59;
+      margin: 0;
+    }
+
+    .stat-card p {
+      color: #666;
+      margin: 0.5rem 0 0 0;
+      font-size: 0.9rem;
+    }
+
+    .search-filter-section {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .cohort-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .cohort-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #1d0c59;
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .cohort-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .cohort-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+    }
+
+    .cohort-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1d0c59;
+      margin: 0;
+    }
+
+    .cohort-code {
+      font-size: 0.85rem;
+      color: #666;
+      background: #f4f4f9;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .teacher-info {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .cohort-stats-mini {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .mini-stat {
+      text-align: center;
+      padding: 0.75rem;
+      background: #f8f9fa;
+      border-radius: 6px;
+    }
+
+    .mini-stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1d0c59;
+    }
+
+    .mini-stat-label {
+      font-size: 0.75rem;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 20px;
+      background-color: #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1d0c59 0%, #d9437a 100%);
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .loading-spinner {
+      text-align: center;
+      padding: 3rem;
+    }
+
+    .no-data {
+      text-align: center;
+      padding: 3rem;
+      color: #666;
+    }
+
+    .btn-primary {
+      background-color: #d9437a;
+      border-color: #d9437a;
+    }
+
+    .btn-primary:hover {
+      background-color: #c13368;
+      border-color: #c13368;
+    }
+
+    /* Cohort Detail View */
+    .cohort-detail-view {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .back-button {
+      margin-bottom: 1.5rem;
+    }
+
+    .student-table-container {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+    }
+
+    .student-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .student-table thead {
+      background-color: #1d0c59;
+      color: white;
+    }
+
+    .student-table th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    .student-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #eee;
+    }
+
+    .student-table tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .student-name {
+      font-weight: 600;
+      color: #1d0c59;
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status-completed {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .status-in-progress {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+
+    .status-not-started {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
+              border-right: 2px solid #d9437a;
+              padding-right: 10px;
+              color: #1d0c59;
+            ">
+          <img src="../images/logo.png" height="60" alt="CTF logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
+            <a class="nav-link" id="sessionsLink" href="#" onclick="createPath('pages/sessions.html')">Sessions</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/faq.html')">FAQ</a>
+          </div>
+
+          <div class="d-flex align-items-center" id="profile-button">
+            <div class="d-flex align-items-center profileBtn">
+              <div>
+                <p class="my-auto" id="profileName"></p>
+              </div>
+              <div class="profileBtn dropdown px-3">
+                <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+                  <img id="profile-pic-avatar" class="rounded-circle" height="25" alt="" src="../images/blank_avatar.jpg"
+                    loading="lazy" />
+                </a>
+
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">View Cohort</a></li>
+                  <li id="teacher-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                      onclick="createPath('pages/teacherCohortView.html')">My Cohorts</a></li>
+                  <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                      onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
+                  <li id="admin-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                      onclick="createPath('pages/adminCohortView.html')">All Cohorts (Admin)</a></li>
+                  <li><a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="container">
+        <h1 class="mb-0">All Cohorts - Admin View</h1>
+        <p class="mb-0">Monitor progress across all Code the Future cohorts</p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container-fluid page-content">
+      <div class="container">
+        <!-- Global Statistics -->
+        <div id="global-stats-section" class="global-stats">
+          <div class="stat-card">
+            <h3 id="total-cohorts">0</h3>
+            <p>Total Cohorts</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="total-students">0</h3>
+            <p>Total Students</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="global-avg-progress">0%</h3>
+            <p>Global Avg Progress</p>
+          </div>
+          <div class="stat-card">
+            <h3 id="total-completed">0</h3>
+            <p>Completed Course</p>
+          </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-filter-section">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <input type="text" id="search-input" class="form-control" placeholder="Search cohorts..."
+                oninput="filterCohorts()">
+            </div>
+            <div class="col-md-3">
+              <select id="teacher-filter" class="form-select" onchange="filterCohorts()">
+                <option value="all">All Teachers</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <select id="sort-select" class="form-select" onchange="sortCohorts()">
+                <option value="name-asc">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+                <option value="progress-desc">Progress (High-Low)</option>
+                <option value="progress-asc">Progress (Low-High)</option>
+                <option value="students-desc">Students (Most-Least)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading-spinner" class="loading-spinner">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">Loading cohort data...</p>
+        </div>
+
+        <!-- No Data Message -->
+        <div id="no-data-message" class="no-data" style="display: none;">
+          <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+          <p class="mt-3">No cohorts found.</p>
+        </div>
+
+        <!-- Cohort Grid View -->
+        <div id="cohort-grid-view" style="display: none;">
+          <div class="cohort-grid" id="cohort-grid">
+            <!-- Cohort cards will be inserted here -->
+          </div>
+        </div>
+
+        <!-- Cohort Detail View -->
+        <div id="cohort-detail-view" style="display: none;">
+          <div class="cohort-detail-view">
+            <button class="btn btn-outline-secondary back-button" onclick="showCohortGrid()">
+              <i class="bi bi-arrow-left"></i> Back to All Cohorts
+            </button>
+            <h2 id="detail-cohort-name"></h2>
+            <p class="text-muted" id="detail-cohort-info"></p>
+
+            <div class="student-table-container mt-4">
+              <h5 class="mb-3">Students in this Cohort</h5>
+              <table class="student-table">
+                <thead>
+                  <tr>
+                    <th>Student Name</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th>Last Active</th>
+                  </tr>
+                </thead>
+                <tbody id="detail-student-table-body">
+                  <!-- Student rows will be inserted here -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+
+  <script type="text/javascript">
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.type = "text/css";
+    stylesheet.href = getPath() + "styles/mainStyle.css";
+    document.head.appendChild(stylesheet);
+
+    let allCohorts = [];
+    let filteredCohorts = [];
+    let allTeachers = new Set();
+
+    window.onload = async (event) => {
+      auth(
+        null,
+        document.querySelector(".profileBtn"),
+        document.querySelector("#sessionsLink")
+      );
+
+      // Check if user is a tutor (admin)
+      if (window.fbAuth) {
+        window.fbAuth.onAuthStateChanged(async (user) => {
+          if (user) {
+            const userSnapshot = await window.fbDB.ref(`users/${user.uid}`).once('value');
+            const userData = userSnapshot.val();
+
+            if (!userData || !userData.tutor) {
+              // Not a tutor, redirect
+              document.body.innerHTML = `
+                <div class="container mt-5">
+                  <div class="alert alert-danger text-center">
+                    <h3>Access Denied</h3>
+                    <p>You are not authorized to access this page. Only course administrators can view all cohorts.</p>
+                    <a href="${getPath()}pages/sessions.html" class="btn btn-primary mt-3">Go to Sessions</a>
+                  </div>
+                </div>
+              `;
+              return;
+            }
+
+            // Load all cohorts
+            await loadAllCohorts();
+          }
+        });
+      }
+    };
+
+    async function loadAllCohorts() {
+      try {
+        // Get all cohorts
+        const cohortsSnapshot = await window.fbDB.ref('cohorts').once('value');
+        const cohortsData = cohortsSnapshot.val();
+
+        // Get all users
+        const usersSnapshot = await window.fbDB.ref('users').once('value');
+        const usersData = usersSnapshot.val();
+
+        allCohorts = [];
+        let totalStudents = 0;
+        let totalProgress = 0;
+        let totalCompleted = 0;
+
+        if (cohortsData && usersData) {
+          for (const [cohortId, cohortData] of Object.entries(cohortsData)) {
+            // Get students in this cohort
+            const students = [];
+            for (const [userId, userData] of Object.entries(usersData)) {
+              if (userData.cohort === cohortData.code && !userData.teacher && !userData.tutor) {
+                const progress = userData.progress || {};
+                const stats = calculateProgressStats(progress);
+                students.push({
+                  id: userId,
+                  name: userData.displayName || 'Unknown',
+                  email: userData.email || '',
+                  progress: stats,
+                  progressData: progress
+                });
+
+                totalProgress += stats.percentage;
+                if (stats.status === 'Completed') totalCompleted++;
+              }
+            }
+
+            totalStudents += students.length;
+
+            // Get teacher info
+            let teacherName = 'Unassigned';
+            if (cohortData.teacherId) {
+              const teacherData = usersData[cohortData.teacherId];
+              if (teacherData) {
+                teacherName = teacherData.displayName || 'Unknown Teacher';
+                allTeachers.add(teacherName);
+              }
+            }
+
+            // Calculate cohort average
+            const avgProgress = students.length > 0
+              ? Math.round(students.reduce((sum, s) => sum + s.progress.percentage, 0) / students.length)
+              : 0;
+
+            allCohorts.push({
+              id: cohortId,
+              code: cohortData.code,
+              name: cohortData.name || cohortData.code,
+              teacherName,
+              teacherId: cohortData.teacherId,
+              students,
+              avgProgress,
+              studentCount: students.length
+            });
+          }
+        }
+
+        // Update global stats
+        document.getElementById('total-cohorts').textContent = allCohorts.length;
+        document.getElementById('total-students').textContent = totalStudents;
+        document.getElementById('global-avg-progress').textContent = 
+          totalStudents > 0 ? Math.round(totalProgress / totalStudents) + '%' : '0%';
+        document.getElementById('total-completed').textContent = totalCompleted;
+
+        // Populate teacher filter
+        const teacherFilter = document.getElementById('teacher-filter');
+        teacherFilter.innerHTML = '<option value="all">All Teachers</option>';
+        Array.from(allTeachers).sort().forEach(teacher => {
+          teacherFilter.innerHTML += `<option value="${teacher}">${teacher}</option>`;
+        });
+
+        filteredCohorts = [...allCohorts];
+        renderCohortGrid();
+
+        document.getElementById('loading-spinner').style.display = 'none';
+        if (allCohorts.length === 0) {
+          document.getElementById('no-data-message').style.display = 'block';
+        } else {
+          document.getElementById('cohort-grid-view').style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error loading cohorts:', error);
+        document.getElementById('loading-spinner').innerHTML = `
+          <i class="bi bi-exclamation-triangle text-danger" style="font-size: 3rem;"></i>
+          <p class="mt-3 text-danger">Error loading cohorts. Please try again.</p>
+        `;
+      }
+    }
+
+    function renderCohortGrid() {
+      const grid = document.getElementById('cohort-grid');
+      grid.innerHTML = '';
+
+      filteredCohorts.forEach(cohort => {
+        const card = document.createElement('div');
+        card.className = 'cohort-card';
+        card.onclick = () => showCohortDetail(cohort);
+
+        const completedCount = cohort.students.filter(s => s.progress.status === 'Completed').length;
+        const inProgressCount = cohort.students.filter(s => s.progress.status === 'In Progress').length;
+
+        card.innerHTML = `
+          <div class="cohort-card-header">
+            <div>
+              <h3 class="cohort-name">${cohort.name}</h3>
+              <span class="cohort-code">${cohort.code}</span>
+            </div>
+          </div>
+          <div class="teacher-info">
+            <i class="bi bi-person-badge"></i> ${cohort.teacherName}
+          </div>
+          <div>
+            <strong>Average Progress:</strong>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: ${cohort.avgProgress}%">
+                ${cohort.avgProgress}%
+              </div>
+            </div>
+          </div>
+          <div class="cohort-stats-mini">
+            <div class="mini-stat">
+              <div class="mini-stat-value">${cohort.studentCount}</div>
+              <div class="mini-stat-label">Students</div>
+            </div>
+            <div class="mini-stat">
+              <div class="mini-stat-value">${completedCount}</div>
+              <div class="mini-stat-label">Completed</div>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCohorts() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      const teacherFilter = document.getElementById('teacher-filter').value;
+
+      filteredCohorts = allCohorts.filter(cohort => {
+        const matchesSearch = cohort.name.toLowerCase().includes(searchTerm) ||
+          cohort.code.toLowerCase().includes(searchTerm);
+        const matchesTeacher = teacherFilter === 'all' || cohort.teacherName === teacherFilter;
+
+        return matchesSearch && matchesTeacher;
+      });
+
+      sortCohorts();
+    }
+
+    function sortCohorts() {
+      const sortBy = document.getElementById('sort-select').value;
+
+      switch (sortBy) {
+        case 'name-asc':
+          filteredCohorts.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'name-desc':
+          filteredCohorts.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'progress-desc':
+          filteredCohorts.sort((a, b) => b.avgProgress - a.avgProgress);
+          break;
+        case 'progress-asc':
+          filteredCohorts.sort((a, b) => a.avgProgress - b.avgProgress);
+          break;
+        case 'students-desc':
+          filteredCohorts.sort((a, b) => b.studentCount - a.studentCount);
+          break;
+      }
+
+      renderCohortGrid();
+    }
+
+    function showCohortDetail(cohort) {
+      document.getElementById('cohort-grid-view').style.display = 'none';
+      document.getElementById('cohort-detail-view').style.display = 'block';
+
+      document.getElementById('detail-cohort-name').textContent = cohort.name;
+      document.getElementById('detail-cohort-info').textContent = 
+        `Code: ${cohort.code} | Teacher: ${cohort.teacherName} | ${cohort.studentCount} Students | Avg Progress: ${cohort.avgProgress}%`;
+
+      const tbody = document.getElementById('detail-student-table-body');
+      tbody.innerHTML = '';
+
+      if (cohort.students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No students in this cohort</td></tr>';
+        return;
+      }
+
+      cohort.students.forEach(student => {
+        const row = document.createElement('tr');
+        const statusClass = student.progress.status.toLowerCase().replace(' ', '-');
+        const lastActive = student.progress.lastAccessedDate > 0
+          ? formatTimeAgo(student.progress.lastAccessedDate)
+          : 'Never';
+
+        row.innerHTML = `
+          <td><span class="student-name">${student.name}</span></td>
+          <td>
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" style="width: ${student.progress.percentage}%">
+                ${student.progress.completedCount}/${student.progress.totalSessions}
+              </div>
+            </div>
+          </td>
+          <td><span class="status-badge status-${statusClass}">${student.progress.status}</span></td>
+          <td>${lastActive}</td>
+        `;
+
+        tbody.appendChild(row);
+      });
+    }
+
+    function showCohortGrid() {
+      document.getElementById('cohort-detail-view').style.display = 'none';
+      document.getElementById('cohort-grid-view').style.display = 'block';
+    }
+
+    function formatTimeAgo(timestamp) {
+      const now = Date.now();
+      const diff = now - timestamp;
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+      if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+      if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+      return 'Just now';
+    }
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout(window.fbAuth);
+    }
+  </script>
+
+  <script type="module">
+    import { fbAuth, fbStorage, fbDB } from "./js/firebase.js";
+    window.fbAuth = fbAuth;
+    window.fbDB = fbDB;
+    window.fbStorage = fbStorage;
+  </script>
+</body>
+
+</html>
