@@ -9,15 +9,11 @@ export const auth = defineAuth({
     email: true,
   },
   userAttributes: {
-    email: {
-      required: true,
-      mutable: false,
-    },
-    name: {
-      required: true,
+    // Using Cognito standard attributes
+    // preferred_username will store the display name
+    preferredUsername: {
+      required: false,
       mutable: true,
     },
   },
 });
-
-// Made with Bob
