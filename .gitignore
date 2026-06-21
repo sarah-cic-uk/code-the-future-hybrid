@@ -15,8 +15,8 @@ amplify-backend/node_modules/
 migration-scripts/node_modules/
 
 # Amplify generated files
-amplify_outputs.json
-**/amplify_outputs.json
+# Ignore in backend but allow in public for deployment
+amplify-backend/amplify_outputs.json
 .amplify/
 **/.amplify/
 
