@@ -19,6 +19,8 @@
     <script defer="" src="../../../js/sidenav.js" type="text/javascript"></script>
     <script src="../../../js/app.js" type="text/javascript"></script>
     <script src="../../../js/imports.js"></script>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
+    <script src="../../../js/s3-videos.js"></script>
 </head>
 
 <body>
@@ -153,7 +155,7 @@
 
             // Load video from Amplify Storage
             const el = document.getElementById('session-video');
-            fetchMediaFromAmplify('firstRepo.mp4', el);
+            fetchMediaFromS3('firstRepo.mp4', el);
 
             document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/sarah.png';
             updateSideNav()

@@ -21,6 +21,8 @@
     <script src="../../../js/imports.js"></script>
 
     </meta>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
+    <script src="../../../js/s3-videos.js"></script>
 </head>
 
 <body>
@@ -156,7 +158,7 @@
 
             // Load video from Amplify Storage
       const el = document.getElementById('session-video');
-      fetchMediaFromAmplify('introGit.mp4', el);
+      fetchMediaFromS3('introGit.mp4', el);
 
             document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.png';
             updateSideNav()
