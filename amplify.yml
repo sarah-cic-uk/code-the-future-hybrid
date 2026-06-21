@@ -6,8 +6,8 @@ frontend:
         - npm ci
     build:
       commands:
-        - echo "Building Amplify configuration..."
-        - cd amplify-backend && npx ampx generate outputs --branch $AWS_BRANCH --app-id $AWS_APP_ID --out-dir ../public
+        - echo "Copying Amplify configuration..."
+        - cp public/amplify_outputs.json public/amplify_outputs.json.backup || true
   artifacts:
     baseDirectory: /public
     files:
@@ -15,6 +15,5 @@ frontend:
   cache:
     paths:
       - node_modules/**/*
-      - amplify-backend/node_modules/**/*
 
 # Made with Bob
