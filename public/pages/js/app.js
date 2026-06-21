@@ -9,15 +9,16 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
     }
 
     // Load profile pictures using Amplify
-    try {
-      const { checkAuth } = await import('./amplify-auth.js');
-      const isAuthenticated = await checkAuth();
-      if (isAuthenticated) {
-        loadProfilePictures();
-      }
-    } catch (error) {
-      console.error('Auth check error:', error);
-    }
+    // TODO: Re-enable when ES modules are working
+    // try {
+    //   const { checkAuth } = await import('./amplify-auth.js');
+    //   const isAuthenticated = await checkAuth();
+    //   if (isAuthenticated) {
+    //     loadProfilePictures();
+    //   }
+    // } catch (error) {
+    //   console.error('Auth check error:', error);
+    // }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
     if (profileBtn) profileBtn.style.display = "none";
@@ -105,21 +106,25 @@ function updateSideNavOverview() {
 
 async function checkReleaseDates() {
   try {
-    const { generateClient } = await import('aws-amplify/data');
-    const client = generateClient();
+    // TODO: Re-enable when ES modules are working
+    // For now, just return to avoid errors
+    return;
     
     const cohortCode = window.localStorage.cohort;
     if (!cohortCode) return;
     
-    // Fetch cohort from DynamoDB
-    const { data: cohorts } = await client.models.Cohort.list({
-      filter: {
-        cohortCode: { eq: cohortCode }
-      }
-    });
-    
-    if (!cohorts || cohorts.length === 0) return;
-    const userCohort = cohorts[0];
+    // const { generateClient } = await import('aws-amplify/data');
+    // const client = generateClient();
+    //
+    // // Fetch cohort from DynamoDB
+    // const { data: cohorts } = await client.models.Cohort.list({
+    //   filter: {
+    //     cohortCode: { eq: cohortCode }
+    //   }
+    // });
+    //
+    // if (!cohorts || cohorts.length === 0) return;
+    // const userCohort = cohorts[0];
     
     console.log(document.querySelectorAll(".release-date-btn"));
     console.log(userCohort);
