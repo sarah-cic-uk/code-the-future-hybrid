@@ -52,7 +52,7 @@ async function getVideoUrl(videoName) {
   try {
     const params = {
       Bucket: s3Config.bucket,
-      Key: `media/${videoName}`,
+      Key: `public/media/${videoName}`,
       Expires: 3600 // 1 hour
     };
     
