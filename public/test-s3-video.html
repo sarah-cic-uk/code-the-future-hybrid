@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>S3 Video Test</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
+</head>
+<body>
+    <h1>S3 Video Test</h1>
+    <div id="status">Loading...</div>
+    <video id="test-video" controls width="640" height="360"></video>
+    
+    <script>
+        async function testS3() {
+            const statusDiv = document.getElementById('status');
+            const videoEl = document.getElementById('test-video');
+            
+            try {
+                // Load config
+                const response = await fetch('/amplify_outputs.json');
+                const config = await response.json();
+                
+                statusDiv.innerHTML += '<br>✅ Config loaded';
+                statusDiv.innerHTML += '<br>Bucket: ' + config.storage.bucket_name;
+                statusDiv.innerHTML += '<br>Region: ' + config.storage.aws_region;
+                statusDiv.innerHTML += '<br>Identity Pool: ' + config.auth.identity_pool_id;
+                
+                // Configure AWS
+                AWS.config.region = config.storage.aws_region;
+                AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+                    IdentityPoolId: config.auth.identity_pool_id
+                });
+                
+                const s3 = new AWS.S3({
+                    region: config.storage.aws_region,
+                    params: { Bucket: config.storage.bucket_name }
+                });
+                
+                statusDiv.innerHTML += '<br>✅ S3 client created';
+                
+                // Try both paths
+                const paths = [
+                    'public/media/firstRepo.mp4',
+                    'media/firstRepo.mp4'
+                ];
+                
+                for (const path of paths) {
+                    try {
+                        statusDiv.innerHTML += '<br><br>Testing path: ' + path;
+                        
+                        const url = s3.getSignedUrl('getObject', {
+                            Bucket: config.storage.bucket_name,
+                            Key: path,
+                            Expires: 3600
+                        });
+                        
+                        statusDiv.innerHTML += '<br>Generated URL: ' + url.substring(0, 100) + '...';
+                        
+                        // Test if file exists
+                        const testResponse = await fetch(url, { method: 'HEAD' });
+                        if (testResponse.ok) {
+                            statusDiv.innerHTML += '<br>✅ FILE EXISTS at ' + path;
+                            statusDiv.innerHTML += '<br>Content-Type: ' + testResponse.headers.get('content-type');
+                            
+                            // Load video
+                            videoEl.src = url;
+                            statusDiv.innerHTML += '<br>✅ Video loaded!';
+                            break;
+                        } else {
+                            statusDiv.innerHTML += '<br>❌ File not found (status: ' + testResponse.status + ')';
+                        }
+                    } catch (err) {
+                        statusDiv.innerHTML += '<br>❌ Error: ' + err.message;
+                    }
+                }
+                
+            } catch (error) {
+                statusDiv.innerHTML += '<br>❌ Error: ' + error.message;
+                console.error(error);
+            }
+        }
+        
+        testS3();
+    </script>
+</body>
+</html>
