@@ -1,32 +1,153 @@
 // Progress Tracking Utility for Code the Future
 // Tracks student session completion and last accessed times
+// Uses AWS DynamoDB via GraphQL API
+
+/**
+ * Get current user's email from localStorage
+ * @returns {string|null} - User email or null
+ */
+function getCurrentUserEmail() {
+  const email = localStorage.getItem('userEmail');
+  if (!email) {
+    console.error('No user email found in localStorage');
+  }
+  return email;
+}
+
+/**
+ * Get GraphQL API configuration
+ * @returns {Promise<Object>} - API config
+ */
+async function getAPIConfig() {
+  try {
+    const response = await fetch('/amplify_outputs.json');
+    const config = await response.json();
+    return {
+      endpoint: config.data.url,
+      apiKey: config.data.api_key,
+      region: config.data.aws_region
+    };
+  } catch (error) {
+    console.error('Error loading API config:', error);
+    throw error;
+  }
+}
+
+/**
+ * Execute GraphQL query/mutation
+ * @param {string} query - GraphQL query string
+ * @param {Object} variables - Query variables
+ * @returns {Promise<Object>} - Query result
+ */
+async function executeGraphQL(query, variables = {}) {
+  const config = await getAPIConfig();
+  
+  const response = await fetch(config.endpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': config.apiKey
+    },
+    body: JSON.stringify({
+      query,
+      variables
+    })
+  });
+
+  const result = await response.json();
+  
+  if (result.errors) {
+    console.error('GraphQL errors:', result.errors);
+    throw new Error(result.errors[0].message);
+  }
+  
+  return result.data;
+}
+
+/**
+ * Get user by email
+ * @param {string} email - User email
+ * @returns {Promise<Object|null>} - User object or null
+ */
+async function getUserByEmail(email) {
+  const query = `
+    query ListUsers($email: String!) {
+      listUsers(filter: { email: { eq: $email } }) {
+        items {
+          id
+          email
+          displayName
+          progress
+        }
+      }
+    }
+  `;
+
+  try {
+    const data = await executeGraphQL(query, { email });
+    const users = data.listUsers.items;
+    return users.length > 0 ? users[0] : null;
+  } catch (error) {
+    console.error('Error getting user:', error);
+    return null;
+  }
+}
+
+/**
+ * Update user progress in DynamoDB
+ * @param {string} userId - User ID
+ * @param {Object} progressData - Progress data object
+ * @returns {Promise<boolean>} - Success status
+ */
+async function updateUserProgress(userId, progressData) {
+  const mutation = `
+    mutation UpdateUser($id: ID!, $progress: AWSJSON!) {
+      updateUser(input: { id: $id, progress: $progress }) {
+        id
+        progress
+      }
+    }
+  `;
+
+  try {
+    await executeGraphQL(mutation, {
+      id: userId,
+      progress: JSON.stringify(progressData)
+    });
+    return true;
+  } catch (error) {
+    console.error('Error updating progress:', error);
+    return false;
+  }
+}
 
 /**
  * Track when a student accesses a session
  * @param {number} sessionNumber - The session number (1-7)
  */
 async function trackSessionAccess(sessionNumber) {
-  if (!window.fbAuth || !window.fbDB) {
-    console.error('Firebase not initialized');
-    return;
-  }
-
-  const user = window.fbAuth.currentUser;
-  if (!user) {
-    console.error('No user logged in');
-    return;
-  }
+  const email = getCurrentUserEmail();
+  if (!email) return;
 
   try {
-    const progressRef = window.fbDB.ref(`users/${user.uid}/progress/session${sessionNumber}`);
-    const snapshot = await progressRef.once('value');
-    const existingData = snapshot.val() || {};
+    const user = await getUserByEmail(email);
+    if (!user) {
+      console.error('User not found');
+      return;
+    }
 
+    // Parse existing progress
+    const currentProgress = user.progress ? JSON.parse(user.progress) : {};
+    const sessionKey = `session${sessionNumber}`;
+    
     // Update last accessed time, preserve completion status
-    await progressRef.update({
+    currentProgress[sessionKey] = {
+      ...currentProgress[sessionKey],
       lastAccessed: Date.now(),
-      completed: existingData.completed || false
-    });
+      completed: currentProgress[sessionKey]?.completed || false
+    };
+
+    await updateUserProgress(user.id, currentProgress);
   } catch (error) {
     console.error('Error tracking session access:', error);
   }
@@ -38,21 +159,17 @@ async function trackSessionAccess(sessionNumber) {
  * @returns {Promise<Object>} - Progress data or null
  */
 async function checkSessionCompletion(sessionNumber) {
-  if (!window.fbAuth || !window.fbDB) {
-    console.error('Firebase not initialized');
-    return null;
-  }
-
-  const user = window.fbAuth.currentUser;
-  if (!user) {
-    console.error('No user logged in');
-    return null;
-  }
+  const email = getCurrentUserEmail();
+  if (!email) return null;
 
   try {
-    const progressRef = window.fbDB.ref(`users/${user.uid}/progress/session${sessionNumber}`);
-    const snapshot = await progressRef.once('value');
-    return snapshot.val();
+    const user = await getUserByEmail(email);
+    if (!user) return null;
+
+    const progress = user.progress ? JSON.parse(user.progress) : {};
+    const sessionKey = `session${sessionNumber}`;
+    
+    return progress[sessionKey] || null;
   } catch (error) {
     console.error('Error checking session completion:', error);
     return null;
@@ -65,27 +182,28 @@ async function checkSessionCompletion(sessionNumber) {
  * @returns {Promise<boolean>} - Success status
  */
 async function markSessionComplete(sessionNumber) {
-  if (!window.fbAuth || !window.fbDB) {
-    console.error('Firebase not initialized');
-    return false;
-  }
-
-  const user = window.fbAuth.currentUser;
-  if (!user) {
-    console.error('No user logged in');
-    return false;
-  }
+  const email = getCurrentUserEmail();
+  if (!email) return false;
 
   try {
-    const progressRef = window.fbDB.ref(`users/${user.uid}/progress/session${sessionNumber}`);
+    const user = await getUserByEmail(email);
+    if (!user) {
+      console.error('User not found');
+      return false;
+    }
+
+    // Parse existing progress
+    const currentProgress = user.progress ? JSON.parse(user.progress) : {};
+    const sessionKey = `session${sessionNumber}`;
     
-    await progressRef.set({
+    // Mark as complete
+    currentProgress[sessionKey] = {
       completed: true,
       completedDate: Date.now(),
       lastAccessed: Date.now()
-    });
+    };
 
-    return true;
+    return await updateUserProgress(user.id, currentProgress);
   } catch (error) {
     console.error('Error marking session complete:', error);
     return false;
@@ -97,21 +215,14 @@ async function markSessionComplete(sessionNumber) {
  * @returns {Promise<Object>} - All progress data
  */
 async function getAllProgress() {
-  if (!window.fbAuth || !window.fbDB) {
-    console.error('Firebase not initialized');
-    return {};
-  }
-
-  const user = window.fbAuth.currentUser;
-  if (!user) {
-    console.error('No user logged in');
-    return {};
-  }
+  const email = getCurrentUserEmail();
+  if (!email) return {};
 
   try {
-    const progressRef = window.fbDB.ref(`users/${user.uid}/progress`);
-    const snapshot = await progressRef.once('value');
-    return snapshot.val() || {};
+    const user = await getUserByEmail(email);
+    if (!user) return {};
+
+    return user.progress ? JSON.parse(user.progress) : {};
   } catch (error) {
     console.error('Error getting all progress:', error);
     return {};
@@ -289,5 +400,7 @@ window.getAllProgress = getAllProgress;
 window.calculateProgressStats = calculateProgressStats;
 window.initializeSessionCompletionUI = initializeSessionCompletionUI;
 window.handleMarkComplete = handleMarkComplete;
+
+console.log('✅ Progress tracking initialized (DynamoDB)');
 
 // Made with Bob
