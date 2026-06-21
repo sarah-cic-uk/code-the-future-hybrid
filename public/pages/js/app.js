@@ -1,16 +1,22 @@
-function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
+async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
   if (localStorage.getItem('loggedIn') === "true") {
     if (loginBtn) loginBtn.style.display = "none";
     if (profileBtn) profileBtn.style.display = "block";
     if (sessionsBtn) sessionsBtn.style.display = "inline-flex";
     const profileName = localStorage.getItem('displayName');
-    document.querySelector('#profileName').innerHTML = profileName;
+    if (document.querySelector('#profileName')) {
+      document.querySelector('#profileName').innerHTML = profileName;
+    }
 
-    // Load profile pictures for all profile-pic-avatar elements
-    if (window.fbAuth && window.fbStorage) {
-      window.fbAuth.onAuthStateChanged(user => {
-        if (user) loadProfilePictures();
-      });
+    // Load profile pictures using Amplify
+    try {
+      const { checkAuth } = await import('./amplify-auth.js');
+      const isAuthenticated = await checkAuth();
+      if (isAuthenticated) {
+        loadProfilePictures();
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
     }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
@@ -59,13 +65,19 @@ function injectSession7Nav() {
   }
 }
 
-function logout(fbAuth) {
-  fbAuth.signOut().then(() => {
-    localStorage.setItem('loggedIn', false);
-    window.location.replace(`${getPath()}pages/login.html`);
-  }).catch((error) => {
+async function logout() {
+  try {
+    const { logout: amplifyLogout } = await import('./amplify-auth.js');
+    await amplifyLogout();
+  } catch (error) {
     console.log("error signing out: ", error.message);
-  });
+    // Fallback: clear local storage and redirect
+    localStorage.setItem('loggedIn', 'false');
+    localStorage.removeItem('userEmail');
+    localStorage.removeItem('displayName');
+    localStorage.removeItem('cohort');
+    window.location.replace(`${getPath()}pages/login.html`);
+  }
 }
 
 function updateSideNav() {
@@ -91,48 +103,69 @@ function updateSideNavOverview() {
   document.getElementsByName(session + '-nav')[0].classList.add("active-top-nav");
 }
 
-async function checkReleaseDates(fbDB) {
-  const cohortsSnapshot = await fbDB.ref("/cohorts").once("value");
-  const allCohorts = cohortsSnapshot.val();
-  const userCohort = Object.values(allCohorts).find(cohort => cohort.code === window.localStorage.cohort);
-  console.log(document.querySelectorAll(".release-date-btn"))
-  console.log(userCohort)
-  if (!userCohort) return;
-  // session buttons
-  for (const btn of document.querySelectorAll(".release-date-btn")) {
-    console.log(btn)
-    const session = btn.name.split('-')[1];
-console.log( userCohort.sessionReleaseDates[session])
-console.log( session)
+async function checkReleaseDates() {
+  try {
+    const { generateClient } = await import('aws-amplify/data');
+    const client = generateClient();
+    
+    const cohortCode = window.localStorage.cohort;
+    if (!cohortCode) return;
+    
+    // Fetch cohort from DynamoDB
+    const { data: cohorts } = await client.models.Cohort.list({
+      filter: {
+        cohortCode: { eq: cohortCode }
+      }
+    });
+    
+    if (!cohorts || cohorts.length === 0) return;
+    const userCohort = cohorts[0];
+    
+    console.log(document.querySelectorAll(".release-date-btn"));
+    console.log(userCohort);
+    // Parse sessionReleaseDates from JSON if needed
+    const releaseDates = typeof userCohort.sessionReleaseDates === 'string'
+      ? JSON.parse(userCohort.sessionReleaseDates)
+      : userCohort.sessionReleaseDates;
+    
+    // session buttons
+    for (const btn of document.querySelectorAll(".release-date-btn")) {
+      console.log(btn);
+      const session = btn.name.split('-')[1];
+      console.log(releaseDates[session]);
+      console.log(session);
 
-    if (Date.now() < userCohort.sessionReleaseDates[session]) {
-      btn.disabled = true;
-      btn.style.float = 'right';
-      btn.title = `Session Opens ${new Date(userCohort.sessionReleaseDates[session]).toLocaleString().split(',')[0]}`;
+      if (releaseDates && Date.now() < releaseDates[session]) {
+        btn.disabled = true;
+        btn.style.float = 'right';
+        btn.title = `Session Opens ${new Date(releaseDates[session]).toLocaleString().split(',')[0]}`;
+      }
     }
-  }
 
-  // sidebar links
-  for (const item of document.querySelectorAll(".nav-item button")) {
-    if (userCohort.sessionReleaseDates && Date.now() < userCohort.sessionReleaseDates[item.name]) {
-      item.disabled = true;
-      item.classList.add('hover-text');
-      document.getElementById(`${item.name}-tooltip`).classList.remove('hidden');
-      document.getElementById(`${item.name}-tooltip`).innerHTML =
-        `Session Opens ${new Date(userCohort.sessionReleaseDates[item.name]).toLocaleString().split(',')[0]}`;
+    // sidebar links
+    for (const item of document.querySelectorAll(".nav-item button")) {
+      if (releaseDates && Date.now() < releaseDates[item.name]) {
+        item.disabled = true;
+        item.classList.add('hover-text');
+        document.getElementById(`${item.name}-tooltip`).classList.remove('hidden');
+        document.getElementById(`${item.name}-tooltip`).innerHTML =
+          `Session Opens ${new Date(releaseDates[item.name]).toLocaleString().split(',')[0]}`;
+      }
     }
-  }
 
-  // navbar links
-  for (const item of document.querySelectorAll(".navbar-nav button")) {
-    const session = item.name.split('-')[0];
-    if (userCohort.sessionReleaseDates && Date.now() < userCohort.sessionReleaseDates[session]) {
-      item.disabled = true;
-      item.classList.add('hover-text');
-      document.getElementById(`${session}-tooltip`).classList.remove('hidden');
-      document.getElementById(`${session}-tooltip`).innerHTML =
-        `Session Opens ${new Date(userCohort.sessionReleaseDates[session]).toLocaleString().split(',')[0]}`;
+    // navbar links
+    for (const item of document.querySelectorAll(".navbar-nav button")) {
+      const session = item.name.split('-')[0];
+      if (releaseDates && Date.now() < releaseDates[session]) {
+        item.disabled = true;
+        item.classList.add('hover-text');
+        document.getElementById(`${session}-tooltip`).classList.remove('hidden');
+        document.getElementById(`${session}-tooltip`).innerHTML =
+          `Session Opens ${new Date(releaseDates[session]).toLocaleString().split(',')[0]}`;
+      }
     }
+  } catch (error) {
+    console.error('Error checking release dates:', error);
   }
 }
 
@@ -144,6 +177,24 @@ function fetchMedia(pathReference, el) {
     .catch((error) => {
       console.error("Error fetching media:", error);
     });
+}
+
+// Fetch media from Amplify Storage (for videos)
+async function fetchMediaFromAmplify(videoName, el) {
+  try {
+    // Import getVideoUrl from amplify-storage module
+    const { getVideoUrl } = await import('./amplify-storage.js');
+    const url = await getVideoUrl(videoName);
+    
+    if (url) {
+      el.setAttribute('src', url);
+      console.log('✅ Video loaded from Amplify:', videoName);
+    } else {
+      console.error('❌ Failed to get video URL from Amplify:', videoName);
+    }
+  } catch (error) {
+    console.error('Error fetching media from Amplify:', error);
+  }
 }
 
 async function sendEmailRequest(to, subject, text, html) {
@@ -166,46 +217,69 @@ async function sendEmailRequest(to, subject, text, html) {
 }
 
 async function loadProfilePictures() {
-  const currentUser = window.fbAuth.currentUser;
-  if (!currentUser) return;
-
-  const profilePicElements = document.querySelectorAll('img[id="profile-pic-avatar"]');
-  const pathReference = window.fbStorage.ref("profilePics/" + currentUser.uid);
-
-  for (const el of profilePicElements) {
-    fetchMedia(pathReference, el);
-  }
-
-  // Check if user is a tutor/teacher and show/hide menu items
   try {
-    const userSnapshot = await window.fbDB.ref(`users/${currentUser.uid}`).once('value');
-    const userData = userSnapshot.val();
+    // Get current user from Cognito
+    const { getCurrentUser } = await import('./amplify-auth.js');
+    const user = await getCurrentUser();
+    if (!user) return;
+
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) return;
+
+    // Load profile picture from Amplify Storage
+    const { getProfilePictureUrl } = await import('./amplify-storage.js');
+    const profilePicElements = document.querySelectorAll('img[id="profile-pic-avatar"]');
     
-    // Show tutor menu item for tutors (course creators)
-    const tutorMenuItem = document.getElementById('tutor-menu-item');
-    if (tutorMenuItem && userData && userData.tutor) {
-      tutorMenuItem.style.display = 'block';
+    // Use email as user ID for profile pictures
+    const profilePicUrl = await getProfilePictureUrl(userEmail);
+    
+    if (profilePicUrl) {
+      for (const el of profilePicElements) {
+        el.setAttribute('src', profilePicUrl);
+      }
     }
 
-    // Show teacher menu item for teachers (school teachers)
-    const teacherMenuItem = document.getElementById('teacher-menu-item');
-    if (teacherMenuItem && userData && userData.teacher) {
-      teacherMenuItem.style.display = 'block';
-    }
+    // Check if user is a tutor/teacher and show/hide menu items
+    const { generateClient } = await import('aws-amplify/data');
+    const client = generateClient();
+    
+    const { data: users } = await client.models.User.list({
+      filter: {
+        email: { eq: userEmail }
+      }
+    });
+    
+    if (users && users.length > 0) {
+      const userData = users[0];
+      
+      // Show tutor menu item for tutors (course creators)
+      const tutorMenuItem = document.getElementById('tutor-menu-item');
+      if (tutorMenuItem && userData.isTutor) {
+        tutorMenuItem.style.display = 'block';
+      }
 
-    // Show admin menu item for tutors (course creators have admin access)
-    const adminMenuItem = document.getElementById('admin-menu-item');
-    if (adminMenuItem && userData && userData.tutor) {
-      adminMenuItem.style.display = 'block';
-    }
+      // Show teacher menu item for teachers (school teachers)
+      const teacherMenuItem = document.getElementById('teacher-menu-item');
+      if (teacherMenuItem && userData.isTeacher) {
+        teacherMenuItem.style.display = 'block';
+      }
 
-    // Ensure cohort data is in localStorage
-    if (!localStorage.getItem('cohort') && userData && userData.cohort) {
-      localStorage.setItem('cohort', userData.cohort);
-      localStorage.setItem('displayName', userData.displayName);
+      // Show admin menu item for tutors (course creators have admin access)
+      const adminMenuItem = document.getElementById('admin-menu-item');
+      if (adminMenuItem && userData.isTutor) {
+        adminMenuItem.style.display = 'block';
+      }
+
+      // Ensure cohort data is in localStorage
+      if (!localStorage.getItem('cohort') && userData.cohortId) {
+        localStorage.setItem('cohort', userData.cohortId);
+      }
+      if (!localStorage.getItem('displayName') && userData.displayName) {
+        localStorage.setItem('displayName', userData.displayName);
+      }
     }
   } catch (error) {
-    console.error('Error checking user status:', error);
+    console.error('Error loading profile:', error);
   }
 }
 

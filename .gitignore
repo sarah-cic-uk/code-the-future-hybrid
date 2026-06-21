@@ -40,3 +40,17 @@ yarn-error.log*
 # OS files
 .DS_Store
 Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+*~
+*.swp
+*.swo
+*.orig
+
+# Migration and temporary files
+migration-scripts/exported-data/
+migration-scripts/transformed-data/
+/tmp/
+*.tmp

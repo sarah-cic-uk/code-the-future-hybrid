@@ -154,9 +154,9 @@
             auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
 
-            const pathReference = window.fbStorage.ref('media/introGit.mp4');
-            const el = document.getElementById('session-video');
-            fetchMedia(pathReference, el)
+            // Load video from Amplify Storage
+      const el = document.getElementById('session-video');
+      fetchMediaFromAmplify('introGit.mp4', el);
 
             document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/haseeb.png';
             updateSideNav()

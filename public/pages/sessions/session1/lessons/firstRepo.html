@@ -151,9 +151,9 @@
             auth(null, document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"))
 
 
-            const pathReference = window.fbStorage.ref('media/firstRepo.mp4');
+            // Load video from Amplify Storage
             const el = document.getElementById('session-video');
-            fetchMedia(pathReference, el)
+            fetchMediaFromAmplify('firstRepo.mp4', el);
 
             document.getElementById('tutor-avatar').src = getPath() + 'images/tutorAvatars/sarah.png';
             updateSideNav()

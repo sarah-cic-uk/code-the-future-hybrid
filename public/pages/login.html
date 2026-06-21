@@ -13,6 +13,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../styles/mainStyle.css" />
 
   <!-- Amplify Import Map -->
   <script type="importmap">
@@ -26,7 +27,24 @@
     }
   </script>
   <script type="module" src="./js/amplify-init.js"></script>
-  <script type="module" src="./js/amplify-auth.js"></script>
+  
+  <!-- Import and expose Amplify auth functions -->
+  <script type="module">
+    import { validateCohortCode, register, login, logout, requestPasswordReset, confirmPasswordReset } from './js/amplify-auth.js';
+    
+    // Expose to window for use in inline scripts
+    window.amplifyValidateCohort = validateCohortCode;
+    window.amplifyRegister = register;
+    window.amplifyLogin = login;
+    window.amplifyLogout = logout;
+    window.amplifyResetPassword = requestPasswordReset;
+    window.amplifyConfirmResetPassword = confirmPasswordReset;
+    
+    // Set ready flag
+    window.amplifyAuthReady = true;
+    
+    console.log('✅ Amplify auth functions loaded');
+  </script>
 
   <script type="text/javascript" src="./js/app.js"></script>
   <!-- Keep Firebase for backward compatibility during migration -->
@@ -144,7 +162,7 @@
                         </h4>
                       </div>
 
-                      <form id="loginForm" onsubmit="login(window.fbAuth)">
+                      <form id="loginForm" onsubmit="handleLogin(event)">
                         <div class="mb-3">
                           <label for="username" class="form-label">Username</label>
                           <div class="input-group">
@@ -332,9 +350,12 @@
   </div>
 
   <script defer type="module">
-    import { fbAuth, fbDB } from './js/firebase.js';
-    window.fbAuth = fbAuth;
-    window.fbDB = fbDB;
+    // Import Amplify auth functions
+    import { login, register, validateCohortCode, requestPasswordReset } from './js/amplify-auth.js';
+    window.amplifyLogin = login;
+    window.amplifyRegister = register;
+    window.amplifyValidateCohort = validateCohortCode;
+    window.amplifyResetPassword = requestPasswordReset;
   </script>
 
   <script defer type="text/javascript">
@@ -357,8 +378,9 @@
       return false;
     }
 
-    function logUserOut(event) {
-      logout(window.fbAuth);
+    async function logUserOut(event) {
+      const { logout } = await import('./js/amplify-auth.js');
+      await logout();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -506,119 +528,133 @@
       await registerNewUser(email, password, displayName, cohortCode);
     }
 
+    // Register new user with Cognito
     async function registerNewUser(email, password, displayName, cohortCode) {
       try {
-        const validCode = await validateCohortCode(cohortCode);
         const alertContainer = document.querySelector('#alert');
-        if (!validCode) {
+        
+        // Use Amplify register function (includes cohort validation)
+        const result = await window.amplifyRegister(email, password, displayName, cohortCode);
+        
+        if (!result.success) {
           const alertHTML = `
             <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display:block">
-              <div> The cohort code is invalid. Please check with your Code the Future coordinator. </div>
+              <div>${result.error}</div>
               <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>`;
           alertContainer.insertAdjacentHTML('beforeend', alertHTML);
           return;
         }
 
-        const userCredential =
-          await window.fbAuth.createUserWithEmailAndPassword(email, password);
-        const user = userCredential.user;
+        // Check if email confirmation is needed
+        if (result.needsConfirmation) {
+          const alertHTML = `
+            <div class="alert alert-info alert-dismissible fade show" role="alert" style="display:block">
+              <div>Registration successful! Please check your email for a confirmation code.</div>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
+          alertContainer.insertAdjacentHTML('beforeend', alertHTML);
+          
+          // Close modal after 3 seconds
+          setTimeout(() => {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
+            modal.hide();
+          }, 3000);
+          return;
+        }
 
-        await user.sendEmailVerification();
-
-        await user.updateProfile({ displayName });
-
-        await addUserToDatabase(user, cohortCode);
-
-        localStorage.setItem('loggedIn', true);
-        localStorage.setItem('displayName', displayName);
-
-        window.location.replace('./sessions.html');
+        // Registration successful and auto-logged in
+        if (result.autoLoggedIn) {
+          window.location.replace('./sessions.html');
+        } else {
+          // Registration successful, redirect to login
+          const alertHTML = `
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="display:block">
+              <div>Registration successful! Please log in.</div>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`;
+          document.querySelector('.gradient-form').insertAdjacentHTML('afterbegin', alertHTML);
+          
+          const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
+          modal.hide();
+        }
       } catch (error) {
         console.error('Error during registration:', error);
         alert('Registration failed: ' + error.message);
       }
     }
 
+    // Validate cohort code using Amplify
     async function validateCohortCode(cohortCode) {
-      const possibleCodes = await window.fbDB.ref('cohorts/').once('value');
-      const possibleCodes1 = possibleCodes.val();
-      const codesArray = Object.values(possibleCodes1);
-      return codesArray.find((obj) => obj.code === cohortCode);
-    }
-
-    async function addUserToDatabase(user, cohortId) {
-      const userData = {
-        displayName: user.displayName,
-        email: user.email,
-        cohort: cohortId,
-      };
-      
-      if (cohortId === 'cTfTut0rCod3!1') {   //tutor code is here if it ever needs updating! move to firebase so its more secure at some point
-        userData.tutor = true;
+      // Wait for Amplify to be ready
+      let attempts = 0;
+      while (!window.amplifyValidateCohort && attempts < 50) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        attempts++;
       }
       
-      await window.fbDB.ref('users/' + user.uid).set(userData);
+      if (!window.amplifyValidateCohort) {
+        console.error('Amplify auth functions not loaded');
+        alert('Authentication system not ready. Please refresh the page.');
+        return null;
+      }
+      
+      const result = await window.amplifyValidateCohort(cohortCode);
+      return result.valid ? result.cohort : null;
     }
 
-    function login(fbAuth) {
+    // Login with Cognito
+    async function handleLogin(event) {
       event.preventDefault();
       const email = document.getElementById('username').value;
       const password = document.getElementById('password').value;
 
-      window.fbAuth
-        .signInWithEmailAndPassword(email, password)
-        .then(async (userCredential) => {
-          localStorage.setItem('loggedIn', true);
-          const user = window.fbAuth.currentUser.uid;
-          const profileData = await window.fbDB
-            .ref('users/' + user)
-            .once('value');
-
-          localStorage.setItem(
-            'displayName',
-            profileData.val()['displayName']
-          );
-          localStorage.setItem(
-            'cohort',
-            profileData.val()['cohort']
-          );
+      try {
+        const result = await window.amplifyLogin(email, password);
+        
+        if (result.success) {
           window.location.replace('./sessions.html');
-        })
-        .catch((error) => {
-          console.error('Log in error:', error.message);
-        });
+        } else {
+          alert('Login failed: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Log in error:', error);
+        alert('Login failed: ' + error.message);
+      }
     }
 
-
+    // Reset password with Cognito
     async function resetPassword(email) {
       const notification = document.getElementById("passwordResetNotification");
 
       try {
-        await window.fbAuth.sendPasswordResetEmail(email);
+        const result = await window.amplifyResetPassword(email);
 
-        notification.style.display = "block";
-        notification.classList.add("alert-success");
-        notification.classList.remove("alert-danger");
-        notification.innerHTML = `
-          Password reset email sent successfully. Please check your email.
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
+        if (result.success) {
+          notification.style.display = "block";
+          notification.classList.add("alert-success");
+          notification.classList.remove("alert-danger");
+          notification.innerHTML = `
+            Password reset code sent successfully. Please check your email.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          `;
 
-        setTimeout(() => {
-          const modal = bootstrap.Modal.getInstance(document.getElementById('passwordResetModal'));
-          modal.hide();
-          notification.style.display = "none";
-        }, 3000);
-
+          setTimeout(() => {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('passwordResetModal'));
+            modal.hide();
+            notification.style.display = "none";
+          }, 3000);
+        } else {
+          throw new Error(result.error);
+        }
       } catch (error) {
-        console.error("Error sending password reset email:", error);
+        console.error("Error sending password reset:", error);
 
         notification.style.display = "block";
         notification.classList.add("alert-danger");
         notification.classList.remove("alert-success");
         notification.innerHTML = `
-          Error sending password reset email: ${error.message}
+          Error sending password reset: ${error.message}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         `;
       }

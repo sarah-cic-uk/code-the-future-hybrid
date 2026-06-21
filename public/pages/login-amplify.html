@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Code the Future - Login</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../styles/mainStyle.css" />
+
+  <!-- Amplify Import Map -->
+  <script type="importmap">
+    {
+      "imports": {
+        "aws-amplify": "https://cdn.jsdelivr.net/npm/aws-amplify@6/dist/esm/index.mjs",
+        "aws-amplify/auth": "https://cdn.jsdelivr.net/npm/aws-amplify@6/dist/esm/auth/index.mjs",
+        "aws-amplify/data": "https://cdn.jsdelivr.net/npm/aws-amplify@6/dist/esm/data/index.mjs"
+      }
+    }
+  </script>
+  
+  <!-- Initialize Amplify inline -->
+  <script type="module">
+    import { Amplify } from 'aws-amplify';
+    import { signIn, signUp, getCurrentUser, resetPassword } from 'aws-amplify/auth';
+    import { generateClient } from 'aws-amplify/data';
+    
+    // Load config
+    const response = await fetch('/amplify_outputs.json');
+    const outputs = await response.json();
+    Amplify.configure(outputs);
+    const client = generateClient();
+    console.log('✅ Amplify ready');
+    
+    // Expose functions
+    window.amplifyValidateCohort = async (code) => {
+      const { data } = await client.models.Cohort.list({ filter: { cohortCode: { eq: code } } });
+      return data?.length > 0 ? { valid: true, cohort: data[0] } : { valid: false };
+    };
+    
+    window.amplifyRegister = async (email, password, name, code) => {
+      const cohort = await window.amplifyValidateCohort(code);
+      if (!cohort.valid) return { success: false, error: 'Invalid cohort code' };
+      
+      const { userId } = await signUp({
+        username: email,
+        password,
+        options: { userAttributes: { email, name } }
+      });
+      
+      await client.models.User.create({
+        email, displayName: name, cohortId: cohort.cohort.id,
+        isTeacher: false, isTutor: code === 'cTfTut0rCod3!1'
+      });
+      
+      return { success: true, userId };
+    };
+    
+    window.amplifyLogin = async (email, password) => {
+      await signIn({ username: email, password });
+      const user = await getCurrentUser();
+      const { data } = await client.models.User.list({ filter: { email: { eq: email } } });
+      
+      if (data?.[0]) {
+        localStorage.setItem('loggedIn', 'true');
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('displayName', data[0].displayName);
+        if (data[0].isTutor) localStorage.setItem('isTutor', 'true');
+      }
+      
+      return { success: true };
+    };
+    
+    window.amplifyResetPassword = async (email) => {
+      await resetPassword({ username: email });
+      return { success: true };
+    };
+    
+    console.log('✅ Auth functions loaded');
+  </script>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <h2>Login</h2>
+        <form onsubmit="handleLogin(event)">
+          <div class="mb-3">
+            <input type="email" class="form-control" id="username" placeholder="Email" required>
+          </div>
+          <div class="mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Login</button>
+          <button type="button" class="btn btn-link" onclick="showRegister()">Register</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Wait for Amplify to load
+    async function waitForAmplify() {
+      let attempts = 0;
+      while (!window.amplifyLogin && attempts < 100) {
+        await new Promise(r => setTimeout(r, 50));
+        attempts++;
+      }
+      if (!window.amplifyLogin) {
+        alert('Amplify not loaded. Please refresh the page.');
+        return false;
+      }
+      return true;
+    }
+    
+    async function handleLogin(e) {
+      e.preventDefault();
+      if (!(await waitForAmplify())) return;
+      
+      const email = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        const result = await window.amplifyLogin(email, password);
+        if (result.success) {
+          window.location.href = './sessions.html';
+        }
+      } catch (error) {
+        alert('Login failed: ' + error.message);
+      }
+    }
+    
+    async function showRegister() {
+      if (!(await waitForAmplify())) return;
+      
+      const code = prompt('Enter cohort code:');
+      if (!code) return;
+      
+      const email = prompt('Enter email:');
+      const password = prompt('Enter password (min 8 chars):');
+      const name = prompt('Enter your name:');
+      
+      try {
+        const result = await window.amplifyRegister(email, password, name, code);
+        if (result.success) {
+          alert('Registration successful! Check your email for verification code.');
+        } else {
+          alert('Registration failed: ' + result.error);
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+  </script>
+</body>
+</html>

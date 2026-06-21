@@ -274,6 +274,48 @@ export async function listPublicFiles() {
 }
 
 // ============================================
+// VIDEO/MEDIA OPERATIONS
+// ============================================
+
+export async function uploadVideo(videoName, file) {
+  try {
+    const result = await uploadData({
+      path: `media/${videoName}`,
+      data: file,
+      options: {
+        contentType: file.type || 'video/mp4'
+      }
+    }).result;
+    
+    console.log('Video upload successful:', result);
+    return { success: true, path: result.path };
+  } catch (error) {
+    console.error('Video upload error:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function getVideoUrl(videoName) {
+  try {
+    const result = await getUrl({
+      path: `media/${videoName}`,
+      options: {
+        validateObjectExistence: false,
+        expiresIn: 3600 // URL expires in 1 hour
+      }
+    });
+    return result.url.toString();
+  } catch (error) {
+    console.error('Get video URL error:', error);
+    return null;
+  }
+}
+
+export async function listVideos() {
+  return await listFiles('media/');
+}
+
+// ============================================
 // GENERIC OPERATIONS
 // ============================================
 
@@ -334,6 +376,10 @@ if (typeof window !== 'undefined') {
     // Job category images
     uploadJobCategoryImage,
     getJobCategoryImageUrl,
+    // Videos/Media
+    uploadVideo,
+    getVideoUrl,
+    listVideos,
     // Public files
     uploadPublicFile,
     getPublicFileUrl,

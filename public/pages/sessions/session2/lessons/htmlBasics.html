@@ -156,9 +156,9 @@
         document.querySelector("#sessionsLink")
       );
 
-      const pathReference = window.fbStorage.ref("media/htmlBasics.mp4");
+      // Load video from Amplify Storage
       const el = document.getElementById("session-video");
-      fetchMedia(pathReference, el);
+      fetchMediaFromAmplify('htmlBasics.mp4', el);
 
       document.getElementById("tutor-avatar").src =
         getPath() + "images/tutorAvatars/bells.jpg";
