@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Video Test</title>
+</head>
+<body>
+    <h1>Direct S3 URL Test</h1>
+    <div id="status">Testing...</div>
+    <br>
+    <video id="video" controls width="640" height="360">
+        <source id="source" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <script>
+        // Get bucket name from amplify_outputs.json
+        fetch('/amplify_outputs.json')
+            .then(r => r.json())
+            .then(config => {
+                const bucket = config.storage.bucket_name;
+                const region = config.storage.aws_region;
+                
+                // Try direct S3 URL (if bucket is public)
+                const directUrl = `https://${bucket}.s3.${region}.amazonaws.com/public/media/firstRepo.mp4`;
+                
+                document.getElementById('status').innerHTML = `
+                    Bucket: ${bucket}<br>
+                    Region: ${region}<br>
+                    URL: <a href="${directUrl}" target="_blank">${directUrl}</a><br>
+                    <br>
+                    Click the URL above to test if it's accessible.
+                `;
+                
+                // Try to load it
+                const source = document.getElementById('source');
+                source.src = directUrl;
+                document.getElementById('video').load();
+                
+                document.getElementById('video').addEventListener('error', (e) => {
+                    document.getElementById('status').innerHTML += '<br><br>❌ Video error: ' + e.target.error.message;
+                });
+                
+                document.getElementById('video').addEventListener('loadeddata', () => {
+                    document.getElementById('status').innerHTML += '<br><br>✅ Video loaded successfully!';
+                });
+            });
+    </script>
+</body>
+</html>

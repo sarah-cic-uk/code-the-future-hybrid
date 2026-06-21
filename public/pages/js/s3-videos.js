@@ -1,13 +1,12 @@
 /**
- * S3 Video Loading using AWS SDK
- * Simple, reliable approach without ES modules
+ * S3 Video Loading - Direct Public URLs
+ * Now that bucket is public, we use direct URLs (faster, simpler)
  */
 
-// Global S3 client
-let s3Client = null;
+// Global S3 config
 let s3Config = null;
 
-// Initialize S3 from amplify_outputs.json
+// Initialize S3 config from amplify_outputs.json
 async function initS3() {
   try {
     const response = await fetch('/amplify_outputs.json');
@@ -18,45 +17,27 @@ async function initS3() {
       region: config.storage.aws_region
     };
     
-    // Configure AWS SDK
-    AWS.config.region = s3Config.region;
-    
-    // Use Cognito Identity for unauthenticated access
-    AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-      IdentityPoolId: config.auth.identity_pool_id
-    });
-    
-    s3Client = new AWS.S3({
-      region: s3Config.region,
-      params: { Bucket: s3Config.bucket }
-    });
-    
-    console.log('✅ S3 client initialized');
+    console.log('✅ S3 config loaded');
     return true;
   } catch (error) {
-    console.error('Failed to initialize S3:', error);
+    console.error('Failed to load S3 config:', error);
     return false;
   }
 }
 
 /**
- * Get signed URL for a video
+ * Get direct public URL for a video
  * @param {string} videoName - Name of video file (e.g., 'intro-git.mp4')
- * @returns {Promise<string>} - Signed URL
+ * @returns {Promise<string>} - Direct S3 URL
  */
 async function getVideoUrl(videoName) {
-  if (!s3Client) {
+  if (!s3Config) {
     await initS3();
   }
   
   try {
-    const params = {
-      Bucket: s3Config.bucket,
-      Key: `public/media/${videoName}`,
-      Expires: 3600 // 1 hour
-    };
-    
-    const url = s3Client.getSignedUrl('getObject', params);
+    // Direct public URL (bucket is now public)
+    const url = `https://${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com/public/media/${videoName}`;
     return url;
   } catch (error) {
     console.error('Error getting video URL:', error);
@@ -90,12 +71,8 @@ async function fetchMediaFromS3(videoName, element) {
   await loadVideo(videoName, element);
 }
 
-// Initialize on page load
-if (typeof AWS !== 'undefined') {
-  initS3();
-} else {
-  console.error('AWS SDK not loaded. Include: <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>');
-}
+// Initialize on page load (no AWS SDK needed for direct URLs)
+initS3();
 
 // Expose to window for use in HTML pages
 window.fetchMediaFromS3 = fetchMediaFromS3;

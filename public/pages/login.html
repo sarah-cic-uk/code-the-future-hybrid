@@ -1,685 +1,195 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
-  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
-
-  <title>Code the Future</title>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
-  <link rel="stylesheet" href="../styles/mainStyle.css" />
-
-  <!-- Amplify Import Map -->
-  <script type="importmap">
-    {
-      "imports": {
-        "aws-amplify": "https://cdn.jsdelivr.net/npm/aws-amplify@6/dist/esm/index.mjs",
-        "aws-amplify/auth": "https://cdn.jsdelivr.net/npm/aws-amplify@6/dist/esm/auth/index.mjs",
-        "aws-amplify/data": "https://cdn.jsdelivr.net/npm/aws-amplify@6/dist/esm/data/index.mjs",
-        "aws-amplify/storage": "https://cdn.jsdelivr.net/npm/aws-amplify@6/dist/esm/storage/index.mjs"
-      }
-    }
-  </script>
-  <script type="module" src="./js/amplify-init.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code the Future - Login</title>
   
-  <!-- Import and expose Amplify auth functions -->
-  <script type="module">
-    import { validateCohortCode, register, login, logout, requestPasswordReset, confirmPasswordReset } from './js/amplify-auth.js';
-    
-    // Expose to window for use in inline scripts
-    window.amplifyValidateCohort = validateCohortCode;
-    window.amplifyRegister = register;
-    window.amplifyLogin = login;
-    window.amplifyLogout = logout;
-    window.amplifyResetPassword = requestPasswordReset;
-    window.amplifyConfirmResetPassword = confirmPasswordReset;
-    
-    // Set ready flag
-    window.amplifyAuthReady = true;
-    
-    console.log('✅ Amplify auth functions loaded');
-  </script>
-
-  <script type="text/javascript" src="./js/app.js"></script>
-  <!-- Keep Firebase for backward compatibility during migration -->
-  <script type="module" src="./js/firebase.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/mainStyle.css">
+  
+  <!-- AWS SDK for Cognito -->
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
+  
   <style>
-    .form-label {
-      margin-bottom: 0 !important;
+    .auth-container {
+      max-width: 500px;
+      margin: 50px auto;
+      padding: 30px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      border-radius: 8px;
     }
-
-    .input-group .form-control {
-      flex: 1;
-      min-width: 0;
-      padding-right: 2rem;
-    }
-
-    span.input-group-text.fixCorners {
-      border-top-right-radius: 0.375rem !important;
-      border-bottom-right-radius: 0.375rem !important;
-    }
-
-    .input-group-text {
-      cursor: pointer;
-      width: 2.5rem;
-      text-align: center;
-      flex-shrink: 0;
-    }
-
-    .is-valid,
-    .is-invalid {
-      padding-right: 2.5rem;
-    }
-
-    .is-valid {
-      border-color: green !important;
-    }
-
-    .is-invalid {
-      border-color: #da1e28 !important;
-    }
-
-    .invalid-feedback {
-      display: none;
-      color: #da1e28;
-      font-size: 0.75rem;
-    }
-
-    #message {
-      margin-top: 0.5rem;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      font-size: 0.85rem;
-      color: #6c757d;
-    }
-
-    .valid:before {
-      position: relative;
-      left: 0;
-      content: '\2713';
-    }
-
-    .valid {
-      color: green;
-    }
-
-    .invalid {
-      color: #da1e28;
-    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .nav-tabs { margin-bottom: 20px; }
   </style>
 </head>
-
 <body>
-  <div class="page-body">
-    <nav class="navbar navbar-expand-lg bg-light">
-      <div class="container-fluid g-0">
-        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
-							border-right: 2px solid #d9437a;
-							padding-right: 10px;
-							color: #1d0c59;
-						">
-          <img src="../images/logo.png" height="60px" alt="CTF" />
-        </a>
-
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav nav-justified">
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('index.html')">About CTF</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the
-              tutors</a>
-            <a class="nav-link" aria-current="page" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
-            <a class="nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
-            <a class="nav-link" href="#" onclick="createPath('pages/faq.html')">FAQ</a>
-          </div>
-        </div>
+  <div class="container">
+    <div class="auth-container">
+      <div class="text-center mb-4">
+        <img src="../images/logo.png" alt="Code the Future" style="max-width: 200px;">
+        <h2 class="mt-3">Welcome</h2>
       </div>
-    </nav>
-
-    <div class="container-fluid">
-      <div class="row flex-nowrap page-content">
-        <section class="gradient-form">
-          <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="px-0">
-              <div class="text-black">
-                <div class="row g-0" style="height: calc(100vh - 70px)">
-                  <div class="col-lg-6">
-                    <div class="p-md-5 mx-md-4">
-                      <div class="text-center">
-                        <img src="../images/logo.png" style="width: 285px" alt="logo" />
-                        <h4 class="mt-4 mb-5 pb-1">
-                          Log in to access your learning
-                        </h4>
-                      </div>
-
-                      <form id="loginForm" onsubmit="handleLogin(event)">
-                        <div class="mb-3">
-                          <label for="username" class="form-label">Username</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
-                            <input class="form-control" type="email" id="username" name="username"
-                              autocomplete="username" placeholder="Registered email address" required />
-                          </div>
-                        </div>
-
-                        <div class="mb-3">
-                          <label for="password" class="form-label">Password</label>
-                          <div class="input-group">
-                            <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                            <input class="form-control" type="password" id="password" name="password"
-                              autocomplete="current-password" required />
-                            <span class="input-group-text fixCorners" onclick="togglePassword('password')">
-                              <i class="bi bi-eye-slash toggle-password"></i>
-                            </span>
-                          </div>
-                        </div>
-
-                        <div class="text-center pt-1 mb-1">
-                          <button type="submit" class="btn primary">
-                            Log in
-                          </button>
-                        </div>
-                      </form>
-
-                      <div class="text-center mb-5 pb-1">
-                        <a class="nav-link pt-2" data-bs-toggle="modal" data-bs-target="#passwordResetModal"
-                          title="Forgot password?" style="cursor:pointer">Forgot password?</a>
-                      </div>
-
-                      <div class="d-flex align-items-center justify-content-center pb-4">
-                        <p class="mb-0 me-2">Don't have an account?</p>
-                        <button type="button" class="btn btn-register" data-bs-toggle="modal"
-                          data-bs-target="#registrationModal">
-                          Register
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                    <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                      <h4 class="mb-4">Log in to access your learning</h4>
-                      <p class="small mb-0" style="width: 400px">
-                        Access to your cohorts sessions, view the course
-                        timetable and book 1:1s with tutors.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+      
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" onclick="showTab('login')">Sign In</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" onclick="showTab('register')">Register</a>
+        </li>
+      </ul>
+      
+      <!-- Login Tab -->
+      <div id="login-tab" class="tab-content active">
+        <form onsubmit="handleLogin(event)">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="login-email" required>
           </div>
-        </section>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" id="login-password" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Sign In</button>
+        </form>
+        <div id="login-message" class="mt-3"></div>
       </div>
-    </div>
-
-    <div class="modal fade" id="registrationModal" tabindex="-1" aria-labelledby="registrationModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold">
-              Code the Future - Sign up
-            </h4>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      
+      <!-- Register Tab -->
+      <div id="register-tab" class="tab-content">
+        <form onsubmit="handleRegister(event)">
+          <div class="mb-3">
+            <label class="form-label">Cohort Code</label>
+            <input type="text" class="form-control" id="reg-cohort" required placeholder="e.g., TEST2024">
+            <small class="text-muted">Get this from your coordinator</small>
           </div>
-          <div class="modal-body">
-            <form id="registrationForm" onsubmit="validateAndRegister(event)" novalidate>
-              <div class="mb-3">
-                <label for="displayName" class="form-label">Display name <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" id="displayName" required />
-                <div class="invalid-feedback">Display name is required.</div>
-              </div>
-
-              <div class="mb-3">
-                <label for="newEmail" class="form-label">Email <span class="text-danger">*</span></label>
-                <input class="form-control" type="email" id="newEmail" required />
-                <div class="invalid-feedback">Valid email is required.</div>
-              </div>
-
-              <div class="mb-3">
-                <label for="newPassword" class="form-label">Password <span class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input class="form-control" type="password" id="newPassword" oninput="validatePassword()"
-                    autocomplete="new-password" required />
-                  <span class="input-group-text fixCorners" onclick="togglePassword('newPassword')">
-                    <i class="bi bi-eye-slash toggle-password"></i>
-                  </span>
-                  <div class="invalid-feedback">
-                    Password is required and must meet the criteria.
-                  </div>
-                </div>
-                <div id="message" class="alert alert-info">
-                  Password must include
-                  <span id="length" class="invalid">8+ characters</span>,
-                  <span id="capital" class="invalid">uppercase</span>,
-                  <span id="letter" class="invalid">lowercase</span>,
-                  <span id="number" class="invalid">number</span>, and
-                  <span id="character" class="invalid">special character</span>.
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm password <span
-                    class="text-danger">*</span></label>
-                <div class="input-group">
-                  <input class="form-control" type="password" id="confirmPassword" oninput="validateConfirmPassword()"
-                    autocomplete="new-password" required />
-                  <span class="input-group-text fixCorners" onclick="togglePassword('confirmPassword')">
-                    <i class="bi bi-eye-slash toggle-password"></i>
-                  </span>
-                  <div class="invalid-feedback">Passwords must match.</div>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label for="cohortCode" class="form-label">Cohort access code
-                  <span class="text-danger">*</span></label>
-                <input class="form-control" type="text" id="cohortCode" required />
-                <div id="cohortCodeCheck" class="invalid-feedback">
-                  Invalid cohort code.
-                </div>
-              </div>
-
-              <div id="alert"></div>
-
-              <div class="form-group py-4 text-center">
-                <button type="submit" class="btn primary" id="btnLogin">
-                  Sign up
-                </button>
-              </div>
-
-              <div class="float-end mb-3" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-                aria-expanded="false" aria-controls="collapseExample">
-                <a class="small" style="cursor: pointer">
-                  View data privacy information<i class="bi bi-shield-exclamation ms-1" style="color: #1d0c59"></i>
-                </a>
-              </div>
-
-              <div class="collapse" id="collapseExample" style="clear: both">
-                <div class="data-privacy-message alert alert-warning">
-                  Your data will not be shared within IBM or with any external
-                  companies. Any information stored will be removed after 5
-                  years of user inactivity.
-                </div>
-              </div>
-            </form>
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="reg-name" required>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="passwordResetModal" tabindex="-1" aria-labelledby="passwordResetModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h4 class="modal-title w-100 font-weight-bold">Password reset</h4>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="reg-email" required>
           </div>
-
-          <div class="modal-body">
-            <form id="passwordResetForm" novalidate>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                <input class="form-control" type="email" id="email" required />
-                <div class="invalid-feedback">Please enter a valid email address.</div>
-              </div>
-
-              <div id="passwordResetNotification" class="alert alert-success alert-dismissible fade show" role="alert"
-                style="display:none;"></div>
-
-              <div class="form-group py-4 text-center">
-                <button type="submit" class="btn primary" id="passwordResetBtn">
-                  Reset password
-                </button>
-              </div>
-            </form>
+          <div class="mb-3">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" id="reg-password" required minlength="8">
+            <small class="text-muted">Minimum 8 characters</small>
           </div>
-        </div>
+          <button type="submit" class="btn btn-primary w-100">Create Account</button>
+        </form>
+        <div id="register-message" class="mt-3"></div>
       </div>
     </div>
   </div>
 
-  <script defer type="module">
-    // Import Amplify auth functions
-    import { login, register, validateCohortCode, requestPasswordReset } from './js/amplify-auth.js';
-    window.amplifyLogin = login;
-    window.amplifyRegister = register;
-    window.amplifyValidateCohort = validateCohortCode;
-    window.amplifyResetPassword = requestPasswordReset;
-  </script>
-
-  <script defer type="text/javascript">
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.type = 'text/css';
-    stylesheet.href = getPath() + 'styles/mainStyle.css';
-    document.head.appendChild(stylesheet);
-
-    window.onload = (event) => {
-      auth(
-        document.querySelector('.loginBtn'),
-        document.querySelector('.profileBtn'),
-        document.querySelector('#sessionsLink')
-      );
-    };
-
-    function createPath(options) {
-      window.location = getPath() + options;
-      return false;
-    }
-
-    async function logUserOut(event) {
-      const { logout } = await import('./js/amplify-auth.js');
-      await logout();
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const fields = [
-        'displayName',
-        'newEmail',
-        'newPassword',
-        'confirmPassword',
-        'cohortCode',
-      ];
-      fields.forEach((fieldId) => {
-        const field = document.getElementById(fieldId);
-        field.addEventListener('input', () => validateField(field));
+  <script>
+    let config = null;
+    let cognitoIdentityServiceProvider = null;
+    
+    // Load configuration
+    fetch('/amplify_outputs.json')
+      .then(r => r.json())
+      .then(data => {
+        config = data;
+        AWS.config.region = config.auth.aws_region;
+        cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider({
+          region: config.auth.aws_region
+        });
+        console.log('✅ AWS SDK configured');
+      })
+      .catch(err => {
+        console.error('Failed to load config:', err);
+        alert('Failed to load configuration. Please refresh.');
       });
-
-      document
-        .getElementById('newPassword')
-        .addEventListener('input', validatePassword);
-      document
-        .getElementById('confirmPassword')
-        .addEventListener('input', validateConfirmPassword);
-      document
-        .getElementById('confirmPassword')
-        .addEventListener('paste', (e) => e.preventDefault());
-    });
-
-    function validateField(field) {
-      const feedback = field.nextElementSibling;
-
-      if (field.checkValidity()) {
-        field.classList.add('is-valid');
-        field.classList.remove('is-invalid');
-        if (feedback && feedback.classList.contains('invalid-feedback')) {
-          feedback.style.display = 'none';
-        }
-      } else {
-        field.classList.add('is-invalid');
-        field.classList.remove('is-valid');
-        if (feedback && feedback.classList.contains('invalid-feedback')) {
-          feedback.style.display = 'block';
-        }
-      }
+    
+    function showTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+      document.getElementById(tab + '-tab').classList.add('active');
+      event.target.classList.add('active');
     }
-
-    function togglePassword(fieldId) {
-      const field = document.getElementById(fieldId);
-      const icon = field.nextElementSibling.querySelector('i');
-
-      field.type = field.type === 'password' ? 'text' : 'password';
-      icon.classList.toggle('bi-eye');
-      icon.classList.toggle('bi-eye-slash');
+    
+    function showMessage(elementId, message, isError = false) {
+      const el = document.getElementById(elementId);
+      el.innerHTML = `<div class="alert alert-${isError ? 'danger' : 'success'}">${message}</div>`;
     }
-
-    function validatePassword() {
-      const password = document.getElementById('newPassword');
-      const criteria = {
-        length: password.value.length >= 8,
-        letter: /[a-z]/.test(password.value),
-        capital: /[A-Z]/.test(password.value),
-        number: /[0-9]/.test(password.value),
-        character: /[!@#$%^&*(),.?":{}|<>]/.test(password.value),
-      };
-
-      for (const [key, isValid] of Object.entries(criteria)) {
-        const element = document.getElementById(key);
-        element.classList.toggle('valid', isValid);
-        element.classList.toggle('invalid', !isValid);
-      }
-
-      const allValid = Object.values(criteria).every(Boolean);
-      password.classList.toggle('is-valid', allValid);
-      password.classList.toggle('is-invalid', !allValid);
-    }
-
-    function validateConfirmPassword() {
-      const password = document.getElementById('newPassword').value;
-      const confirmPassword = document.getElementById('confirmPassword');
-
-      if (confirmPassword.value === password && password.length > 0) {
-        confirmPassword.classList.add('is-valid');
-        confirmPassword.classList.remove('is-invalid');
-      } else {
-        confirmPassword.classList.add('is-invalid');
-        confirmPassword.classList.remove('is-valid');
-      }
-    }
-
-    async function validateAndRegister(event) {
-      event.preventDefault();
-
-      const form = document.getElementById('registrationForm');
-      const displayName = document.getElementById('displayName').value.trim();
-      const email = document.getElementById('newEmail').value.trim();
-      const password = document.getElementById('newPassword').value;
-      const confirmPassword =
-        document.getElementById('confirmPassword').value;
-      const cohortCode = document.getElementById('cohortCode').value.trim();
-
-      let formIsValid = true;
-
-      const fields = [
-        'displayName',
-        'newEmail',
-        'newPassword',
-        'confirmPassword',
-        'cohortCode',
-      ];
-      fields.forEach((fieldId) => {
-        const field = document.getElementById(fieldId);
-        validateField(field);
-        if (!field.checkValidity()) {
-          formIsValid = false;
-        }
-      });
-
-      if (password !== confirmPassword) {
-        document
-          .getElementById('confirmPassword')
-          .classList.add('is-invalid');
-        document
-          .getElementById('confirmPassword')
-          .classList.remove('is-valid');
-        formIsValid = false;
-      } else {
-        document
-          .getElementById('confirmPassword')
-          .classList.remove('is-invalid');
-        document.getElementById('confirmPassword').classList.add('is-valid');
-      }
-
-      const validCode = await validateCohortCode(cohortCode);
-      if (!validCode) {
-        document.getElementById('cohortCode').classList.add('is-invalid');
-        document.getElementById('cohortCode').classList.remove('is-valid');
-        formIsValid = false;
-      } else {
-        document.getElementById('cohortCode').classList.remove('is-invalid');
-        document.getElementById('cohortCode').classList.add('is-valid');
-      }
-
-      if (!formIsValid) {
-        return;
-      }
-
-      await registerNewUser(email, password, displayName, cohortCode);
-    }
-
-    // Register new user with Cognito
-    async function registerNewUser(email, password, displayName, cohortCode) {
-      try {
-        const alertContainer = document.querySelector('#alert');
-        
-        // Use Amplify register function (includes cohort validation)
-        const result = await window.amplifyRegister(email, password, displayName, cohortCode);
-        
-        if (!result.success) {
-          const alertHTML = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="display:block">
-              <div>${result.error}</div>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-          alertContainer.insertAdjacentHTML('beforeend', alertHTML);
-          return;
-        }
-
-        // Check if email confirmation is needed
-        if (result.needsConfirmation) {
-          const alertHTML = `
-            <div class="alert alert-info alert-dismissible fade show" role="alert" style="display:block">
-              <div>Registration successful! Please check your email for a confirmation code.</div>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-          alertContainer.insertAdjacentHTML('beforeend', alertHTML);
-          
-          // Close modal after 3 seconds
-          setTimeout(() => {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
-            modal.hide();
-          }, 3000);
-          return;
-        }
-
-        // Registration successful and auto-logged in
-        if (result.autoLoggedIn) {
-          window.location.replace('./sessions.html');
-        } else {
-          // Registration successful, redirect to login
-          const alertHTML = `
-            <div class="alert alert-success alert-dismissible fade show" role="alert" style="display:block">
-              <div>Registration successful! Please log in.</div>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>`;
-          document.querySelector('.gradient-form').insertAdjacentHTML('afterbegin', alertHTML);
-          
-          const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
-          modal.hide();
-        }
-      } catch (error) {
-        console.error('Error during registration:', error);
-        alert('Registration failed: ' + error.message);
-      }
-    }
-
-    // Validate cohort code using Amplify
-    async function validateCohortCode(cohortCode) {
-      // Wait for Amplify to be ready
-      let attempts = 0;
-      while (!window.amplifyValidateCohort && attempts < 50) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-      }
+    
+    async function handleLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
       
-      if (!window.amplifyValidateCohort) {
-        console.error('Amplify auth functions not loaded');
-        alert('Authentication system not ready. Please refresh the page.');
-        return null;
-      }
-      
-      const result = await window.amplifyValidateCohort(cohortCode);
-      return result.valid ? result.cohort : null;
-    }
-
-    // Login with Cognito
-    async function handleLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
       try {
-        const result = await window.amplifyLogin(email, password);
+        const params = {
+          AuthFlow: 'USER_PASSWORD_AUTH',
+          ClientId: config.auth.user_pool_client_id,
+          AuthParameters: {
+            USERNAME: email,
+            PASSWORD: password
+          }
+        };
         
-        if (result.success) {
-          window.location.replace('./sessions.html');
-        } else {
-          alert('Login failed: ' + result.error);
+        const result = await cognitoIdentityServiceProvider.initiateAuth(params).promise();
+        
+        if (result.AuthenticationResult) {
+          // Store tokens
+          localStorage.setItem('accessToken', result.AuthenticationResult.AccessToken);
+          localStorage.setItem('idToken', result.AuthenticationResult.IdToken);
+          localStorage.setItem('loggedIn', 'true');
+          localStorage.setItem('userEmail', email);
+          
+          // Redirect
+          window.location.href = './sessions.html';
         }
       } catch (error) {
-        console.error('Log in error:', error);
-        alert('Login failed: ' + error.message);
+        console.error('Login error:', error);
+        showMessage('login-message', error.message || 'Login failed', true);
       }
     }
-
-    // Reset password with Cognito
-    async function resetPassword(email) {
-      const notification = document.getElementById("passwordResetNotification");
-
+    
+    async function handleRegister(e) {
+      e.preventDefault();
+      const cohort = document.getElementById('reg-cohort').value;
+      const name = document.getElementById('reg-name').value;
+      const email = document.getElementById('reg-email').value;
+      const password = document.getElementById('reg-password').value;
+      
       try {
-        const result = await window.amplifyResetPassword(email);
-
-        if (result.success) {
-          notification.style.display = "block";
-          notification.classList.add("alert-success");
-          notification.classList.remove("alert-danger");
-          notification.innerHTML = `
-            Password reset code sent successfully. Please check your email.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          `;
-
-          setTimeout(() => {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('passwordResetModal'));
-            modal.hide();
-            notification.style.display = "none";
-          }, 3000);
-        } else {
-          throw new Error(result.error);
+        // Validate cohort (simplified - just check it's not empty)
+        if (!cohort || cohort.length < 3) {
+          throw new Error('Please enter a valid cohort code');
         }
+        
+        const params = {
+          ClientId: config.auth.user_pool_client_id,
+          Username: email,
+          Password: password,
+          UserAttributes: [
+            { Name: 'email', Value: email },
+            { Name: 'name', Value: name }
+          ]
+        };
+        
+        const result = await cognitoIdentityServiceProvider.signUp(params).promise();
+        
+        showMessage('register-message', 
+          'Account created! Please check your email for a verification code. ' +
+          'After verifying, you can sign in using the Sign In tab.');
+        
+        // Clear form
+        document.getElementById('reg-cohort').value = '';
+        document.getElementById('reg-name').value = '';
+        document.getElementById('reg-email').value = '';
+        document.getElementById('reg-password').value = '';
+        
       } catch (error) {
-        console.error("Error sending password reset:", error);
-
-        notification.style.display = "block";
-        notification.classList.add("alert-danger");
-        notification.classList.remove("alert-success");
-        notification.innerHTML = `
-          Error sending password reset: ${error.message}
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        `;
+        console.error('Registration error:', error);
+        showMessage('register-message', error.message || 'Registration failed', true);
       }
     }
-
-
-    document.getElementById("passwordResetForm").addEventListener("submit", (event) => {
-      event.preventDefault();
-      const emailInput = document.getElementById("email");
-
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!emailPattern.test(emailInput.value)) {
-        emailInput.classList.add("is-invalid");
-      } else {
-        emailInput.classList.remove("is-invalid");
-        resetPassword(emailInput.value);
-      }
-    });
-
   </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
 </body>
-
 </html>
