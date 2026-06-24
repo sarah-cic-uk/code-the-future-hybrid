@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
 
   <script type="text/javascript" src="./js/app.js"></script>
-  <script type="module" src="./js/firebase.js"></script>
+  <script src="./js/cohort-management.js"></script>
+  
   <style>
     .pagination-container .btn {
       margin: 0.2rem;
@@ -121,12 +122,6 @@
     </div>
   </div>
 
-  <script defer type="module">
-    import { fbAuth, fbDB } from "./js/firebase.js";
-    window.fbAuth = fbAuth;
-    window.fbDB = fbDB;
-  </script>
-
   <script type="text/javascript">
     const stylesheet = document.createElement("link");
     stylesheet.rel = "stylesheet";
@@ -145,31 +140,32 @@
         document.querySelector("#sessionsLink")
       );
 
-      window.fbAuth.onAuthStateChanged(async function (user) {
-        if (user) {
-          const currentUser = window.fbAuth.currentUser;
-          const userData = await window.fbDB.ref('users/' + currentUser.uid).once('value');
-          const cohortId = userData.val().cohort;
-          await loadCohortData(cohortId);
-
+      // Load cohort data using localStorage
+      if (localStorage.getItem('loggedIn') === 'true') {
+        const cohortCode = localStorage.getItem('cohort');
+        if (cohortCode) {
+          await loadCohortData(cohortCode);
+          
           const elements = document.getElementsByClassName("dynamic-link");
           for (let i = 0; i < elements.length; i++) {
             elements[i].addEventListener('click', (e) => redirect(e.target.name, e.target.id), false);
           }
         }
-      });
+      }
     };
 
-    async function loadCohortData(cohortId) {
+    async function loadCohortData(cohortCode) {
       cohortMembers = [];
-      const snapshot = await window.fbDB.ref('users').once("value");
-
-      snapshot.forEach((userSnapshot) => {
-        let userEntry = userSnapshot.val();
-        if (userEntry.cohort === cohortId) {
-          cohortMembers.push({ id: userSnapshot.key, ...userEntry });
-        }
-      });
+      
+      // Use cohort-management helper
+      const students = await window.getStudentsByCohort(cohortCode);
+      cohortMembers = students.map(s => ({
+        id: s.id,
+        email: s.email,
+        displayName: s.displayName,
+        cohort: s.cohortId,
+        profile: s.profile || {}
+      }));
 
       loadCohortPage(1);
       renderPaginationControls();
@@ -184,16 +180,16 @@
       const end = start + itemsPerPage;
       const pageMembers = cohortMembers.slice(start, end);
 
-      pageMembers.forEach(({ id, displayName, profile }) => {
+      pageMembers.forEach(({ id, email, displayName, profile }) => {
         const fallbackImageURL = profile ? profile.imageURL : null;
         const cardHTML = `
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="card shadow m-2" style="height: fit-content">
               <div class="card-body">
-                <p class="h5 text-center" style="padding-top:0;">${displayName}</p> 
+                <p class="h5 text-center" style="padding-top:0;">${displayName}</p>
                 <div class="d-flex justify-content-center">
                   <img class="rounded-circle avatar-dimensions img-thumbnail" id="profile-pic"
-                    alt="Profile picture of ${displayName}" data-user-id="${id}" />
+                    alt="Profile picture of ${displayName}" data-user-email="${email}" />
                 </div>
                 <div class="text-center mt-4">
                   <a href="javascript:void(0);" data-name="${displayName}" data-id="${id}" class="dynamic-link" title="View profile">View profile</a>
@@ -203,7 +199,7 @@
           </div>
         `;
         cardContainer.insertAdjacentHTML('beforeend', cardHTML);
-        setUserProfileImage(id, fallbackImageURL);
+        setUserProfileImage(email, fallbackImageURL);
       });
 
       document.querySelectorAll(".dynamic-link").forEach(link => {
@@ -245,21 +241,16 @@
     }
 
 
-    async function setUserProfileImage(userId, fallbackImageURL) {
-      const imgElement = document.querySelector(`img[data-user-id="${userId}"]`);
+    async function setUserProfileImage(userEmail, fallbackImageURL) {
+      const imgElement = document.querySelector(`img[data-user-email="${userEmail}"]`);
 
       if (imgElement) {
-        const pathReference = window.fbStorage.ref("profilePics/" + userId);
-
         try {
-          const url = await pathReference.getDownloadURL();
+          const url = await window.getProfilePictureUrl(userEmail);
           imgElement.src = url;
         } catch (error) {
-          if (error.code === 'storage/object-not-found') {
-            imgElement.src = "../images/blank_avatar.jpg";
-          } else {
-            console.error(`Error fetching profile image for user ${userId}:`, error);
-          }
+          console.error(`Error fetching profile image for ${userEmail}:`, error);
+          imgElement.src = "../images/blank_avatar.jpg";
         }
       }
     }
@@ -281,7 +272,7 @@
     }
 
     function logUserOut(event) {
-      logout(window.fbAuth);
+      logout();
     }
   </script>
 

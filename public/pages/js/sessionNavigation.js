@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		return;
 	}
 
-	await waitForFbAuth();
+	await waitForAuth();
 
 	const sessionFlow = [
 		{ path: "sessions/session1/introduction.html", type: "intro", session: 1 },
@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		return filename;
 	}
 
-	// render saved state from Firebase
+	// render saved state from DynamoDB
 	await renderCompletionStatus(lessonName, markBtn, bannerTarget);
 
 	// save & update on click
@@ -161,14 +161,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ================= Helper Functions =================
-async function waitForFbAuth() {
+async function waitForAuth() {
 	return new Promise((resolve) => {
 		const interval = setInterval(() => {
-			if (window.fbAuth && window.fbDB && window.fbAuth.currentUser) {
+			const userEmail = localStorage.getItem('userEmail');
+			if (userEmail) {
 				clearInterval(interval);
 				resolve();
 			}
 		}, 50);
+		// Timeout after 5 seconds
+		setTimeout(() => {
+			clearInterval(interval);
+			resolve();
+		}, 5000);
 	});
 }
 
@@ -181,26 +187,21 @@ function getCurrentSessionName() {
 	return window.location.pathname.split("/").find((part) => /^session\d+$/.test(part));
 }
 
-// === Replace old session detection logic in helpers ===
+// === Lesson completion helpers using DynamoDB ===
 async function saveLessonComplete(lessonName) {
-	const user = window.fbAuth.currentUser;
-	if (!user) return;
-
 	const session = getCurrentSessionName();
-	const ref = window.fbDB.ref(`users/${user.uid}/completedSessions/${session}`);
-	await ref.update({ [lessonName]: true });
+	if (!session) return;
+	
+	// Use the global function from progressTracking.js
+	await window.saveLessonComplete(session, lessonName);
 }
 
 async function isLessonComplete(lessonName) {
-	const user = window.fbAuth.currentUser;
-	if (!user) return false;
-
 	const session = getCurrentSessionName();
-	const ref = window.fbDB.ref(`users/${user.uid}/completedSessions/${session}`);
-	const snapshot = await ref.once("value");
-	const data = snapshot.val() || {};
-
-	return !!data[lessonName];
+	if (!session) return false;
+	
+	// Use the global function from progressTracking.js
+	return await window.isLessonComplete(session, lessonName);
 }
 
 function extractLessonName(path) {

@@ -20,7 +20,9 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script type="text/javascript" src="./js/app.js"></script>
-  <script type="module" src="./js/firebase.js"></script>
+  <script src="./js/cohort-management.js"></script>
+  <script src="./js/tutor-booking.js"></script>
+
 </head>
 
 <body>
@@ -273,7 +275,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-          The time slot has been added successfully to 'Schedule 1:1' and Firebase.
+          The time slot has been added successfully to 'Schedule 1:1'.
         </div>
       </div>
 
@@ -300,7 +302,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-          The time slot was successfully removed from Firebase.
+          The time slot was successfully removed.
         </div>
       </div>
 
@@ -322,13 +324,13 @@
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
         <div class="toast-body">
-          The session was successfully removed from Firebase.
+          The session was successfully removed.
         </div>
       </div>
 
 
       <!-- failure toast notification -->
-      <div id="firebase-error-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div id="database-error-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
           <strong class="me-auto">Bad news!</strong>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -390,11 +392,6 @@
 
   </div>
 
-  <script type="module">
-    import { fbDB } from "./js/firebase.js";
-    window.fbDB = fbDB;
-  </script>
-
   <script>
     let loggedInTutor;
     let userId;
@@ -412,31 +409,31 @@
         document.querySelector("#sessionsLink")
       );
 
-      window.fbAuth.onAuthStateChanged(async function (user) {
-        // Check if user is an authorised tutor
-        const currentUser = fbAuth.currentUser;
-        loggedInTutor = currentUser.displayName;
-        userId = currentUser.uid;
-        if (!currentUser) {
-          document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Access Denied</h3><p>You must be logged in to access this page.</p></div></div>';
-          return;
-        }
-        try {
-          const userSnapshot = await fbDB.ref(`users/${currentUser.uid}`).once('value');
-          const userData = userSnapshot.val();
-          if (!userData || !userData.tutor) {
-            document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Access Denied</h3><p>You are not authorized to access this page. Only tutors can view tutor availability.</p></div></div>';
-            return;
-          }
-        } catch (error) {
-          document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Error</h3><p>Unable to verify your authorization. Please try again later.</p></div></div>';
-          return;
-        }
+      // Check if user is logged in and is a tutor
+      if (localStorage.getItem('loggedIn') !== 'true') {
+        document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Access Denied</h3><p>You must be logged in to access this page.</p></div></div>';
+        return;
+      }
 
+      const userEmail = localStorage.getItem('userEmail');
+      loggedInTutor = localStorage.getItem('displayName');
+      
+      try {
+        // Check if user is a tutor using cohort-management helper
+        const userData = await window.getUserByEmail(userEmail);
+        if (!userData || !userData.isTutor) {
+          document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Access Denied</h3><p>You are not authorized to access this page. Only tutors can view tutor availability.</p></div></div>';
+          return;
+        }
+        
+        userId = userData.id;
         updateAvailabilityTable();
         updateBookedTable();
         initialiseTutorData();
-      })
+      } catch (error) {
+        console.error('Authorization error:', error);
+        document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Error</h3><p>Unable to verify your authorization. Please try again later.</p></div></div>';
+      }
 
     };
 
@@ -447,20 +444,26 @@
       }
 
       try {
-        const availabilitySnapshot = await fbDB.ref(`users/${userId}/availability`).once("value");
-        if (availabilitySnapshot.exists()) {
-          tutorAvailability[loggedInTutor] = availabilitySnapshot.val() || {};
-        }
+        // Get availability from DynamoDB
+        const availabilityList = await getTutorAvailabilitySlots(loggedInTutor);
+        tutorAvailability[loggedInTutor] = {};
+        availabilityList.forEach(slot => {
+          tutorAvailability[loggedInTutor][slot.slotId] = slot;
+        });
 
-        const bookedSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once("value");
-        if (bookedSnapshot.exists()) {
-          bookedSessions[loggedInTutor] = bookedSnapshot.val() || {};
-        }
+        // Get booked sessions from DynamoDB
+        const bookedList = await getTutorBookedSessions(loggedInTutor);
+        bookedSessions[loggedInTutor] = {};
+        bookedList.forEach(session => {
+          bookedSessions[loggedInTutor][session.sessionId] = session;
+        });
 
-        const requestedSnapshot = await fbDB.ref(`users/${userId}/requestedSessions`).once("value");
-        if (requestedSnapshot.exists()) {
-          requestedSessions[loggedInTutor] = requestedSnapshot.val() || {};
-        }
+        // Get requested sessions from DynamoDB
+        const requestedList = await getTutorSessionRequests(loggedInTutor);
+        requestedSessions[loggedInTutor] = {};
+        requestedList.forEach(request => {
+          requestedSessions[loggedInTutor][request.requestId] = request;
+        });
 
         updateRequestedTable();
         updateAvailabilityTable();
@@ -619,8 +622,11 @@
       const systemOptions = Intl.DateTimeFormat().resolvedOptions();
 
       // check for conflicts in booked sessions
-      const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once('value');
-      const existingBookings = bookedSessionsSnapshot.val() || {}; // ensures existingBookings is an object
+      const bookedList = await getTutorBookedSessions(loggedInTutor);
+      const existingBookings = {};
+      bookedList.forEach(session => {
+        existingBookings[session.sessionId] = session;
+      });
 
       const hasBookingConflict = existingBookings && Object.values(existingBookings).some(booking => {
         const bookingStartTime = new Date(`${booking.date}T${booking.time}`).getTime();
@@ -668,13 +674,12 @@
         timezone: systemOptions.timeZone
       };
 
-      // if we ever want to update on behalf of others:
-      // const userSnapshot = await fbDB.ref('users').orderByChild('tutorId').equalTo(tutorId).once('value');
-      // const userId = Object.keys(userSnapshot.val())[0];
-      const tutorRef = fbDB.ref(`users/${userId}/availability`).push();
+      // Add availability slot to DynamoDB
+      const slotId = Date.now().toString();
+      newSlot.slotId = slotId;
 
       try {
-        await tutorRef.set(newSlot);
+        await addAvailabilitySlot(loggedInTutor, newSlot);
         tutorAvailability[loggedInTutor][tutorRef.key] = newSlot;
         updateAvailabilityTable();
 
@@ -683,8 +688,8 @@
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
       } catch (error) {
-        console.error("Error adding to Firebase:", error);
-        const toastEl = document.getElementById('firebase-error-toast');
+        console.error("Error adding to database:", error);
+        const toastEl = document.getElementById('database-error-toast');
         const toast = new bootstrap.Toast(toastEl);
         toast.show();
       }
@@ -734,13 +739,13 @@
           return;
         }
 
-        // if the slot is in the past, remove it from Firebase
+        // if the slot is in the past, remove it from DynamoDB
         if (slotDate < today) {
           try {
-            await fbDB.ref(`users/${userId}/availability/${slotId}`).remove();
-            console.log(`Past session ${slotId} removed from Firebase.`);
+            await deleteAvailabilitySlot(slotId);
+            console.log(`Past session ${slotId} removed from DynamoDB.`);
           } catch (error) {
-            console.error(`Error removing past session ${slotId} from Firebase:`, error);
+            console.error(`Error removing past session ${slotId} from DynamoDB:`, error);
           }
           return; // ignore past sessions in the table
         }
@@ -782,7 +787,7 @@
         tableBody.insertAdjacentHTML('beforeend', createNewRow);
       });
 
-      // wait for all Firebase deletions to complete
+      // wait for all database deletions to complete
       await Promise.all(deletePromises);
 
       // if no future slots exist, show this message
@@ -842,14 +847,14 @@
           continue; // skip if date or time is invalid
         }
 
-        // if the session is in the past, delete it from Firebase
+        // if the session is in the past, delete it from DynamoDB
         if (slotDate < today) {
           try {
-            // then remove the past session from Firebase
-            await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).remove();
+            // then remove the past session from DynamoDB
+            await deleteBookedSession(slotId);
             console.log(`Removed past session: ${slotId}`);
           } catch (error) {
-            console.error(`Error removing session ${slotId} from Firebase:`, error);
+            console.error(`Error removing session ${slotId} from DynamoDB:`, error);
           }
           continue; // skip displaying this past session
         }
@@ -903,14 +908,14 @@
 
     async function cancelBookedSession(slotId) {
       try {
-        const sessionSnapshot = await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).once('value');
-        const sessionData = sessionSnapshot.val();
+        // Get session data from local cache (already loaded in bookedSessions)
+        const sessionData = bookedSessions[loggedInTutor]?.[slotId];
 
         if (sessionData) {
           const { studentEmail, studentName, date, time, duration } = sessionData;
 
-          await fbDB.ref(`users/${userId}/bookedSessions/${slotId}`).remove();
-          console.log(`Booked session with ID ${slotId} removed from Firebase.`);
+          await deleteBookedSession(slotId);
+          console.log(`Booked session with ID ${slotId} removed from DynamoDB.`);
 
           // === Add Email Notification ===
           // Notify the student about the cancellation
@@ -947,15 +952,20 @@
           const refPath = `users/${userId}/${type}/${slotId}`;
           console.log(`Attempting to remove session from path: ${refPath}`);
 
-          // Fetch session data before removing (only for bookedSessions or requestedSessions)
+          // Fetch session data from local cache before removing
           let sessionData = null;
           if (type === 'bookedSessions') {
-            const sessionSnapshot = await fbDB.ref(refPath).once('value');
-            sessionData = sessionSnapshot.val();
+            sessionData = bookedSessions[loggedInTutor]?.[slotId];
           }
 
-          // remove the session from Firebase based on type
-          await fbDB.ref(refPath).remove();
+          // remove the session from DynamoDB based on type
+          if (type === 'availability') {
+            await deleteAvailabilitySlot(slotId);
+          } else if (type === 'bookedSessions') {
+            await deleteBookedSession(slotId);
+          } else if (type === 'requestedSessions') {
+            await deleteSessionRequest(slotId);
+          }
 
           // remove from local state and update the table
           if (type === 'availability') {
@@ -986,7 +996,7 @@
           removedToast.show();
         } catch (error) {
           console.error(`Error removing ${type}:`, error);
-          showFirebaseErrorToast();
+          showDatabaseErrorToast();
         }
         toast.hide();
       };
@@ -1012,8 +1022,14 @@
       let hasFutureSessions = false;
 
       try {
-        const requestedSnapshot = await fbDB.ref(`users/${userId}/requestedSessions`).once('value');
-        const requestedSessions = requestedSnapshot.val() || {};
+        // Get requested sessions from DynamoDB using helper function
+        const requestedSessionsArray = await getTutorSessionRequests(loggedInTutor);
+        
+        // Transform array to object keyed by requestId for compatibility
+        const requestedSessions = {};
+        requestedSessionsArray.forEach(session => {
+          requestedSessions[session.requestId] = session;
+        });
 
         if (!requestedSessions || Object.keys(requestedSessions).length === 0) {
           console.log("No requested sessions found.");
@@ -1040,7 +1056,7 @@
 
           if (slotDate < today) {
             try {
-              await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).remove();
+              await deleteSessionRequest(slotId);
               console.log(`Removed past session: ${slotId}`);
             } catch (error) {
               console.error(`Error removing past session ${slotId}:`, error);
@@ -1112,12 +1128,12 @@
 
     async function confirmSession(slotId) {
       try {
-        const sessionSnapshot = await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).once('value');
-        const sessionData = sessionSnapshot.val();
+        // Get session data from local cache
+        const sessionData = requestedSessions[loggedInTutor]?.[slotId];
 
         if (sessionData) {
           const { date, time, duration, studentEmail, studentName } = sessionData;
-          const tutorEmail = firebase.auth().currentUser.email;
+          const tutorEmail = localStorage.getItem('userEmail');
 
           const selectedDate = sessionData.date;
           const selectedTime = sessionData.time;
@@ -1127,9 +1143,8 @@
           const durationInMinutes = { '15 Mins': 15, '30 Mins': 30, '1 Hour': 60 }[selectedDuration];
           const selectedEndTime = selectedStartTime + durationInMinutes * 60000;
 
-          // check for existing bookings at this time
-          const bookedSessionsSnapshot = await fbDB.ref(`users/${userId}/bookedSessions`).once('value');
-          const existingBookings = bookedSessionsSnapshot.val() || {};
+          // check for existing bookings at this time using local cache
+          const existingBookings = bookedSessions[loggedInTutor] || {};
 
           const hasBookingConflict = Object.values(existingBookings).some(booking => {
             const bookingStartTime = new Date(`${booking.date}T${booking.time}`).getTime();
@@ -1144,16 +1159,8 @@
             return;
           }
 
-          // proceed to confirm booking if no conflicts exist
-          sessionData.status = "booked";
-          const bookedSessionRef = fbDB.ref(`users/${userId}/bookedSessions`).push();
-          await bookedSessionRef.set(sessionData);
-          await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).remove();
-
-          const sessionRequestId = sessionData.sessionRequestId;
-          if (sessionRequestId) {
-            await fbDB.ref(`sessionRequests/${sessionRequestId}`).remove();
-          }
+          // proceed to confirm booking if no conflicts exist using helper function
+          await acceptSessionRequest(slotId, tutorEmail, sessionData);
 
           // === Add Email Notifications ===
 
@@ -1197,24 +1204,15 @@
 
     async function cancelRequestedSession(slotId) {
       try {
-        // fetch session data from requestedSessions to get the sessionRequestId
-        const sessionSnapshot = await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).once('value');
-        const sessionData = sessionSnapshot.val();
+        // fetch session data from local cache
+        const sessionData = requestedSessions[loggedInTutor]?.[slotId];
 
         if (sessionData) {
           const { date, time, duration, studentEmail, studentName } = sessionData;
 
-          // get sessionRequestId from the session data to remove it from sessionRequests
-          const sessionRequestId = sessionData.sessionRequestId;
-          if (sessionRequestId) {
-            // remove the session from the global sessionRequests node
-            await fbDB.ref(`sessionRequests/${sessionRequestId}`).remove();
-            console.log(`Session with ID ${sessionRequestId} removed from global sessionRequests.`);
-          }
-
-          // remove session from the tutors requestedSessions in Firebase
-          await fbDB.ref(`users/${userId}/requestedSessions/${slotId}`).remove();
-          console.log('Requested session cancelled and removed from tutors requestedSessions.');
+          // remove session from DynamoDB using helper function
+          await deleteSessionRequest(slotId);
+          console.log('Requested session cancelled and removed from DynamoDB.');
 
           // === Add Email Notification ===
           // Notify the student about the cancellation
@@ -1241,9 +1239,9 @@
       }
     }
 
-    // function to show generic Firebase error toast
-    function showFirebaseErrorToast() {
-      const toastEl = document.getElementById('firebase-error-toast');
+    // function to show generic database error toast
+    function showDatabaseErrorToast() {
+      const toastEl = document.getElementById('database-error-toast');
       const toast = new bootstrap.Toast(toastEl);
       toast.show();
     }
@@ -1329,8 +1327,7 @@
     document.getElementById('timePicker').addEventListener('input', checkFormCompletion);
 
     function logUserOut(event) {
-      const fbAuth = firebase.auth();
-      logout(fbAuth);
+      logout();
     }
   </script>
 

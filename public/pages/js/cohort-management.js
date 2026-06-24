@@ -285,6 +285,36 @@ async function getUserByEmail(email) {
   }
 }
 
+/**
+ * Get profile picture URL from S3
+ * @param {string} email - User email
+ * @returns {Promise<string>} - Profile picture URL or default
+ */
+async function getProfilePictureUrl(email) {
+  try {
+    const response = await fetch('/amplify_outputs.json');
+    const config = await response.json();
+    const bucket = config.storage.bucket_name;
+    const region = config.storage.aws_region;
+    
+    // Convert email to safe filename
+    const fileName = email.replace('@', '_at_').replace(/\./g, '_');
+    const url = `https://${bucket}.s3.${region}.amazonaws.com/public/profile-pictures/${fileName}.jpg`;
+    
+    // Test if image exists
+    const testResponse = await fetch(url, { method: 'HEAD' });
+    if (testResponse.ok) {
+      return url;
+    }
+    
+    // Return default avatar if not found
+    return '/images/blank_avatar.jpg';
+  } catch (error) {
+    console.error('Error getting profile picture:', error);
+    return '/images/blank_avatar.jpg';
+  }
+}
+
 // Export functions to window
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
@@ -293,6 +323,7 @@ window.updateCohort = updateCohort;
 window.calculateCohortProgress = calculateCohortProgress;
 window.getStudentProgressDetails = getStudentProgressDetails;
 window.getUserByEmail = getUserByEmail;
+window.getProfilePictureUrl = getProfilePictureUrl;
 
 console.log('✅ Cohort management initialized (DynamoDB)');
 

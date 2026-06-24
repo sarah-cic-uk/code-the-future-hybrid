@@ -63,7 +63,7 @@ async function loadVideo(videoName, videoElement) {
 }
 
 /**
- * Fetch media from S3 (replaces Firebase version)
+ * Fetch media from S3
  * @param {string} videoName - Name of video file
  * @param {HTMLElement} element - Video element
  */

@@ -26,9 +26,7 @@
   <script type="module" src="./pages/js/amplify-init.js"></script>
   
   <script type="text/javascript" src="./pages/js/app.js"></script>
-  <script src="./pages/js/imports.js"></script>
-  <!-- Keep Firebase for backward compatibility during migration -->
-  <script defer type="module" src="./pages/js/firebase.js"></script>
+  <!-- Firebase imports removed - migrated to AWS Amplify -->
 </head>
 
 <body>
@@ -335,11 +333,7 @@
       </div>
     </div>
   </div>
-  <script type="module">
-    import { fbAuth } from "./pages/js/firebase.js"
-    window.fbAuth = fbAuth;
-    window.fbDB = fbDB;
-  </script>
+
   <script defer type="text/javascript">
 
     const stylesheet = document.createElement('link');
@@ -349,12 +343,12 @@
     document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
-      checkReleaseDates(window.fbDB);
+      checkReleaseDates();
       auth(document.querySelector(".loginBtn"), document.querySelector(".profileBtn"), document.querySelector("#sessionsLink"), false)
     }
 
     function logUserOut(event) {
-      logout(window.fbAuth)
+      logout()
     }
 
     function createPath(options) {

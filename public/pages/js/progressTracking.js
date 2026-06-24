@@ -390,6 +390,92 @@ function showCompletionMessage(message, isError = false) {
       messageDiv.remove();
     }
   }, 5000);
+/**
+ * Save lesson completion status
+ * @param {string} sessionName - Session name (e.g., "session1")
+ * @param {string} lessonName - Lesson name (e.g., "introIDE")
+ * @returns {Promise<boolean>} - Success status
+ */
+async function saveLessonComplete(sessionName, lessonName) {
+  const email = getCurrentUserEmail();
+  if (!email) return false;
+
+  try {
+    const user = await getUserByEmail(email);
+    if (!user) {
+      console.error('User not found');
+      return false;
+    }
+
+    // Parse existing progress
+    const currentProgress = user.progress ? JSON.parse(user.progress) : {};
+    
+    // Initialize session object if it doesn't exist
+    if (!currentProgress[sessionName]) {
+      currentProgress[sessionName] = {};
+    }
+    
+    // Initialize completedLessons if it doesn't exist
+    if (!currentProgress[sessionName].completedLessons) {
+      currentProgress[sessionName].completedLessons = {};
+    }
+    
+    // Mark lesson as complete
+    currentProgress[sessionName].completedLessons[lessonName] = true;
+    currentProgress[sessionName].lastAccessed = Date.now();
+
+    return await updateUserProgress(user.id, currentProgress);
+  } catch (error) {
+    console.error('Error saving lesson completion:', error);
+    return false;
+  }
+}
+
+/**
+ * Check if a lesson is complete
+ * @param {string} sessionName - Session name (e.g., "session1")
+ * @param {string} lessonName - Lesson name (e.g., "introIDE")
+ * @returns {Promise<boolean>} - Completion status
+ */
+async function isLessonComplete(sessionName, lessonName) {
+  const email = getCurrentUserEmail();
+  if (!email) return false;
+
+  try {
+    const user = await getUserByEmail(email);
+    if (!user) return false;
+
+    const progress = user.progress ? JSON.parse(user.progress) : {};
+    
+    return !!(progress[sessionName]?.completedLessons?.[lessonName]);
+  } catch (error) {
+    console.error('Error checking lesson completion:', error);
+    return false;
+  }
+}
+
+/**
+ * Get all completed lessons for a session
+ * @param {string} sessionName - Session name (e.g., "session1")
+ * @returns {Promise<Object>} - Object with lesson names as keys, true as values
+ */
+async function getSessionCompletedLessons(sessionName) {
+  const email = getCurrentUserEmail();
+  if (!email) return {};
+
+  try {
+    const user = await getUserByEmail(email);
+    if (!user) return {};
+
+    const progress = user.progress ? JSON.parse(user.progress) : {};
+    
+    return progress[sessionName]?.completedLessons || {};
+  } catch (error) {
+    console.error('Error getting completed lessons:', error);
+    return {};
+  }
+}
+
 }
 
 // Make functions available globally
@@ -404,3 +490,8 @@ window.handleMarkComplete = handleMarkComplete;
 console.log('✅ Progress tracking initialized (DynamoDB)');
 
 // Made with Bob
+
+// Make lesson tracking functions available globally
+window.saveLessonComplete = saveLessonComplete;
+window.isLessonComplete = isLessonComplete;
+window.getSessionCompletedLessons = getSessionCompletedLessons;

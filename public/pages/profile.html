@@ -12,7 +12,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-  
+
   <!-- Amplify Import Map -->
   <script type="importmap">
     {
@@ -28,10 +28,9 @@
   <script type="module" src="./js/amplify-auth.js"></script>
   <script type="module" src="./js/amplify-data.js"></script>
   <script type="module" src="./js/amplify-storage.js"></script>
-  
+
   <script src="./js/app.js"></script>
-  <!-- Keep Firebase for backward compatibility during migration -->
-  <script type="module" src="./js/firebase.js"></script>
+  <script src="./js/cohort-management.js"></script>
 
   <style>
     body {
@@ -126,8 +125,7 @@
             <div class="profileBtn dropdown px-3">
               <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                 aria-expanded="false">
-                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
-                  src="../images/blank_avatar.jpg"
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt="" src="../images/blank_avatar.jpg"
                   loading="lazy" />
               </a>
 
@@ -387,12 +385,6 @@
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
 
-  <script defer type="module">
-    import { fbAuth, fbDB } from "./js/firebase.js";
-    window.fbAuth = fbAuth;
-    window.fbDB = fbDB;
-  </script>
-
   <script>
     const stylesheet = document.createElement("link");
     stylesheet.rel = "stylesheet";
@@ -435,7 +427,7 @@
       const selectedImage = document.getElementById(elementId);
       const fileInput = event.target;
       const fileNameDisplay = document.getElementById('fileNameDisplay');
-      currentUser = window.fbAuth.currentUser;
+      const userEmail = localStorage.getItem('userEmail');
 
       if (fileInput.files && fileInput.files[0]) {
         const reader = new FileReader();
@@ -447,43 +439,88 @@
         };
         reader.readAsDataURL(fileInput.files[0]);
 
-        const storageRef = window.fbStorage.ref("profilePics/" + currentUser.uid);
-        storageRef.put(fileInput.files[0]).then(() => {
-          avatarSuccessToast.show();
-        }).catch((error) => {
-          console.error("Image upload failed:", error);
-          avatarErrorToast.show();
-        });
+        async function uploadProfilePicture(file) {
+          const email = localStorage.getItem('userEmail');
+          if (!email) {
+            avatarErrorToast.show();
+            return;
+          }
+
+          try {
+            // Create FormData for upload
+            const formData = new FormData();
+            formData.append('file', file);
+
+            // Get S3 config
+            const response = await fetch('/amplify_outputs.json');
+            const config = await response.json();
+            const bucket = config.storage.bucket_name;
+            const region = config.storage.aws_region;
+
+            // Upload to S3 using fetch (simple approach)
+            const fileName = `profile-pictures/${email.replace('@', '_at_')}`;
+            const url = `https://${bucket}.s3.${region}.amazonaws.com/${fileName}`;
+
+            const uploadResponse = await fetch(url, {
+              method: 'PUT',
+              body: file,
+              headers: {
+                'Content-Type': file.type
+              }
+            });
+
+            if (uploadResponse.ok) {
+              avatarSuccessToast.show();
+              // Update user record with picture URL
+              await updateUserProfilePicture(email, url);
+            } else {
+              throw new Error('Upload failed');
+            }
+          } catch (error) {
+            console.error("Image upload failed:", error);
+            avatarErrorToast.show();
+          }
+        }
+
       } else {
         avatarErrorToast.show();
       }
     }
 
     async function getProfile() {
-      window.fbAuth.onAuthStateChanged(async (user) => {
-        if (user) {
-          currentUser = user;
-          const profileData = await window.fbDB.ref('users/' + currentUser.uid + '/profile').once('value');
-          const profileValues = profileData.val() || {};
+      if (localStorage.getItem('loggedIn') !== 'true') {
+        window.location.href = './login.html';
+        return;
+      }
 
-          who.value = profileValues.about || '';
-          what.value = profileValues.learning || '';
-          career.value = profileValues.aspirations || '';
-          currentJob.value = profileValues.currentJob || '';
-          studentLocation.value = profileValues.studentLocation || '';
-          linkedIn.value = profileValues.linkedIn || '';
-          gitHubAccount.value = profileValues.gitHub || '';
-          document.getElementById('gitUrl').value = profileValues.siteURL || '';
-          document.getElementById('gitTitle').value = profileValues.siteTitle || '';
-          document.getElementById(profileValues.siteFlag ? 'showcaseYes' : 'showcaseNo').checked = true;
-
-          const profilePicElement = document.getElementById("selectedAvatar");
-          const pathReference = await window.fbStorage.ref("profilePics/" + currentUser.uid);
-          fetchMedia(pathReference, profilePicElement);
-        } else {
+      const userEmail = localStorage.getItem('userEmail');
+      try {
+        // Get user data from DynamoDB
+        const userData = await window.getUserByEmail(userEmail);
+        if (!userData) {
           console.error('User data not found');
+          return;
         }
-      });
+
+        const profileValues = userData.profile || {};
+        
+        who.value = profileValues.about || '';
+        what.value = profileValues.learning || '';
+        career.value = profileValues.aspirations || '';
+        currentJob.value = profileValues.currentJob || '';
+        studentLocation.value = profileValues.studentLocation || '';
+        linkedIn.value = profileValues.linkedIn || '';
+        gitHubAccount.value = profileValues.gitHub || '';
+        document.getElementById('gitUrl').value = profileValues.siteURL || '';
+        document.getElementById('gitTitle').value = profileValues.siteTitle || '';
+        document.getElementById(profileValues.siteFlag ? 'showcaseYes' : 'showcaseNo').checked = true;
+
+        // Load profile picture from S3
+        const profilePicUrl = await window.getProfilePictureUrl(userEmail);
+        document.getElementById("selectedAvatar").src = profilePicUrl;
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
     }
 
     async function updateProfile(event) {
@@ -506,8 +543,63 @@
       updates['users/' + currentUser.uid + '/profile'] = profileValues;
 
       try {
-        await window.fbDB.ref().update(updates);
-        successToast.show();
+        async function updateProfile(event) {
+          event.preventDefault();
+
+          const email = localStorage.getItem('userEmail');
+          const profileValues = {
+            about: who.value,
+            learning: what.value,
+            aspirations: career.value,
+            currentJob: currentJob.value,
+            studentLocation: studentLocation.value,
+            linkedIn: linkedIn.value,
+            gitHub: gitHubAccount.value,
+            siteURL: document.getElementById('gitUrl').value,
+            siteTitle: document.getElementById('gitTitle').value,
+            siteFlag: document.querySelector('input[name="showcase"]:checked').value === "yes"
+          };
+
+          try {
+            // Get user
+            const user = await getUserByEmail(email);
+            if (!user) throw new Error('User not found');
+
+            // Update user profile in DynamoDB
+            const mutation = `
+      mutation UpdateUser($id: ID!, $profile: AWSJSON!) {
+        updateUser(input: { id: $id, profile: $profile }) {
+          id
+          profile
+        }
+      }
+    `;
+
+            const config = await getAPIConfig();
+            const response = await fetch(config.endpoint, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': config.apiKey
+              },
+              body: JSON.stringify({
+                query: mutation,
+                variables: {
+                  id: user.id,
+                  profile: JSON.stringify(profileValues)
+                }
+              })
+            });
+
+            const result = await response.json();
+            if (result.errors) throw new Error(result.errors[0].message);
+
+            successToast.show();
+          } catch (error) {
+            console.error('Error updating profile:', error);
+            errorToast.show();
+          }
+        } successToast.show();
       } catch (err) {
         console.error("Profile update failed:", err);
         errorToast.show();
@@ -520,7 +612,7 @@
     }
 
     function logUserOut(event) {
-      logout(window.fbAuth);
+      logout();
     }
   </script>
 
@@ -554,7 +646,7 @@
       const gitUrlInput = document.getElementById('gitUrl');
       let gitUrlValue = gitUrlInput.value.trim();
 
-      // strip protocol if present because we dont want it in Firebase - it might be used on teh Showcase page with protocol it will break!
+      // strip protocol if present - it might be used on the Showcase page with protocol and will break!
       if (gitUrlValue.startsWith('http://') || gitUrlValue.startsWith('https://')) {
         gitUrlValue = gitUrlValue.replace(/^https?:\/\//, '');
         gitUrlInput.value = gitUrlValue; // set the stripped URL back in the input

@@ -66,19 +66,20 @@ function injectSession7Nav() {
   }
 }
 
-async function logout() {
-  try {
-    const { logout: amplifyLogout } = await import('./amplify-auth.js');
-    await amplifyLogout();
-  } catch (error) {
-    console.log("error signing out: ", error.message);
-    // Fallback: clear local storage and redirect
-    localStorage.setItem('loggedIn', 'false');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('displayName');
-    localStorage.removeItem('cohort');
-    window.location.replace(`${getPath()}pages/login.html`);
-  }
+function logout() {
+  // Clear all authentication data from localStorage
+  localStorage.removeItem('loggedIn');
+  localStorage.removeItem('userEmail');
+  localStorage.removeItem('displayName');
+  localStorage.removeItem('cohort');
+  localStorage.removeItem('idToken');
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  
+  console.log('✅ User logged out');
+  
+  // Redirect to login page
+  window.location.replace(`${getPath()}pages/login.html`);
 }
 
 function updateSideNav() {
@@ -106,55 +107,44 @@ function updateSideNavOverview() {
 
 async function checkReleaseDates() {
   try {
-    // TODO: Re-enable when ES modules are working
-    // For now, just return to avoid errors
-    return;
-    
-    const cohortCode = window.localStorage.cohort;
+    const cohortCode = localStorage.getItem('cohort');
     if (!cohortCode) return;
     
-    // const { generateClient } = await import('aws-amplify/data');
-    // const client = generateClient();
-    //
-    // // Fetch cohort from DynamoDB
-    // const { data: cohorts } = await client.models.Cohort.list({
-    //   filter: {
-    //     cohortCode: { eq: cohortCode }
-    //   }
-    // });
-    //
-    // if (!cohorts || cohorts.length === 0) return;
-    // const userCohort = cohorts[0];
+    // Use cohort-management.js helper if available
+    if (typeof window.getCohortByCode !== 'function') {
+      console.warn('Cohort management not loaded');
+      return;
+    }
     
-    console.log(document.querySelectorAll(".release-date-btn"));
-    console.log(userCohort);
-    // Parse sessionReleaseDates from JSON if needed
+    const userCohort = await window.getCohortByCode(cohortCode);
+    if (!userCohort) return;
+    
     const releaseDates = typeof userCohort.sessionReleaseDates === 'string'
       ? JSON.parse(userCohort.sessionReleaseDates)
       : userCohort.sessionReleaseDates;
     
-    // session buttons
+    if (!releaseDates) return;
+    
+    // Session buttons
     for (const btn of document.querySelectorAll(".release-date-btn")) {
-      console.log(btn);
       const session = btn.name.split('-')[1];
-      console.log(releaseDates[session]);
-      console.log(session);
-
-      if (releaseDates && Date.now() < releaseDates[session]) {
+      if (Date.now() < releaseDates[session]) {
         btn.disabled = true;
         btn.style.float = 'right';
         btn.title = `Session Opens ${new Date(releaseDates[session]).toLocaleString().split(',')[0]}`;
       }
     }
 
-    // sidebar links
+    // Sidebar links
     for (const item of document.querySelectorAll(".nav-item button")) {
-      if (releaseDates && Date.now() < releaseDates[item.name]) {
+      if (Date.now() < releaseDates[item.name]) {
         item.disabled = true;
         item.classList.add('hover-text');
-        document.getElementById(`${item.name}-tooltip`).classList.remove('hidden');
-        document.getElementById(`${item.name}-tooltip`).innerHTML =
-          `Session Opens ${new Date(releaseDates[item.name]).toLocaleString().split(',')[0]}`;
+        const tooltip = document.getElementById(`${item.name}-tooltip`);
+        if (tooltip) {
+          tooltip.classList.remove('hidden');
+          tooltip.innerHTML = `Session Opens ${new Date(releaseDates[item.name]).toLocaleString().split(',')[0]}`;
+        }
       }
     }
 

@@ -21,7 +21,10 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
-  <script type="module" src="./js/firebase.js"></script>
+  <!-- Helper Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/cohort-management.js"></script>
+  <script src="js/tutor-booking.js"></script>
 </head>
 
 
@@ -295,10 +298,10 @@
       </div>
     </div>
 
-    <!-- Firebase failure toast notification -->
-    <div id="firebase-error-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <!-- Generic error toast notification -->
+    <div id="error-toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
-        <strong class="me-auto">Bad news!</strong>
+        <strong class="me-auto">Error</strong>
         <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
       </div>
       <div class="toast-body">
@@ -333,14 +336,6 @@
   </div>
 
   </div>
-
-  <script type="module">
-    import { fbAuth, fbDB, fbStorage } from "./js/firebase.js";
-
-    window.fbAuth = fbAuth;
-    window.fbDB = fbDB;
-    window.fbStorage = fbStorage;
-  </script>
 
   <script>
     function safeAuthInit() {
@@ -391,7 +386,7 @@
 
     function logUserOut() {
       if (typeof logout === "function") {
-        logout(window.fbAuth);
+        logout();
       }
     }
 
@@ -488,9 +483,12 @@
       const sessionRows = tutorTable.querySelector(".sessionTable");
       const calendarToggleContainer = document.getElementById('toggleViewSwitch').closest('.form-check');
 
-      // fetch tutors (users where tutor == true)
-      const snap = await window.fbDB.ref("users").orderByChild("tutor").equalTo(true).once("value");
-      const tutors = snap.val() || {};
+      // Fetch tutors using helper
+      const tutorsList = await window.getAllTutors();
+      const tutors = {};
+      tutorsList.forEach(tutor => {
+        tutors[tutor.id] = tutor;
+      });
 
       scrollbox.replaceChildren();
 
@@ -511,9 +509,8 @@
         img.style.borderRadius = "100%";
         img.style.objectFit = "cover";
 
-        window.fbStorage
-          .ref(`profilePics/${tutorId}`)
-          .getDownloadURL()
+        // Load profile picture from S3
+        window.getProfilePictureUrl(tutor.email)
           .then(url => img.src = url)
           .catch(() => img.src = "../images/blank_avatar.jpg");
 
@@ -602,27 +599,20 @@
 
     // ---------- Book/Request actions ----------
     async function handleSessionRequest(button, isBookingSession, sessionId = null, tutorId = null) {
-      const currentUser = window.fbAuth.currentUser;
-      if (!currentUser) {
+      const userEmail = localStorage.getItem('userEmail');
+      const userName = localStorage.getItem('displayName');
+      
+      if (!userEmail) {
         console.warn("No user is currently logged in.");
         return;
       }
 
-      if (!isBookingSession) return; // this page uses booking via table button
+      if (!isBookingSession) return;
 
       const row = button.closest('tr');
       const requestedDate = row.cells[0].textContent;
       const requestedTime = row.cells[1].textContent;
       const requestedDuration = row.cells[2].textContent;
-
-      const sessionRef = window.fbDB.ref(`users/${tutorId}/availability/${sessionId}`);
-      const snapshot = await sessionRef.once("value");
-      const sessionData = snapshot.val();
-
-      if (!sessionData) {
-        console.error("Session data not found in availability.");
-        return;
-      }
 
       const tutorEmail = (selectedTutor && selectedTutor.email) || null;
       if (!tutorEmail) {
@@ -630,22 +620,24 @@
         return;
       }
 
-      // Move from availability to bookedSessions
-      const unified = {
-        date: sessionData.date || requestedDate,
-        time: sessionData.time || requestedTime,
-        duration: sessionData.duration || requestedDuration,
-        timezone: sessionData.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
-        studentEmail: currentUser.email,
-        studentName: currentUser.displayName || "Unknown",
-        tutorName: selectedTutor.displayName || "Unknown tutor",
-        status: "booked",
-        sessionRequestId: sessionData.sessionRequestId || null
+      // Book the session using helper
+      const sessionData = {
+        sessionId: sessionId,
+        studentName: userName || "Unknown",
+        date: requestedDate,
+        time: requestedTime,
+        duration: requestedDuration
       };
 
-      await sessionRef.remove();
-      const bookedRef = window.fbDB.ref(`users/${tutorId}/bookedSessions`).push();
-      await bookedRef.set(unified);
+      const result = await window.bookSession(tutorEmail, userEmail, sessionData);
+      
+      if (!result) {
+        console.error("Failed to book session");
+        return;
+      }
+
+      // Delete availability slot
+      await window.deleteAvailabilitySlot(sessionId);
 
       // UI feedback
       new bootstrap.Toast(document.getElementById('booked-session')).show();
@@ -661,37 +653,24 @@
     }
 
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
-      const currentUser = window.fbAuth.currentUser;
-      if (!currentUser) return;
+      const studentEmail = localStorage.getItem('userEmail');
+      const studentName = localStorage.getItem('displayName');
+      if (!studentEmail) return;
 
-      const reqRef = window.fbDB.ref("sessionRequests").push();
-      const sessionData = {
+      const requestData = {
         date: requestedDate,
         time: requestedTime,
         duration: requestedDuration,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        studentEmail: currentUser.email,
-        studentName: currentUser.displayName || "Unknown",
-        tutorName: tutor.displayName,
-        status: "requested",  // mark this as a requested session
+        studentName: studentName || "Unknown",
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
       };
 
-      // now, store this session request under the tutors requestedSessions node
-      window.fbDB.ref(`users/${tutor.tutorId}`).once("value", (snapshot) => {
-        const tutorData = snapshot.val();
-        if (tutorData) {
-          const tutorSessionRef = window.fbDB.ref(`users/${tutor.tutorId}/requestedSessions`).push();
-          tutorSessionRef.set(sessionData, (error) => {
-            if (error) {
-              console.error("Error saving session request under tutor's node:", error);
-            } else {
-              console.log(`Session request saved under tutor ${tutor.displayName}`);
-            }
-          });
-        } else {
-          console.error(`Tutor with displayName "${tutor.displayName}" not found.`);
-        }
-      });
+      const result = await createSessionRequest(tutor.email, studentEmail, requestData);
+      if (result) {
+        console.log(`Session request created for tutor ${tutor.displayName}`);
+      } else {
+        console.error("Error creating session request");
+      }
     }
 
         // alt session request button
@@ -713,7 +692,7 @@
       new bootstrap.Toast(document.getElementById('request-session')).show();
       await writeSessionRequestToDatabase(selectedTutor, requestedDate, requestedTime, requestedDuration);
 
-      const studentName = (window.fbAuth.currentUser && window.fbAuth.currentUser.displayName) || "Unknown";
+      const studentName = localStorage.getItem('displayName') || "Unknown";
       await sendAlternateRequestEmail_Tutor(selectedTutor, studentName, requestedDate, requestedTime, requestedDuration);
 
       // reset form
@@ -725,12 +704,8 @@
 
     // ---------- Booked / Requested tabs (for the current student) ----------
     async function populateStudentBookedAndRequested() {
-      const currentUser = window.fbAuth.currentUser;
-      if (!currentUser) return;
-
-      const myEmail = currentUser.email;
-      const usersSnap = await window.fbDB.ref("users").orderByChild("tutor").equalTo(true).once("value");
-      const tutors = usersSnap.val() || {};
+      const myEmail = localStorage.getItem('userEmail');
+      if (!myEmail) return;
 
       // Clear tables
       const bookedBody = document.querySelector("#bookedTable .bookedTable");
@@ -740,58 +715,56 @@
 
       const now = new Date();
 
-      // iterate each tutor node and filter by current student
-      await Promise.all(Object.keys(tutors).map(async (tid) => {
-        const bookedSnap = await window.fbDB.ref(`users/${tid}/bookedSessions`).once("value");
-        const reqSnap = await window.fbDB.ref(`users/${tid}/requestedSessions`).once("value");
-        const t = tutors[tid];
+      // Get all tutors to map tutor IDs to names
+      const tutors = await getAllTutors();
+      const tutorMap = {};
+      tutors.forEach(t => {
+        tutorMap[t.email] = t.displayName;
+      });
 
-        const booked = bookedSnap.val() || {};
-        Object.keys(booked).forEach(id => {
-          const s = booked[id];
-          if (s.studentEmail === myEmail) {
-            const d = new Date(`${s.date}T${s.time}`);
-            if (isNaN(d) || d < now) return; // skip past/invalid
-            const dateStr = new Date(s.date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
-            const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-            const tzName = s.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // Get booked sessions for this student
+      const bookedSessions = await getStudentBookedSessions(myEmail);
+      bookedSessions.forEach(s => {
+        const d = new Date(`${s.date}T${s.time}`);
+        if (isNaN(d) || d < now) return; // skip past/invalid
+        const dateStr = new Date(s.date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const tutorName = tutorMap[s.tutorId] || 'Tutor';
 
-            bookedBody.insertAdjacentHTML('beforeend', `
-            <tr>
-              <td>${dateStr}</td>
-              <td>${timeStr}</td>
-              <td>${s.duration}</td>
-              <td>${tzName}</td>
-              <td>${s.tutorName || t.displayName || 'Tutor'}</td>
-              <td align="right"><span class="badge bg-success">Booked</span></td>
-            </tr>
-          `);
-          }
-        });
+        bookedBody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${dateStr}</td>
+            <td>${timeStr}</td>
+            <td>${s.duration}</td>
+            <td>${tzName}</td>
+            <td>${tutorName}</td>
+            <td align="right"><span class="badge bg-success">Booked</span></td>
+          </tr>
+        `);
+      });
 
-        const requested = reqSnap.val() || {};
-        Object.keys(requested).forEach(id => {
-          const s = requested[id];
-          if (s.studentEmail === myEmail) {
-            const d = new Date(`${s.date}T${s.time}`);
-            if (isNaN(d) || d < now) return;
-            const dateStr = new Date(s.date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
-            const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
-            const tzName = s.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      // Get requested sessions for this student
+      const requestedSessions = await getStudentSessionRequests(myEmail);
+      requestedSessions.forEach(s => {
+        const d = new Date(`${s.date}T${s.time}`);
+        if (isNaN(d) || d < now) return;
+        const dateStr = new Date(s.date).toLocaleDateString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit' });
+        const timeStr = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+        const tzName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const tutorName = tutorMap[s.tutorId] || 'Tutor';
 
-            requestedBody.insertAdjacentHTML('beforeend', `
-            <tr>
-              <td>${dateStr}</td>
-              <td>${timeStr}</td>
-              <td>${s.duration}</td>
-              <td>${tzName}</td>
-              <td>${s.tutorName || t.displayName || 'Tutor'}</td>
-              <td align="right"><span class="badge bg-warning text-dark">Pending</span></td>
-            </tr>
-          `);
-          }
-        });
-      }));
+        requestedBody.insertAdjacentHTML('beforeend', `
+          <tr>
+            <td>${dateStr}</td>
+            <td>${timeStr}</td>
+            <td>${s.duration}</td>
+            <td>${tzName}</td>
+            <td>${tutorName}</td>
+            <td align="right"><span class="badge bg-warning text-dark">Pending</span></td>
+          </tr>
+        `);
+      });
     }
 
     // Initialize EmailJS
@@ -816,7 +789,7 @@
 
     async function sendBookedEmail_Student(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
       try {
-        const studentEmail = firebase.auth().currentUser.email;
+        const studentEmail = localStorage.getItem('userEmail');
 
         await emailjs.send('service_gos1bro', 'template_nlqu6we', { //student booking confirmation
           email: studentEmail,

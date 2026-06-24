@@ -286,24 +286,30 @@ template.innerHTML = `
 document.querySelector(".page-content").prepend(template.content);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await waitForFbAuth();
+  await waitForAuth();
   updateSideNavCompletionStatus();
 });
 
-async function waitForFbAuth() {
+async function waitForAuth() {
   return new Promise((resolve) => {
     const interval = setInterval(() => {
-      if (window.fbAuth && window.fbDB && window.fbAuth.currentUser) {
+      const userEmail = localStorage.getItem('userEmail');
+      if (userEmail) {
         clearInterval(interval);
         resolve();
       }
     }, 50);
+    // Timeout after 5 seconds
+    setTimeout(() => {
+      clearInterval(interval);
+      resolve();
+    }, 5000);
   });
 }
 
 async function updateSideNavCompletionStatus() {
-  const user = window.fbAuth.currentUser;
-  if (!user) return;
+  const userEmail = localStorage.getItem('userEmail');
+  if (!userEmail) return;
 
   const sessions = [
     "session1",
@@ -316,12 +322,8 @@ async function updateSideNavCompletionStatus() {
   ];
 
   for (const session of sessions) {
-    const ref = window.fbDB.ref(
-      `users/${user.uid}/completedSessions/${session}`
-    );
-    const snapshot = await ref.once("value");
-    const completed = snapshot.val() || {};
-
+    // Get completed lessons from DynamoDB
+    const completed = await window.getSessionCompletedLessons(session);
     const completedLessons = Object.keys(completed);
 
     const allLessons = {
@@ -389,11 +391,8 @@ async function updateSideNavCompletionStatus() {
     };
 
     for (const session of sessions) {
-      const ref = window.fbDB.ref(
-        `users/${user.uid}/completedSessions/${session}`
-      );
-      const snapshot = await ref.once("value");
-      const completed = snapshot.val() || {};
+      // Get completed lessons from DynamoDB
+      const completed = await window.getSessionCompletedLessons(session);
       const completedLessons = Object.keys(completed);
 
       const requiredLessons = allLessons[session].filter(

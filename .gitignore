@@ -7,6 +7,7 @@
 ._.DS_Store
 firebase_media
 .env
+documentation/
 
 # Node modules - ignore all node_modules directories
 node_modules/
