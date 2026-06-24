@@ -476,8 +476,6 @@ async function getSessionCompletedLessons(sessionName) {
   }
 }
 
-}
-
 // Make functions available globally
 window.trackSessionAccess = trackSessionAccess;
 window.checkSessionCompletion = checkSessionCompletion;
@@ -487,11 +485,13 @@ window.calculateProgressStats = calculateProgressStats;
 window.initializeSessionCompletionUI = initializeSessionCompletionUI;
 window.handleMarkComplete = handleMarkComplete;
 
-console.log('✅ Progress tracking initialized (DynamoDB)');
-
-// Made with Bob
-
 // Make lesson tracking functions available globally
 window.saveLessonComplete = saveLessonComplete;
 window.isLessonComplete = isLessonComplete;
 window.getSessionCompletedLessons = getSessionCompletedLessons;
+
+console.log('✅ Progress tracking initialized (DynamoDB)');
+
+}
+
+// Made with Bob
