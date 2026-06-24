@@ -1,14 +1,24 @@
-// Clear any Firebase session storage on page load
+// Clear any Firebase storage on page load
 (function() {
   // Remove Firebase-specific session storage keys
-  const firebaseKeys = [];
+  const sessionFirebaseKeys = [];
   for (let i = 0; i < sessionStorage.length; i++) {
     const key = sessionStorage.key(i);
     if (key && (key.includes('firebase') || key.includes('Firebase'))) {
-      firebaseKeys.push(key);
+      sessionFirebaseKeys.push(key);
     }
   }
-  firebaseKeys.forEach(key => sessionStorage.removeItem(key));
+  sessionFirebaseKeys.forEach(key => sessionStorage.removeItem(key));
+  
+  // Remove Firebase-specific local storage keys
+  const localFirebaseKeys = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && (key.includes('firebase') || key.includes('Firebase'))) {
+      localFirebaseKeys.push(key);
+    }
+  }
+  localFirebaseKeys.forEach(key => localStorage.removeItem(key));
 })();
 
 async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {

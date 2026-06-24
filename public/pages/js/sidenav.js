@@ -286,7 +286,8 @@ template.innerHTML = `
 document.querySelector(".page-content").prepend(template.content);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await waitForAuth();
+  // Don't wait for auth or completion status - show sidenav immediately
+  // Update completion status in background
   updateSideNavCompletionStatus();
 });
 

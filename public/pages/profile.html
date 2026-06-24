@@ -29,7 +29,9 @@
         "@aws-amplify/storage/": "https://unpkg.com/@aws-amplify/storage@6/dist/esm/",
         "@aws-amplify/data": "https://unpkg.com/@aws-amplify/data@1/dist/esm/index.mjs",
         "@aws-amplify/data/": "https://unpkg.com/@aws-amplify/data@1/dist/esm/",
-        "uuid": "https://unpkg.com/uuid@9/dist/esm-browser/index.js"
+        "uuid": "https://unpkg.com/uuid@9/dist/esm-browser/index.js",
+        "@aws-crypto/sha256-js": "https://unpkg.com/@aws-crypto/sha256-js@5/build/module/index.js",
+        "@smithy/": "https://unpkg.com/@smithy/"
       }
     }
   </script>
@@ -401,7 +403,6 @@
     stylesheet.href = getPath() + "styles/mainStyle.css";
     document.head.appendChild(stylesheet);
 
-    let currentUser = null;
     const who = document.getElementById('who');
     const what = document.getElementById('what');
     const career = document.getElementById('career');
@@ -535,6 +536,7 @@
     async function updateProfile(event) {
       event.preventDefault();
 
+      const email = localStorage.getItem('userEmail');
       const profileValues = {
         about: who.value,
         learning: what.value,
@@ -548,69 +550,43 @@
         siteFlag: document.querySelector('input[name="showcase"]:checked').value === "yes"
       };
 
-      const updates = {};
-      updates['users/' + currentUser.uid + '/profile'] = profileValues;
-
       try {
-        async function updateProfile(event) {
-          event.preventDefault();
+        // Get user
+        const user = await getUserByEmail(email);
+        if (!user) throw new Error('User not found');
 
-          const email = localStorage.getItem('userEmail');
-          const profileValues = {
-            about: who.value,
-            learning: what.value,
-            aspirations: career.value,
-            currentJob: currentJob.value,
-            studentLocation: studentLocation.value,
-            linkedIn: linkedIn.value,
-            gitHub: gitHubAccount.value,
-            siteURL: document.getElementById('gitUrl').value,
-            siteTitle: document.getElementById('gitTitle').value,
-            siteFlag: document.querySelector('input[name="showcase"]:checked').value === "yes"
-          };
-
-          try {
-            // Get user
-            const user = await getUserByEmail(email);
-            if (!user) throw new Error('User not found');
-
-            // Update user profile in DynamoDB
-            const mutation = `
-      mutation UpdateUser($id: ID!, $profile: AWSJSON!) {
-        updateUser(input: { id: $id, profile: $profile }) {
-          id
-          profile
-        }
-      }
-    `;
-
-            const config = await getAPIConfig();
-            const response = await fetch(config.endpoint, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'x-api-key': config.apiKey
-              },
-              body: JSON.stringify({
-                query: mutation,
-                variables: {
-                  id: user.id,
-                  profile: JSON.stringify(profileValues)
-                }
-              })
-            });
-
-            const result = await response.json();
-            if (result.errors) throw new Error(result.errors[0].message);
-
-            successToast.show();
-          } catch (error) {
-            console.error('Error updating profile:', error);
-            errorToast.show();
+        // Update user profile in DynamoDB
+        const mutation = `
+          mutation UpdateUser($id: ID!, $profile: AWSJSON!) {
+            updateUser(input: { id: $id, profile: $profile }) {
+              id
+              profile
+            }
           }
-        } successToast.show();
-      } catch (err) {
-        console.error("Profile update failed:", err);
+        `;
+
+        const config = await getAPIConfig();
+        const response = await fetch(config.endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': config.apiKey
+          },
+          body: JSON.stringify({
+            query: mutation,
+            variables: {
+              id: user.id,
+              profile: JSON.stringify(profileValues)
+            }
+          })
+        });
+
+        const result = await response.json();
+        if (result.errors) throw new Error(result.errors[0].message);
+
+        successToast.show();
+      } catch (error) {
+        console.error('Error updating profile:', error);
         errorToast.show();
       }
     }
