@@ -551,9 +551,53 @@
       };
 
       try {
-        // Get user
-        const user = await getUserByEmail(email);
-        if (!user) throw new Error('User not found');
+        // Get user or create if doesn't exist
+        let user = await getUserByEmail(email);
+        
+        if (!user) {
+          // User doesn't exist in DynamoDB yet - create them
+          console.log('User not found in DynamoDB, creating...');
+          const displayName = localStorage.getItem('displayName') || email.split('@')[0];
+          
+          const createMutation = `
+            mutation CreateUser($email: String!, $displayName: String!) {
+              createUser(input: {
+                email: $email,
+                displayName: $displayName,
+                profile: "{}"
+              }) {
+                id
+                email
+                displayName
+              }
+            }
+          `;
+          
+          const config = await getAPIConfig();
+          const createResponse = await fetch(config.endpoint, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': config.apiKey
+            },
+            body: JSON.stringify({
+              query: createMutation,
+              variables: {
+                email: email,
+                displayName: displayName
+              }
+            })
+          });
+          
+          const createResult = await createResponse.json();
+          if (createResult.errors) {
+            console.error('Error creating user:', createResult.errors);
+            throw new Error('Failed to create user record');
+          }
+          
+          user = createResult.data.createUser;
+          console.log('User created successfully:', user);
+        }
 
         // Update user profile in DynamoDB
         const mutation = `
