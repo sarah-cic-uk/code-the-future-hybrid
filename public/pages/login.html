@@ -135,11 +135,24 @@
         const result = await cognitoIdentityServiceProvider.initiateAuth(params).promise();
         
         if (result.AuthenticationResult) {
-          // Store tokens
+          // Get user attributes to fetch displayName
+          const getUserParams = {
+            AccessToken: result.AuthenticationResult.AccessToken
+          };
+          
+          const userInfo = await cognitoIdentityServiceProvider.getUser(getUserParams).promise();
+          const nameAttr = userInfo.UserAttributes.find(attr => attr.Name === 'name');
+          const displayName = nameAttr ? nameAttr.Value : email.split('@')[0];
+          
+          // Clear any Firebase session storage
+          sessionStorage.clear();
+          
+          // Store tokens and user info
           localStorage.setItem('accessToken', result.AuthenticationResult.AccessToken);
           localStorage.setItem('idToken', result.AuthenticationResult.IdToken);
           localStorage.setItem('loggedIn', 'true');
           localStorage.setItem('userEmail', email);
+          localStorage.setItem('displayName', displayName);
           
           // Redirect
           window.location.href = './sessions.html';

@@ -1,3 +1,16 @@
+// Clear any Firebase session storage on page load
+(function() {
+  // Remove Firebase-specific session storage keys
+  const firebaseKeys = [];
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
+    if (key && (key.includes('firebase') || key.includes('Firebase'))) {
+      firebaseKeys.push(key);
+    }
+  }
+  firebaseKeys.forEach(key => sessionStorage.removeItem(key));
+})();
+
 async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
   if (localStorage.getItem('loggedIn') === "true") {
     if (loginBtn) loginBtn.style.display = "none";
