@@ -222,7 +222,6 @@
       const pageMembers = cohortMembers.slice(start, end);
 
       pageMembers.forEach(({ id, email, displayName, profile, isCurrentUser }) => {
-        const fallbackImageURL = profile ? profile.imageURL : null;
         const youBadge = isCurrentUser ? ' <span class="badge bg-secondary">You</span>' : '';
         const cardHTML = `
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
@@ -230,8 +229,8 @@
               <div class="card-body">
                 <p class="h5 text-center" style="padding-top:0;">${displayName}${youBadge}</p>
                 <div class="d-flex justify-content-center">
-                  <img class="rounded-circle avatar-dimensions img-thumbnail" id="profile-pic"
-                    alt="Profile picture of ${displayName}" data-user-email="${email}" />
+                  <img class="rounded-circle avatar-dimensions img-thumbnail"
+                    alt="Profile picture of ${displayName}" data-user-id="${id}" />
                 </div>
                 <div class="text-center mt-4">
                   <a href="javascript:void(0);" data-name="${displayName}" data-id="${id}" ${isCurrentUser ? 'data-self="true"' : ''} class="dynamic-link" title="View profile">${isCurrentUser ? 'Edit your profile' : 'View profile'}</a>
@@ -241,7 +240,7 @@
           </div>
         `;
         cardContainer.insertAdjacentHTML('beforeend', cardHTML);
-        setUserProfileImage(email, fallbackImageURL);
+        setUserProfileImage(id);
       });
 
       document.querySelectorAll(".dynamic-link").forEach(link => {
@@ -288,15 +287,15 @@
     }
 
 
-    async function setUserProfileImage(userEmail, fallbackImageURL) {
-      const imgElement = document.querySelector(`img[data-user-email="${userEmail}"]`);
+    async function setUserProfileImage(userId) {
+      const imgElement = document.querySelector(`img[data-user-id="${userId}"]`);
 
       if (imgElement) {
         try {
-          const url = await window.getProfilePictureUrl(userEmail);
+          const url = await window.getProfilePictureUrl(userId);
           imgElement.src = url;
         } catch (error) {
-          console.error(`Error fetching profile image for ${userEmail}:`, error);
+          console.error(`Error fetching profile image for ${userId}:`, error);
           imgElement.src = "../images/blank_avatar.jpg";
         }
       }

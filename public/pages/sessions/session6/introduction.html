@@ -228,7 +228,7 @@
                 <div class="d-flex justify-content-center">
                   <img class="profile-pic rounded-circle img-thumbnail" style="height: 200px; width: 200px;"
                     src="https://avatar.iran.liara.run/public"
-                    alt="Profile picture of ${student.displayName}" data-user-email="${student.email}" />
+                    alt="Profile picture of ${student.displayName}" data-user-id="${student.userId}" />
                 </div>
                 <div class="text-center my-6">
                   <p class="d-block h6 mt-4">${student.profile.siteTitle || 'Project Title'}</p>
@@ -240,7 +240,7 @@
         `;
 
         showcaseContainer.innerHTML += cardHTML;
-        setUserProfileImage(student.email, student.profile.imageURL);
+        setUserProfileImage(student.userId);
       });
 
       renderPaginationControls(totalPages);
@@ -263,20 +263,16 @@
       document.querySelector(".container.pt-4.mb-4").appendChild(paginationContainer);
     }
 
-    // Load profile picture from S3
-    async function setUserProfileImage(userEmail, fallbackImageURL) {
-      const imgElement = document.querySelector(`img[data-user-email="${userEmail}"]`);
+    async function setUserProfileImage(userId) {
+      const imgElement = document.querySelector(`img[data-user-id="${userId}"]`);
 
       if (imgElement) {
         try {
-          // Use the helper function from cohort-management.js
-          const url = await window.getProfilePictureUrl(userEmail);
+          const url = await window.getProfilePictureUrl(userId);
           imgElement.src = url;
-          console.log(`Profile picture loaded for ${userEmail}: ${url}`);
         } catch (error) {
-          console.error(`Error loading profile picture for ${userEmail}:`, error);
-          // Fallback to default avatar
-          imgElement.src = fallbackImageURL || '/images/blank_avatar.jpg';
+          console.error(`Error loading profile picture for ${userId}:`, error);
+          imgElement.src = '/images/blank_avatar.jpg';
         }
       }
     }

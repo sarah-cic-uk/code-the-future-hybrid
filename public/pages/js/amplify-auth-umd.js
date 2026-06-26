@@ -128,6 +128,8 @@ async function amplifySignOut() {
     localStorage.setItem('loggedIn', 'false');
     localStorage.removeItem('userEmail');
     localStorage.removeItem('displayName');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('profilePicUrl');
     window.location.href = '/pages/login.html';
   } catch (error) {
     console.error('Logout error:', error);

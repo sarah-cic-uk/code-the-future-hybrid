@@ -31,17 +31,10 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
       document.querySelector('#profileName').innerHTML = profileName;
     }
 
-    // Load profile pictures using Amplify
-    // TODO: Re-enable when ES modules are working
-    // try {
-    //   const { checkAuth } = await import('./amplify-auth.js');
-    //   const isAuthenticated = await checkAuth();
-    //   if (isAuthenticated) {
-    //     loadProfilePictures();
-    //   }
-    // } catch (error) {
-    //   console.error('Auth check error:', error);
-    // }
+    const cachedPic = localStorage.getItem('profilePicUrl');
+    if (cachedPic) {
+      document.querySelectorAll('#profile-pic-avatar').forEach(el => el.src = cachedPic);
+    }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
     if (profileBtn) profileBtn.style.display = "none";
@@ -95,6 +88,8 @@ function logout() {
   localStorage.removeItem('userEmail');
   localStorage.removeItem('displayName');
   localStorage.removeItem('cohort');
+  localStorage.removeItem('userId');
+  localStorage.removeItem('profilePicUrl');
   localStorage.removeItem('idToken');
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
@@ -234,70 +229,5 @@ async function sendEmailRequest(to, subject, text, html) {
   }
 }
 
-async function loadProfilePictures() {
-  try {
-    // Get current user from Cognito
-    const { getCurrentUser } = await import('./amplify-auth.js');
-    const user = await getCurrentUser();
-    if (!user) return;
 
-    const userEmail = localStorage.getItem('userEmail');
-    if (!userEmail) return;
-
-    // Load profile picture from Amplify Storage
-    const { getProfilePictureUrl } = await import('./amplify-storage.js');
-    const profilePicElements = document.querySelectorAll('img[id="profile-pic-avatar"]');
-    
-    // Use email as user ID for profile pictures
-    const profilePicUrl = await getProfilePictureUrl(userEmail);
-    
-    if (profilePicUrl) {
-      for (const el of profilePicElements) {
-        el.setAttribute('src', profilePicUrl);
-      }
-    }
-
-    // Check if user is a tutor/teacher and show/hide menu items
-    const { generateClient } = await import('aws-amplify/data');
-    const client = generateClient();
-    
-    const { data: users } = await client.models.User.list({
-      filter: {
-        email: { eq: userEmail }
-      }
-    });
-    
-    if (users && users.length > 0) {
-      const userData = users[0];
-      
-      // Show tutor menu item for tutors (course creators)
-      const tutorMenuItem = document.getElementById('tutor-menu-item');
-      if (tutorMenuItem && userData.isTutor) {
-        tutorMenuItem.style.display = 'block';
-      }
-
-      // Show teacher menu item for teachers (school teachers)
-      const teacherMenuItem = document.getElementById('teacher-menu-item');
-      if (teacherMenuItem && userData.isTeacher) {
-        teacherMenuItem.style.display = 'block';
-      }
-
-      // Show admin menu item for tutors (course creators have admin access)
-      const adminMenuItem = document.getElementById('admin-menu-item');
-      if (adminMenuItem && userData.isTutor) {
-        adminMenuItem.style.display = 'block';
-      }
-
-      // Ensure cohort data is in localStorage
-      if (!localStorage.getItem('cohort') && userData.cohortId) {
-        localStorage.setItem('cohort', userData.cohortId);
-      }
-      if (!localStorage.getItem('displayName') && userData.displayName) {
-        localStorage.setItem('displayName', userData.displayName);
-      }
-    }
-  } catch (error) {
-    console.error('Error loading profile:', error);
-  }
-}
 

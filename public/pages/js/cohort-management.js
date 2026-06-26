@@ -287,27 +287,27 @@ async function getUserByEmail(email) {
 
 /**
  * Get profile picture URL from S3
- * @param {string} email - User email
+ * @param {string} userId - DynamoDB user ID
  * @returns {Promise<string>} - Profile picture URL or default
  */
-async function getProfilePictureUrl(email) {
+async function getProfilePictureUrl(userId) {
+  if (!userId) return '/images/blank_avatar.jpg';
+
   try {
+    if (window.amplifyStorage && window.amplifyStorage.getProfilePictureUrl) {
+      const url = await window.amplifyStorage.getProfilePictureUrl(userId);
+      if (url) return url;
+    }
+
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
     const bucket = config.storage.bucket_name;
     const region = config.storage.aws_region;
-    
-    // Convert email to safe filename
-    const fileName = email.replace('@', '_at_').replace(/\./g, '_');
-    const url = `https://${bucket}.s3.${region}.amazonaws.com/public/profile-pictures/${fileName}.jpg`;
-    
-    // Test if image exists
+    const url = `https://${bucket}.s3.${region}.amazonaws.com/profile-pictures/${userId}`;
+
     const testResponse = await fetch(url, { method: 'HEAD' });
-    if (testResponse.ok) {
-      return url;
-    }
-    
-    // Return default avatar if not found
+    if (testResponse.ok) return url;
+
     return '/images/blank_avatar.jpg';
   } catch (error) {
     console.error('Error getting profile picture:', error);
