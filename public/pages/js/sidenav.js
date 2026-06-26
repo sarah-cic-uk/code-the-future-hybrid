@@ -312,6 +312,8 @@ async function updateSideNavCompletionStatus() {
   const userEmail = localStorage.getItem('userEmail');
   if (!userEmail) return;
 
+  if (typeof window.getSessionCompletedLessons !== 'function') return;
+
   const sessions = [
     "session1",
     "session2",
@@ -323,7 +325,6 @@ async function updateSideNavCompletionStatus() {
   ];
 
   for (const session of sessions) {
-    // Get completed lessons from DynamoDB
     const completed = await window.getSessionCompletedLessons(session);
     const completedLessons = Object.keys(completed);
 
