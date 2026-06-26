@@ -135,26 +135,42 @@
         const result = await cognitoIdentityServiceProvider.initiateAuth(params).promise();
         
         if (result.AuthenticationResult) {
-          // Get user attributes to fetch displayName
           const getUserParams = {
             AccessToken: result.AuthenticationResult.AccessToken
           };
-          
+
           const userInfo = await cognitoIdentityServiceProvider.getUser(getUserParams).promise();
           const nameAttr = userInfo.UserAttributes.find(attr => attr.Name === 'name');
           const displayName = nameAttr ? nameAttr.Value : email.split('@')[0];
-          
-          // Clear any Firebase session storage
+
           sessionStorage.clear();
-          
-          // Store tokens and user info
+
           localStorage.setItem('accessToken', result.AuthenticationResult.AccessToken);
           localStorage.setItem('idToken', result.AuthenticationResult.IdToken);
+          localStorage.setItem('refreshToken', result.AuthenticationResult.RefreshToken);
           localStorage.setItem('loggedIn', 'true');
           localStorage.setItem('userEmail', email);
           localStorage.setItem('displayName', displayName);
-          
-          // Redirect
+
+          // Fetch user record from DynamoDB for cohort and userId
+          try {
+            const userQuery = `
+              query ListUsers($email: String!) {
+                listUsers(filter: { email: { eq: $email } }) {
+                  items { id cohortId }
+                }
+              }
+            `;
+            const userData = await executeGraphQL(userQuery, { email });
+            const user = userData.listUsers.items[0];
+            if (user) {
+              localStorage.setItem('userId', user.id);
+              if (user.cohortId) localStorage.setItem('cohort', user.cohortId);
+            }
+          } catch (e) {
+            console.error('Error fetching user record:', e);
+          }
+
           window.location.href = './sessions.html';
         }
       } catch (error) {
@@ -163,19 +179,63 @@
       }
     }
     
+    async function executeGraphQL(query, variables = {}) {
+      const response = await fetch(config.data.url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': config.data.api_key
+        },
+        body: JSON.stringify({ query, variables })
+      });
+      const result = await response.json();
+      if (result.errors) throw new Error(result.errors[0].message);
+      return result.data;
+    }
+
+    async function validateCohortCode(cohortCode) {
+      const query = `
+        query ListCohorts($code: String!) {
+          listCohorts(filter: { cohortCode: { eq: $code } }) {
+            items { id cohortCode name }
+          }
+        }
+      `;
+      const data = await executeGraphQL(query, { code: cohortCode });
+      return data.listCohorts.items.length > 0 ? data.listCohorts.items[0] : null;
+    }
+
+    async function createUserRecord(email, displayName, cohortCode) {
+      const query = `
+        mutation CreateUser($input: CreateUserInput!) {
+          createUser(input: $input) {
+            id email displayName cohortId
+          }
+        }
+      `;
+      const data = await executeGraphQL(query, {
+        input: { email, displayName, cohortId: cohortCode }
+      });
+      return data.createUser;
+    }
+
     async function handleRegister(e) {
       e.preventDefault();
-      const cohort = document.getElementById('reg-cohort').value;
-      const name = document.getElementById('reg-name').value;
-      const email = document.getElementById('reg-email').value;
+      const cohort = document.getElementById('reg-cohort').value.trim();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
       const password = document.getElementById('reg-password').value;
-      
+
       try {
-        // Validate cohort (simplified - just check it's not empty)
         if (!cohort || cohort.length < 3) {
           throw new Error('Please enter a valid cohort code');
         }
-        
+
+        const cohortRecord = await validateCohortCode(cohort);
+        if (!cohortRecord) {
+          throw new Error('Cohort code not found. Please check with your teacher.');
+        }
+
         const params = {
           ClientId: config.auth.user_pool_client_id,
           Username: email,
@@ -185,19 +245,20 @@
             { Name: 'name', Value: name }
           ]
         };
-        
-        const result = await cognitoIdentityServiceProvider.signUp(params).promise();
-        
-        showMessage('register-message', 
+
+        await cognitoIdentityServiceProvider.signUp(params).promise();
+
+        await createUserRecord(email, name, cohort);
+
+        showMessage('register-message',
           'Account created! Please check your email for a verification code. ' +
           'After verifying, you can sign in using the Sign In tab.');
-        
-        // Clear form
+
         document.getElementById('reg-cohort').value = '';
         document.getElementById('reg-name').value = '';
         document.getElementById('reg-email').value = '';
         document.getElementById('reg-password').value = '';
-        
+
       } catch (error) {
         console.error('Registration error:', error);
         showMessage('register-message', error.message || 'Registration failed', true);

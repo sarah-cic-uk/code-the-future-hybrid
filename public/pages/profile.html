@@ -498,6 +498,27 @@
       }
     }
 
+    async function refreshIdToken() {
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) throw new Error('No refresh token - please log in again');
+
+      const response = await fetch('/amplify_outputs.json');
+      const config = await response.json();
+
+      const cognito = new AWS.CognitoIdentityServiceProvider({ region: config.auth.aws_region });
+      const result = await cognito.initiateAuth({
+        AuthFlow: 'REFRESH_TOKEN_AUTH',
+        ClientId: config.auth.user_pool_client_id,
+        AuthParameters: { REFRESH_TOKEN: refreshToken }
+      }).promise();
+
+      const newIdToken = result.AuthenticationResult.IdToken;
+      const newAccessToken = result.AuthenticationResult.AccessToken;
+      localStorage.setItem('idToken', newIdToken);
+      localStorage.setItem('accessToken', newAccessToken);
+      return newIdToken;
+    }
+
     async function uploadProfilePictureToS3(userId, blob) {
       const response = await fetch('/amplify_outputs.json');
       const config = await response.json();
@@ -506,8 +527,8 @@
       const identityPoolId = config.auth.identity_pool_id;
       const userPoolId = config.auth.user_pool_id;
 
-      const idToken = localStorage.getItem('idToken');
-      if (!idToken) throw new Error('Not authenticated');
+      // Always refresh the token to ensure it's valid
+      const idToken = await refreshIdToken();
 
       const logins = {};
       logins[`cognito-idp.${region}.amazonaws.com/${userPoolId}`] = idToken;
