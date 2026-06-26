@@ -156,19 +156,52 @@
 
     async function loadCohortData(cohortCode) {
       cohortMembers = [];
-      
-      // Use cohort-management helper
+
       const students = await window.getStudentsByCohort(cohortCode);
-      cohortMembers = students.map(s => ({
-        id: s.id,
-        email: s.email,
-        displayName: s.displayName,
-        cohort: s.cohortId,
-        profile: s.profile || {}
-      }));
+      const currentEmail = localStorage.getItem('userEmail');
+
+      cohortMembers = students.map(s => {
+        let profile = {};
+        if (s.profile) {
+          try {
+            profile = typeof s.profile === 'string' ? JSON.parse(s.profile) : s.profile;
+          } catch (e) {
+            console.error('Error parsing profile for', s.email, e);
+          }
+        }
+        return {
+          id: s.id,
+          email: s.email,
+          displayName: s.displayName,
+          cohort: s.cohortId,
+          profile,
+          isCurrentUser: s.email === currentEmail
+        };
+      });
+
+      // Ensure current user appears first
+      cohortMembers.sort((a, b) => b.isCurrentUser - a.isCurrentUser);
+
+      if (cohortMembers.length === 0) {
+        showEmptyState();
+        return;
+      }
 
       loadCohortPage(1);
       renderPaginationControls();
+    }
+
+    function showEmptyState() {
+      const cardContainer = document.querySelector(".card-container");
+      cardContainer.innerHTML = `
+        <div class="col-12 text-center py-5">
+          <h3 class="text-muted mb-3">No one else has joined your cohort yet</h3>
+          <p class="text-muted mb-4">In the meantime, make sure your profile is up to date so your cohort can get to know you when they arrive!</p>
+          <a href="javascript:void(0);" onclick="createPath('pages/profile.html')" class="btn text-white" style="background-color: #31268c;">
+            Update your profile
+          </a>
+        </div>
+      `;
     }
 
     function loadCohortPage(page) {
@@ -176,23 +209,32 @@
       cardContainer.innerHTML = "";
       currentPage = page;
 
+      if (cohortMembers.length === 1 && cohortMembers[0].isCurrentUser) {
+        cardContainer.innerHTML = `
+          <div class="col-12 text-center py-4">
+            <p class="text-muted">You're the first one here! Your cohort members will appear below as they join.</p>
+          </div>
+        `;
+      }
+
       const start = (page - 1) * itemsPerPage;
       const end = start + itemsPerPage;
       const pageMembers = cohortMembers.slice(start, end);
 
-      pageMembers.forEach(({ id, email, displayName, profile }) => {
+      pageMembers.forEach(({ id, email, displayName, profile, isCurrentUser }) => {
         const fallbackImageURL = profile ? profile.imageURL : null;
+        const youBadge = isCurrentUser ? ' <span class="badge bg-secondary">You</span>' : '';
         const cardHTML = `
           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="card shadow m-2" style="height: fit-content">
               <div class="card-body">
-                <p class="h5 text-center" style="padding-top:0;">${displayName}</p>
+                <p class="h5 text-center" style="padding-top:0;">${displayName}${youBadge}</p>
                 <div class="d-flex justify-content-center">
                   <img class="rounded-circle avatar-dimensions img-thumbnail" id="profile-pic"
                     alt="Profile picture of ${displayName}" data-user-email="${email}" />
                 </div>
                 <div class="text-center mt-4">
-                  <a href="javascript:void(0);" data-name="${displayName}" data-id="${id}" class="dynamic-link" title="View profile">View profile</a>
+                  <a href="javascript:void(0);" data-name="${displayName}" data-id="${id}" ${isCurrentUser ? 'data-self="true"' : ''} class="dynamic-link" title="View profile">${isCurrentUser ? 'Edit your profile' : 'View profile'}</a>
                 </div>
               </div>
             </div>
@@ -205,8 +247,13 @@
       document.querySelectorAll(".dynamic-link").forEach(link => {
         link.addEventListener("click", (e) => {
           e.preventDefault();
-          const name = e.target.getAttribute("data-name");
-          const id = e.target.getAttribute("data-id");
+          const target = e.target;
+          if (target.getAttribute("data-self") === "true") {
+            createPath('pages/profile.html');
+            return;
+          }
+          const name = target.getAttribute("data-name");
+          const id = target.getAttribute("data-id");
           redirect(name, id);
         });
       });

@@ -494,8 +494,15 @@
           return;
         }
 
-        const profileValues = userData.profile || {};
-        
+        let profileValues = {};
+        if (userData.profile) {
+          try {
+            profileValues = typeof userData.profile === 'string' ? JSON.parse(userData.profile) : userData.profile;
+          } catch (e) {
+            console.error('Error parsing profile JSON:', e);
+          }
+        }
+
         who.value = profileValues.about || '';
         what.value = profileValues.learning || '';
         career.value = profileValues.aspirations || '';
