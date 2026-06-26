@@ -80,7 +80,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 		const overviewName = extractLessonName(currentPath);
 
-		if (await isLessonComplete(overviewName)) {
+		if (await checkLessonComplete(overviewName)) {
 			startBtn.style.backgroundColor = "#011460";
 			startBtn.style.borderColor = "#011460";
 		}
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		if (nextLesson) {
 			startBtn.addEventListener("click", async (e) => {
 				e.preventDefault();
-				await saveLessonComplete(overviewName);
+				await saveLesson(overviewName);
 				startBtn.style.backgroundColor = "#011460";
 				startBtn.style.borderColor = "#011460";
 				setTimeout(() => {
@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	// save & update on click
 	markBtn.addEventListener("click", async () => {
-		await saveLessonComplete(lessonName);
+		await saveLesson(lessonName);
 		await renderCompletionStatus(lessonName, markBtn, bannerTarget);
 	});
 });
@@ -188,20 +188,18 @@ function getCurrentSessionName() {
 }
 
 // === Lesson completion helpers using DynamoDB ===
-async function saveLessonComplete(lessonName) {
+async function saveLesson(lessonName) {
 	const session = getCurrentSessionName();
-	if (!session) return;
-	
-	// Use the global function from progressTracking.js
-	await window.saveLessonComplete(session, lessonName);
+	if (!session || typeof window._saveLessonComplete !== 'function') return;
+
+	await window._saveLessonComplete(session, lessonName);
 }
 
-async function isLessonComplete(lessonName) {
+async function checkLessonComplete(lessonName) {
 	const session = getCurrentSessionName();
-	if (!session) return false;
-	
-	// Use the global function from progressTracking.js
-	return await window.isLessonComplete(session, lessonName);
+	if (!session || typeof window._isLessonComplete !== 'function') return false;
+
+	return await window._isLessonComplete(session, lessonName);
 }
 
 function extractLessonName(path) {
@@ -218,7 +216,7 @@ function extractLessonName(path) {
 
 
 async function renderCompletionStatus(lessonName, markBtn, bannerTarget) {
-	const completed = await isLessonComplete(lessonName);
+	const completed = await checkLessonComplete(lessonName);
 
 	if (completed) {
 		if (markBtn) {

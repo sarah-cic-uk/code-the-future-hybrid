@@ -486,8 +486,8 @@ window.initializeSessionCompletionUI = initializeSessionCompletionUI;
 window.handleMarkComplete = handleMarkComplete;
 
 // Make lesson tracking functions available globally
-window.saveLessonComplete = saveLessonComplete;
-window.isLessonComplete = isLessonComplete;
+window._saveLessonComplete = saveLessonComplete;
+window._isLessonComplete = isLessonComplete;
 window.getSessionCompletedLessons = getSessionCompletedLessons;
 
 console.log('✅ Progress tracking initialized (DynamoDB)');
