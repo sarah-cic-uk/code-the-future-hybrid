@@ -546,7 +546,8 @@
         Bucket: bucket,
         Key: `public/profile-pictures/${userId}`,
         Body: blob,
-        ContentType: 'image/jpeg'
+        ContentType: 'image/jpeg',
+        ACL: 'public-read'
       }).promise();
     }
 
