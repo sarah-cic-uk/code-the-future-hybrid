@@ -294,11 +294,6 @@ async function getProfilePictureUrl(userId) {
   if (!userId) return '/images/blank_avatar.jpg';
 
   try {
-    if (window.amplifyStorage && window.amplifyStorage.getProfilePictureUrl) {
-      const url = await window.amplifyStorage.getProfilePictureUrl(userId);
-      if (url) return url;
-    }
-
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
     const bucket = config.storage.bucket_name;
