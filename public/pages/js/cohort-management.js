@@ -298,7 +298,7 @@ async function getProfilePictureUrl(userId) {
     const config = await response.json();
     const bucket = config.storage.bucket_name;
     const region = config.storage.aws_region;
-    const url = `https://${bucket}.s3.${region}.amazonaws.com/profile-pictures/${userId}`;
+    const url = `https://${bucket}.s3.${region}.amazonaws.com/public/profile-pictures/${userId}`;
 
     const testResponse = await fetch(url, { method: 'HEAD' });
     if (testResponse.ok) return url;

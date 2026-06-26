@@ -544,7 +544,7 @@
       const s3 = new AWS.S3({ region });
       await s3.putObject({
         Bucket: bucket,
-        Key: `profile-pictures/${userId}`,
+        Key: `public/profile-pictures/${userId}`,
         Body: blob,
         ContentType: 'image/jpeg'
       }).promise();
@@ -553,7 +553,7 @@
     function getProfilePictureDirectUrl(userId) {
       const bucket = 'amplify-amplifybackend-sa-codethefuturestoragebuck-lfiecrr3qvzc';
       const region = 'eu-west-2';
-      return `https://${bucket}.s3.${region}.amazonaws.com/profile-pictures/${userId}`;
+      return `https://${bucket}.s3.${region}.amazonaws.com/public/profile-pictures/${userId}`;
     }
 
     async function getProfile() {
