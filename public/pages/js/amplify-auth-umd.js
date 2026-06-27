@@ -130,6 +130,7 @@ async function amplifySignOut() {
     localStorage.removeItem('displayName');
     localStorage.removeItem('userId');
     localStorage.removeItem('profilePicUrl');
+    localStorage.removeItem('profilePicUrlExpiry');
     window.location.href = '/pages/login.html';
   } catch (error) {
     console.error('Logout error:', error);

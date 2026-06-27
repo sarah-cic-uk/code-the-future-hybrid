@@ -15,6 +15,7 @@
 
   <!-- AWS SDK for S3 uploads -->
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
+  <script src="./js/s3-profile-pictures.js"></script>
 
   <script src="./js/app.js"></script>
   <script src="./js/cohort-management.js"></script>
@@ -481,13 +482,14 @@
           return;
         }
 
-        await uploadProfilePictureToS3(userId, compressed);
+        await window.profilePictures.uploadProfilePicture(userId, compressed);
 
-        const url = getProfilePictureDirectUrl(userId);
-        localStorage.setItem('profilePicUrl', url);
-
-        const navAvatars = document.querySelectorAll('#profile-pic-avatar');
-        navAvatars.forEach(el => el.src = url);
+        // Get a fresh presigned URL to display
+        const url = await window.profilePictures.getProfilePictureUrl(userId);
+        if (url) {
+          document.getElementById('selectedAvatar').src = url;
+          window.profilePictures.cacheNavAvatar(url);
+        }
 
         fileNameDisplay.textContent = `Uploaded: ${file.name}`;
         avatarSuccessToast.show();
@@ -498,64 +500,6 @@
       }
     }
 
-    async function refreshIdToken() {
-      const refreshToken = localStorage.getItem('refreshToken');
-      if (!refreshToken) throw new Error('No refresh token - please log in again');
-
-      const response = await fetch('/amplify_outputs.json');
-      const config = await response.json();
-
-      const cognito = new AWS.CognitoIdentityServiceProvider({ region: config.auth.aws_region });
-      const result = await cognito.initiateAuth({
-        AuthFlow: 'REFRESH_TOKEN_AUTH',
-        ClientId: config.auth.user_pool_client_id,
-        AuthParameters: { REFRESH_TOKEN: refreshToken }
-      }).promise();
-
-      const newIdToken = result.AuthenticationResult.IdToken;
-      const newAccessToken = result.AuthenticationResult.AccessToken;
-      localStorage.setItem('idToken', newIdToken);
-      localStorage.setItem('accessToken', newAccessToken);
-      return newIdToken;
-    }
-
-    async function uploadProfilePictureToS3(userId, blob) {
-      const response = await fetch('/amplify_outputs.json');
-      const config = await response.json();
-      const bucket = config.storage.bucket_name;
-      const region = config.storage.aws_region;
-      const identityPoolId = config.auth.identity_pool_id;
-      const userPoolId = config.auth.user_pool_id;
-
-      // Always refresh the token to ensure it's valid
-      const idToken = await refreshIdToken();
-
-      const logins = {};
-      logins[`cognito-idp.${region}.amazonaws.com/${userPoolId}`] = idToken;
-
-      AWS.config.region = region;
-      AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-        IdentityPoolId: identityPoolId,
-        Logins: logins
-      });
-
-      await AWS.config.credentials.getPromise();
-
-      const s3 = new AWS.S3({ region });
-      await s3.putObject({
-        Bucket: bucket,
-        Key: `public/profile-pictures/${userId}`,
-        Body: blob,
-        ContentType: 'image/jpeg',
-        ACL: 'public-read'
-      }).promise();
-    }
-
-    function getProfilePictureDirectUrl(userId) {
-      const bucket = 'amplify-amplifybackend-sa-codethefuturestoragebuck-lfiecrr3qvzc';
-      const region = 'eu-west-2';
-      return `https://${bucket}.s3.${region}.amazonaws.com/public/profile-pictures/${userId}`;
-    }
 
     async function getProfile() {
       if (localStorage.getItem('loggedIn') !== 'true') {
@@ -595,15 +539,12 @@
         // Store userId for photo upload
         localStorage.setItem('userId', userData.id);
 
-        // Load profile picture from S3
-        const profilePicUrl = getProfilePictureDirectUrl(userData.id);
-        const testImg = new Image();
-        testImg.onload = () => {
+        // Load profile picture from S3 via presigned URL
+        const profilePicUrl = await window.profilePictures.getProfilePictureUrl(userData.id);
+        if (profilePicUrl) {
           document.getElementById("selectedAvatar").src = profilePicUrl;
-          localStorage.setItem('profilePicUrl', profilePicUrl);
-          document.querySelectorAll('#profile-pic-avatar').forEach(el => el.src = profilePicUrl);
-        };
-        testImg.src = profilePicUrl;
+          window.profilePictures.cacheNavAvatar(profilePicUrl);
+        }
       } catch (error) {
         console.error('Error loading profile:', error);
       }

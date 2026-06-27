@@ -31,8 +31,10 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
       document.querySelector('#profileName').innerHTML = profileName;
     }
 
+    // Presigned URLs expire (1hr); only use the cached one while still valid
     const cachedPic = localStorage.getItem('profilePicUrl');
-    if (cachedPic) {
+    const cachedPicExpiry = parseInt(localStorage.getItem('profilePicUrlExpiry') || '0', 10);
+    if (cachedPic && Date.now() < cachedPicExpiry) {
       document.querySelectorAll('#profile-pic-avatar').forEach(el => el.src = cachedPic);
     }
   } else {
@@ -90,6 +92,7 @@ function logout() {
   localStorage.removeItem('cohort');
   localStorage.removeItem('userId');
   localStorage.removeItem('profilePicUrl');
+  localStorage.removeItem('profilePicUrlExpiry');
   localStorage.removeItem('idToken');
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');

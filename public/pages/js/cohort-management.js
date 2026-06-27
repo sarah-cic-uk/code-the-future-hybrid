@@ -286,28 +286,52 @@ async function getUserByEmail(email) {
 }
 
 /**
- * Get profile picture URL from S3
+ * Get user by DynamoDB ID
+ */
+async function getUserById(id) {
+  const query = `
+    query GetUser($id: ID!) {
+      getUser(id: $id) {
+        id
+        email
+        displayName
+        cohortId
+        isTeacher
+        isTutor
+        progress
+        profile
+      }
+    }
+  `;
+
+  try {
+    const data = await executeGraphQL(query, { id });
+    return data.getUser || null;
+  } catch (error) {
+    console.error('Error getting user by id:', error);
+    return null;
+  }
+}
+
+/**
+ * Get profile picture URL from S3 (presigned, authenticated read).
+ * Requires window.profilePictures (s3-profile-pictures.js) to be loaded.
  * @param {string} userId - DynamoDB user ID
- * @returns {Promise<string>} - Profile picture URL or default
+ * @returns {Promise<string>} - Profile picture URL or default avatar
  */
 async function getProfilePictureUrl(userId) {
   if (!userId) return '/images/blank_avatar.jpg';
 
-  try {
-    const response = await fetch('/amplify_outputs.json');
-    const config = await response.json();
-    const bucket = config.storage.bucket_name;
-    const region = config.storage.aws_region;
-    const url = `https://${bucket}.s3.${region}.amazonaws.com/public/profile-pictures/${userId}`;
-
-    const testResponse = await fetch(url, { method: 'HEAD' });
-    if (testResponse.ok) return url;
-
-    return '/images/blank_avatar.jpg';
-  } catch (error) {
-    console.error('Error getting profile picture:', error);
-    return '/images/blank_avatar.jpg';
+  if (window.profilePictures && window.profilePictures.getProfilePictureUrl) {
+    try {
+      const url = await window.profilePictures.getProfilePictureUrl(userId);
+      return url || '/images/blank_avatar.jpg';
+    } catch (error) {
+      console.error('Error getting profile picture:', error);
+    }
   }
+
+  return '/images/blank_avatar.jpg';
 }
 
 // Export functions to window
@@ -318,6 +342,7 @@ window.updateCohort = updateCohort;
 window.calculateCohortProgress = calculateCohortProgress;
 window.getStudentProgressDetails = getStudentProgressDetails;
 window.getUserByEmail = getUserByEmail;
+window.getUserById = getUserById;
 window.getProfilePictureUrl = getProfilePictureUrl;
 
 console.log('✅ Cohort management initialized (DynamoDB)');
