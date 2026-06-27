@@ -34,10 +34,13 @@
       
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-          <a class="nav-link active" onclick="showTab('login')">Sign In</a>
+          <a class="nav-link active" data-tab="login" onclick="showTab('login')">Sign In</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" onclick="showTab('register')">Register</a>
+          <a class="nav-link" data-tab="register" onclick="showTab('register')">Register</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-tab="verify" onclick="showTab('verify')">Verify Email</a>
         </li>
       </ul>
       
@@ -82,6 +85,27 @@
         </form>
         <div id="register-message" class="mt-3"></div>
       </div>
+
+      <!-- Verify Email Tab -->
+      <div id="verify-tab" class="tab-content">
+        <p class="text-muted">Enter the 6-digit code sent to your email to activate your account.</p>
+        <form onsubmit="handleVerify(event)">
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="verify-email" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Verification Code</label>
+            <input type="text" class="form-control" id="verify-code" required placeholder="6-digit code"
+              inputmode="numeric" autocomplete="one-time-code">
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Verify Email</button>
+        </form>
+        <div class="text-center mt-2">
+          <a href="#" onclick="handleResendCode(event)" class="small">Resend code</a>
+        </div>
+        <div id="verify-message" class="mt-3"></div>
+      </div>
     </div>
   </div>
 
@@ -109,7 +133,8 @@
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       document.getElementById(tab + '-tab').classList.add('active');
-      event.target.classList.add('active');
+      const navLink = document.querySelector(`.nav-link[data-tab="${tab}"]`);
+      if (navLink) navLink.classList.add('active');
     }
     
     function showMessage(elementId, message, isError = false) {
@@ -285,9 +310,11 @@
 
         await createUserRecord(email, name, userFields);
 
-        showMessage('register-message',
-          'Account created! Please check your email for a verification code. ' +
-          'After verifying, you can sign in using the Sign In tab.');
+        // Move the user to the verification step with their email prefilled
+        document.getElementById('verify-email').value = email;
+        showTab('verify');
+        showMessage('verify-message',
+          'Account created! Enter the 6-digit code sent to ' + email + ' to activate your account.');
 
         document.getElementById('reg-cohort').value = '';
         document.getElementById('reg-name').value = '';
@@ -297,6 +324,47 @@
       } catch (error) {
         console.error('Registration error:', error);
         showMessage('register-message', error.message || 'Registration failed', true);
+      }
+    }
+
+    async function handleVerify(e) {
+      e.preventDefault();
+      const email = document.getElementById('verify-email').value.trim();
+      const code = document.getElementById('verify-code').value.trim();
+
+      try {
+        await cognitoIdentityServiceProvider.confirmSignUp({
+          ClientId: config.auth.user_pool_client_id,
+          Username: email,
+          ConfirmationCode: code
+        }).promise();
+
+        showMessage('verify-message', 'Email verified! You can now sign in.');
+        document.getElementById('login-email').value = email;
+        setTimeout(() => showTab('login'), 1500);
+      } catch (error) {
+        console.error('Verification error:', error);
+        showMessage('verify-message', error.message || 'Verification failed', true);
+      }
+    }
+
+    async function handleResendCode(e) {
+      e.preventDefault();
+      const email = document.getElementById('verify-email').value.trim();
+      if (!email) {
+        showMessage('verify-message', 'Enter your email first, then click resend.', true);
+        return;
+      }
+
+      try {
+        await cognitoIdentityServiceProvider.resendConfirmationCode({
+          ClientId: config.auth.user_pool_client_id,
+          Username: email
+        }).promise();
+        showMessage('verify-message', 'A new code has been sent to ' + email + '.');
+      } catch (error) {
+        console.error('Resend error:', error);
+        showMessage('verify-message', error.message || 'Could not resend code', true);
       }
     }
   </script>
