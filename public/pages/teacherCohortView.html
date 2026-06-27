@@ -18,58 +18,6 @@
   
   <script src="./js/progressTracking.js"></script>
   <script src="./js/cohort-management.js"></script>
-  <script>
-    async function loadCohortData() {
-      const cohortCode = localStorage.getItem('cohort');
-      if (!cohortCode) {
-        alert('No cohort assigned');
-        return;
-      }
-
-      try {
-        // Get students in cohort
-        const students = await getStudentsByCohort(cohortCode);
-
-        // Calculate statistics
-        const stats = calculateCohortProgress(students);
-
-        // Display data
-        document.getElementById('totalStudents').textContent = stats.totalStudents;
-        document.getElementById('activeStudents').textContent = stats.activeStudents;
-        document.getElementById('averageProgress').textContent = stats.averageProgress + '%';
-
-        // Populate student table
-        const tbody = document.getElementById('studentTableBody');
-        tbody.innerHTML = '';
-
-        students.forEach(student => {
-          const progress = student.progress ? JSON.parse(student.progress) : {};
-          let completedCount = 0;
-
-          for (let i = 1; i <= 7; i++) {
-            if (progress[`session${i}`]?.completed) completedCount++;
-          }
-
-          const row = `
-        <tr>
-          <td>${student.displayName}</td>
-          <td>${student.email}</td>
-          <td>${completedCount}/7</td>
-          <td>${Math.round((completedCount / 7) * 100)}%</td>
-        </tr>
-      `;
-          tbody.innerHTML += row;
-        });
-
-      } catch (error) {
-        console.error('Error loading cohort data:', error);
-        alert('Failed to load cohort data');
-      }
-    }
-
-    // Load on page load
-    window.addEventListener('DOMContentLoaded', loadCohortData);
-  </script>
   <style>
     body {
       background-color: #f4f4f9;
@@ -556,6 +504,19 @@
 
         allStudents = students.map(student => {
           const progressDetails = getStudentProgressDetails(student);
+
+          // Derive overall status and most-recent activity from the session data
+          let status = 'Not Started';
+          if (progressDetails.percentage === 100) status = 'Completed';
+          else if (progressDetails.completedSessions > 0) status = 'In Progress';
+
+          let lastAccessedDate = 0;
+          Object.values(progressDetails.sessions).forEach(s => {
+            if (s.lastAccessed && s.lastAccessed > lastAccessedDate) lastAccessedDate = s.lastAccessed;
+            if (s.completed && lastAccessedDate === 0) status = 'In Progress';
+          });
+          if (lastAccessedDate > 0 && status === 'Not Started') status = 'In Progress';
+
           return {
             id: student.id,
             name: student.displayName || 'Unknown',
@@ -563,7 +524,9 @@
             progress: {
               completedCount: progressDetails.completedSessions,
               totalSessions: 7,
-              percentage: progressDetails.percentage
+              percentage: progressDetails.percentage,
+              status,
+              lastAccessedDate
             },
             progressData: progressDetails.sessions
           };
