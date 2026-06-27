@@ -69,7 +69,10 @@ async function executeGraphQL(query, variables = {}) {
  * @param {string} email - User email
  * @returns {Promise<Object|null>} - User object or null
  */
-async function getUserByEmail(email) {
+// Internal: progress-only user lookup. Named distinctly so it does NOT
+// shadow the global window.getUserByEmail from cohort-management.js
+// (which returns the full record incl. isTutor/isTeacher/schoolPrefix).
+async function getUserForProgress(email) {
   const query = `
     query ListUsers($email: String!) {
       listUsers(filter: { email: { eq: $email } }) {
@@ -130,7 +133,7 @@ async function trackSessionAccess(sessionNumber) {
   if (!email) return;
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getUserForProgress(email);
     if (!user) {
       console.error('User not found');
       return;
@@ -163,7 +166,7 @@ async function checkSessionCompletion(sessionNumber) {
   if (!email) return null;
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getUserForProgress(email);
     if (!user) return null;
 
     const progress = user.progress ? JSON.parse(user.progress) : {};
@@ -186,7 +189,7 @@ async function markSessionComplete(sessionNumber) {
   if (!email) return false;
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getUserForProgress(email);
     if (!user) {
       console.error('User not found');
       return false;
@@ -219,7 +222,7 @@ async function getAllProgress() {
   if (!email) return {};
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getUserForProgress(email);
     if (!user) return {};
 
     return user.progress ? JSON.parse(user.progress) : {};
@@ -401,7 +404,7 @@ async function saveLessonComplete(sessionName, lessonName) {
   if (!email) return false;
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getUserForProgress(email);
     if (!user) {
       console.error('User not found');
       return false;
@@ -442,7 +445,7 @@ async function isLessonComplete(sessionName, lessonName) {
   if (!email) return false;
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getUserForProgress(email);
     if (!user) return false;
 
     const progress = user.progress ? JSON.parse(user.progress) : {};
@@ -464,7 +467,7 @@ async function getSessionCompletedLessons(sessionName) {
   if (!email) return {};
 
   try {
-    const user = await getUserByEmail(email);
+    const user = await getUserForProgress(email);
     if (!user) return {};
 
     const progress = user.progress ? JSON.parse(user.progress) : {};
