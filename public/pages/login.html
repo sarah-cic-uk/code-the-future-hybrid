@@ -10,6 +10,7 @@
   
   <!-- AWS SDK for Cognito -->
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
+  <script src="./js/s3-profile-pictures.js"></script>
   
   <style>
     .auth-container {
@@ -194,6 +195,16 @@
               localStorage.setItem('isTeacher', user.isTeacher ? 'true' : 'false');
               localStorage.setItem('isTutor', user.isTutor ? 'true' : 'false');
               localStorage.setItem('schoolPrefix', user.schoolPrefix || '');
+
+              // Pre-cache the nav-bar avatar so it shows on every page right after login
+              try {
+                if (window.profilePictures) {
+                  const picUrl = await window.profilePictures.getProfilePictureUrl(user.id);
+                  if (picUrl) window.profilePictures.cacheNavAvatar(picUrl);
+                }
+              } catch (picErr) {
+                console.error('Error caching avatar at login:', picErr);
+              }
             }
           } catch (e) {
             console.error('Error fetching user record:', e);
