@@ -585,9 +585,13 @@
           </td>
           <td><span class="status-badge status-${statusClass}">${student.progress.status}</span></td>
           <td><span class="last-active">${lastActive}</span></td>
-          <td><button class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation(); showStudentDetail(${JSON.stringify(student).replace(/"/g, '"')})">View Details</button></td>
+          <td><button class="btn btn-sm btn-outline-secondary view-details-btn">View Details</button></td>
         `;
 
+        row.querySelector('.view-details-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          showStudentDetail(student);
+        });
         tbody.appendChild(row);
       });
     }
@@ -632,58 +636,7 @@
     }
 
     function showStudentDetail(student) {
-      const modalBody = document.getElementById('modal-body-content');
-      const sessionNames = [
-        'Session 1: Dev Environment',
-        'Session 2: HTML Basics',
-        'Session 3: HTML Advanced',
-        'Session 4: CSS Styling',
-        'Session 5: Accessibility',
-        'Session 6: Final Project',
-        'Session 7: AI Tools'
-      ];
-
-      let sessionsHTML = '';
-      for (let i = 1; i <= 7; i++) {
-        const sessionKey = `session${i}`;
-        const sessionData = student.progressData[sessionKey];
-        const completed = sessionData && sessionData.completed;
-        const lastAccessed = sessionData && sessionData.lastAccessed;
-
-        const statusClass = completed ? 'completed' : (lastAccessed ? 'in-progress' : 'not-started');
-        const statusIcon = completed ? '✓' : (lastAccessed ? '◐' : '○');
-        const statusText = completed
-          ? `Completed ${new Date(sessionData.completedDate).toLocaleDateString()}`
-          : (lastAccessed ? `Last accessed ${formatTimeAgo(lastAccessed)}` : 'Not started');
-
-        sessionsHTML += `
-          <div class="session-detail-item ${statusClass}">
-            <strong>${statusIcon} ${sessionNames[i - 1]}</strong>
-            <div class="text-muted small">${statusText}</div>
-          </div>
-        `;
-      }
-
-      modalBody.innerHTML = `
-        <div class="mb-4">
-          <h5>${student.name}</h5>
-          <p class="text-muted mb-2">${student.email}</p>
-          <div class="mb-3">
-            <strong>Overall Progress:</strong>
-            <div class="progress-bar-container mt-2">
-              <div class="progress-bar-fill" style="width: ${student.progress.percentage}%">
-                ${student.progress.percentage}%
-              </div>
-            </div>
-          </div>
-          <p><strong>Status:</strong> <span class="status-badge status-${student.progress.status.toLowerCase().replace(' ', '-')}">${student.progress.status}</span></p>
-          <p><strong>Sessions Completed:</strong> ${student.progress.completedCount} / ${student.progress.totalSessions}</p>
-        </div>
-        <hr>
-        <h6 class="mb-3">Session Details:</h6>
-        ${sessionsHTML}
-      `;
-
+      document.getElementById('modal-body-content').innerHTML = window.buildStudentDetailHTML(student);
       const modal = new bootstrap.Modal(document.getElementById('studentDetailModal'));
       modal.show();
     }

@@ -258,6 +258,28 @@
       background-color: #f8d7da;
       color: #721c24;
     }
+
+    .session-detail-item {
+      padding: 0.75rem;
+      border-left: 3px solid #e9ecef;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+    }
+
+    .session-detail-item.completed {
+      border-left-color: #28a745;
+      background-color: #f8fff9;
+    }
+
+    .session-detail-item.in-progress {
+      border-left-color: #ffc107;
+      background-color: #fffef8;
+    }
+
+    .session-detail-item.not-started {
+      border-left-color: #dc3545;
+      background-color: #fff8f8;
+    }
   </style>
 </head>
 
@@ -413,6 +435,7 @@
                     <th>Progress</th>
                     <th>Status</th>
                     <th>Last Active</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody id="detail-student-table-body">
@@ -421,6 +444,23 @@
               </table>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Detail Modal -->
+  <div class="modal fade" id="studentDetailModal" tabindex="-1" aria-labelledby="studentDetailModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header" style="background: linear-gradient(135deg, #1d0c59 0%, #31238c 100%); color: white;">
+          <h5 class="modal-title" id="studentDetailModalLabel">Student Progress</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body-content"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -665,7 +705,7 @@
       tbody.innerHTML = '';
 
       if (cohort.students.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No students in this cohort</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">No students in this cohort</td></tr>';
         return;
       }
 
@@ -687,10 +727,18 @@
           </td>
           <td><span class="status-badge status-${statusClass}">${student.progress.status}</span></td>
           <td>${lastActive}</td>
+          <td><button class="btn btn-sm btn-outline-secondary view-details-btn">View Details</button></td>
         `;
 
+        row.querySelector('.view-details-btn').addEventListener('click', () => showStudentDetail(student));
         tbody.appendChild(row);
       });
+    }
+
+    function showStudentDetail(student) {
+      document.getElementById('modal-body-content').innerHTML = window.buildStudentDetailHTML(student);
+      const modal = new bootstrap.Modal(document.getElementById('studentDetailModal'));
+      modal.show();
     }
 
     function showCohortGrid() {

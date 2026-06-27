@@ -294,6 +294,81 @@ function getStudentProgressDetails(student) {
   };
 }
 
+const SESSION_TITLES = {
+  session1: 'Session 1: Dev Environment',
+  session2: 'Session 2: HTML Basics',
+  session3: 'Session 3: HTML Advanced',
+  session4: 'Session 4: CSS Styling',
+  session5: 'Session 5: Accessibility',
+  session6: 'Session 6: Final Project',
+  session7: 'Session 7: AI Tools'
+};
+
+// Turn a lesson key into a readable label, e.g. "html_images" -> "Html Images"
+function prettyLessonName(key) {
+  if (/-overview$/.test(key)) return 'Session overview';
+  return key
+    .replace(/_/g, ' ')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
+/**
+ * Build the HTML for a student progress modal, including a per-lesson
+ * breakdown within each session. Shared by the teacher and admin dashboards.
+ * `student` is the shape produced in those pages: { name, email, progress, progressData }.
+ */
+function buildStudentDetailHTML(student) {
+  const sessions = student.progressData || {};
+  const p = student.progress || {};
+
+  let sessionsHTML = '';
+  for (let i = 1; i <= 7; i++) {
+    const key = `session${i}`;
+    const s = sessions[key] || {};
+    const doneLessons = s.completedLessons || {};
+    const lessons = COURSE_LESSONS[key] || [];
+    const optional = OPTIONAL_LESSONS[key] || [];
+    const anyActivity = Object.keys(doneLessons).length > 0 || s.lastAccessed;
+
+    const statusClass = s.completed ? 'completed' : (anyActivity ? 'in-progress' : 'not-started');
+    const statusIcon = s.completed ? '✓' : (anyActivity ? '◐' : '○');
+    const doneCount = lessons.filter(l => doneLessons[l]).length;
+
+    const lessonItems = lessons.map(l => {
+      const isDone = !!doneLessons[l];
+      const isOpt = optional.includes(l);
+      return `<li>${isDone ? '✅' : '⬜'} ${prettyLessonName(l)}${isOpt ? ' <span class="text-muted">(optional)</span>' : ''}</li>`;
+    }).join('');
+
+    sessionsHTML += `
+      <div class="session-detail-item ${statusClass}">
+        <strong>${statusIcon} ${SESSION_TITLES[key] || key}</strong>
+        <span class="text-muted small"> — ${doneCount}/${lessons.length} lessons</span>
+        <ul class="list-unstyled ms-4 mt-2 mb-0">${lessonItems}</ul>
+      </div>`;
+  }
+
+  const statusClass = (p.status || '').toLowerCase().replace(' ', '-');
+  return `
+    <div class="mb-4">
+      <h5>${student.name || ''}</h5>
+      <p class="text-muted mb-2">${student.email || ''}</p>
+      <div class="mb-3">
+        <strong>Overall Progress:</strong>
+        <div class="progress-bar-container mt-2">
+          <div class="progress-bar-fill" style="width: ${p.percentage || 0}%">${p.percentage || 0}%</div>
+        </div>
+      </div>
+      <p><strong>Status:</strong> <span class="status-badge status-${statusClass}">${p.status || ''}</span></p>
+      <p><strong>Sessions Completed:</strong> ${p.completedCount || 0} / ${p.totalSessions || 7}</p>
+    </div>
+    <hr>
+    <h6 class="mb-3">Session &amp; Lesson Details:</h6>
+    ${sessionsHTML}
+  `;
+}
+
 /**
  * Get user by email
  */
@@ -386,6 +461,9 @@ window.getStudentProgressDetails = getStudentProgressDetails;
 window.getUserByEmail = getUserByEmail;
 window.getUserById = getUserById;
 window.getProfilePictureUrl = getProfilePictureUrl;
+window.buildStudentDetailHTML = buildStudentDetailHTML;
+window.COURSE_LESSONS = COURSE_LESSONS;
+window.OPTIONAL_LESSONS = OPTIONAL_LESSONS;
 
 console.log('✅ Cohort management initialized (DynamoDB)');
 
