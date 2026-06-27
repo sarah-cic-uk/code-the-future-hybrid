@@ -151,14 +151,16 @@ function updateSideNav() {
 }
 
 function updateSideNavOverview() {
-  const session = window.location.pathname.match(/session\d/)[0];
-  const submenu = 'submenu' + session.match(/\d/);
+  const match = window.location.pathname.match(/session\d/);
+  if (!match) return;
+  const session = match[0];
+  const submenu = document.getElementById('submenu' + session.match(/\d/));
 
-  console.log(submenu);
-  document.getElementById(submenu).classList.add("show");
-  document.getElementsByName(session + '-overview')[0].classList.add("active-side-nav");
-  document.getElementsByName(session)[0].classList.add("active-side-nav");
-  document.getElementsByName(session + '-nav')[0].classList.add("active-top-nav");
+  // Guard each lookup — some pages (e.g. the showcase) don't have the full sidenav
+  if (submenu) submenu.classList.add("show");
+  document.getElementsByName(session + '-overview')[0]?.classList.add("active-side-nav");
+  document.getElementsByName(session)[0]?.classList.add("active-side-nav");
+  document.getElementsByName(session + '-nav')[0]?.classList.add("active-top-nav");
 }
 
 async function checkReleaseDates() {

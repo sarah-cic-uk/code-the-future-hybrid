@@ -89,6 +89,41 @@ async function getStudentsByCohort(cohortCode) {
 }
 
 /**
+ * Get all students across every cohort (paginated). Used by the showcase page.
+ */
+async function getAllStudents() {
+  const query = `
+    query ListUsers($nextToken: String) {
+      listUsers(nextToken: $nextToken) {
+        items {
+          id
+          email
+          displayName
+          cohortId
+          progress
+          profile
+        }
+        nextToken
+      }
+    }
+  `;
+
+  const all = [];
+  let nextToken = null;
+  try {
+    do {
+      const data = await executeGraphQL(query, { nextToken });
+      all.push(...data.listUsers.items);
+      nextToken = data.listUsers.nextToken;
+    } while (nextToken);
+    return all;
+  } catch (error) {
+    console.error('Error getting all students:', error);
+    return [];
+  }
+}
+
+/**
  * Get all cohorts (admin only)
  */
 async function getAllCohorts() {
@@ -454,6 +489,7 @@ async function getProfilePictureUrl(userId) {
 // Export functions to window
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
+window.getAllStudents = getAllStudents;
 window.getAllCohorts = getAllCohorts;
 window.updateCohort = updateCohort;
 window.calculateCohortProgress = calculateCohortProgress;
