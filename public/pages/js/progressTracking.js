@@ -393,6 +393,8 @@ function showCompletionMessage(message, isError = false) {
       messageDiv.remove();
     }
   }, 5000);
+}
+
 /**
  * Save lesson completion status
  * @param {string} sessionName - Session name (e.g., "session1")
@@ -494,7 +496,5 @@ window._isLessonComplete = isLessonComplete;
 window.getSessionCompletedLessons = getSessionCompletedLessons;
 
 console.log('✅ Progress tracking initialized (DynamoDB)');
-
-}
 
 // Made with Bob
