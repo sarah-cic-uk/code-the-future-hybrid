@@ -44,6 +44,7 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
     }
     if (localStorage.getItem('isTutor') === 'true') {
       showRoleMenuItem('admin-menu-item', 'All Cohorts (Admin)', 'pages/adminCohortView.html');
+      showRoleMenuItem('tutor-menu-item', 'Tutor Availability', 'pages/tutorAvailability.html');
     }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
