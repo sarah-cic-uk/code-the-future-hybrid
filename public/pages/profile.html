@@ -575,21 +575,24 @@
           // User doesn't exist in DynamoDB yet - create them
           console.log('User not found in DynamoDB, creating...');
           const displayName = localStorage.getItem('displayName') || email.split('@')[0];
-          
+          const cohortId = localStorage.getItem('cohort') || null;
+
           const createMutation = `
-            mutation CreateUser($email: String!, $displayName: String!) {
+            mutation CreateUser($email: String!, $displayName: String!, $cohortId: String) {
               createUser(input: {
                 email: $email,
                 displayName: $displayName,
+                cohortId: $cohortId,
                 profile: "{}"
               }) {
                 id
                 email
                 displayName
+                cohortId
               }
             }
           `;
-          
+
           const config = await getAPIConfig();
           const createResponse = await fetch(config.endpoint, {
             method: 'POST',
@@ -601,7 +604,8 @@
               query: createMutation,
               variables: {
                 email: email,
-                displayName: displayName
+                displayName: displayName,
+                cohortId: cohortId
               }
             })
           });

@@ -473,16 +473,15 @@
       );
 
       // Check if user is a teacher
-      window.onload = async function () {
-        const email = localStorage.getItem('userEmail');
-        if (!email) {
-          window.location.href = getPath() + 'pages/login.html';
-          return;
-        }
+      const email = localStorage.getItem('userEmail');
+      if (!email) {
+        window.location.href = getPath() + 'pages/login.html';
+        return;
+      }
 
-        const user = await getUserByEmail(email);
-        if (!user || !user.isTeacher) {
-          document.body.innerHTML = `
+      const user = await getUserByEmail(email);
+      if (!user || !user.isTeacher) {
+        document.body.innerHTML = `
       <div class="container mt-5">
         <div class="alert alert-danger text-center">
           <h3>Access Denied</h3>
@@ -491,24 +490,35 @@
         </div>
       </div>
     `;
+        return;
+      }
+
+      await loadTeacherCohorts(user.schoolPrefix);
+    };
+
+    async function loadTeacherCohorts(schoolPrefix) {
+      try {
+        if (!schoolPrefix) {
+          document.getElementById('loading-spinner').style.display = 'none';
+          document.getElementById('no-data-message').innerHTML = `
+        <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
+        <p class="mt-3">No school is linked to your account. Please contact support.</p>
+      `;
+          document.getElementById('no-data-message').style.display = 'block';
           return;
         }
 
-        await loadTeacherCohorts(user.id);
-      };
-
-    };
-
-    async function loadTeacherCohorts(teacherId) {
-      try {
+        const prefix = schoolPrefix.toLowerCase();
         const allCohorts = await getAllCohorts();
-        teacherCohorts = allCohorts.filter(c => c.teacherId === teacherId);
+        teacherCohorts = allCohorts.filter(c =>
+          (c.cohortCode || '').toLowerCase().startsWith(prefix)
+        );
 
         if (teacherCohorts.length === 0) {
           document.getElementById('loading-spinner').style.display = 'none';
           document.getElementById('no-data-message').innerHTML = `
         <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
-        <p class="mt-3">You are not assigned to any cohorts yet.</p>
+        <p class="mt-3">No cohorts found for your school yet.</p>
       `;
           document.getElementById('no-data-message').style.display = 'block';
           return;

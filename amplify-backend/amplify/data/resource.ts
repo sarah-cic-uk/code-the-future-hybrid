@@ -12,6 +12,7 @@ const schema = a.schema({
       cohortId: a.string(),
       isTeacher: a.boolean(),
       isTutor: a.boolean(),
+      schoolPrefix: a.string(),
       progress: a.json(),
       profile: a.json(),
     })

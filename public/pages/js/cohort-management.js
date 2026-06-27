@@ -268,6 +268,7 @@ async function getUserByEmail(email) {
           cohortId
           isTeacher
           isTutor
+          schoolPrefix
           progress
           profile
         }
@@ -298,6 +299,7 @@ async function getUserById(id) {
         cohortId
         isTeacher
         isTutor
+        schoolPrefix
         progress
         profile
       }

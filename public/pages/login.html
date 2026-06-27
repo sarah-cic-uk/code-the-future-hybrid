@@ -152,12 +152,12 @@
           localStorage.setItem('userEmail', email);
           localStorage.setItem('displayName', displayName);
 
-          // Fetch user record from DynamoDB for cohort and userId
+          // Fetch user record from DynamoDB for cohort, userId and teacher status
           try {
             const userQuery = `
               query ListUsers($email: String!) {
                 listUsers(filter: { email: { eq: $email } }) {
-                  items { id cohortId }
+                  items { id cohortId isTeacher schoolPrefix }
                 }
               }
             `;
@@ -166,6 +166,8 @@
             if (user) {
               localStorage.setItem('userId', user.id);
               if (user.cohortId) localStorage.setItem('cohort', user.cohortId);
+              localStorage.setItem('isTeacher', user.isTeacher ? 'true' : 'false');
+              localStorage.setItem('schoolPrefix', user.schoolPrefix || '');
             }
           } catch (e) {
             console.error('Error fetching user record:', e);
@@ -205,16 +207,36 @@
       return data.listCohorts.items.length > 0 ? data.listCohorts.items[0] : null;
     }
 
-    async function createUserRecord(email, displayName, cohortCode) {
+    // Teacher codes are {schoolPrefix}Tutor, e.g. "peverillTutor".
+    // Returns the lowercased school prefix, or null if not a teacher code.
+    function deriveTeacherPrefix(code) {
+      const match = code.match(/^(.+?)Tutor$/i);
+      return match ? match[1].toLowerCase() : null;
+    }
+
+    // A teacher prefix is valid if at least one cohort code starts with it.
+    async function validateTeacherPrefix(prefix) {
+      const query = `
+        query ListCohorts {
+          listCohorts { items { cohortCode } }
+        }
+      `;
+      const data = await executeGraphQL(query);
+      return data.listCohorts.items.some(c =>
+        (c.cohortCode || '').toLowerCase().startsWith(prefix)
+      );
+    }
+
+    async function createUserRecord(email, displayName, { cohortId = null, isTeacher = false, schoolPrefix = null } = {}) {
       const query = `
         mutation CreateUser($input: CreateUserInput!) {
           createUser(input: $input) {
-            id email displayName cohortId
+            id email displayName cohortId isTeacher schoolPrefix
           }
         }
       `;
       const data = await executeGraphQL(query, {
-        input: { email, displayName, cohortId: cohortCode }
+        input: { email, displayName, cohortId, isTeacher, schoolPrefix }
       });
       return data.createUser;
     }
@@ -228,12 +250,25 @@
 
       try {
         if (!cohort || cohort.length < 3) {
-          throw new Error('Please enter a valid cohort code');
+          throw new Error('Please enter a valid cohort or teacher code');
         }
 
-        const cohortRecord = await validateCohortCode(cohort);
-        if (!cohortRecord) {
-          throw new Error('Cohort code not found. Please check with your teacher.');
+        // Determine whether this is a teacher code ({schoolPrefix}Tutor) or a student cohort code
+        const teacherPrefix = deriveTeacherPrefix(cohort);
+        let userFields;
+
+        if (teacherPrefix) {
+          const prefixValid = await validateTeacherPrefix(teacherPrefix);
+          if (!prefixValid) {
+            throw new Error('Teacher code not recognised. No cohorts found for your school.');
+          }
+          userFields = { isTeacher: true, schoolPrefix: teacherPrefix };
+        } else {
+          const cohortRecord = await validateCohortCode(cohort);
+          if (!cohortRecord) {
+            throw new Error('Cohort code not found. Please check with your teacher.');
+          }
+          userFields = { cohortId: cohort };
         }
 
         const params = {
@@ -248,7 +283,7 @@
 
         await cognitoIdentityServiceProvider.signUp(params).promise();
 
-        await createUserRecord(email, name, cohort);
+        await createUserRecord(email, name, userFields);
 
         showMessage('register-message',
           'Account created! Please check your email for a verification code. ' +

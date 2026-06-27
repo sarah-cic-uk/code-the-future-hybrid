@@ -37,6 +37,12 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
     if (cachedPic && Date.now() < cachedPicExpiry) {
       document.querySelectorAll('#profile-pic-avatar').forEach(el => el.src = cachedPic);
     }
+
+    // Show the teacher dashboard menu item for teachers
+    if (localStorage.getItem('isTeacher') === 'true') {
+      const teacherMenuItem = document.getElementById('teacher-menu-item');
+      if (teacherMenuItem) teacherMenuItem.style.display = 'block';
+    }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
     if (profileBtn) profileBtn.style.display = "none";
@@ -93,6 +99,8 @@ function logout() {
   localStorage.removeItem('userId');
   localStorage.removeItem('profilePicUrl');
   localStorage.removeItem('profilePicUrlExpiry');
+  localStorage.removeItem('isTeacher');
+  localStorage.removeItem('schoolPrefix');
   localStorage.removeItem('idToken');
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
