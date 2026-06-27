@@ -59,12 +59,11 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
 
 function getPath() {
   const BASE_URL = window.location.origin;
-  const PATH = BASE_URL.includes('github')
-    ? '/code-the-future-hybrid/'
-    : BASE_URL.includes('app')
-      ? '/'
-      : '/public/';
-  return PATH;
+  if (BASE_URL.includes('github')) return '/code-the-future-hybrid/';
+  // Local dev server serves the public/ folder as the web root
+  if (BASE_URL.includes('localhost') || BASE_URL.includes('127.0.0.1')) return '/';
+  if (BASE_URL.includes('app')) return '/';
+  return '/public/';
 }
 
 // Ensure a role-specific dashboard link is present (and visible) in the profile
@@ -127,6 +126,7 @@ function logout() {
   localStorage.removeItem('profilePicUrlExpiry');
   localStorage.removeItem('isTeacher');
   localStorage.removeItem('isTutor');
+  localStorage.removeItem('isAdmin');
   localStorage.removeItem('schoolPrefix');
   localStorage.removeItem('idToken');
   localStorage.removeItem('accessToken');

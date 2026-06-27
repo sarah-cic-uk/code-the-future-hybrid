@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		{ path: "sessions/session7/lessons/promptPractice.html", type: "lesson" },
 		{ path: "sessions/session7/lessons/modelsTokensCosts.html", type: "lesson" },
 		{ path: "sessions/session7/lessons/reviewAndRepeat.html", type: "lesson" },
+		{ path: "sessions/session7/lessons/furtherLearning.html", type: "lesson", optional: true, },
 	];
 
 	const currentPath = window.location.pathname.replace(/^.*pages\//, "");

@@ -260,12 +260,13 @@ const COURSE_LESSONS = {
   session4: ['session4-overview', 'introToCSS', 'layoutsInCSS', 'advancedCSS', 'cssActivities'],
   session5: ['session5-overview', 'accessibility', 'accessibilityTools', 'accessibilityExample'],
   session6: ['session6-overview', 'projectPlanning', 'additionalHelp'],
-  session7: ['session7-overview', 'goodUses', 'humanFirst', 'promptPractice', 'modelsTokensCosts', 'reviewAndRepeat']
+  session7: ['session7-overview', 'goodUses', 'humanFirst', 'promptPractice', 'modelsTokensCosts', 'reviewAndRepeat', 'furtherLearning']
 };
 const OPTIONAL_LESSONS = {
   session1: ['gitTerminal', 'githubDesktop'],
   session5: ['accessibilityExample'],
-  session6: ['additionalHelp']
+  session6: ['additionalHelp'],
+  session7: ['furtherLearning']
 };
 
 function requiredLessonsFor(sessionKey) {
@@ -418,6 +419,7 @@ async function getUserByEmail(email) {
           cohortId
           isTeacher
           isTutor
+          isAdmin
           schoolPrefix
           progress
           profile
@@ -486,6 +488,52 @@ async function getProfilePictureUrl(userId) {
   return '/images/blank_avatar.jpg';
 }
 
+/**
+ * Save an "interest registration" for someone without a cohort code.
+ */
+async function createInterestRegistration(name, email) {
+  const mutation = `
+    mutation CreateInterestRegistration($input: CreateInterestRegistrationInput!) {
+      createInterestRegistration(input: $input) {
+        id name email status registeredAt
+      }
+    }
+  `;
+  const data = await executeGraphQL(mutation, {
+    input: { name, email, status: 'new', registeredAt: new Date().toISOString() }
+  });
+  return data.createInterestRegistration;
+}
+
+/**
+ * List all interest registrations (newest first). Admin-only view.
+ */
+async function getInterestRegistrations() {
+  const query = `
+    query ListInterestRegistrations($nextToken: String) {
+      listInterestRegistrations(nextToken: $nextToken) {
+        items { id name email status registeredAt }
+        nextToken
+      }
+    }
+  `;
+  const all = [];
+  let nextToken = null;
+  try {
+    do {
+      const data = await executeGraphQL(query, { nextToken });
+      all.push(...data.listInterestRegistrations.items);
+      nextToken = data.listInterestRegistrations.nextToken;
+    } while (nextToken);
+  } catch (error) {
+    console.error('Error getting interest registrations:', error);
+    return [];
+  }
+  // Newest first
+  all.sort((a, b) => (b.registeredAt || '').localeCompare(a.registeredAt || ''));
+  return all;
+}
+
 // Export functions to window
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
@@ -500,6 +548,8 @@ window.getProfilePictureUrl = getProfilePictureUrl;
 window.buildStudentDetailHTML = buildStudentDetailHTML;
 window.COURSE_LESSONS = COURSE_LESSONS;
 window.OPTIONAL_LESSONS = OPTIONAL_LESSONS;
+window.createInterestRegistration = createInterestRegistration;
+window.getInterestRegistrations = getInterestRegistrations;
 
 console.log('✅ Cohort management initialized (DynamoDB)');
 

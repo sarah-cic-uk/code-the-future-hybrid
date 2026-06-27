@@ -269,6 +269,11 @@ template.innerHTML = `
               <i class="fs-4 bi-dash"></i>
               <span class="d-none d-sm-inline">Review and repeat</span></a>
           </li>
+          <li>
+            <a href="#" onclick="createPath('pages/sessions/session7/lessons/furtherLearning.html')" class="nav-link p-0" name="furtherLearning">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Further learning</span></a>
+          </li>
         </ul>
       </li>
       <li class="nav-item pb-2">
@@ -373,6 +378,7 @@ async function updateSideNavCompletionStatus() {
         "promptPractice",
         "modelsTokensCosts",
         "reviewAndRepeat",
+        "furtherLearning",
       ],
     };
 
@@ -380,6 +386,7 @@ async function updateSideNavCompletionStatus() {
       session1: ["gitTerminal", "githubDesktop"],
       session5: ["accessibilityExample"],
       session6: ["additionalHelp"],
+      session7: ["furtherLearning"],
     };
 
     const lessonNameToElementName = {

@@ -1,4 +1,5 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+import { notifyAdmin } from '../functions/notify-admin/resource';
 
 /**
  * Define your data schema
@@ -12,10 +13,31 @@ const schema = a.schema({
       cohortId: a.string(),
       isTeacher: a.boolean(),
       isTutor: a.boolean(),
+      isAdmin: a.boolean(),
       schoolPrefix: a.string(),
       progress: a.json(),
       profile: a.json(),
     })
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  InterestRegistration: a
+    .model({
+      name: a.string().required(),
+      email: a.string().required(),
+      status: a.string(),
+      registeredAt: a.string(),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  // Emails the site admin (via SES) when someone registers interest.
+  notifyInterest: a
+    .mutation()
+    .arguments({
+      name: a.string().required(),
+      email: a.string().required(),
+    })
+    .returns(a.string())
+    .handler(a.handler.function(notifyAdmin))
     .authorization((allow) => [allow.publicApiKey()]),
 
   Cohort: a

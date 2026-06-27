@@ -4,35 +4,153 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code the Future - Login</title>
-  
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../styles/mainStyle.css?v=202606271449">
-  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="../styles/mainStyle.css?v=202606271646">
+
   <!-- AWS SDK for Cognito -->
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
-  <script src="./js/s3-profile-pictures.js?v=202606271449"></script>
-  
+  <script src="./js/s3-profile-pictures.js?v=202606271646"></script>
+
   <style>
-    .auth-container {
-      max-width: 500px;
-      margin: 50px auto;
-      padding: 30px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      border-radius: 8px;
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #011640 0%, #1d0c59 45%, #31238c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
     }
+
+    .auth-container {
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      border-radius: 1rem;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+    }
+
+    .auth-header {
+      background: #eae9f3;
+      border-bottom: 3px solid #d9437a;
+      text-align: center;
+      padding: 1.75rem 1.5rem 1.25rem;
+    }
+
+    .auth-header img {
+      max-width: 180px;
+    }
+
+    .auth-header h2 {
+      color: #1d0c59;
+      font-weight: 700;
+      margin: 0.75rem 0 0;
+      font-size: 1.4rem;
+    }
+
+    .auth-body {
+      padding: 1.5rem 1.75rem 2rem;
+    }
+
+    .nav-tabs {
+      border-bottom: 2px solid #eae9f3;
+      margin-bottom: 1.5rem;
+    }
+
+    .nav-tabs .nav-link {
+      color: #6c6a85;
+      font-weight: 600;
+      border: none;
+      border-bottom: 3px solid transparent;
+      cursor: pointer;
+      padding: 0.5rem 0.85rem;
+    }
+
+    .nav-tabs .nav-link:hover {
+      color: #d9437a;
+    }
+
+    .nav-tabs .nav-link.active {
+      color: #1d0c59;
+      background: transparent;
+      border-bottom: 3px solid #d9437a;
+    }
+
     .tab-content { display: none; }
     .tab-content.active { display: block; }
-    .nav-tabs { margin-bottom: 20px; }
+
+    .form-label {
+      font-weight: 600;
+      color: #1d0c59;
+      font-size: 0.9rem;
+    }
+
+    .form-control:focus {
+      border-color: #31238c;
+      box-shadow: 0 0 0 0.2rem rgba(49, 35, 140, 0.15);
+    }
+
+    .btn-brand {
+      background-color: #d9437a;
+      color: #fff;
+      font-weight: 600;
+      border: 0;
+      border-radius: 0.5rem;
+      padding: 0.6rem 1rem;
+    }
+
+    .btn-brand:hover,
+    .btn-brand:focus {
+      background-color: #d9437a;
+      color: #fff;
+      opacity: 0.85;
+    }
+
+    .btn-brand-secondary {
+      background-color: #31238c;
+      color: #fff;
+      font-weight: 600;
+      border: 0;
+      border-radius: 0.5rem;
+      padding: 0.6rem 1rem;
+    }
+
+    .btn-brand-secondary:hover,
+    .btn-brand-secondary:focus {
+      background-color: #31238c;
+      color: #fff;
+      opacity: 0.85;
+    }
+
+    .link-brand {
+      color: #31238c;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .link-brand:hover {
+      color: #d9437a;
+      text-decoration: underline;
+    }
+
+    .reveal-block {
+      border-top: 1px solid #eae9f3;
+      margin-top: 1.25rem;
+      padding-top: 1.25rem;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="auth-container">
-      <div class="text-center mb-4">
-        <img src="../images/logo.png" alt="Code the Future" style="max-width: 200px;">
-        <h2 class="mt-3">Welcome</h2>
-      </div>
-      
+  <div class="auth-container">
+    <div class="auth-header">
+      <img src="../images/logo.png" alt="Code the Future">
+      <h2>Welcome</h2>
+    </div>
+
+    <div class="auth-body">
       <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
           <a class="nav-link active" data-tab="login" onclick="showTab('login')">Sign In</a>
@@ -44,7 +162,7 @@
           <a class="nav-link" data-tab="verify" onclick="showTab('verify')">Verify Email</a>
         </li>
       </ul>
-      
+
       <!-- Login Tab -->
       <div id="login-tab" class="tab-content active">
         <form onsubmit="handleLogin(event)">
@@ -56,11 +174,44 @@
             <label class="form-label">Password</label>
             <input type="password" class="form-control" id="login-password" required>
           </div>
-          <button type="submit" class="btn btn-primary w-100">Sign In</button>
+          <button type="submit" class="btn btn-brand w-100">Sign In</button>
         </form>
+        <div class="text-center mt-3">
+          <a class="link-brand small" onclick="toggleForgot(event)">Forgot password?</a>
+        </div>
         <div id="login-message" class="mt-3"></div>
+
+        <!-- Forgot password (inline reveal) -->
+        <div id="forgot-block" class="reveal-block" style="display: none;">
+          <h6 class="fw-bold" style="color:#1d0c59;">Reset your password</h6>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="forgot-email">
+          </div>
+          <button type="button" class="btn btn-brand-secondary w-100" onclick="handleForgotPassword(event)">
+            Send reset code
+          </button>
+
+          <div id="forgot-step2" style="display: none;">
+            <div class="mb-3 mt-3">
+              <label class="form-label">Reset code</label>
+              <input type="text" class="form-control" id="forgot-code" inputmode="numeric"
+                autocomplete="one-time-code" placeholder="6-digit code">
+            </div>
+            <div class="mb-3">
+              <label class="form-label">New password</label>
+              <input type="password" class="form-control" id="forgot-new-password" minlength="8">
+              <small class="text-muted">Minimum 8 characters</small>
+            </div>
+            <button type="button" class="btn btn-brand w-100" onclick="handleConfirmForgotPassword(event)">
+              Set new password
+            </button>
+          </div>
+
+          <div id="forgot-message" class="mt-3"></div>
+        </div>
       </div>
-      
+
       <!-- Register Tab -->
       <div id="register-tab" class="tab-content">
         <form onsubmit="handleRegister(event)">
@@ -82,9 +233,30 @@
             <input type="password" class="form-control" id="reg-password" required minlength="8">
             <small class="text-muted">Minimum 8 characters</small>
           </div>
-          <button type="submit" class="btn btn-primary w-100">Create Account</button>
+          <button type="submit" class="btn btn-brand w-100">Create Account</button>
         </form>
         <div id="register-message" class="mt-3"></div>
+
+        <!-- Register interest (inline reveal) -->
+        <div class="text-center mt-3">
+          <a class="link-brand small" onclick="toggleInterest(event)">No cohort code? Register your interest</a>
+        </div>
+        <div id="interest-block" class="reveal-block" style="display: none;">
+          <h6 class="fw-bold" style="color:#1d0c59;">Register your interest</h6>
+          <p class="text-muted small">Leave your details and we'll invite you to a future cohort.</p>
+          <div class="mb-3">
+            <label class="form-label">Full Name</label>
+            <input type="text" class="form-control" id="interest-name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" id="interest-email">
+          </div>
+          <button type="button" class="btn btn-brand-secondary w-100" onclick="handleRegisterInterest(event)">
+            Register interest
+          </button>
+          <div id="interest-message" class="mt-3"></div>
+        </div>
       </div>
 
       <!-- Verify Email Tab -->
@@ -100,10 +272,10 @@
             <input type="text" class="form-control" id="verify-code" required placeholder="6-digit code"
               inputmode="numeric" autocomplete="one-time-code">
           </div>
-          <button type="submit" class="btn btn-primary w-100">Verify Email</button>
+          <button type="submit" class="btn btn-brand w-100">Verify Email</button>
         </form>
         <div class="text-center mt-2">
-          <a href="#" onclick="handleResendCode(event)" class="small">Resend code</a>
+          <a href="#" onclick="handleResendCode(event)" class="link-brand small">Resend code</a>
         </div>
         <div id="verify-message" class="mt-3"></div>
       </div>
@@ -113,7 +285,7 @@
   <script>
     let config = null;
     let cognitoIdentityServiceProvider = null;
-    
+
     // Load configuration
     fetch('/amplify_outputs.json')
       .then(r => r.json())
@@ -129,7 +301,7 @@
         console.error('Failed to load config:', err);
         alert('Failed to load configuration. Please refresh.');
       });
-    
+
     function showTab(tab) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
@@ -137,17 +309,29 @@
       const navLink = document.querySelector(`.nav-link[data-tab="${tab}"]`);
       if (navLink) navLink.classList.add('active');
     }
-    
+
     function showMessage(elementId, message, isError = false) {
       const el = document.getElementById(elementId);
       el.innerHTML = `<div class="alert alert-${isError ? 'danger' : 'success'}">${message}</div>`;
     }
-    
+
+    function toggleForgot(e) {
+      e.preventDefault();
+      const block = document.getElementById('forgot-block');
+      block.style.display = block.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleInterest(e) {
+      e.preventDefault();
+      const block = document.getElementById('interest-block');
+      block.style.display = block.style.display === 'none' ? 'block' : 'none';
+    }
+
     async function handleLogin(e) {
       e.preventDefault();
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
-      
+
       try {
         const params = {
           AuthFlow: 'USER_PASSWORD_AUTH',
@@ -157,9 +341,9 @@
             PASSWORD: password
           }
         };
-        
+
         const result = await cognitoIdentityServiceProvider.initiateAuth(params).promise();
-        
+
         if (result.AuthenticationResult) {
           const getUserParams = {
             AccessToken: result.AuthenticationResult.AccessToken
@@ -178,12 +362,12 @@
           localStorage.setItem('userEmail', email);
           localStorage.setItem('displayName', displayName);
 
-          // Fetch user record from DynamoDB for cohort, userId and teacher status
+          // Fetch user record from DynamoDB for cohort, userId, role flags
           try {
             const userQuery = `
               query ListUsers($email: String!) {
                 listUsers(filter: { email: { eq: $email } }) {
-                  items { id cohortId isTeacher isTutor schoolPrefix }
+                  items { id cohortId isTeacher isTutor isAdmin schoolPrefix }
                 }
               }
             `;
@@ -194,6 +378,7 @@
               if (user.cohortId) localStorage.setItem('cohort', user.cohortId);
               localStorage.setItem('isTeacher', user.isTeacher ? 'true' : 'false');
               localStorage.setItem('isTutor', user.isTutor ? 'true' : 'false');
+              localStorage.setItem('isAdmin', user.isAdmin ? 'true' : 'false');
               localStorage.setItem('schoolPrefix', user.schoolPrefix || '');
 
               // Pre-cache the nav-bar avatar so it shows on every page right after login
@@ -217,7 +402,48 @@
         showMessage('login-message', error.message || 'Login failed', true);
       }
     }
-    
+
+    async function handleForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim();
+      if (!email) {
+        showMessage('forgot-message', 'Please enter your email.', true);
+        return;
+      }
+      try {
+        await cognitoIdentityServiceProvider.forgotPassword({
+          ClientId: config.auth.user_pool_client_id,
+          Username: email
+        }).promise();
+        document.getElementById('forgot-step2').style.display = 'block';
+        showMessage('forgot-message', 'A reset code has been sent to ' + email + '.');
+      } catch (error) {
+        console.error('Forgot password error:', error);
+        showMessage('forgot-message', error.message || 'Could not send reset code', true);
+      }
+    }
+
+    async function handleConfirmForgotPassword(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim();
+      const code = document.getElementById('forgot-code').value.trim();
+      const newPassword = document.getElementById('forgot-new-password').value;
+      try {
+        await cognitoIdentityServiceProvider.confirmForgotPassword({
+          ClientId: config.auth.user_pool_client_id,
+          Username: email,
+          ConfirmationCode: code,
+          Password: newPassword
+        }).promise();
+        showMessage('forgot-message', 'Password reset! You can now sign in with your new password.');
+        document.getElementById('login-email').value = email;
+        setTimeout(() => { document.getElementById('forgot-block').style.display = 'none'; }, 1500);
+      } catch (error) {
+        console.error('Confirm forgot password error:', error);
+        showMessage('forgot-message', error.message || 'Password reset failed', true);
+      }
+    }
+
     async function executeGraphQL(query, variables = {}) {
       const response = await fetch(config.data.url, {
         method: 'POST',
@@ -344,6 +570,46 @@
       } catch (error) {
         console.error('Registration error:', error);
         showMessage('register-message', error.message || 'Registration failed', true);
+      }
+    }
+
+    async function handleRegisterInterest(e) {
+      e.preventDefault();
+      const name = document.getElementById('interest-name').value.trim();
+      const email = document.getElementById('interest-email').value.trim();
+
+      if (!name || !email) {
+        showMessage('interest-message', 'Please enter your name and email.', true);
+        return;
+      }
+
+      try {
+        const mutation = `
+          mutation CreateInterestRegistration($input: CreateInterestRegistrationInput!) {
+            createInterestRegistration(input: $input) { id }
+          }
+        `;
+        await executeGraphQL(mutation, {
+          input: { name, email, status: 'new', registeredAt: new Date().toISOString() }
+        });
+
+        // Best-effort: notify the admin by email (SES). Never block the user on this.
+        try {
+          await executeGraphQL(
+            `mutation Notify($name: String!, $email: String!) { notifyInterest(name: $name, email: $email) }`,
+            { name, email }
+          );
+        } catch (notifyErr) {
+          console.warn('Admin email notification failed (non-critical):', notifyErr);
+        }
+
+        showMessage('interest-message',
+          'Thanks ' + name + '! We\'ve registered your interest and will be in touch about future cohorts.');
+        document.getElementById('interest-name').value = '';
+        document.getElementById('interest-email').value = '';
+      } catch (error) {
+        console.error('Register interest error:', error);
+        showMessage('interest-message', error.message || 'Could not register interest. Please try again.', true);
       }
     }
 

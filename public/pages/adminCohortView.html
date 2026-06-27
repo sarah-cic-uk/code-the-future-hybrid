@@ -14,10 +14,10 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
 
-  <script type="text/javascript" src="./js/app.js?v=202606271449"></script>
-  <script src="./js/cohort-management.js?v=202606271449"></script>
+  <script type="text/javascript" src="./js/app.js?v=202606271646"></script>
+  <script src="./js/cohort-management.js?v=202606271646"></script>
 
-  <script src="./js/progressTracking.js?v=202606271449"></script>
+  <script src="./js/progressTracking.js?v=202606271646"></script>
 
   <style>
     body {
@@ -352,6 +352,28 @@
     <!-- Main Content -->
     <div class="container-fluid page-content">
       <div class="container">
+        <!-- Interest Registrations (site admins only) -->
+        <div id="interest-section" class="cohort-detail-view" style="display: none;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="h4 mb-0" style="color:#1d0c59;">Interest Registrations</h2>
+            <span id="interest-count" class="badge" style="background-color:#d9437a;">0</span>
+          </div>
+          <p class="text-muted">People who registered interest without a cohort code — invite them to future cohorts.</p>
+          <div class="student-table-container">
+            <table class="student-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Registered</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="interest-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Global Statistics -->
         <div id="global-stats-section" class="global-stats">
           <div class="stat-card">
@@ -514,10 +536,42 @@
 
         // Load all cohorts
         await loadAllCohorts();
+
+        // Site admins also see the interest-registration list
+        if (userData.isAdmin) {
+          await loadInterestRegistrations();
+        }
       } catch (error) {
         console.error('Authorization error:', error);
       }
     };
+
+    async function loadInterestRegistrations() {
+      try {
+        const registrations = await window.getInterestRegistrations();
+        const section = document.getElementById('interest-section');
+        const tbody = document.getElementById('interest-table-body');
+        document.getElementById('interest-count').textContent = registrations.length;
+
+        if (registrations.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No interest registrations yet</td></tr>';
+        } else {
+          tbody.innerHTML = registrations.map(r => {
+            const when = r.registeredAt ? new Date(r.registeredAt).toLocaleDateString() : '—';
+            return `
+              <tr>
+                <td>${r.name || ''}</td>
+                <td><a href="mailto:${r.email}">${r.email || ''}</a></td>
+                <td>${when}</td>
+                <td><span class="status-badge status-in-progress">${r.status || 'new'}</span></td>
+              </tr>`;
+          }).join('');
+        }
+        section.style.display = 'block';
+      } catch (error) {
+        console.error('Error loading interest registrations:', error);
+      }
+    }
 
     async function loadAllCohorts() {
       try {
