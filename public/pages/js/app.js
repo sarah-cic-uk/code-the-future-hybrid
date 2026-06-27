@@ -43,6 +43,12 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
       const teacherMenuItem = document.getElementById('teacher-menu-item');
       if (teacherMenuItem) teacherMenuItem.style.display = 'block';
     }
+
+    // Show the admin (all cohorts) menu item for tutors / course owners
+    if (localStorage.getItem('isTutor') === 'true') {
+      const adminMenuItem = document.getElementById('admin-menu-item');
+      if (adminMenuItem) adminMenuItem.style.display = 'block';
+    }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
     if (profileBtn) profileBtn.style.display = "none";
@@ -100,6 +106,7 @@ function logout() {
   localStorage.removeItem('profilePicUrl');
   localStorage.removeItem('profilePicUrlExpiry');
   localStorage.removeItem('isTeacher');
+  localStorage.removeItem('isTutor');
   localStorage.removeItem('schoolPrefix');
   localStorage.removeItem('idToken');
   localStorage.removeItem('accessToken');

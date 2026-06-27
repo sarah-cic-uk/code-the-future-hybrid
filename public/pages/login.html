@@ -182,7 +182,7 @@
             const userQuery = `
               query ListUsers($email: String!) {
                 listUsers(filter: { email: { eq: $email } }) {
-                  items { id cohortId isTeacher schoolPrefix }
+                  items { id cohortId isTeacher isTutor schoolPrefix }
                 }
               }
             `;
@@ -192,6 +192,7 @@
               localStorage.setItem('userId', user.id);
               if (user.cohortId) localStorage.setItem('cohort', user.cohortId);
               localStorage.setItem('isTeacher', user.isTeacher ? 'true' : 'false');
+              localStorage.setItem('isTutor', user.isTutor ? 'true' : 'false');
               localStorage.setItem('schoolPrefix', user.schoolPrefix || '');
             }
           } catch (e) {
@@ -252,16 +253,19 @@
       );
     }
 
-    async function createUserRecord(email, displayName, { cohortId = null, isTeacher = false, schoolPrefix = null } = {}) {
+    // Fixed code that grants course-owner (admin) access.
+    const TUTOR_CODE = 'Cod3Th3Futur3Tutor!';
+
+    async function createUserRecord(email, displayName, { cohortId = null, isTeacher = false, isTutor = false, schoolPrefix = null } = {}) {
       const query = `
         mutation CreateUser($input: CreateUserInput!) {
           createUser(input: $input) {
-            id email displayName cohortId isTeacher schoolPrefix
+            id email displayName cohortId isTeacher isTutor schoolPrefix
           }
         }
       `;
       const data = await executeGraphQL(query, {
-        input: { email, displayName, cohortId, isTeacher, schoolPrefix }
+        input: { email, displayName, cohortId, isTeacher, isTutor, schoolPrefix }
       });
       return data.createUser;
     }
@@ -278,11 +282,16 @@
           throw new Error('Please enter a valid cohort or teacher code');
         }
 
-        // Determine whether this is a teacher code ({schoolPrefix}Tutor) or a student cohort code
+        // Determine the role from the code:
+        //   tutor code (fixed) -> course owner/admin
+        //   {schoolPrefix}Tutor -> teacher
+        //   anything else -> student cohort code
         const teacherPrefix = deriveTeacherPrefix(cohort);
         let userFields;
 
-        if (teacherPrefix) {
+        if (cohort === TUTOR_CODE) {
+          userFields = { isTutor: true };
+        } else if (teacherPrefix) {
           const prefixValid = await validateTeacherPrefix(teacherPrefix);
           if (!prefixValid) {
             throw new Error('Teacher code not recognised. No cohorts found for your school.');

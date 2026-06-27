@@ -132,6 +132,7 @@ async function amplifySignOut() {
     localStorage.removeItem('profilePicUrl');
     localStorage.removeItem('profilePicUrlExpiry');
     localStorage.removeItem('isTeacher');
+    localStorage.removeItem('isTutor');
     localStorage.removeItem('schoolPrefix');
     window.location.href = '/pages/login.html';
   } catch (error) {

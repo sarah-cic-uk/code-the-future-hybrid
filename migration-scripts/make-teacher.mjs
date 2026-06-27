@@ -4,7 +4,7 @@
  * Promote a user to teacher
  *
  * Sets isTeacher=true and schoolPrefix on an existing User record, so they get
- * the "My Cohorts" dashboard scoped to all cohorts starting with that prefix.
+ * the "View All Cohorts" dashboard scoped to all cohorts starting with that prefix.
  *
  * No dependencies — uses the GraphQL API + API key from public/amplify_outputs.json.
  * Requires the schoolPrefix field to be deployed to the backend first.
