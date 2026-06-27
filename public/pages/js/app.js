@@ -38,16 +38,12 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
       document.querySelectorAll('#profile-pic-avatar').forEach(el => el.src = cachedPic);
     }
 
-    // Show the teacher dashboard menu item for teachers
+    // Add role dashboard links to the profile dropdown on every page
     if (localStorage.getItem('isTeacher') === 'true') {
-      const teacherMenuItem = document.getElementById('teacher-menu-item');
-      if (teacherMenuItem) teacherMenuItem.style.display = 'block';
+      showRoleMenuItem('teacher-menu-item', 'My Cohorts', 'pages/teacherCohortView.html');
     }
-
-    // Show the admin (all cohorts) menu item for tutors / course owners
     if (localStorage.getItem('isTutor') === 'true') {
-      const adminMenuItem = document.getElementById('admin-menu-item');
-      if (adminMenuItem) adminMenuItem.style.display = 'block';
+      showRoleMenuItem('admin-menu-item', 'All Cohorts (Admin)', 'pages/adminCohortView.html');
     }
   } else {
     if (loginBtn) loginBtn.style.display = "block";
@@ -69,6 +65,30 @@ function getPath() {
       ? '/'
       : '/public/';
   return PATH;
+}
+
+// Ensure a role-specific dashboard link is present (and visible) in the profile
+// dropdown on any page. If the page already hardcodes the <li>, just show it;
+// otherwise inject it before the Log out item. relPath is resolved via getPath().
+function showRoleMenuItem(id, label, relPath) {
+  const existing = document.getElementById(id);
+  if (existing) {
+    existing.style.display = 'block';
+    return;
+  }
+
+  const menu = document.querySelector('.profileBtn .dropdown-menu')
+    || document.querySelector('.dropdown-menu');
+  if (!menu) return;
+
+  const item = document.createElement('li');
+  item.id = id;
+  item.innerHTML = `<a class="dropdown-item" href="${getPath()}${relPath}">${label}</a>`;
+
+  const logoutItem = Array.from(menu.querySelectorAll('li'))
+    .find(li => /logout|logUserOut/i.test(li.innerHTML));
+  if (logoutItem) menu.insertBefore(item, logoutItem);
+  else menu.appendChild(item);
 }
 
 document.addEventListener("DOMContentLoaded", injectSession7Nav);

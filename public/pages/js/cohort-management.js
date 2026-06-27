@@ -214,42 +214,82 @@ function calculateCohortProgress(students) {
 }
 
 /**
- * Get individual student progress details
+ * Course curriculum — keep in sync with sidenav.js.
+ * A session counts as complete when all of its REQUIRED lessons are done
+ * (optional lessons are excluded), or when it was manually marked complete.
+ */
+const COURSE_LESSONS = {
+  session1: ['session1-overview', 'introIDE', 'introGit', 'firstRepo', 'hostingGithub', 'gitVScode', 'gitTerminal', 'githubDesktop'],
+  session2: ['session2-overview', 'htmlBasics', 'firstWebpage', 'chromeDevTools'],
+  session3: ['session3-overview', 'html_images', 'html_tables', 'html_forms', 'html_hyperlinks'],
+  session4: ['session4-overview', 'introToCSS', 'layoutsInCSS', 'advancedCSS', 'cssActivities'],
+  session5: ['session5-overview', 'accessibility', 'accessibilityTools', 'accessibilityExample'],
+  session6: ['session6-overview', 'projectPlanning', 'additionalHelp'],
+  session7: ['session7-overview', 'goodUses', 'humanFirst', 'promptPractice', 'modelsTokensCosts', 'reviewAndRepeat']
+};
+const OPTIONAL_LESSONS = {
+  session1: ['gitTerminal', 'githubDesktop'],
+  session5: ['accessibilityExample'],
+  session6: ['additionalHelp']
+};
+
+function requiredLessonsFor(sessionKey) {
+  const optional = OPTIONAL_LESSONS[sessionKey] || [];
+  return (COURSE_LESSONS[sessionKey] || []).filter(name => !optional.includes(name));
+}
+
+// A session is complete if manually marked, or all required lessons are done.
+function isSessionComplete(sessionKey, progress) {
+  const s = progress[sessionKey];
+  if (!s) return false;
+  if (s.completed) return true;
+  const done = s.completedLessons || {};
+  const required = requiredLessonsFor(sessionKey);
+  return required.length > 0 && required.every(name => done[name]);
+}
+
+/**
+ * Get individual student progress details (rolls up lesson completion)
  */
 function getStudentProgressDetails(student) {
-  if (!student.progress) {
-    return {
-      completedSessions: 0,
-      totalSessions: 7,
-      percentage: 0,
-      sessions: {}
-    };
-  }
-  
-  const progress = typeof student.progress === 'string' 
-    ? JSON.parse(student.progress) 
-    : student.progress;
-  
-  let completedCount = 0;
-  const sessions = {};
-  
-  for (let i = 1; i <= 7; i++) {
-    const sessionKey = `session${i}`;
-    sessions[sessionKey] = {
-      completed: progress[sessionKey]?.completed || false,
-      lastAccessed: progress[sessionKey]?.lastAccessed || null,
-      completedDate: progress[sessionKey]?.completedDate || null
-    };
-    
-    if (sessions[sessionKey].completed) {
-      completedCount++;
+  let progress = {};
+  if (student.progress) {
+    try {
+      progress = typeof student.progress === 'string' ? JSON.parse(student.progress) : student.progress;
+    } catch (e) {
+      console.error('Error parsing progress:', e);
     }
   }
-  
+
+  let completedCount = 0;
+  let lastAccessedDate = 0;
+  const sessions = {};
+
+  for (let i = 1; i <= 7; i++) {
+    const sessionKey = `session${i}`;
+    const raw = progress[sessionKey] || {};
+    const complete = isSessionComplete(sessionKey, progress);
+    sessions[sessionKey] = {
+      completed: complete,
+      lastAccessed: raw.lastAccessed || null,
+      completedDate: raw.completedDate || null,
+      completedLessons: raw.completedLessons || {}
+    };
+    if (complete) completedCount++;
+    if (raw.lastAccessed && raw.lastAccessed > lastAccessedDate) lastAccessedDate = raw.lastAccessed;
+  }
+
+  let status = 'Not Started';
+  if (completedCount === 7) status = 'Completed';
+  else if (completedCount > 0 || lastAccessedDate > 0) status = 'In Progress';
+
   return {
     completedSessions: completedCount,
+    completedCount,
     totalSessions: 7,
     percentage: Math.round((completedCount / 7) * 100),
+    status,
+    lastAccessedDate,
     sessions
   };
 }
