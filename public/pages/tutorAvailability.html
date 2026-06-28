@@ -716,14 +716,10 @@
       }
 
       const availability = tutorAvailability[loggedInTutor] || {};
-      console.log(availability)
-      console.log(loggedInTutor)
-      console.log(tutorAvailability)
       const today = new Date();
 
       // Handle no availability data
       if (!availability || Object.keys(availability).length === 0) {
-        console.log("No availability slots found.");
         tableBody.innerHTML = '<tr><td colspan="5"> No time slots added yet. </td></tr>';
         return;
       }
@@ -804,7 +800,6 @@
     async function updateBookedTable() {
       const tableBody = document.querySelector('.bookedTable');
       tableBody.innerHTML = '';
-      console.log("update boked table...")
       const bookedTab = document.getElementById('booked-tab');
       const calendarToggle = document.getElementById('switch-booked');
       const today = new Date();
@@ -824,7 +819,6 @@
 
       // Handle no sessions
       if (!sessions || Object.keys(sessions).length === 0) {
-        console.log("No booked sessions found.");
         tableBody.innerHTML = '<tr><td colspan="6"> There aren\'t any booked sessions to display. </td></tr>';
         bookedTab.textContent = "Booked sessions (0)";
         calendarToggle.classList.add('hidden'); // Hide calendar toggle
@@ -1019,7 +1013,6 @@
         });
 
         if (!requestedSessions || Object.keys(requestedSessions).length === 0) {
-          console.log("No requested sessions found.");
           tableBody.innerHTML = '<tr><td colspan="6"> There aren\'t any requested sessions to display. </td></tr>';
           requestTab.textContent = "Requested sessions (0)";
           calendarToggle.classList.add('hidden'); // Hide calendar toggle
@@ -1191,7 +1184,6 @@
 
           // remove session from DynamoDB using helper function
           await deleteSessionRequest(slotId);
-          console.log('Requested session cancelled and removed from DynamoDB.');
 
           // Notify the student their requested session was cancelled
           await window.sendBookingEmail({
@@ -1318,9 +1310,6 @@
           const timezone = cells[3].textContent.trim();
           const studentName = cells[4].textContent.trim();
 
-          // log each row to ensure data is being picked up correctly
-          console.log('Booked row data:', { date, time, duration, timezone, studentName });
-
           // safeguard for missing critical row data
           if (!date || !time || !studentName) {
             console.warn('Missing critical data for this booked row. Skipping.');
@@ -1331,18 +1320,12 @@
           const [day, month, year] = date.split('/');
           date = `${year}-${month}-${day}`;
 
-          console.log('Booked sessions data:', bookedSessions);
-          console.log('Logged-in tutor:', loggedInTutor);
-
           const sessionId = Object.keys(bookedSessions[loggedInTutor]).find(id => {
             const session = bookedSessions[loggedInTutor][id];
             return session.date === date && session.time === time && session.studentName === studentName;
           });
 
           const session = bookedSessions[loggedInTutor][sessionId];
-
-          // log the session object to debug any potential issues
-          console.log('Booked session data:', session);
 
           // safeguard for missing session object
           if (!sessionId || !session) {
@@ -1398,7 +1381,6 @@
         }
       });
 
-      console.log('Sessions:', sessions); // log all sessions before returning
       return sessions;
     }
   </script>
@@ -1568,7 +1550,6 @@
         }
       });
 
-      // console.log('Requested sessions:', sessions); // log all sessions before returning
       return sessions;
     }
   </script>

@@ -124,6 +124,17 @@ async function getAllStudents() {
 }
 
 /**
+ * Get all students whose cohort starts with a school prefix (case-insensitive).
+ * Used so a teacher's "My Cohort" page shows every student across their school's cohorts.
+ */
+async function getStudentsBySchoolPrefix(prefix) {
+  if (!prefix) return [];
+  const p = prefix.toLowerCase();
+  const all = await getAllStudents();
+  return all.filter(s => (s.cohortId || '').toLowerCase().startsWith(p));
+}
+
+/**
  * Get all cohorts (admin only)
  */
 async function getAllCohorts() {
@@ -538,6 +549,7 @@ async function getInterestRegistrations() {
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
 window.getAllStudents = getAllStudents;
+window.getStudentsBySchoolPrefix = getStudentsBySchoolPrefix;
 window.getAllCohorts = getAllCohorts;
 window.updateCohort = updateCohort;
 window.calculateCohortProgress = calculateCohortProgress;

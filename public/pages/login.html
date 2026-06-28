@@ -174,7 +174,11 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Password</label>
-            <input type="password" class="form-control" id="login-password" required>
+            <div class="input-group">
+              <input type="password" class="form-control" id="login-password" required>
+              <button type="button" class="btn btn-outline-secondary" tabindex="-1"
+                aria-label="Show password" onclick="togglePassword('login-password', this)"><i class="bi bi-eye"></i></button>
+            </div>
           </div>
           <button type="submit" class="btn btn-brand w-100">Sign In</button>
         </form>
@@ -202,7 +206,11 @@
             </div>
             <div class="mb-3">
               <label class="form-label">New password</label>
-              <input type="password" class="form-control" id="forgot-new-password" minlength="8">
+              <div class="input-group">
+                <input type="password" class="form-control" id="forgot-new-password" minlength="8">
+                <button type="button" class="btn btn-outline-secondary" tabindex="-1"
+                  aria-label="Show password" onclick="togglePassword('forgot-new-password', this)"><i class="bi bi-eye"></i></button>
+              </div>
               <small class="text-muted">Minimum 8 characters</small>
             </div>
             <button type="button" class="btn btn-brand w-100" onclick="handleConfirmForgotPassword(event)">
@@ -232,7 +240,11 @@
           </div>
           <div class="mb-3">
             <label class="form-label">Password</label>
-            <input type="password" class="form-control" id="reg-password" required minlength="8">
+            <div class="input-group">
+              <input type="password" class="form-control" id="reg-password" required minlength="8">
+              <button type="button" class="btn btn-outline-secondary" tabindex="-1"
+                aria-label="Show password" onclick="togglePassword('reg-password', this)"><i class="bi bi-eye"></i></button>
+            </div>
             <small class="text-muted">Minimum 8 characters</small>
           </div>
           <button type="submit" class="btn btn-brand w-100">Create Account</button>
@@ -315,6 +327,16 @@
     function showMessage(elementId, message, isError = false) {
       const el = document.getElementById(elementId);
       el.innerHTML = `<div class="alert alert-${isError ? 'danger' : 'success'}">${message}</div>`;
+    }
+
+    // Toggle a password field between hidden and visible
+    function togglePassword(inputId, btn) {
+      const input = document.getElementById(inputId);
+      const icon = btn.querySelector('i');
+      const show = input.type === 'password';
+      input.type = show ? 'text' : 'password';
+      icon.className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+      btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
     }
 
     function toggleForgot(e) {
@@ -494,6 +516,8 @@
 
     // Fixed code that grants course-owner (admin) access.
     const TUTOR_CODE = 'Cod3Th3Futur3Tutor!';
+    // Tutors share one cohort so they can see each other on the My Cohort page
+    const TUTOR_COHORT = 'tutors';
 
     async function createUserRecord(email, displayName, { cohortId = null, isTeacher = false, isTutor = false, schoolPrefix = null } = {}) {
       const query = `
@@ -529,7 +553,7 @@
         let userFields;
 
         if (cohort === TUTOR_CODE) {
-          userFields = { isTutor: true };
+          userFields = { isTutor: true, cohortId: TUTOR_COHORT };
         } else if (teacherPrefix) {
           const prefixValid = await validateTeacherPrefix(teacherPrefix);
           if (!prefixValid) {

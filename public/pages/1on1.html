@@ -611,9 +611,12 @@
       if (!isBookingSession) return;
 
       const row = button.closest('tr');
-      const requestedDate = row.cells[0].textContent;
-      const requestedTime = row.cells[1].textContent;
-      const requestedDuration = row.cells[2].textContent;
+      // Use the slot's RAW values (ISO date/time), not the display-formatted cell text,
+      // so the booked session stores a parseable date (e.g. 2026-07-01, not 01/07/2026).
+      const slot = (selectedTutor && selectedTutor.availability && selectedTutor.availability[sessionId]) || {};
+      const requestedDate = slot.date || row.cells[0].textContent;
+      const requestedTime = slot.time || row.cells[1].textContent;
+      const requestedDuration = slot.duration || row.cells[2].textContent;
 
       const tutorEmail = (selectedTutor && selectedTutor.email) || null; // email address for notifications
       const tutorIdValue = (selectedTutor && selectedTutor.id) || tutorId; // stable User.id stored as tutorId

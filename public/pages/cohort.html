@@ -144,22 +144,30 @@
 
       // Load cohort data using localStorage
       if (localStorage.getItem('loggedIn') === 'true') {
+        const isTeacher = localStorage.getItem('isTeacher') === 'true';
+        const schoolPrefix = (localStorage.getItem('schoolPrefix') || '').trim();
         const cohortCode = localStorage.getItem('cohort');
-        if (cohortCode) {
-          await loadCohortData(cohortCode);
-          
-          const elements = document.getElementsByClassName("dynamic-link");
-          for (let i = 0; i < elements.length; i++) {
-            elements[i].addEventListener('click', (e) => redirect(e.target.name, e.target.id), false);
-          }
+
+        // Teachers see every student across their school's cohorts (by prefix);
+        // everyone else sees their own cohort.
+        let students = [];
+        if (isTeacher && schoolPrefix) {
+          students = await window.getStudentsBySchoolPrefix(schoolPrefix);
+        } else if (cohortCode) {
+          students = await window.getStudentsByCohort(cohortCode);
+        }
+
+        await loadCohortData(students);
+
+        const elements = document.getElementsByClassName("dynamic-link");
+        for (let i = 0; i < elements.length; i++) {
+          elements[i].addEventListener('click', (e) => redirect(e.target.name, e.target.id), false);
         }
       }
     };
 
-    async function loadCohortData(cohortCode) {
+    async function loadCohortData(students) {
       cohortMembers = [];
-
-      const students = await window.getStudentsByCohort(cohortCode);
       const currentEmail = localStorage.getItem('userEmail');
 
       cohortMembers = students.map(s => {
