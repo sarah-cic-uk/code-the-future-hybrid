@@ -17,7 +17,11 @@ export const handler: Schema['sendBookingEmail']['functionHandler'] = async (eve
 
   const tutor = tutorName || 'your tutor';
   const student = studentName || 'the student';
-  const when = `${date || ''}${time ? ' at ' + time : ''}${duration ? ' (' + duration + ')' : ''}`.trim();
+
+  // Format an ISO date (YYYY-MM-DD) as DD/MM/YYYY; leave anything else untouched
+  const isoMatch = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date || '');
+  const niceDate = isoMatch ? `${isoMatch[3]}/${isoMatch[2]}/${isoMatch[1]}` : (date || '');
+  const when = `${niceDate}${time ? ' at ' + time : ''}${duration ? ' (' + duration + ')' : ''}`.trim();
 
   async function send(to: string | null | undefined, subject: string, text: string) {
     if (!to) return;
