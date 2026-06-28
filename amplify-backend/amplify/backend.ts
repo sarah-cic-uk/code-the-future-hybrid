@@ -25,4 +25,12 @@ const sesPolicy = new PolicyStatement({
 backend.notifyAdmin.resources.lambda.addToRolePolicy(sesPolicy);
 backend.bookingEmail.resources.lambda.addToRolePolicy(sesPolicy);
 
+// The login page authenticates with USER_PASSWORD_AUTH (AWS SDK v2), so the
+// user pool app client must allow that flow (plus SRP + refresh-token).
+backend.auth.resources.cfnResources.cfnUserPoolClient.explicitAuthFlows = [
+  'ALLOW_USER_PASSWORD_AUTH',
+  'ALLOW_USER_SRP_AUTH',
+  'ALLOW_REFRESH_TOKEN_AUTH',
+];
+
 // Made with Bob
