@@ -50,8 +50,9 @@ Thumbs.db
 *.swo
 *.orig
 
-# Migration and temporary files
-migration-scripts/exported-data/
-migration-scripts/transformed-data/
+# Migration scripts — kept locally only, not tracked
+migration-scripts/
+
+# Temporary files
 /tmp/
 *.tmp

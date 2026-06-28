@@ -10,6 +10,6 @@ export const bookingEmail = defineFunction({
   name: 'booking-email',
   entry: './handler.ts',
   environment: {
-    FROM_EMAIL: 'code.the.future.team@gmail.com',
+    FROM_EMAIL: 'no-reply@codethefuture.uk',
   },
 });

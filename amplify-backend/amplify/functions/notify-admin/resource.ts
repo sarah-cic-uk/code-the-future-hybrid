@@ -9,7 +9,7 @@ export const notifyAdmin = defineFunction({
   name: 'notify-admin',
   entry: './handler.ts',
   environment: {
-    FROM_EMAIL: 'code.the.future.team@gmail.com',
+    FROM_EMAIL: 'no-reply@codethefuture.uk',
     ADMIN_EMAIL: 'code.the.future.team@gmail.com',
   },
 });
