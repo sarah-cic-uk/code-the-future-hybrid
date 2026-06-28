@@ -13,8 +13,9 @@ frontend:
         - npm ci
     build:
       commands:
-        # Show which backend the deployed app will talk to (should be the branch endpoint, not the sandbox)
-        - node -e "const c=require('./public/amplify_outputs.json'); console.log('Frontend using backend endpoint:', c.data.url)"
+        # No frontend build step needed — it's static. The backend phase already wrote
+        # public/amplify_outputs.json (via --outputs-out-dir ../public) for the app to use.
+        - echo "Static frontend — using public/amplify_outputs.json from the backend phase"
   artifacts:
     baseDirectory: /public
     files:
