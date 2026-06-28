@@ -24,4 +24,24 @@ frontend:
     paths:
       - node_modules/**/*
 
+# Always revalidate HTML/JS/CSS so a deploy is picked up immediately
+# (browser may cache, but must check freshness — fast 304s via the CDN).
+customHeaders:
+  - pattern: '**/*.html'
+    headers:
+      - key: 'Cache-Control'
+        value: 'no-cache'
+  - pattern: '**/*.js'
+    headers:
+      - key: 'Cache-Control'
+        value: 'no-cache'
+  - pattern: '**/*.css'
+    headers:
+      - key: 'Cache-Control'
+        value: 'no-cache'
+  - pattern: '/amplify_outputs.json'
+    headers:
+      - key: 'Cache-Control'
+        value: 'no-cache'
+
 # Made with Bob
