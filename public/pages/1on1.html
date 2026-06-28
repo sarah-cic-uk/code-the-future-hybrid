@@ -9,7 +9,7 @@
 
   <title>Code the Future</title>
 
-  <link rel="stylesheet" href="../styles/1on1.css?v=202606271659" />
+  <link rel="stylesheet" href="../styles/1on1.css?v=202606281430" />
 
   <!-- FullCalendar CSS & JS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
@@ -19,7 +19,6 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
   <!-- Helper Scripts -->
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1544.0.min.js"></script>
@@ -616,9 +615,10 @@
       const requestedTime = row.cells[1].textContent;
       const requestedDuration = row.cells[2].textContent;
 
-      const tutorEmail = (selectedTutor && selectedTutor.email) || null;
-      if (!tutorEmail) {
-        console.error("Tutor email is not defined on selectedTutor.");
+      const tutorEmail = (selectedTutor && selectedTutor.email) || null; // email address for notifications
+      const tutorIdValue = (selectedTutor && selectedTutor.id) || tutorId; // stable User.id stored as tutorId
+      if (!tutorIdValue) {
+        console.error("Tutor id is not defined on selectedTutor.");
         return;
       }
 
@@ -631,8 +631,8 @@
         duration: requestedDuration
       };
 
-      const result = await window.bookSession(tutorEmail, userEmail, sessionData);
-      
+      const result = await window.bookSession(tutorIdValue, userEmail, sessionData);
+
       if (!result) {
         console.error("Failed to book session");
         return;
@@ -649,9 +649,16 @@
       // refresh student's Booked tab
       await populateStudentBookedAndRequested();
 
-      // send emails
-      await sendBookedEmail_Tutor(tutorEmail, unified.studentName, unified.date, unified.time, unified.duration);
-      await sendBookedEmail_Student(selectedTutor, unified.studentName, unified.date, unified.time, unified.duration);
+      // Email both the tutor and the student about the booking (via SES Lambda)
+      await window.sendBookingEmail({
+        tutorEmail,
+        tutorName: (selectedTutor && selectedTutor.displayName) || '',
+        studentEmail: userEmail,
+        studentName: sessionData.studentName,
+        date: sessionData.date,
+        time: sessionData.time,
+        duration: sessionData.duration
+      });
     }
 
     async function writeSessionRequestToDatabase(tutor, requestedDate, requestedTime, requestedDuration) {
@@ -667,7 +674,7 @@
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
       };
 
-      const result = await createSessionRequest(tutor.email, studentEmail, requestData);
+      const result = await createSessionRequest(tutor.id, studentEmail, requestData);
       if (result) {
         console.log(`Session request created for tutor ${tutor.displayName}`);
       } else {
@@ -694,8 +701,17 @@
       new bootstrap.Toast(document.getElementById('request-session')).show();
       await writeSessionRequestToDatabase(selectedTutor, requestedDate, requestedTime, requestedDuration);
 
-      const studentName = localStorage.getItem('displayName') || "Unknown";
-      await sendAlternateRequestEmail_Tutor(selectedTutor, studentName, requestedDate, requestedTime, requestedDuration);
+      // Notify the tutor of the new request (also visible in their Requested sessions tab)
+      await window.sendBookingEmail({
+        type: 'requested',
+        tutorEmail: (selectedTutor && selectedTutor.email) || '',
+        tutorName: (selectedTutor && selectedTutor.displayName) || '',
+        studentEmail: localStorage.getItem('userEmail'),
+        studentName: localStorage.getItem('displayName') || 'A student',
+        date: requestedDate,
+        time: requestedTime,
+        duration: requestedDuration
+      });
 
       // reset form
       dateInput.value = '';
@@ -721,7 +737,7 @@
       const tutors = await getAllTutors();
       const tutorMap = {};
       tutors.forEach(t => {
-        tutorMap[t.email] = t.displayName;
+        tutorMap[t.id] = t.displayName;  // tutorId on sessions is the tutor's User.id
       });
 
       // Get booked sessions for this student
@@ -767,61 +783,6 @@
           </tr>
         `);
       });
-    }
-
-    // Initialize EmailJS
-    emailjs.init('N0cfshULW4gnpvhdY'); // Replace with your EmailJS public key
-
-    // ===== SELECT a SESSION <<---- from tutor_availability
-    async function sendSelectSession_BookedConfirmationEmail_Tutor(tutorEmail, studentName, requestedDate, requestedTime, requestedDuration) {
-      try {
-        await emailjs.send('service_gos1bro', 'template_tz92f3l', {
-          email: tutorEmail,
-          recipient_name: tutor.displayName,
-          attendee_name: studentName,
-          session_date: requestedDate,
-          session_time: requestedTime,
-          session_duration: requestedDuration
-        });
-        console.log('Tutor email sent successfully');
-      } catch (error) {
-        console.error('Error sending tutor email:', error);
-      }
-    }
-
-    async function sendBookedEmail_Student(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
-      try {
-        const studentEmail = localStorage.getItem('userEmail');
-
-        await emailjs.send('service_gos1bro', 'template_nlqu6we', { //student booking confirmation
-          email: studentEmail,
-          recipient_name: studentName,
-          attendee_name: tutor.displayName,
-          session_date: requestedDate,
-          session_time: requestedTime,
-          session_duration: requestedDuration
-        });
-        console.log('Student email sent successfully');
-      } catch (error) {
-        console.error('Error sending student email:', error);
-      }
-    }
-
-    async function sendAlternateRequestEmail_Tutor(tutor, studentName, requestedDate, requestedTime, requestedDuration) {
-      console.log(tutor)
-      try {
-        await emailjs.send('service_gos1bro', 'template_tz92f3l', { //Tutor ad hoc request
-          email: tutor.email,
-          tutor_name: tutor.displayName,
-          student_name: studentName,
-          session_date: requestedDate,
-          session_time: requestedTime,
-          session_duration: requestedDuration
-        });
-        console.log('Alternative 1:1 session request email sent successfully to tutor');
-      } catch (error) {
-        console.error('Error sending alternative 1:1 session request email to tutor:', error);
-      }
     }
 
     // ---------- Calendar toggle ----------
@@ -911,7 +872,7 @@
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
 
-  <script type="text/javascript" src="./js/app.js?v=202606271659"></script>
+  <script type="text/javascript" src="./js/app.js?v=202606281430"></script>
 </body>
 
 </html>

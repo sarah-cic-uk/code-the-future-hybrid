@@ -251,24 +251,5 @@ async function fetchMediaFromAmplify(videoName, el) {
   }
 }
 
-async function sendEmailRequest(to, subject, text, html) {
-  // Validate email inputs
-  if (!to || !subject || (!text && !html)) {
-    console.error("Invalid email payload. 'To', 'Subject', and either 'Text' or 'HTML' are required.");
-    return;
-  }
-
-  try {
-    await emailjs.send('service_id', 'template_id', {
-      to_email: to,
-      subject: subject,
-      message: html || text
-    });
-    console.log('Email sent successfully');
-  } catch (error) {
-    console.error('Error sending email:', error);
-  }
-}
-
 
 

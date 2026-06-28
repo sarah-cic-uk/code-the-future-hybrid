@@ -9,7 +9,7 @@
 
   <title>Code the Future</title>
 
-  <link rel="stylesheet" href="../styles/1on1.css?v=202606271659" />
+  <link rel="stylesheet" href="../styles/1on1.css?v=202606281430" />
 
   <!-- FullCalendar CSS & JS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
@@ -19,9 +19,9 @@
     integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-  <script type="text/javascript" src="./js/app.js?v=202606271659"></script>
-  <script src="./js/cohort-management.js?v=202606271659"></script>
-  <script src="./js/tutor-booking.js?v=202606271659"></script>
+  <script type="text/javascript" src="./js/app.js?v=202606281430"></script>
+  <script src="./js/cohort-management.js?v=202606281430"></script>
+  <script src="./js/tutor-booking.js?v=202606281430"></script>
 
 </head>
 
@@ -416,8 +416,7 @@
       }
 
       const userEmail = localStorage.getItem('userEmail');
-      loggedInTutor = localStorage.getItem('displayName');
-      
+
       try {
         // Check if user is a tutor using cohort-management helper
         const userData = await window.getUserByEmail(userEmail);
@@ -425,8 +424,10 @@
           document.body.innerHTML = '<div class="container mt-5"><div class="alert alert-danger text-center"><h3>Access Denied</h3><p>You are not authorized to access this page. Only tutors can view tutor availability.</p></div></div>';
           return;
         }
-        
+
         userId = userData.id;
+        // Tutors are identified everywhere by their stable User.id
+        loggedInTutor = userData.id;
         updateAvailabilityTable();
         updateBookedTable();
         initialiseTutorData();
@@ -679,8 +680,10 @@
       newSlot.slotId = slotId;
 
       try {
-        await addAvailabilitySlot(loggedInTutor, newSlot);
-        tutorAvailability[loggedInTutor][tutorRef.key] = newSlot;
+        const saved = await addAvailabilitySlot(loggedInTutor, newSlot);
+        if (!saved) throw new Error('Failed to save availability slot');
+        // Cache locally keyed by slotId, matching how slots are loaded on refresh
+        tutorAvailability[loggedInTutor][slotId] = newSlot;
         updateAvailabilityTable();
 
         // show success toast
@@ -917,16 +920,13 @@
           await deleteBookedSession(slotId);
           console.log(`Booked session with ID ${slotId} removed from DynamoDB.`);
 
-          // === Add Email Notification ===
-          // Notify the student about the cancellation
-          const emailContent = createEmailContent(
-            'cancelSession',
-            { date, time, duration, studentName },
-            'student'
-          );
-          await sendEmail(studentEmail, emailContent.subject, emailContent.text, emailContent.html);
-          console.log(`Cancellation email sent to ${studentEmail}`);
-          // === End Email Notification ===
+          // Notify the student their booked session was cancelled
+          await window.sendBookingEmail({
+            type: 'cancelledBooked',
+            tutorEmail: localStorage.getItem('userEmail'),
+            tutorName: localStorage.getItem('displayName') || '',
+            studentEmail, studentName, date, time, duration
+          });
 
           updateBookedTable();
 
@@ -976,19 +976,6 @@
             updateBookedTable();
           }
 
-          // Send email notification to the student if session data exists
-          if (sessionData) {
-            const { studentEmail, studentName, date, time, duration } = sessionData;
-
-            const emailContent = createEmailContent(
-              'cancelBookedSession',
-              { date, time, duration, studentName },
-              'student'
-            );
-
-            await sendEmail(studentEmail, emailContent.subject, emailContent.text, emailContent.html);
-            console.log(`Cancellation email sent to ${studentEmail}`);
-          }
 
           // show success toast
           const removedToastEl = document.getElementById('removed-session');
@@ -1133,7 +1120,7 @@
 
         if (sessionData) {
           const { date, time, duration, studentEmail, studentName } = sessionData;
-          const tutorEmail = localStorage.getItem('userEmail');
+          const tutorEmail = localStorage.getItem('userEmail'); // used only as the email address for notifications
 
           const selectedDate = sessionData.date;
           const selectedTime = sessionData.time;
@@ -1160,27 +1147,19 @@
           }
 
           // proceed to confirm booking if no conflicts exist using helper function
-          await acceptSessionRequest(slotId, tutorEmail, sessionData);
+          // tutorId is the stable User.id (loggedInTutor); tutorEmail is only for the email
+          await acceptSessionRequest(slotId, loggedInTutor, sessionData);
 
-          // === Add Email Notifications ===
-
-          // 1. Send email to student
-          const studentEmailContent = createEmailContent(
-            'confirmSession',
-            { ...sessionData, tutorName: loggedInTutor },
-            'student'
-          );
-          await sendEmail(studentEmail, studentEmailContent.subject, studentEmailContent.text, studentEmailContent.html);
-
-          // 2. Send email to tutor
-          const tutorEmailContent = createEmailContent(
-            'confirmSession',
-            { ...sessionData, tutorName: loggedInTutor },
-            'tutor'
-          );
-          await sendEmail(tutorEmail, tutorEmailContent.subject, tutorEmailContent.text, tutorEmailContent.html);
-
-          // === End Email Notifications ===
+          // === Email both the tutor and the student about the booking (via SES Lambda) ===
+          await window.sendBookingEmail({
+            tutorEmail,
+            tutorName: localStorage.getItem('displayName') || '',
+            studentEmail,
+            studentName: sessionData.studentName,
+            date: sessionData.date,
+            time: sessionData.time,
+            duration: sessionData.duration
+          });
 
 
           updateRequestedTable();
@@ -1214,16 +1193,13 @@
           await deleteSessionRequest(slotId);
           console.log('Requested session cancelled and removed from DynamoDB.');
 
-          // === Add Email Notification ===
-          // Notify the student about the cancellation
-          const emailContent = createEmailContent(
-            'cancelRequestedSession',
-            { date, time, duration, studentName },
-            'student'
-          );
-          await sendEmail(studentEmail, emailContent.subject, emailContent.text, emailContent.html);
-          console.log(`Cancellation email sent to ${studentEmail}`);
-          // === End Email Notification ===
+          // Notify the student their requested session was cancelled
+          await window.sendBookingEmail({
+            type: 'cancelledRequest',
+            tutorEmail: localStorage.getItem('userEmail'),
+            tutorName: localStorage.getItem('displayName') || '',
+            studentEmail, studentName, date, time, duration
+          });
 
           updateRequestedTable();
 
@@ -1246,81 +1222,6 @@
       toast.show();
     }
 
-
-    async function sendEmail(to, subject, text, html) {
-      await sendEmailRequest(to, subject, text, html);
-    }
-
-    const appUrl = "https://code-the-future-hybrid.web.app";
-
-    // Helper to create email content
-    function createEmailContent(type, sessionData, recipient) {
-      const { date, time, duration, studentName, tutorName } = sessionData;
-      let subject, text, html;
-
-      if (type === 'confirmSession') {
-        if (recipient === 'student') {
-          subject = 'Code the Future: Your 1:1 session confirmed';
-          text = `Dear ${studentName},\n\nYour 1:1 session with ${tutorName} has been confirmed.\n\nDetails:\nDate: ${date}\nTime: ${time}\nDuration: ${duration} \nWe're confident that you will find the session highly beneficial to you and your developer output in the course. \n\nBest wishes,\nYour Code the Future Team`;
-          html = `
-            <p>Dear ${studentName},</p>
-            <p>Your 1:1 session with <strong>${tutorName}</strong> has been confirmed.</p>
-            <ul>
-              <li><strong>Date:</strong> ${date}</li>
-              <li><strong>Time:</strong> ${time}</li>
-              <li><strong>Duration:</strong> ${duration}</li>
-            </ul>
-            <p>We're confident that you will find the session highly beneficial to you and your coding skills in the course.</p>
-            <p>Best wishes, <br>Your Code the Future Team</p>
-          `;
-        } else if (recipient === 'tutor') {
-          subject = 'Code the Future: 1:1 session confirmed';
-          text = `Dear ${tutorName},\n\nThe following 1:1 session with ${studentName} has been confirmed.\n\nDetails:\nDate: ${date}\nTime: ${time}\nDuration: ${duration} \nThis email is not only for your records but acts as a gentle reminder for you to log in to Code the Future to <a href="${appUrl}/pages/tutorAvailability.html">Manage 1:1s</a>.\nIt's important that you also manually set up a calendar event with ${studentName} for the  1:1 session Teams/Slack until this functionality is added. \n\nBest wishes,\nYour Code the Future Team`;
-          html = `
-            <p>Dear ${tutorName},</p>
-            <p>The following 1:1 session with <strong>${studentName}</strong> has been confirmed.</p>
-            <ul>
-              <li><strong>Date:</strong> ${date}</li>
-              <li><strong>Time:</strong> ${time}</li>
-              <li><strong>Duration:</strong> ${duration}</li>
-            </ul>
-            <p>This email is not only for your records but acts as a gentle reminder for you to log in to Code the Future to <a href="${appUrl}/pages/tutorAvailability.html">Manage 1:1s</a>.</p>
-            <p>It's important that you also manually set up a calendar event with ${studentName} for the  1:1 session Teams/Slack until this functionality is added.</p>
-            <p>Best wishes, <br>Your Code the Future Team</p>
-          `;
-        }
-      } else if (type === 'cancelRequestedSession') {
-        subject = 'Code the Future: Your requested 1:1 session has been cancelled';
-        text = `Dear ${studentName},\n\nYour requested 1:1 session has been cancelled.\n\nDetails:\nDate: ${date}\nTime: ${time}\nDuration: ${duration}\n The tutor should make contact with you shortly. If this does not happen reach out to us in the Slack channel or browse the other tutors availability to book a 1:1 session. \n\nBest wishes,\nYour Code the Future Team`;
-        html = `
-          <p>Dear ${studentName},</p>
-          <p>Your 1:1 session has been cancelled.</p>
-          <ul>
-            <li><strong>Date:</strong> ${date}</li>
-            <li><strong>Time:</strong> ${time}</li>
-            <li><strong>Duration:</strong> ${duration}</li>
-          </ul>
-          <p>The tutor should make contact with you shortly. If this does not happen reach out to us in the Slack channel or browse the other tutors availability to book a 1:1 session.</p>
-          <p>Best wishes, <br>Your Code the Future Team</p>
-        `;
-      } else if (type === 'cancelBookedSession') {
-        subject = 'Code the Future: Your booked 1:1 session has been cancelled';
-        text = `Dear ${studentName},\n\nYour booked 1:1 session has been cancelled by the tutor.\n\nDetails:\nDate: ${date}\nTime: ${time}\nDuration: ${duration} \nThe tutor should contact you directly for rescheduling. If this does not happen reach out to us in the Slack channel or browse the other tutors availability to book a 1:1 session. \n\nBest wishes,\nYour Code the Future Team`;
-        html = `
-          <p>Dear ${studentName},</p>
-          <p>Your booked 1:1 session has been cancelled by the tutor.</p>
-          <ul>
-            <li><strong>Date:</strong> ${date}</li>
-            <li><strong>Time:</strong> ${time}</li>
-            <li><strong>Duration:</strong> ${duration}</li>
-          </ul>
-          <p>The tutor should contact you directly for rescheduling. If this does not happen reach out to us in the Slack channel or browse the other tutors availability to book a 1:1 session.</p>
-          <p>Best wishes, <br>Your Code the Future Team</p>
-        `;
-      }
-
-      return { subject, text, html };
-    }
 
     // attach event listeners to the date and time inputs to call checkFormCompletion
     document.getElementById('txtDate').addEventListener('input', checkFormCompletion);

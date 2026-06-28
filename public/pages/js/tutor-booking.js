@@ -59,7 +59,7 @@ const getSessionRequests = `
 /**
  * Get tutor's availability slots
  */
-async function getTutorAvailabilitySlots(tutorEmail) {
+async function getTutorAvailabilitySlots(tutorId) {
   try {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
@@ -67,7 +67,7 @@ async function getTutorAvailabilitySlots(tutorEmail) {
     const query = {
       query: `
         query ListTutorAvailabilities {
-          listTutorAvailabilities(filter: {tutorId: {eq: "${tutorEmail}"}}) {
+          listTutorAvailabilities(filter: {tutorId: {eq: "${tutorId}"}}) {
             items {
               id
               tutorId
@@ -102,7 +102,7 @@ async function getTutorAvailabilitySlots(tutorEmail) {
 /**
  * Add availability slot
  */
-async function addAvailabilitySlot(tutorEmail, slotData) {
+async function addAvailabilitySlot(tutorId, slotData) {
   try {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
@@ -111,7 +111,7 @@ async function addAvailabilitySlot(tutorEmail, slotData) {
       query: `
         mutation CreateTutorAvailability {
           createTutorAvailability(input: {
-            tutorId: "${tutorEmail}"
+            tutorId: "${tutorId}"
             slotId: "${slotData.slotId}"
             date: "${slotData.date}"
             time: "${slotData.time}"
@@ -151,32 +151,46 @@ async function addAvailabilitySlot(tutorEmail, slotData) {
  * Delete availability slot
  */
 async function deleteAvailabilitySlot(slotId) {
+  // Callers pass our custom slotId; resolve it to the record's DynamoDB id first.
+  return deleteByCustomId('TutorAvailability', 'listTutorAvailabilities', 'slotId', slotId);
+}
+
+/**
+ * Delete a record identified by a custom field (not the DynamoDB id).
+ * Looks up the record(s) where <field> == <value>, then deletes each by id.
+ */
+async function deleteByCustomId(model, listQuery, field, value) {
   try {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
-    
-    const mutation = {
-      query: `
-        mutation DeleteTutorAvailability {
-          deleteTutorAvailability(input: {id: "${slotId}"}) {
-            id
-          }
-        }
-      `
-    };
+    const headers = { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key };
 
-    const result = await fetch(config.data.url, {
+    const lookup = await fetch(config.data.url, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': config.data.api_key
-      },
-      body: JSON.stringify(mutation)
+      headers,
+      body: JSON.stringify({
+        query: `query { ${listQuery}(filter: { ${field}: { eq: "${value}" } }) { items { id } } }`
+      })
     });
+    const lookupData = await lookup.json();
+    const items = lookupData.data?.[listQuery]?.items || [];
+    if (items.length === 0) {
+      console.warn(`No ${model} found with ${field}=${value}`);
+      return false;
+    }
 
-    return result.ok;
+    for (const item of items) {
+      await fetch(config.data.url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          query: `mutation { delete${model}(input: { id: "${item.id}" }) { id } }`
+        })
+      });
+    }
+    return true;
   } catch (error) {
-    console.error('Error deleting availability:', error);
+    console.error(`Error deleting ${model} by ${field}:`, error);
     return false;
   }
 }
@@ -184,7 +198,7 @@ async function deleteAvailabilitySlot(slotId) {
 /**
  * Get booked sessions for tutor
  */
-async function getTutorBookedSessions(tutorEmail) {
+async function getTutorBookedSessions(tutorId) {
   try {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
@@ -192,7 +206,7 @@ async function getTutorBookedSessions(tutorEmail) {
     const query = {
       query: `
         query ListBookedSessions {
-          listBookedSessions(filter: {tutorId: {eq: "${tutorEmail}"}}) {
+          listBookedSessions(filter: {tutorId: {eq: "${tutorId}"}}) {
             items {
               id
               sessionId
@@ -229,7 +243,7 @@ async function getTutorBookedSessions(tutorEmail) {
 /**
  * Book a session
  */
-async function bookSession(tutorEmail, studentEmail, sessionData) {
+async function bookSession(tutorId, studentEmail, sessionData) {
   try {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
@@ -239,7 +253,7 @@ async function bookSession(tutorEmail, studentEmail, sessionData) {
         mutation CreateBookedSession {
           createBookedSession(input: {
             sessionId: "${sessionData.sessionId}"
-            tutorId: "${tutorEmail}"
+            tutorId: "${tutorId}"
             studentEmail: "${studentEmail}"
             studentName: "${sessionData.studentName || ''}"
             date: "${sessionData.date}"
@@ -308,7 +322,17 @@ async function getAllTutors() {
     });
 
     const data = await result.json();
-    return data.data?.listUsers?.items || [];
+    const tutors = data.data?.listUsers?.items || [];
+
+    // Attach each tutor's availability (keyed by slotId) so 1on1.html can render it.
+    // tutorId is the tutor's User.id.
+    await Promise.all(tutors.map(async (tutor) => {
+      const slots = await getTutorAvailabilitySlots(tutor.id);
+      tutor.availability = {};
+      slots.forEach(slot => { tutor.availability[slot.slotId] = slot; });
+    }));
+
+    return tutors;
   } catch (error) {
     console.error('Error fetching tutors:', error);
     return [];
@@ -317,7 +341,7 @@ async function getAllTutors() {
 /**
  * Create a session request
  */
-async function createSessionRequest(tutorEmail, studentEmail, requestData) {
+async function createSessionRequest(tutorId, studentEmail, requestData) {
   try {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
@@ -327,7 +351,7 @@ async function createSessionRequest(tutorEmail, studentEmail, requestData) {
         mutation CreateSessionRequest {
           createSessionRequest(input: {
             requestId: "${Date.now()}"
-            tutorId: "${tutorEmail}"
+            tutorId: "${tutorId}"
             studentEmail: "${studentEmail}"
             studentName: "${requestData.studentName || ''}"
             date: "${requestData.date}"
@@ -461,7 +485,7 @@ window.getTutorAvailabilitySlots = getTutorAvailabilitySlots;
 /**
  * Get session requests for a tutor
  */
-async function getTutorSessionRequests(tutorEmail) {
+async function getTutorSessionRequests(tutorId) {
   try {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
@@ -469,7 +493,7 @@ async function getTutorSessionRequests(tutorEmail) {
     const query = {
       query: `
         query GetTutorRequests {
-          listSessionRequests(filter: {tutorId: {eq: "${tutorEmail}"}}) {
+          listSessionRequests(filter: {tutorId: {eq: "${tutorId}"}}) {
             items {
               id
               requestId
@@ -507,79 +531,25 @@ async function getTutorSessionRequests(tutorEmail) {
  * Delete a booked session
  */
 async function deleteBookedSession(sessionId) {
-  try {
-    const response = await fetch('/amplify_outputs.json');
-    const config = await response.json();
-    
-    const mutation = {
-      query: `
-        mutation DeleteBookedSession {
-          deleteBookedSession(input: {id: "${sessionId}"}) {
-            id
-          }
-        }
-      `
-    };
-
-    const result = await fetch(config.data.url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': config.data.api_key
-      },
-      body: JSON.stringify(mutation)
-    });
-
-    const data = await result.json();
-    return data.data?.deleteBookedSession;
-  } catch (error) {
-    console.error('Error deleting booked session:', error);
-    return null;
-  }
+  // Callers pass our custom sessionId; resolve it to the record's DynamoDB id first.
+  return deleteByCustomId('BookedSession', 'listBookedSessions', 'sessionId', sessionId);
 }
 
 /**
  * Delete a session request
  */
 async function deleteSessionRequest(requestId) {
-  try {
-    const response = await fetch('/amplify_outputs.json');
-    const config = await response.json();
-    
-    const mutation = {
-      query: `
-        mutation DeleteSessionRequest {
-          deleteSessionRequest(input: {id: "${requestId}"}) {
-            id
-          }
-        }
-      `
-    };
-
-    const result = await fetch(config.data.url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': config.data.api_key
-      },
-      body: JSON.stringify(mutation)
-    });
-
-    const data = await result.json();
-    return data.data?.deleteSessionRequest;
-  } catch (error) {
-    console.error('Error deleting session request:', error);
-    return null;
-  }
+  // Callers pass our custom requestId; resolve it to the record's DynamoDB id first.
+  return deleteByCustomId('SessionRequest', 'listSessionRequests', 'requestId', requestId);
 }
 
 /**
  * Accept a session request (convert to booked session)
  */
-async function acceptSessionRequest(requestId, tutorEmail, sessionData) {
+async function acceptSessionRequest(requestId, tutorId, sessionData) {
   try {
     // Create booked session
-    const bookedSession = await bookSession(tutorEmail, sessionData.studentEmail, {
+    const bookedSession = await bookSession(tutorId, sessionData.studentEmail, {
       sessionId: Date.now().toString(),
       studentName: sessionData.studentName,
       date: sessionData.date,
@@ -599,11 +569,40 @@ async function acceptSessionRequest(requestId, tutorEmail, sessionData) {
   }
 }
 
+/**
+ * Send a 1:1 session email via the SES Lambda. Best-effort: never throws into the flow.
+ * type = 'booked' | 'cancelledBooked' | 'cancelledRequest' | 'requested' (default 'booked').
+ */
+async function sendBookingEmail({ type = 'booked', tutorEmail, tutorName, studentEmail, studentName, date, time, duration }) {
+  try {
+    const response = await fetch('/amplify_outputs.json');
+    const config = await response.json();
+    const mutation = `
+      mutation SendBookingEmail($type: String, $tutorEmail: String!, $tutorName: String, $studentEmail: String!, $studentName: String, $date: String, $time: String, $duration: String) {
+        sendBookingEmail(type: $type, tutorEmail: $tutorEmail, tutorName: $tutorName, studentEmail: $studentEmail, studentName: $studentName, date: $date, time: $time, duration: $duration)
+      }
+    `;
+    await fetch(config.data.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
+      body: JSON.stringify({
+        query: mutation,
+        variables: { type, tutorEmail, tutorName, studentEmail, studentName, date, time, duration }
+      })
+    });
+    return true;
+  } catch (error) {
+    console.error('sendBookingEmail failed:', error);
+    return false;
+  }
+}
+
 window.addAvailabilitySlot = addAvailabilitySlot;
 window.deleteAvailabilitySlot = deleteAvailabilitySlot;
 window.getTutorBookedSessions = getTutorBookedSessions;
 window.bookSession = bookSession;
 window.getAllTutors = getAllTutors;
+window.sendBookingEmail = sendBookingEmail;
 
 console.log('✅ Tutor booking system initialized (DynamoDB)');
 
