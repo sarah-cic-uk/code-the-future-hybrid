@@ -1,9 +1,9 @@
 {
   "auth": {
-    "user_pool_id": "eu-west-2_vSZtbKr41",
+    "user_pool_id": "eu-west-2_xM0l74g0G",
     "aws_region": "eu-west-2",
-    "user_pool_client_id": "1s106u012djq1beusbe30agdth",
-    "identity_pool_id": "eu-west-2:7c5d705e-d411-4c4b-9a88-189b73c202fa",
+    "user_pool_client_id": "36ec0itne2hab3ajdl4rjvis31",
+    "identity_pool_id": "eu-west-2:77a1d989-494e-462f-b8e8-3e2c99872979",
     "mfa_methods": [],
     "standard_required_attributes": [
       "email"
@@ -26,9 +26,9 @@
     "unauthenticated_identities_enabled": true
   },
   "data": {
-    "url": "https://z3doqdndoramxneajbcehkjkvi.appsync-api.eu-west-2.amazonaws.com/graphql",
+    "url": "https://ki3vplp7pvfvxkz2zjk46wxnf4.appsync-api.eu-west-2.amazonaws.com/graphql",
     "aws_region": "eu-west-2",
-    "api_key": "da2-cqr3mbwnwngy7lotwe3737ggoq",
+    "api_key": "da2-ysvqhvkyc5gs7afh36f27qerwi",
     "default_authorization_type": "API_KEY",
     "authorization_types": [
       "AMAZON_COGNITO_USER_POOLS",
@@ -82,6 +82,20 @@
               "isRequired": false,
               "attributes": []
             },
+            "isAdmin": {
+              "name": "isAdmin",
+              "isArray": false,
+              "type": "Boolean",
+              "isRequired": false,
+              "attributes": []
+            },
+            "schoolPrefix": {
+              "name": "schoolPrefix",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
             "progress": {
               "name": "progress",
               "isArray": false,
@@ -115,6 +129,92 @@
           },
           "syncable": true,
           "pluralName": "Users",
+          "attributes": [
+            {
+              "type": "model",
+              "properties": {}
+            },
+            {
+              "type": "auth",
+              "properties": {
+                "rules": [
+                  {
+                    "allow": "public",
+                    "provider": "apiKey",
+                    "operations": [
+                      "create",
+                      "update",
+                      "delete",
+                      "read"
+                    ]
+                  }
+                ]
+              }
+            }
+          ],
+          "primaryKeyInfo": {
+            "isCustomPrimaryKey": false,
+            "primaryKeyFieldName": "id",
+            "sortKeyFieldNames": []
+          }
+        },
+        "InterestRegistration": {
+          "name": "InterestRegistration",
+          "fields": {
+            "id": {
+              "name": "id",
+              "isArray": false,
+              "type": "ID",
+              "isRequired": true,
+              "attributes": []
+            },
+            "name": {
+              "name": "name",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "email": {
+              "name": "email",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true,
+              "attributes": []
+            },
+            "status": {
+              "name": "status",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
+            "registeredAt": {
+              "name": "registeredAt",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
+            "createdAt": {
+              "name": "createdAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+            },
+            "updatedAt": {
+              "name": "updatedAt",
+              "isArray": false,
+              "type": "AWSDateTime",
+              "isRequired": false,
+              "attributes": [],
+              "isReadOnly": true
+            }
+          },
+          "syncable": true,
+          "pluralName": "InterestRegistrations",
           "attributes": [
             {
               "type": "model",
@@ -567,16 +667,94 @@
         }
       },
       "enums": {},
-      "nonModels": {}
+      "nonModels": {},
+      "mutations": {
+        "notifyInterest": {
+          "name": "notifyInterest",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "arguments": {
+            "name": {
+              "name": "name",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "email": {
+              "name": "email",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            }
+          }
+        },
+        "sendBookingEmail": {
+          "name": "sendBookingEmail",
+          "isArray": false,
+          "type": "String",
+          "isRequired": false,
+          "arguments": {
+            "type": {
+              "name": "type",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "tutorEmail": {
+              "name": "tutorEmail",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "tutorName": {
+              "name": "tutorName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "studentEmail": {
+              "name": "studentEmail",
+              "isArray": false,
+              "type": "String",
+              "isRequired": true
+            },
+            "studentName": {
+              "name": "studentName",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "date": {
+              "name": "date",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "time": {
+              "name": "time",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            },
+            "duration": {
+              "name": "duration",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false
+            }
+          }
+        }
+      }
     }
   },
   "storage": {
     "aws_region": "eu-west-2",
-    "bucket_name": "amplify-amplifybackend-sa-codethefuturestoragebuck-lfiecrr3qvzc",
+    "bucket_name": "amplify-d1h7y0ztcdi14n-ma-codethefuturestoragebuck-5pa1hy0xjzyu",
     "buckets": [
       {
         "name": "codeTheFutureStorage",
-        "bucket_name": "amplify-amplifybackend-sa-codethefuturestoragebuck-lfiecrr3qvzc",
+        "bucket_name": "amplify-d1h7y0ztcdi14n-ma-codethefuturestoragebuck-5pa1hy0xjzyu",
         "aws_region": "eu-west-2",
         "paths": {
           "profile-pictures/*": {
