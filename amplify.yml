@@ -3,8 +3,9 @@ backend:
   phases:
     build:
       commands:
-        # Backend lives in amplify-backend/. Deploy the Gen2 backend for this branch.
-        - cd amplify-backend && npm ci && npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
+        # Backend lives in amplify-backend/. Deploy the Gen2 backend for this branch
+        # and write amplify_outputs.json straight into the frontend folder (public/).
+        - cd amplify-backend && npm ci && npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID --outputs-out-dir ../public
 frontend:
   phases:
     preBuild:
@@ -12,8 +13,8 @@ frontend:
         - npm ci
     build:
       commands:
-        # Use the backend the pipeline just deployed (not the committed sandbox file)
-        - cp amplify-backend/amplify_outputs.json public/amplify_outputs.json
+        # Show which backend the deployed app will talk to (should be the branch endpoint, not the sandbox)
+        - node -e "const c=require('./public/amplify_outputs.json'); console.log('Frontend using backend endpoint:', c.data.url)"
   artifacts:
     baseDirectory: /public
     files:
