@@ -60,11 +60,11 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
 
 function getPath() {
   const BASE_URL = window.location.origin;
+  // GitHub Pages serves the project under a repo subpath
   if (BASE_URL.includes('github')) return '/code-the-future-hybrid/';
-  // Local dev server serves the public/ folder as the web root
-  if (BASE_URL.includes('localhost') || BASE_URL.includes('127.0.0.1')) return '/';
-  if (BASE_URL.includes('app')) return '/';
-  return '/public/';
+  // Everywhere else (Amplify default domain, the codethefuture.uk custom domain,
+  // and the local dev server) serves the public/ folder at the web root.
+  return '/';
 }
 
 // Ensure a role-specific dashboard link is present (and visible) in the profile

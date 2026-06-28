@@ -18,7 +18,7 @@ import { readFileSync } from 'fs';
 // e.g. a "peverill" teacher (peverillTutor) sees every cohort starting with "peverill".
 const COHORTS = [
   { cohortCode: 'TEST2024', name: 'Test Cohort 2024' },
-  // { cohortCode: 'peverillAug26', name: 'Peverill — August 2026' },
+  { cohortCode: 'shePlusTechJuly26', name: 'ShePlusTech — July 2026' },
 ];
 // ─────────────────────────────────────────────────────────────────────────────
 
