@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+
+  <title>Code the Future — Share Feedback</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/styles/mainStyle.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+
+  <script defer type="text/javascript" src="./js/app.js"></script>
+  <script defer src="./js/cohort-management.js"></script>
+
+  <style>
+    .feedback-card {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .feedback-card .form-label {
+      font-weight: 600;
+      color: #011640;
+    }
+
+    #feedback-success {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
+              border-right: 2px solid #d9437a;
+              padding-right: 10px;
+              color: #1d0c59;
+            ">
+          <img src="../images/logo.png" height="60px" alt="CTF logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/sessions.html')" id="sessionsLink">Sessions</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/faq.html')">FAQ</a>
+          </div>
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div>
+              <p class=" my-auto" id="profileName"></p>
+            </div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg" loading="lazy" />
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">My Cohort</a>
+                </li>
+                <li id="teacher-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/teacherCohortView.html')">My Cohorts</a></li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
+                <li id="admin-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/adminCohortView.html')">All Cohorts (Admin)</a></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid page-content py-5">
+      <div class="feedback-card">
+        <h1 class="mb-2">Share your feedback</h1>
+        <p class="text-muted mb-4">
+          We'd love to hear your thoughts — whether it's about a specific lesson, the website,
+          how you're finding the learning style and pace, or anything else. Your feedback helps us
+          make Code the Future better for everyone.
+        </p>
+
+        <div id="feedback-success" class="alert alert-success" role="alert">
+          Thank you! Your feedback has been sent to the team. 🎉
+        </div>
+        <div id="feedback-error" class="alert alert-danger" role="alert" style="display: none;"></div>
+
+        <form id="feedback-form" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="feedback-category">What is your feedback about?</label>
+            <select class="form-select" id="feedback-category" required>
+              <option value="" selected disabled>Choose a topic…</option>
+              <option value="A specific lesson">A specific lesson</option>
+              <option value="The website / platform">The website / platform</option>
+              <option value="Learning style or pace">Learning style or pace</option>
+              <option value="General / something else">General / something else</option>
+            </select>
+          </div>
+
+          <div class="mb-3" id="lesson-field" style="display: none;">
+            <label class="form-label" for="feedback-lesson">Which lesson or session? <span
+                class="text-muted fw-normal">(optional)</span></label>
+            <input type="text" class="form-control" id="feedback-lesson"
+              placeholder="e.g. Session 2 — HTML Basics" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="feedback-message">Your feedback</label>
+            <textarea class="form-control" id="feedback-message" rows="6"
+              placeholder="What would you like to share with us?" required></textarea>
+          </div>
+
+          <button type="submit" id="feedback-submit" class="btn text-white button-style"
+            style="background-color: #31268c;">
+            Send feedback
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    window.onload = () => {
+      // Feedback is a logged-in feature — auth() redirects to login if not signed in
+      auth(
+        document.querySelector('.loginBtn'),
+        document.querySelector('.profileBtn'),
+        document.querySelector('#sessionsLink')
+      );
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout();
+    }
+
+    // Show the "which lesson" field only when the lesson category is chosen
+    document.getElementById('feedback-category').addEventListener('change', (e) => {
+      const lessonField = document.getElementById('lesson-field');
+      lessonField.style.display = e.target.value === 'A specific lesson' ? 'block' : 'none';
+    });
+
+    document.getElementById('feedback-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const category = document.getElementById('feedback-category').value;
+      const lesson = document.getElementById('feedback-lesson').value.trim();
+      const message = document.getElementById('feedback-message').value.trim();
+      const successBox = document.getElementById('feedback-success');
+      const errorBox = document.getElementById('feedback-error');
+      const submitBtn = document.getElementById('feedback-submit');
+
+      successBox.style.display = 'none';
+      errorBox.style.display = 'none';
+
+      if (!category) {
+        errorBox.textContent = 'Please choose what your feedback is about.';
+        errorBox.style.display = 'block';
+        return;
+      }
+      if (!message) {
+        errorBox.textContent = 'Please add a little detail before sending.';
+        errorBox.style.display = 'block';
+        return;
+      }
+      if (typeof window.sendFeedback !== 'function') {
+        errorBox.textContent = 'Something went wrong loading the page. Please refresh and try again.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending…';
+
+      try {
+        await window.sendFeedback({
+          category,
+          lesson: category === 'A specific lesson' ? lesson : '',
+          message
+        });
+        document.getElementById('feedback-form').reset();
+        document.getElementById('lesson-field').style.display = 'none';
+        successBox.style.display = 'block';
+        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } catch (err) {
+        console.error('Error sending feedback:', err);
+        errorBox.textContent = 'Sorry, we couldn\'t send your feedback just now. Please try again shortly.';
+        errorBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send feedback';
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

@@ -38,6 +38,9 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
       document.querySelectorAll('#profile-pic-avatar').forEach(el => el.src = cachedPic);
     }
 
+    // Feedback link in the profile dropdown for every logged-in user
+    showRoleMenuItem('feedback-menu-item', 'Share Feedback', 'pages/feedback.html');
+
     // Add role dashboard links to the profile dropdown on every page
     if (localStorage.getItem('isTeacher') === 'true') {
       showRoleMenuItem('teacher-menu-item', 'My Cohorts', 'pages/teacherCohortView.html');

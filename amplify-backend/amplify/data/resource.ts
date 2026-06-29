@@ -1,6 +1,7 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { notifyAdmin } from '../functions/notify-admin/resource';
 import { bookingEmail } from '../functions/booking-email/resource';
+import { feedbackEmail } from '../functions/feedback-email/resource';
 
 /**
  * Define your data schema
@@ -57,6 +58,20 @@ const schema = a.schema({
     })
     .returns(a.string())
     .handler(a.handler.function(bookingEmail))
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  // Emails the team (via SES) when a student submits feedback.
+  sendFeedback: a
+    .mutation()
+    .arguments({
+      category: a.string(),
+      lesson: a.string(),
+      message: a.string().required(),
+      userName: a.string(),
+      userEmail: a.string(),
+    })
+    .returns(a.string())
+    .handler(a.handler.function(feedbackEmail))
     .authorization((allow) => [allow.publicApiKey()]),
 
   Cohort: a

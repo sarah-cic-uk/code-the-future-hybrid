@@ -545,6 +545,35 @@ async function getInterestRegistrations() {
   return all;
 }
 
+/**
+ * Submit student feedback. Emails the team via SES (sendFeedback mutation).
+ * Name/email are pulled from the logged-in user in localStorage.
+ * @param {{category?: string, lesson?: string, message: string}} feedback
+ */
+async function sendFeedback({ category, lesson, message }) {
+  const userName = localStorage.getItem('displayName') || '';
+  const userEmail = localStorage.getItem('userEmail') || '';
+  const mutation = `
+    mutation SendFeedback(
+      $category: String, $lesson: String, $message: String!,
+      $userName: String, $userEmail: String
+    ) {
+      sendFeedback(
+        category: $category, lesson: $lesson, message: $message,
+        userName: $userName, userEmail: $userEmail
+      )
+    }
+  `;
+  const data = await executeGraphQL(mutation, {
+    category: category || null,
+    lesson: lesson || null,
+    message,
+    userName,
+    userEmail,
+  });
+  return data.sendFeedback;
+}
+
 // Export functions to window
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
@@ -562,6 +591,7 @@ window.COURSE_LESSONS = COURSE_LESSONS;
 window.OPTIONAL_LESSONS = OPTIONAL_LESSONS;
 window.createInterestRegistration = createInterestRegistration;
 window.getInterestRegistrations = getInterestRegistrations;
+window.sendFeedback = sendFeedback;
 
 console.log('✅ Cohort management initialized (DynamoDB)');
 

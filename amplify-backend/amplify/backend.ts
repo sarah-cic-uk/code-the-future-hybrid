@@ -5,6 +5,7 @@ import { data } from './data/resource';
 import { storage } from './storage/resource';
 import { notifyAdmin } from './functions/notify-admin/resource';
 import { bookingEmail } from './functions/booking-email/resource';
+import { feedbackEmail } from './functions/feedback-email/resource';
 
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
@@ -15,6 +16,7 @@ const backend = defineBackend({
   storage,
   notifyAdmin,
   bookingEmail,
+  feedbackEmail,
 });
 
 // Allow the email Lambdas to send through SES
@@ -24,6 +26,7 @@ const sesPolicy = new PolicyStatement({
 });
 backend.notifyAdmin.resources.lambda.addToRolePolicy(sesPolicy);
 backend.bookingEmail.resources.lambda.addToRolePolicy(sesPolicy);
+backend.feedbackEmail.resources.lambda.addToRolePolicy(sesPolicy);
 
 // The login page authenticates with USER_PASSWORD_AUTH (AWS SDK v2), so the
 // user pool app client must allow that flow (plus SRP + refresh-token).
