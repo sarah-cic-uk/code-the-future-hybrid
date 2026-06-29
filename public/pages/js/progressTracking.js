@@ -15,11 +15,16 @@ function getCurrentUserEmail() {
 }
 
 /**
- * Get GraphQL API configuration
+ * Get GraphQL API configuration.
+ * Cached after the first successful load so we don't re-fetch
+ * /amplify_outputs.json on every single GraphQL call.
  * @returns {Promise<Object>} - API config
  */
+let _apiConfigPromise = null;
 async function getAPIConfig() {
-  try {
+  if (_apiConfigPromise) return _apiConfigPromise;
+
+  _apiConfigPromise = (async () => {
     const response = await fetch('/amplify_outputs.json');
     const config = await response.json();
     return {
@@ -27,7 +32,12 @@ async function getAPIConfig() {
       apiKey: config.data.api_key,
       region: config.data.aws_region
     };
+  })();
+
+  try {
+    return await _apiConfigPromise;
   } catch (error) {
+    _apiConfigPromise = null; // allow a retry on the next call
     console.error('Error loading API config:', error);
     throw error;
   }

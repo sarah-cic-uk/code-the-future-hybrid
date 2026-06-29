@@ -313,127 +313,105 @@ async function waitForAuth() {
   });
 }
 
+const SIDENAV_ALL_LESSONS = {
+  session1: [
+    "session1-overview",
+    "introIDE",
+    "introGit",
+    "firstRepo",
+    "hostingGithub",
+    "gitVScode",
+    "gitTerminal",
+    "githubDesktop",
+  ],
+  session2: ["session2-overview", "htmlBasics", "firstWebpage", "chromeDevTools"],
+  session3: [
+    "session3-overview",
+    "html_images",
+    "html_tables",
+    "html_forms",
+    "html_hyperlinks",
+  ],
+  session4: [
+    "session4-overview",
+    "introToCSS",
+    "layoutsInCSS",
+    "advancedCSS",
+    "cssActivities",
+  ],
+  session5: [
+    "session5-overview",
+    "accessibility",
+    "accessibilityTools",
+    "accessibilityExample",
+  ],
+  session6: ["session6-overview", "projectPlanning", "additionalHelp"],
+  session7: [
+    "session7-overview",
+    "goodUses",
+    "humanFirst",
+    "promptPractice",
+    "modelsTokensCosts",
+    "reviewAndRepeat",
+    "furtherLearning",
+  ],
+};
+
+const SIDENAV_OPTIONAL_LESSONS = {
+  session1: ["gitTerminal", "githubDesktop"],
+  session5: ["accessibilityExample"],
+  session6: ["additionalHelp"],
+  session7: ["furtherLearning"],
+};
+
 async function updateSideNavCompletionStatus() {
   const userEmail = localStorage.getItem('userEmail');
   if (!userEmail) return;
 
-  if (typeof window.getSessionCompletedLessons !== 'function') return;
+  if (typeof window.getAllProgress !== 'function') return;
 
-  const sessions = [
-    "session1",
-    "session2",
-    "session3",
-    "session4",
-    "session5",
-    "session6",
-    "session7",
-  ];
+  // Fetch the user's full progress ONCE (a single GraphQL query) instead of
+  // querying per-session. The previous nested loop issued ~56 duplicate
+  // queries (plus a config fetch each), which flooded the page with requests.
+  let allProgress = {};
+  try {
+    allProgress = await window.getAllProgress();
+  } catch (error) {
+    console.error('Error loading progress for side nav:', error);
+    return;
+  }
 
-  for (const session of sessions) {
-    const completed = await window.getSessionCompletedLessons(session);
-    const completedLessons = Object.keys(completed);
+  for (const session of Object.keys(SIDENAV_ALL_LESSONS)) {
+    const completedLessons = Object.keys(
+      allProgress[session]?.completedLessons || {}
+    );
 
-    const allLessons = {
-      session1: [
-        "session1-overview",
-        "introIDE",
-        "introGit",
-        "firstRepo",
-        "hostingGithub",
-        "gitVScode",
-        "gitTerminal",
-        "githubDesktop",
-      ],
-      session2: [
-        "session2-overview",
-        "htmlBasics",
-        "firstWebpage",
-        "chromeDevTools",
-      ],
-      session3: [
-        "session3-overview",
-        "html_images",
-        "html_tables",
-        "html_forms",
-        "html_hyperlinks",
-      ],
-      session4: [
-        "session4-overview",
-        "introToCSS",
-        "layoutsInCSS",
-        "advancedCSS",
-        "cssActivities",
-      ],
-      session5: [
-        "session5-overview",
-        "accessibility",
-        "accessibilityTools",
-        "accessibilityExample",
-      ],
-      session6: ["session6-overview", "projectPlanning", "additionalHelp"],
-      session7: [
-        "session7-overview",
-        "goodUses",
-        "humanFirst",
-        "promptPractice",
-        "modelsTokensCosts",
-        "reviewAndRepeat",
-        "furtherLearning",
-      ],
-    };
+    // Mark each completed lesson in the side nav
+    completedLessons.forEach((lessonName) => {
+      const el = document.querySelector(`[name="${lessonName}"]`);
+      if (el) {
+        const icon = el.querySelector("i");
+        const label = el.querySelector("span");
+        if (icon) icon.className = "fs-4 bi-check-circle text-success";
+        if (label) label.classList.add("text-success");
+      }
+    });
 
-    const optionalLessons = {
-      session1: ["gitTerminal", "githubDesktop"],
-      session5: ["accessibilityExample"],
-      session6: ["additionalHelp"],
-      session7: ["furtherLearning"],
-    };
+    // Mark the whole session complete when all required lessons are done
+    const requiredLessons = SIDENAV_ALL_LESSONS[session].filter(
+      (name) => !SIDENAV_OPTIONAL_LESSONS[session]?.includes(name)
+    );
+    const isSessionComplete = requiredLessons.every((name) =>
+      completedLessons.includes(name)
+    );
 
-    const lessonNameToElementName = {
-      session1: { "session1-overview": "session1-overview" },
-      session2: { "session2-overview": "session2-overview" },
-      session3: { "session3-overview": "session3-overview" },
-      session4: { "session4-overview": "session4-overview" },
-      session5: { "session5-overview": "session5-overview" },
-      session6: { "session6-overview": "session6-overview" },
-      session7: { "session7-overview": "session7-overview" },
-    };
-
-    for (const session of sessions) {
-      // Get completed lessons from DynamoDB
-      const completed = await window.getSessionCompletedLessons(session);
-      const completedLessons = Object.keys(completed);
-
-      const requiredLessons = allLessons[session].filter(
-        (name) => !optionalLessons[session]?.includes(name)
-      );
-
-      // Restore correct lookup for overview entries
-      completedLessons.forEach((lessonName) => {
-        const lookupName =
-          lessonNameToElementName[session]?.[lessonName] || lessonName;
-        const el = document.querySelector(`[name="${lookupName}"]`);
-        if (el) {
-          const icon = el.querySelector("i");
-          const label = el.querySelector("span");
-          if (icon) icon.className = "fs-4 bi-check-circle text-success";
-          if (label) label.classList.add("text-success");
-        }
-      });
-
-      // Check if all required lessons completed
-      const isSessionComplete = requiredLessons.every((name) =>
-        completedLessons.includes(name)
-      );
-
-      if (isSessionComplete) {
-        const sessionBtn = document.querySelector(`button[name="${session}"]`);
-        if (sessionBtn) {
-          const icon = sessionBtn.querySelector("i");
-          const label = sessionBtn.querySelector("span");
-          if (icon) icon.className = "fs-4 bi-check-circle-fill text-success";
-          if (label) label.classList.add("text-success");
-        }
+    if (isSessionComplete) {
+      const sessionBtn = document.querySelector(`button[name="${session}"]`);
+      if (sessionBtn) {
+        const icon = sessionBtn.querySelector("i");
+        const label = sessionBtn.querySelector("span");
+        if (icon) icon.className = "fs-4 bi-check-circle-fill text-success";
+        if (label) label.classList.add("text-success");
       }
     }
   }
