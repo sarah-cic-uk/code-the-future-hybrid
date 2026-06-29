@@ -92,6 +92,7 @@
       color: white;
     }
   </style>
+  <link rel="stylesheet" href="/styles/mainStyle.css">
 </head>
 
 <body>
@@ -208,11 +209,6 @@
   </div>
 
   <script type="text/javascript">
-    const stylesheet = document.createElement("link");
-    stylesheet.rel = "stylesheet";
-    stylesheet.type = "text/css";
-    stylesheet.href = getPath() + "styles/mainStyle.css";
-    document.head.appendChild(stylesheet);
 
     window.onload = () => {
       checkReleaseDates();

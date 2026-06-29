@@ -45,6 +45,7 @@
       opacity: 0.8;
     }
   </style>
+  <link rel="stylesheet" href="/styles/mainStyle.css">
 </head>
 
 <body>
@@ -392,11 +393,6 @@
     });
 
     window.onload = () => {
-      const stylesheet = document.createElement('link');
-      stylesheet.rel = 'stylesheet';
-      stylesheet.type = 'text/css';
-      stylesheet.href = getPath() + 'styles/mainStyle.css';
-      document.head.appendChild(stylesheet);
 
       auth(
         document.querySelector('.loginBtn'),

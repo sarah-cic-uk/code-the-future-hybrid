@@ -26,6 +26,7 @@
   <script src="js/cohort-management.js"></script>
   <script src="js/s3-profile-pictures.js"></script>
   <script src="js/tutor-booking.js"></script>
+  <link rel="stylesheet" href="/styles/mainStyle.css">
 </head>
 
 
@@ -359,11 +360,6 @@
     let calendar = null;
 
     window.addEventListener("load", async () => {
-      const stylesheet = document.createElement("link");
-      stylesheet.rel = "stylesheet";
-      stylesheet.type = "text/css";
-      stylesheet.href = getPath() + "styles/mainStyle.css";
-      document.head.appendChild(stylesheet);
 
       safeAuthInit();
 

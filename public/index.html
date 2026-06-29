@@ -22,6 +22,7 @@
   <script type="text/javascript" src="./pages/js/amplify-storage-umd.js"></script>
   
   <script type="text/javascript" src="./pages/js/app.js"></script>
+  <link rel="stylesheet" href="/styles/mainStyle.css">
 </head>
 
 <body>
@@ -331,11 +332,6 @@
 
   <script defer type="text/javascript">
 
-    const stylesheet = document.createElement('link');
-    stylesheet.rel = 'stylesheet';
-    stylesheet.type = 'text/css';
-    stylesheet.href = getPath() + 'styles/mainStyle.css';
-    document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
       checkReleaseDates();

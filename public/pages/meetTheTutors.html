@@ -15,6 +15,7 @@
   <!-- <script  src="./js/imports.js"></script> -->
   
   <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link rel="stylesheet" href="/styles/mainStyle.css">
 </head>
 
 <body>
@@ -440,11 +441,6 @@
     </div>
   </div>
   <script type="text/javascript">
-    const stylesheet = document.createElement("link");
-    stylesheet.rel = "stylesheet";
-    stylesheet.type = "text/css";
-    stylesheet.href = getPath() + "styles/mainStyle.css";
-    document.head.appendChild(stylesheet);
 
     window.onload = (event) => {
       auth(

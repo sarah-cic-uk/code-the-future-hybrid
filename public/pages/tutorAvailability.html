@@ -23,6 +23,7 @@
   <script src="./js/cohort-management.js"></script>
   <script src="./js/tutor-booking.js"></script>
 
+  <link rel="stylesheet" href="/styles/mainStyle.css">
 </head>
 
 <body>
@@ -397,11 +398,6 @@
     let userId;
 
     window.onload = async function () {
-      const stylesheet = document.createElement("link");
-      stylesheet.rel = "stylesheet";
-      stylesheet.type = "text/css";
-      stylesheet.href = getPath() + "styles/mainStyle.css";
-      document.head.appendChild(stylesheet);
 
       auth(
         document.querySelector(".loginBtn"),

@@ -73,6 +73,7 @@
       border-color: #31238c;
     }
   </style>
+  <link rel="stylesheet" href="/styles/mainStyle.css">
 </head>
 
 <body>
@@ -374,11 +375,6 @@
     crossorigin="anonymous"></script>
 
   <script>
-    const stylesheet = document.createElement("link");
-    stylesheet.rel = "stylesheet";
-    stylesheet.type = "text/css";
-    stylesheet.href = getPath() + "styles/mainStyle.css";
-    document.head.appendChild(stylesheet);
 
     const who = document.getElementById('who');
     const what = document.getElementById('what');
