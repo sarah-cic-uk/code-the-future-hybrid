@@ -26,23 +26,28 @@ async function initS3() {
 }
 
 /**
- * Get direct public URL for a video
- * @param {string} videoName - Name of video file (e.g., 'intro-git.mp4')
- * @returns {Promise<string>} - Direct S3 URL
+ * Get a presigned (authenticated) URL for a video. The bucket is private, so the
+ * URL is signed with the logged-in user's Cognito credentials — only logged-in
+ * students can load videos. Requires AWS SDK v2 + s3-profile-pictures.js
+ * (window.profilePictures) to be loaded first.
+ * @param {string} videoName - Name of video file (e.g., 'htmlBasics.mp4')
+ * @returns {Promise<string>} - Presigned S3 URL
  */
 async function getVideoUrl(videoName) {
   if (!s3Config) {
     await initS3();
   }
-  
-  try {
-    // Direct public URL (bucket is now public)
-    const url = `https://${s3Config.bucket}.s3.${s3Config.region}.amazonaws.com/public/media/${videoName}`;
-    return url;
-  } catch (error) {
-    console.error('Error getting video URL:', error);
-    throw error;
+
+  if (!window.profilePictures || !window.profilePictures.ensureCredentials) {
+    throw new Error('Credential helper (s3-profile-pictures.js) not loaded');
   }
+
+  const s3 = await window.profilePictures.ensureCredentials();
+  return s3.getSignedUrl('getObject', {
+    Bucket: s3Config.bucket,
+    Key: `public/media/${videoName}`,
+    Expires: 3600
+  });
 }
 
 /**

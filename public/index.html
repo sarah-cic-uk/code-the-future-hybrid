@@ -365,4 +365,10 @@
     height: 15vw;
     object-fit: cover;
   }
+
+  /* Reserve a consistent height for session captions (1–3 lines) so the
+     carousel doesn't change height between slides and shift content below. */
+  #carousel-sessions .card-text {
+    min-height: 4.5em;
+  }
 </style>

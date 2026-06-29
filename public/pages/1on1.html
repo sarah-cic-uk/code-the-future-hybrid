@@ -509,11 +509,17 @@
         img.width = 70;
         img.style.borderRadius = "100%";
         img.style.objectFit = "cover";
+        img.alt = `${tutor.displayName || 'Tutor'} profile picture`;
 
-        // Load profile picture from S3
+        // Always start with the placeholder, and fall back to it if a photo fails to load
+        const FALLBACK_AVATAR = "../images/blank_avatar.jpg";
+        img.src = FALLBACK_AVATAR;
+        img.onerror = () => { img.onerror = null; img.src = FALLBACK_AVATAR; };
+
+        // Swap in the tutor's photo only if they actually have one
         window.getProfilePictureUrl(tutor.id)
-          .then(url => img.src = url)
-          .catch(() => img.src = "../images/blank_avatar.jpg");
+          .then(url => { if (url && !/blank_avatar/.test(url)) img.src = url; })
+          .catch(() => { img.src = FALLBACK_AVATAR; });
 
         const name = document.createElement("p");
         name.textContent = tutor.displayName || "Tutor";
