@@ -654,7 +654,7 @@
         // Verified but not logged in yet — send them to the Sign In form, email prefilled
         document.getElementById('login-email').value = email;
         showTab('login');
-        showMessage('login-message', 'Email verified! Please sign in below.');
+        showMessage('login-message', 'Email verified! Please sign in to continue.');
       } catch (error) {
         console.error('Verification error:', error);
         showMessage('verify-message', error.message || 'Verification failed', true);
