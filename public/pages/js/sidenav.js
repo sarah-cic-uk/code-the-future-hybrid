@@ -416,3 +416,8 @@ async function updateSideNavCompletionStatus() {
     }
   }
 }
+
+// Expose the lesson lists so other scripts (e.g. progressTracking.js's session
+// status indicator) use the same source of truth as the side-nav ticks.
+window.SIDENAV_ALL_LESSONS = SIDENAV_ALL_LESSONS;
+window.SIDENAV_OPTIONAL_LESSONS = SIDENAV_OPTIONAL_LESSONS;

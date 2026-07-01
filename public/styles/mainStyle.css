@@ -142,6 +142,17 @@ a.dropdown-item.logout:hover {
 	cursor: default;
 }
 
+.session-status-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1.15rem;
+	font-weight: 600;
+	padding: 0.6rem 1.5rem;
+	border-radius: 999px;
+	margin-bottom: 0.75rem;
+}
+
 .completion-status {
 	color: #eae9f3;
 	margin-top: 0.5rem;

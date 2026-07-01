@@ -283,29 +283,70 @@ function calculateProgressStats(progressData) {
 }
 
 /**
- * Initialize session completion UI on a session introduction page
+ * Render a read-only progress indicator (Not Started / In Progress / Completed)
+ * on a session introduction page, based on how many of that session's lessons
+ * the student has completed. Replaces the old "Mark Session as Complete" button.
+ * The status rule matches the teacher/admin view: complete when manually flagged
+ * OR when every required lesson is done.
  * @param {number} sessionNumber - The session number (1-7)
  */
 async function initializeSessionCompletionUI(sessionNumber) {
-  // Track that user accessed this session
+  // Record that the student accessed this session (drives recency / "In Progress")
   await trackSessionAccess(sessionNumber);
 
-  // Check if already completed
-  const progressData = await checkSessionCompletion(sessionNumber);
+  const sessionKey = `session${sessionNumber}`;
+  const allProgress = await getAllProgress();
+  const sessionProgress = allProgress[sessionKey] || {};
+  const completedLessons = Object.keys(sessionProgress.completedLessons || {});
+
+  // Required lessons for this session — shared with the side-nav ticks so the
+  // indicator and the sidebar always agree.
+  const allLessons =
+    (window.SIDENAV_ALL_LESSONS && window.SIDENAV_ALL_LESSONS[sessionKey]) || [];
+  const optionalLessons =
+    (window.SIDENAV_OPTIONAL_LESSONS && window.SIDENAV_OPTIONAL_LESSONS[sessionKey]) || [];
+  const requiredLessons = allLessons.filter((name) => !optionalLessons.includes(name));
+  const completedRequired = requiredLessons.filter((name) => completedLessons.includes(name));
+
+  const isComplete =
+    sessionProgress.completed === true ||
+    (requiredLessons.length > 0 && completedRequired.length === requiredLessons.length);
+  // Status is driven by lesson completion (not mere page access), so a freshly
+  // opened session with no completed lessons still reads as "Not Started".
+  const hasStarted = completedLessons.length > 0;
+
+  let status, badgeClass, icon, subtext;
+  if (isComplete) {
+    status = 'Completed';
+    badgeClass = 'bg-success';
+    icon = 'bi-check-circle-fill';
+    subtext = 'You’ve completed all the lessons in this session. Great work! 🎉';
+  } else if (hasStarted) {
+    status = 'In Progress';
+    badgeClass = 'bg-warning text-dark';
+    icon = 'bi-hourglass-split';
+    subtext = requiredLessons.length
+      ? `${completedRequired.length} of ${requiredLessons.length} lessons completed — keep going!`
+      : 'Keep working through the lessons in this session.';
+  } else {
+    status = 'Not Started';
+    badgeClass = 'bg-secondary';
+    icon = 'bi-circle';
+    subtext = 'Work through the lessons in this session to track your progress here.';
+  }
 
   // Find or create the completion section
   let completionSection = document.getElementById('session-completion-section');
-  
+
   if (!completionSection) {
-    // Create completion section if it doesn't exist
     completionSection = document.createElement('div');
     completionSection.id = 'session-completion-section';
     completionSection.className = 'session-completion-section';
-    
+
     // Try to insert before session navigation, or at end of embed-container
     const sessionNav = document.getElementById('session-navigation');
     const embedContainer = document.querySelector('.embed-container');
-    
+
     if (sessionNav && embedContainer) {
       embedContainer.insertBefore(completionSection, sessionNav);
     } else if (embedContainer) {
@@ -316,26 +357,14 @@ async function initializeSessionCompletionUI(sessionNumber) {
     }
   }
 
-  // Build the UI
-  const isCompleted = progressData && progressData.completed;
-  const completedDate = progressData && progressData.completedDate 
-    ? new Date(progressData.completedDate).toLocaleDateString() 
-    : '';
-
   completionSection.innerHTML = `
     <div class="completion-card">
       <div class="completion-content">
         <h4>Session ${sessionNumber} Progress</h4>
-        <button 
-          id="markCompleteBtn" 
-          class="btn ${isCompleted ? 'btn-success' : 'btn-primary'}"
-          ${isCompleted ? 'disabled' : ''}
-          onclick="handleMarkComplete(${sessionNumber})">
-          ${isCompleted ? '✓ Completed' : 'Mark Session as Complete'}
-        </button>
-        <p id="completionStatus" class="completion-status">
-          ${isCompleted ? `Completed on ${completedDate}` : 'Complete this session when you finish all lessons'}
-        </p>
+        <span class="session-status-badge badge ${badgeClass}">
+          <i class="bi ${icon}"></i> ${status}
+        </span>
+        <p class="completion-status">${subtext}</p>
       </div>
     </div>
   `;
