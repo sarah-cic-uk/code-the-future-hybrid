@@ -574,6 +574,68 @@ async function sendFeedback({ category, lesson, message }) {
   return data.sendFeedback;
 }
 
+// ---------------------------------------------------------------------------
+// Session unlock (release) dates
+// Stored on the Cohort as sessionReleaseDates: { session1: <ms>, ... } where the
+// value is a millisecond timestamp (0 = available immediately). app.js's
+// checkReleaseDates() compares Date.now() < releaseDates[sessionN].
+// ---------------------------------------------------------------------------
+const SESSION_KEYS = ['session1', 'session2', 'session3', 'session4', 'session5', 'session6', 'session7'];
+const SESSION_LABELS = {
+  session1: 'Session 1', session2: 'Session 2', session3: 'Session 3',
+  session4: 'Session 4', session5: 'Session 5', session6: 'Session 6', session7: 'Session 7'
+};
+
+function parseSessionReleaseDates(raw) {
+  if (!raw) return {};
+  try {
+    return typeof raw === 'string' ? JSON.parse(raw) : raw;
+  } catch (e) {
+    console.error('Could not parse sessionReleaseDates:', e);
+    return {};
+  }
+}
+
+// Convert a millisecond timestamp into a value for <input type="datetime-local">
+// (local time, "YYYY-MM-DDTHH:mm"). Returns '' when there is no date set.
+function msToDatetimeLocal(ms) {
+  const n = Number(ms);
+  if (!n || isNaN(n)) return '';
+  const d = new Date(n);
+  if (isNaN(d.getTime())) return '';
+  const pad = (x) => String(x).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+// Build the datetime-local inputs (one per session) for the unlock-dates modal,
+// prefilled from the cohort's current sessionReleaseDates.
+function buildReleaseDatesFieldsHTML(raw) {
+  const dates = parseSessionReleaseDates(raw);
+  return SESSION_KEYS.map((key) => {
+    const val = msToDatetimeLocal(dates[key]);
+    return `
+      <div class="mb-3 row align-items-center">
+        <label class="col-sm-4 col-form-label" for="release-${key}">${SESSION_LABELS[key]}</label>
+        <div class="col-sm-8">
+          <input type="datetime-local" class="form-control release-date-input"
+            id="release-${key}" data-session="${key}" value="${val}" />
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// Read the modal inputs back into a { session1: ms, ... } object.
+// An empty field becomes 0, meaning "unlocked immediately".
+function collectReleaseDatesFromForm() {
+  const result = {};
+  document.querySelectorAll('.release-date-input').forEach((input) => {
+    const key = input.getAttribute('data-session');
+    const v = input.value;
+    result[key] = v ? new Date(v).getTime() : 0;
+  });
+  return result;
+}
+
 // Export functions to window
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
@@ -592,6 +654,10 @@ window.OPTIONAL_LESSONS = OPTIONAL_LESSONS;
 window.createInterestRegistration = createInterestRegistration;
 window.getInterestRegistrations = getInterestRegistrations;
 window.sendFeedback = sendFeedback;
+window.parseSessionReleaseDates = parseSessionReleaseDates;
+window.msToDatetimeLocal = msToDatetimeLocal;
+window.buildReleaseDatesFieldsHTML = buildReleaseDatesFieldsHTML;
+window.collectReleaseDatesFromForm = collectReleaseDatesFromForm;
 
 console.log('✅ Cohort management initialized (DynamoDB)');
 

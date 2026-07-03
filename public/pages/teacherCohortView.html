@@ -297,6 +297,13 @@
           </select>
         </div>
 
+        <!-- Set unlock dates -->
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-primary" onclick="openReleaseDatesModal()">
+            <i class="bi bi-calendar-event"></i> Set Session Unlock Dates
+          </button>
+        </div>
+
         <!-- Cohort Statistics -->
         <div class="cohort-stats">
           <div class="stat-card">
@@ -398,6 +405,31 @@
     </div>
   </div>
 
+  <!-- Session Unlock Dates Modal -->
+  <div class="modal fade" id="releaseDatesModal" tabindex="-1" aria-labelledby="releaseDatesModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="releaseDatesModalLabel">Set Session Unlock Dates</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="fw-bold mb-1" id="release-cohort-name"></p>
+          <p class="small text-muted">Choose when each session unlocks for this cohort. Leave a session blank to make
+            it available immediately.</p>
+          <div id="release-dates-fields"></div>
+          <div id="release-dates-message" class="mt-2"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" id="release-dates-save-btn"
+            onclick="saveReleaseDatesFromModal()">Save unlock dates</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
@@ -408,6 +440,40 @@
     let filteredStudents = [];
     let teacherCohorts = [];
     let currentCohortCode = null;
+
+    // --- Session unlock dates ---
+    function openReleaseDatesModal() {
+      const cohort = teacherCohorts.find(c => c.cohortCode === currentCohortCode);
+      if (!cohort) return;
+      document.getElementById('release-cohort-name').textContent = `${cohort.name} (${cohort.cohortCode})`;
+      document.getElementById('release-dates-fields').innerHTML =
+        window.buildReleaseDatesFieldsHTML(cohort.sessionReleaseDates);
+      document.getElementById('release-dates-message').innerHTML = '';
+      new bootstrap.Modal(document.getElementById('releaseDatesModal')).show();
+    }
+
+    async function saveReleaseDatesFromModal() {
+      const cohort = teacherCohorts.find(c => c.cohortCode === currentCohortCode);
+      if (!cohort) return;
+      const btn = document.getElementById('release-dates-save-btn');
+      const msg = document.getElementById('release-dates-message');
+      const dates = window.collectReleaseDatesFromForm();
+
+      btn.disabled = true;
+      btn.textContent = 'Saving…';
+      msg.innerHTML = '';
+      try {
+        await window.updateCohort(cohort.id, { sessionReleaseDates: dates });
+        cohort.sessionReleaseDates = JSON.stringify(dates); // keep the in-memory copy fresh
+        msg.innerHTML = '<span class="text-success">Unlock dates saved.</span>';
+      } catch (error) {
+        console.error('Error saving unlock dates:', error);
+        msg.innerHTML = '<span class="text-danger">Sorry, could not save the unlock dates. Please try again.</span>';
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save unlock dates';
+      }
+    }
 
     window.onload = async (event) => {
       auth(
