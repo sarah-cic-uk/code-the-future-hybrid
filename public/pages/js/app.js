@@ -167,26 +167,44 @@ function updateSideNavOverview() {
   document.getElementsByName(session + '-nav')[0]?.classList.add("active-top-nav");
 }
 
+// Fetch a cohort's session unlock dates directly from the API. Self-contained so
+// release-date locking works on every page that loads app.js, regardless of
+// whether cohort-management.js happens to be loaded too.
+async function fetchCohortReleaseDates(cohortCode) {
+  try {
+    const configRes = await fetch('/amplify_outputs.json');
+    const config = await configRes.json();
+    const query = `
+      query ListCohorts($cohortCode: String!) {
+        listCohorts(filter: { cohortCode: { eq: $cohortCode } }) {
+          items { sessionReleaseDates }
+        }
+      }
+    `;
+    const res = await fetch(config.data.url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
+      body: JSON.stringify({ query, variables: { cohortCode } })
+    });
+    const json = await res.json();
+    const items = json?.data?.listCohorts?.items || [];
+    if (!items.length) return null;
+    const raw = items[0].sessionReleaseDates;
+    return typeof raw === 'string' ? JSON.parse(raw) : raw;
+  } catch (error) {
+    console.error('Error fetching cohort release dates:', error);
+    return null;
+  }
+}
+
 async function checkReleaseDates() {
   try {
     const cohortCode = localStorage.getItem('cohort');
     if (!cohortCode) return;
-    
-    // Use cohort-management.js helper if available
-    if (typeof window.getCohortByCode !== 'function') {
-      console.warn('Cohort management not loaded');
-      return;
-    }
-    
-    const userCohort = await window.getCohortByCode(cohortCode);
-    if (!userCohort) return;
-    
-    const releaseDates = typeof userCohort.sessionReleaseDates === 'string'
-      ? JSON.parse(userCohort.sessionReleaseDates)
-      : userCohort.sessionReleaseDates;
-    
+
+    const releaseDates = await fetchCohortReleaseDates(cohortCode);
     if (!releaseDates) return;
-    
+
     // Session buttons
     for (const btn of document.querySelectorAll(".release-date-btn")) {
       const session = btn.name.split('-')[1];
