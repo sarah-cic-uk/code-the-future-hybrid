@@ -169,33 +169,74 @@ function updateSideNavOverview() {
 
 // Fetch a cohort's session unlock dates directly from the API. Self-contained so
 // release-date locking works on every page that loads app.js, regardless of
-// whether cohort-management.js happens to be loaded too.
-async function fetchCohortReleaseDates(cohortCode) {
-  try {
-    const configRes = await fetch('/amplify_outputs.json');
-    const config = await configRes.json();
-    const query = `
-      query ListCohorts($cohortCode: String!) {
-        listCohorts(filter: { cohortCode: { eq: $cohortCode } }) {
-          items { sessionReleaseDates }
-        }
+// whether cohort-management.js happens to be loaded too. Cached per page load
+// (by cohort) so the UI gating and the access guard share a single request.
+let _releaseDatesPromises = {};
+function fetchCohortReleaseDates(cohortCode) {
+  if (!_releaseDatesPromises[cohortCode]) {
+    _releaseDatesPromises[cohortCode] = (async () => {
+      try {
+        const configRes = await fetch('/amplify_outputs.json');
+        const config = await configRes.json();
+        const query = `
+          query ListCohorts($cohortCode: String!) {
+            listCohorts(filter: { cohortCode: { eq: $cohortCode } }) {
+              items { sessionReleaseDates }
+            }
+          }
+        `;
+        const res = await fetch(config.data.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
+          body: JSON.stringify({ query, variables: { cohortCode } })
+        });
+        const json = await res.json();
+        const items = json?.data?.listCohorts?.items || [];
+        if (!items.length) return null;
+        const raw = items[0].sessionReleaseDates;
+        return typeof raw === 'string' ? JSON.parse(raw) : raw;
+      } catch (error) {
+        console.error('Error fetching cohort release dates:', error);
+        _releaseDatesPromises[cohortCode] = null; // allow a retry
+        return null;
       }
-    `;
-    const res = await fetch(config.data.url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
-      body: JSON.stringify({ query, variables: { cohortCode } })
-    });
-    const json = await res.json();
-    const items = json?.data?.listCohorts?.items || [];
-    if (!items.length) return null;
-    const raw = items[0].sessionReleaseDates;
-    return typeof raw === 'string' ? JSON.parse(raw) : raw;
-  } catch (error) {
-    console.error('Error fetching cohort release dates:', error);
-    return null;
+    })();
+  }
+  return _releaseDatesPromises[cohortCode];
+}
+
+// Hard access control: keep students out of a session's pages until its unlock
+// date has passed. Staff (teacher/tutor/admin) may preview locked content.
+// Runs on every page; no-ops unless the URL is under /session<N>/.
+async function enforceSessionLock() {
+  const match = window.location.pathname.match(/session(\d)/);
+  if (!match) return; // not a session/lesson page
+
+  // Staff bypass — they need to review locked material
+  if (localStorage.getItem('isTeacher') === 'true' ||
+      localStorage.getItem('isTutor') === 'true' ||
+      localStorage.getItem('isAdmin') === 'true') return;
+
+  const cohortCode = localStorage.getItem('cohort');
+  if (!cohortCode) return; // no cohort → nothing to enforce
+
+  const releaseDates = await fetchCohortReleaseDates(cohortCode);
+  if (!releaseDates) return;
+
+  const sessionKey = 'session' + match[1];
+  const unlockTime = releaseDates[sessionKey];
+  if (unlockTime && Date.now() < Number(unlockTime)) {
+    try {
+      const when = new Date(Number(unlockTime)).toLocaleString();
+      sessionStorage.setItem('lockedSessionMsg', `That session is locked. It unlocks on ${when}.`);
+    } catch (e) { /* ignore storage errors */ }
+    window.location.replace(getPath() + 'pages/sessions.html');
   }
 }
+
+// Run the access guard as early as possible (app.js is deferred, so this fires
+// before DOMContentLoaded — before the lesson content/video has loaded).
+enforceSessionLock();
 
 async function checkReleaseDates() {
   try {
