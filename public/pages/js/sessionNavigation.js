@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		{ path: "sessions/session1/lessons/firstRepo.html", type: "lesson" },
 		{ path: "sessions/session1/lessons/hostingGithub.html", type: "lesson" },
 		{ path: "sessions/session1/lessons/gitVScode.html", type: "lesson" },
-		{ path: "sessions/session1/lessons/gitTerminal.html", type: "lesson", optional: true, },
+		{ path: "sessions/session1/lessons/gitTerminal.html", type: "lesson" },
 		{ path: "sessions/session1/lessons/githubDesktop.html", type: "lesson", optional: true, },
 		{ path: "sessions/session1/lessons/gitBranchConflicts.html", type: "lesson", optional: true, },
 		{ path: "sessions/session2/introduction.html", type: "intro", session: 2 },
@@ -40,13 +40,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 		{ path: "sessions/session5/lessons/accessibilityExample.html", type: "lesson", optional: true, },
 		{ path: "sessions/session6/introduction.html", type: "intro", session: 6 },
 		{ path: "sessions/session6/lessons/projectPlanning.html", type: "lesson" },
-		{ path: "sessions/session6/lessons/additionalHelp.html", type: "lesson", optional: true, },
+		{ path: "sessions/session6/lessons/additionalHelp.html", type: "lesson" },
 		{ path: "sessions/session7/introduction.html", type: "intro", session: 7 },
-		{ path: "sessions/session7/lessons/goodUses.html", type: "lesson" },
-		{ path: "sessions/session7/lessons/humanFirst.html", type: "lesson" },
-		{ path: "sessions/session7/lessons/promptPractice.html", type: "lesson" },
-		{ path: "sessions/session7/lessons/modelsTokensCosts.html", type: "lesson" },
-		{ path: "sessions/session7/lessons/reviewAndRepeat.html", type: "lesson" },
+		{ path: "sessions/session7/lessons/goodUses.html", type: "lesson", optional: true, },
+		{ path: "sessions/session7/lessons/humanFirst.html", type: "lesson", optional: true, },
+		{ path: "sessions/session7/lessons/promptPractice.html", type: "lesson", optional: true, },
+		{ path: "sessions/session7/lessons/modelsTokensCosts.html", type: "lesson", optional: true, },
+		{ path: "sessions/session7/lessons/reviewAndRepeat.html", type: "lesson", optional: true, },
 		{ path: "sessions/session7/lessons/furtherLearning.html", type: "lesson", optional: true, },
 	];
 
@@ -117,6 +117,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     </div>
   `;
 
+	// Optional lessons aren't required to complete the course — make that clear
+	// with a banner at the top of the lesson (separate from the "completed"
+	// banner so the two don't overwrite each other).
+	if (currentItem.optional) {
+		showOptionalBanner();
+	}
+
 	const prevBtn = document.getElementById("prevSessionBtn");
 	const nextBtn = document.getElementById("nextSessionBtn");
 	const markBtn = document.getElementById("markCompleteBtn");
@@ -162,6 +169,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ================= Helper Functions =================
+
+// Insert an "Optional lesson" banner at the top of the lesson content, above
+// the (separate) completion banner so both can be shown at once.
+function showOptionalBanner() {
+	const anchor = document.getElementById("session-banner");
+	if (!anchor || document.getElementById("lesson-optional-note")) return;
+
+	const note = document.createElement("div");
+	note.id = "lesson-optional-note";
+	note.className = "optional-lesson-banner";
+	note.innerHTML =
+		`<i class="bi bi-star-fill"></i> This is an optional lesson — it isn’t required to complete the course.`;
+	anchor.parentNode.insertBefore(note, anchor);
+}
+
 async function waitForAuth() {
 	return new Promise((resolve) => {
 		const interval = setInterval(() => {

@@ -236,6 +236,7 @@ template.innerHTML = `
         <button href="#submenu7" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="session7">
           <i class="fs-4 bi-cpu"></i>
           <span class="ms-3 d-none d-sm-inline">AI Session</span>
+          <i class="bi bi-three-dots ms-2 d-none d-sm-inline" title="Optional bonus session"></i>
           <span id="session7-tooltip" class="tooltip-text hidden">Session Opens Soon</span>
         </button>
         <ul class="collapse nav flex-column ms-1" id="submenu7" data-bs-parent="#menu">
@@ -291,8 +292,9 @@ template.innerHTML = `
 document.querySelector(".page-content").prepend(template.content);
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // Don't wait for auth or completion status - show sidenav immediately
-  // Update completion status in background
+  // Paint the base to-do icons immediately, then overlay completion in the
+  // background so the sidenav shows instantly without waiting on the network.
+  initSideNavIcons();
   updateSideNavCompletionStatus();
 });
 
@@ -358,17 +360,56 @@ const SIDENAV_ALL_LESSONS = {
 };
 
 const SIDENAV_OPTIONAL_LESSONS = {
-  session1: ["gitTerminal", "githubDesktop"],
+  session1: ["githubDesktop", "gitBranchConflicts"],
   session5: ["accessibilityExample"],
-  session6: ["additionalHelp"],
   session7: ["furtherLearning"],
 };
 
-async function updateSideNavCompletionStatus() {
-  const userEmail = localStorage.getItem('userEmail');
-  if (!userEmail) return;
+// Whole sessions that are optional (a "bonus" the student doesn't need for
+// course completion). Keep in sync with cohort-management.js OPTIONAL_SESSIONS.
+const SIDENAV_OPTIONAL_SESSIONS = ["session7"];
 
-  if (typeof window.getAllProgress !== 'function') return;
+// All lessons shown under a session in the side nav (including optional-only
+// ones such as gitBranchConflicts that aren't tracked for completion), minus
+// the overview link, which is a section intro rather than a lesson.
+function sideNavLessonNames(session) {
+  return [...new Set([
+    ...(SIDENAV_ALL_LESSONS[session] || []),
+    ...(SIDENAV_OPTIONAL_LESSONS[session] || []),
+  ])].filter((name) => !name.endsWith('-overview'));
+}
+
+// A lesson is optional if its whole session is a bonus, or it's individually
+// flagged optional within its session.
+function isSideNavOptionalLesson(session, lessonName) {
+  return SIDENAV_OPTIONAL_SESSIONS.includes(session) ||
+    (SIDENAV_OPTIONAL_LESSONS[session] || []).includes(lessonName);
+}
+
+// Icon language for the side nav (matches the lesson pages):
+//   required to-do → white tick        (bi-check-circle)
+//   optional to-do → white three-dots  (bi-three-dots)
+//   done           → green tick        (bi-check-circle text-success)
+// White icons inherit the nav-link colour, so they highlight pink on hover.
+function sideNavIconClass(isOptional, isDone) {
+  if (isDone) return 'fs-4 bi-check-circle text-success';
+  return 'fs-4 ' + (isOptional ? 'bi-three-dots' : 'bi-check-circle');
+}
+
+// Paint the base (to-do) icons synchronously so there's no flash and the icons
+// are correct even before progress loads / when logged out.
+function initSideNavIcons() {
+  for (const session of Object.keys(SIDENAV_ALL_LESSONS)) {
+    sideNavLessonNames(session).forEach((lessonName) => {
+      const el = document.querySelector(`[name="${lessonName}"]`);
+      const icon = el && el.querySelector('i');
+      if (icon) icon.className = sideNavIconClass(isSideNavOptionalLesson(session, lessonName), false);
+    });
+  }
+}
+
+async function updateSideNavCompletionStatus() {
+  if (!localStorage.getItem('userEmail') || typeof window.getAllProgress !== 'function') return;
 
   // Fetch the user's full progress ONCE (a single GraphQL query) instead of
   // querying per-session. The previous nested loop issued ~56 duplicate
@@ -382,36 +423,38 @@ async function updateSideNavCompletionStatus() {
   }
 
   for (const session of Object.keys(SIDENAV_ALL_LESSONS)) {
-    const completedLessons = Object.keys(
-      allProgress[session]?.completedLessons || {}
-    );
+    const completed = new Set(Object.keys(allProgress[session]?.completedLessons || {}));
 
-    // Mark each completed lesson in the side nav
-    completedLessons.forEach((lessonName) => {
+    // Turn completed lessons green (tick for required, filled star for optional).
+    sideNavLessonNames(session).forEach((lessonName) => {
+      if (!completed.has(lessonName)) return;
       const el = document.querySelector(`[name="${lessonName}"]`);
-      if (el) {
-        const icon = el.querySelector("i");
-        const label = el.querySelector("span");
-        if (icon) icon.className = "fs-4 bi-check-circle text-success";
-        if (label) label.classList.add("text-success");
-      }
+      if (!el) return;
+      const icon = el.querySelector('i');
+      const label = el.querySelector('span');
+      if (icon) icon.className = sideNavIconClass(isSideNavOptionalLesson(session, lessonName), true);
+      if (label) label.classList.add('text-success');
     });
 
-    // Mark the whole session complete when all required lessons are done
-    const requiredLessons = SIDENAV_ALL_LESSONS[session].filter(
-      (name) => !SIDENAV_OPTIONAL_LESSONS[session]?.includes(name)
+    // Mark the whole session complete when all of its lessons that count toward
+    // that session are done. The overview and individually-optional lessons are
+    // excluded; a bonus session still ticks once its core lessons are finished.
+    const requiredLessons = (SIDENAV_ALL_LESSONS[session] || []).filter(
+      (name) =>
+        !(SIDENAV_OPTIONAL_LESSONS[session] || []).includes(name) &&
+        !name.endsWith('-overview')
     );
-    const isSessionComplete = requiredLessons.every((name) =>
-      completedLessons.includes(name)
-    );
+    const isSessionComplete =
+      requiredLessons.length > 0 &&
+      requiredLessons.every((name) => completed.has(name));
 
     if (isSessionComplete) {
       const sessionBtn = document.querySelector(`button[name="${session}"]`);
       if (sessionBtn) {
-        const icon = sessionBtn.querySelector("i");
-        const label = sessionBtn.querySelector("span");
-        if (icon) icon.className = "fs-4 bi-check-circle-fill text-success";
-        if (label) label.classList.add("text-success");
+        const icon = sessionBtn.querySelector('i');
+        const label = sessionBtn.querySelector('span');
+        if (icon) icon.className = 'fs-4 bi-check-circle-fill text-success';
+        if (label) label.classList.add('text-success');
       }
     }
   }
@@ -421,3 +464,4 @@ async function updateSideNavCompletionStatus() {
 // status indicator) use the same source of truth as the side-nav ticks.
 window.SIDENAV_ALL_LESSONS = SIDENAV_ALL_LESSONS;
 window.SIDENAV_OPTIONAL_LESSONS = SIDENAV_OPTIONAL_LESSONS;
+window.SIDENAV_OPTIONAL_SESSIONS = SIDENAV_OPTIONAL_SESSIONS;

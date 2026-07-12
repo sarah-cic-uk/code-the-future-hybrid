@@ -237,15 +237,17 @@ function calculateCohortProgress(students) {
       if (progress[sessionKey]) {
         hasProgress = true;
         if (progress[sessionKey].completed) {
-          completedSessions++;
+          // Bonus sessions still show in the per-session stats, but don't
+          // count toward the student's overall completion percentage.
+          if (!OPTIONAL_SESSIONS.includes(sessionKey)) completedSessions++;
           stats.sessionStats[sessionKey].completed++;
         } else if (progress[sessionKey].lastAccessed) {
           stats.sessionStats[sessionKey].inProgress++;
         }
       }
     }
-    
-    const percentage = (completedSessions / 7) * 100;
+
+    const percentage = (completedSessions / REQUIRED_SESSION_COUNT) * 100;
     totalProgress += percentage;
     
     if (hasProgress) stats.activeStudents++;
@@ -274,15 +276,34 @@ const COURSE_LESSONS = {
   session7: ['session7-overview', 'goodUses', 'humanFirst', 'promptPractice', 'modelsTokensCosts', 'reviewAndRepeat', 'furtherLearning']
 };
 const OPTIONAL_LESSONS = {
-  session1: ['gitTerminal', 'githubDesktop'],
+  session1: ['githubDesktop'],
   session5: ['accessibilityExample'],
-  session6: ['additionalHelp'],
   session7: ['furtherLearning']
 };
 
-function requiredLessonsFor(sessionKey) {
+// Whole sessions that are optional (a "bonus" the student doesn't need for
+// course completion). Session 7 (AI tools) is a bonus session, so it is
+// excluded from the overall completeness count. Keep in sync with sidenav.js.
+const OPTIONAL_SESSIONS = ['session7'];
+
+// Number of sessions that actually count toward course completion.
+const TOTAL_SESSIONS = 7;
+const REQUIRED_SESSION_COUNT = TOTAL_SESSIONS - OPTIONAL_SESSIONS.length;
+
+// The lessons within a session that count toward *that session's* completion
+// (excludes the overview page and any lessons flagged optional). This is used
+// for the per-session tick even on bonus sessions.
+function sessionRequiredLessons(sessionKey) {
   const optional = OPTIONAL_LESSONS[sessionKey] || [];
-  return (COURSE_LESSONS[sessionKey] || []).filter(name => !optional.includes(name));
+  return (COURSE_LESSONS[sessionKey] || []).filter(
+    name => !optional.includes(name) && !name.endsWith('-overview')
+  );
+}
+
+function requiredLessonsFor(sessionKey) {
+  // A bonus session has no lessons that are required for course completion.
+  if (OPTIONAL_SESSIONS.includes(sessionKey)) return [];
+  return sessionRequiredLessons(sessionKey);
 }
 
 // A session is complete if manually marked, or all required lessons are done.
@@ -312,29 +333,40 @@ function getStudentProgressDetails(student) {
   let lastAccessedDate = 0;
   const sessions = {};
 
-  for (let i = 1; i <= 7; i++) {
+  for (let i = 1; i <= TOTAL_SESSIONS; i++) {
     const sessionKey = `session${i}`;
     const raw = progress[sessionKey] || {};
-    const complete = isSessionComplete(sessionKey, progress);
+    const isBonus = OPTIONAL_SESSIONS.includes(sessionKey);
+
+    // For a bonus session, "complete" means the student finished all of its
+    // lessons — it just doesn't count toward the overall total.
+    const done = raw.completedLessons || {};
+    const complete = isBonus
+      ? sessionRequiredLessons(sessionKey).every(name => done[name])
+      : isSessionComplete(sessionKey, progress);
+
     sessions[sessionKey] = {
       completed: complete,
+      optional: isBonus,
       lastAccessed: raw.lastAccessed || null,
       completedDate: raw.completedDate || null,
       completedLessons: raw.completedLessons || {}
     };
-    if (complete) completedCount++;
+
+    // Only required sessions count toward course completion.
+    if (!isBonus && complete) completedCount++;
     if (raw.lastAccessed && raw.lastAccessed > lastAccessedDate) lastAccessedDate = raw.lastAccessed;
   }
 
   let status = 'Not Started';
-  if (completedCount === 7) status = 'Completed';
+  if (completedCount === REQUIRED_SESSION_COUNT) status = 'Completed';
   else if (completedCount > 0 || lastAccessedDate > 0) status = 'In Progress';
 
   return {
     completedSessions: completedCount,
     completedCount,
-    totalSessions: 7,
-    percentage: Math.round((completedCount / 7) * 100),
+    totalSessions: REQUIRED_SESSION_COUNT,
+    percentage: Math.round((completedCount / REQUIRED_SESSION_COUNT) * 100),
     status,
     lastAccessedDate,
     sessions
@@ -376,6 +408,7 @@ function buildStudentDetailHTML(student) {
     const doneLessons = s.completedLessons || {};
     const lessons = COURSE_LESSONS[key] || [];
     const optional = OPTIONAL_LESSONS[key] || [];
+    const isBonusSession = OPTIONAL_SESSIONS.includes(key);
     const anyActivity = Object.keys(doneLessons).length > 0 || s.lastAccessed;
 
     const statusClass = s.completed ? 'completed' : (anyActivity ? 'in-progress' : 'not-started');
@@ -384,13 +417,18 @@ function buildStudentDetailHTML(student) {
 
     const lessonItems = lessons.map(l => {
       const isDone = !!doneLessons[l];
-      const isOpt = optional.includes(l);
+      // A lesson is optional if flagged individually, or if its whole session is a bonus.
+      const isOpt = optional.includes(l) || isBonusSession;
       return `<li>${isDone ? '✅' : '⬜'} ${prettyLessonName(l)}${isOpt ? ' <span class="text-muted">(optional)</span>' : ''}</li>`;
     }).join('');
 
+    const sessionOptionalTag = isBonusSession
+      ? ' <span class="text-muted small">(optional bonus — not counted)</span>'
+      : '';
+
     sessionsHTML += `
       <div class="session-detail-item ${statusClass}">
-        <strong>${statusIcon} ${SESSION_TITLES[key] || key}</strong>
+        <strong>${statusIcon} ${SESSION_TITLES[key] || key}</strong>${sessionOptionalTag}
         <span class="text-muted small"> — ${doneCount}/${lessons.length} lessons</span>
         <ul class="list-unstyled ms-4 mt-2 mb-0">${lessonItems}</ul>
       </div>`;
@@ -651,6 +689,7 @@ window.getProfilePictureUrl = getProfilePictureUrl;
 window.buildStudentDetailHTML = buildStudentDetailHTML;
 window.COURSE_LESSONS = COURSE_LESSONS;
 window.OPTIONAL_LESSONS = OPTIONAL_LESSONS;
+window.OPTIONAL_SESSIONS = OPTIONAL_SESSIONS;
 window.createInterestRegistration = createInterestRegistration;
 window.getInterestRegistrations = getInterestRegistrations;
 window.sendFeedback = sendFeedback;

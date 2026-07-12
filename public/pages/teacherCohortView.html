@@ -281,8 +281,8 @@
     <!-- Page Header -->
     <div class="page-header">
       <div class="container">
-        <h1 class="mb-0">View All Cohorts</h1>
-        <p class="mb-0">Track your students' progress through the Code the Future course</p>
+        <h1 class="mb-0">Cohort Progress</h1>
+        <p class="mb-0" id="cohort-name-display">Track your students' progress through the Code the Future course</p>
       </div>
     </div>
 
@@ -362,7 +362,7 @@
 
           <div id="no-data-message" class="no-data" style="display: none;">
             <i class="bi bi-inbox" style="font-size: 3rem; color: #ccc;"></i>
-            <p class="mt-3">No students found in this cohort.</p>
+            <p class="mt-3" id="no-data-text">No students found in this cohort.</p>
           </div>
 
           <div id="student-table-wrapper" style="display: none;">
@@ -543,6 +543,9 @@
           currentCohortCode = teacherCohorts[0].cohortCode;
         } else {
           currentCohortCode = teacherCohorts[0].cohortCode;
+          // Show the cohort name in the header when there's only one cohort
+          const cohort = teacherCohorts[0];
+          document.getElementById('cohort-name-display').textContent = cohort.name;
         }
 
         await loadCohortStudents(currentCohortCode);
@@ -561,6 +564,15 @@
       try {
         document.getElementById('loading-spinner').style.display = 'block';
         document.getElementById('student-table-wrapper').style.display = 'none';
+        document.getElementById('no-data-message').style.display = 'none';
+
+        // Update header and empty-state to show the active cohort name
+        const activeCohort = teacherCohorts.find(c => c.cohortCode === cohortCode);
+        if (activeCohort) {
+          document.getElementById('cohort-name-display').textContent = activeCohort.name;
+          document.getElementById('no-data-text').textContent =
+            `No students have enrolled in ${activeCohort.name} yet.`;
+        }
 
         const students = await getStudentsByCohort(cohortCode);
 
@@ -585,7 +597,7 @@
             email: student.email || '',
             progress: {
               completedCount: progressDetails.completedSessions,
-              totalSessions: 7,
+              totalSessions: progressDetails.totalSessions,
               percentage: progressDetails.percentage,
               status,
               lastAccessedDate

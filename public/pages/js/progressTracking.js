@@ -248,14 +248,16 @@ async function getAllProgress() {
  * @returns {Object} - Statistics object
  */
 function calculateProgressStats(progressData) {
-  const totalSessions = 7;
+  // Bonus sessions (e.g. the AI session) don't count toward course completion.
+  const optionalSessions = window.SIDENAV_OPTIONAL_SESSIONS || ['session7'];
+  const totalSessions = 7 - optionalSessions.length;
   let completedCount = 0;
   let lastAccessedDate = 0;
 
-  for (let i = 1; i <= totalSessions; i++) {
+  for (let i = 1; i <= 7; i++) {
     const sessionKey = `session${i}`;
     if (progressData[sessionKey]) {
-      if (progressData[sessionKey].completed) {
+      if (progressData[sessionKey].completed && !optionalSessions.includes(sessionKey)) {
         completedCount++;
       }
       if (progressData[sessionKey].lastAccessed > lastAccessedDate) {
@@ -305,7 +307,11 @@ async function initializeSessionCompletionUI(sessionNumber) {
     (window.SIDENAV_ALL_LESSONS && window.SIDENAV_ALL_LESSONS[sessionKey]) || [];
   const optionalLessons =
     (window.SIDENAV_OPTIONAL_LESSONS && window.SIDENAV_OPTIONAL_LESSONS[sessionKey]) || [];
-  const requiredLessons = allLessons.filter((name) => !optionalLessons.includes(name));
+  // The session-overview (introduction) page is not a lesson, so it must not
+  // count toward completion — otherwise a session could never read as complete.
+  const requiredLessons = allLessons.filter(
+    (name) => !optionalLessons.includes(name) && !name.endsWith('-overview')
+  );
   const completedRequired = requiredLessons.filter((name) => completedLessons.includes(name));
 
   const isComplete =
@@ -314,6 +320,10 @@ async function initializeSessionCompletionUI(sessionNumber) {
   // Status is driven by lesson completion (not mere page access), so a freshly
   // opened session with no completed lessons still reads as "Not Started".
   const hasStarted = completedLessons.length > 0;
+
+  // A bonus session (e.g. the AI session) is optional — it doesn't count
+  // toward course completion, so make that obvious to the student.
+  const isOptionalSession = (window.SIDENAV_OPTIONAL_SESSIONS || []).includes(sessionKey);
 
   let status, badgeClass, icon, subtext;
   if (isComplete) {
@@ -357,14 +367,25 @@ async function initializeSessionCompletionUI(sessionNumber) {
     }
   }
 
+  const optionalPill = isOptionalSession
+    ? `<span class="session-status-badge badge bg-info text-dark">
+         <i class="bi bi-star-fill"></i> Optional bonus session
+       </span>`
+    : '';
+  const optionalNote = isOptionalSession
+    ? `<p class="completion-status text-muted">This is a bonus session — it isn’t required to complete the course, but it’s well worth doing.</p>`
+    : '';
+
   completionSection.innerHTML = `
     <div class="completion-card">
       <div class="completion-content">
         <h4>Session ${sessionNumber} Progress</h4>
+        ${optionalPill}
         <span class="session-status-badge badge ${badgeClass}">
           <i class="bi ${icon}"></i> ${status}
         </span>
         <p class="completion-status">${subtext}</p>
+        ${optionalNote}
       </div>
     </div>
   `;
