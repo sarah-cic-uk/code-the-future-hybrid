@@ -19,6 +19,7 @@ import { readFileSync } from 'fs';
 const COHORTS = [
   { cohortCode: 'TEST2024', name: 'Test Cohort 2024' },
   { cohortCode: 'shePlusTechJuly26', name: 'ShePlusTech — July 2026' },
+  { cohortCode: 'nepalJuly26', name: 'Nepal — July 2026' },
   // Shared cohort for tutors (auto-assigned when registering with the tutor code)
   { cohortCode: 'tutors', name: 'Code the Future Tutors' },
 ];
