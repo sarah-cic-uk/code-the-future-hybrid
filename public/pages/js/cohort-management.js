@@ -309,7 +309,7 @@ function calculateCohortProgress(students) {
  * (optional lessons are excluded), or when it was manually marked complete.
  */
 const COURSE_LESSONS = {
-  session1: ['session1-overview', 'introIDE', 'introGit', 'firstRepo', 'hostingGithub', 'gitVScode', 'gitTerminal', 'githubDesktop'],
+  session1: ['session1-overview', 'introIDE', 'introGit', 'firstRepo', 'hostingGithub', 'gitVScode', 'gitTerminal', 'sshVsHttps', 'githubDesktop'],
   session2: ['session2-overview', 'htmlBasics', 'firstWebpage', 'chromeDevTools'],
   session3: ['session3-overview', 'html_images', 'html_tables', 'html_forms', 'html_hyperlinks'],
   session4: ['session4-overview', 'introToCSS', 'layoutsInCSS', 'advancedCSS', 'cssActivities'],
@@ -318,7 +318,7 @@ const COURSE_LESSONS = {
   session7: ['session7-overview', 'goodUses', 'humanFirst', 'promptPractice', 'modelsTokensCosts', 'reviewAndRepeat', 'furtherLearning']
 };
 const OPTIONAL_LESSONS = {
-  session1: ['githubDesktop'],
+  session1: ['sshVsHttps', 'githubDesktop'],
   session5: ['accessibilityExample'],
   session7: ['furtherLearning']
 };

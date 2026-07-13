@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		{ path: "sessions/session1/lessons/hostingGithub.html", type: "lesson" },
 		{ path: "sessions/session1/lessons/gitVScode.html", type: "lesson" },
 		{ path: "sessions/session1/lessons/gitTerminal.html", type: "lesson" },
+		{ path: "sessions/session1/lessons/sshVsHttps.html", type: "lesson", optional: true, },
 		{ path: "sessions/session1/lessons/githubDesktop.html", type: "lesson", optional: true, },
 		{ path: "sessions/session1/lessons/gitBranchConflicts.html", type: "lesson", optional: true, },
 		{ path: "sessions/session2/introduction.html", type: "intro", session: 2 },

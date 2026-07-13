@@ -53,6 +53,12 @@ template.innerHTML = `
               <span class="d-none d-sm-inline">Git & the Terminal</span></a>
           </li>
           <li>
+            <a href="#" onclick="createPath('pages/sessions/session1/lessons/sshVsHttps.html')"
+              class="nav-link p-0" name="sshVsHttps">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">SSH vs HTTPS</span></a>
+          </li>
+          <li>
             <a href="#" onclick="createPath('pages/sessions/session1/lessons/githubDesktop.html')"
               class="nav-link p-0" name="githubDesktop">
               <i class="fs-4 bi-dash"></i>
@@ -324,6 +330,7 @@ const SIDENAV_ALL_LESSONS = {
     "hostingGithub",
     "gitVScode",
     "gitTerminal",
+    "sshVsHttps",
     "githubDesktop",
   ],
   session2: ["session2-overview", "htmlBasics", "firstWebpage", "chromeDevTools"],
@@ -360,7 +367,7 @@ const SIDENAV_ALL_LESSONS = {
 };
 
 const SIDENAV_OPTIONAL_LESSONS = {
-  session1: ["githubDesktop", "gitBranchConflicts"],
+  session1: ["sshVsHttps", "githubDesktop", "gitBranchConflicts"],
   session5: ["accessibilityExample"],
   session7: ["furtherLearning"],
 };
