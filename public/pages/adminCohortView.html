@@ -665,10 +665,13 @@
 
             totalStudents += students.length;
 
-            // Get teacher info
-            const teacherName = cohortData.teacherName || 'Unassigned';
+            // Get teachers assigned to this cohort from User records
+            const cohortTeachers = await window.getTeachersByCohort(cohortData.cohortCode);
+            const teacherName = cohortTeachers.length > 0
+              ? cohortTeachers.map(t => t.displayName || t.email).join(', ')
+              : 'Unassigned';
             if (teacherName !== 'Unassigned') {
-              allTeachers.add(teacherName);
+              cohortTeachers.forEach(t => allTeachers.add(t.displayName || t.email));
             }
 
             // Calculate cohort average
@@ -775,7 +778,7 @@
       filteredCohorts = allCohorts.filter(cohort => {
         const matchesSearch = cohort.name.toLowerCase().includes(searchTerm) ||
           cohort.code.toLowerCase().includes(searchTerm);
-        const matchesTeacher = teacherFilter === 'all' || cohort.teacherName === teacherFilter;
+        const matchesTeacher = teacherFilter === 'all' || cohort.teacherName.split(', ').includes(teacherFilter);
 
         return matchesSearch && matchesTeacher;
       });

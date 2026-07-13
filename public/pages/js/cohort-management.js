@@ -65,8 +65,8 @@ async function getCohortByCode(cohortCode) {
  */
 async function getStudentsByCohort(cohortCode) {
   const query = `
-    query ListUsers($cohortCode: String!) {
-      listUsers(filter: { cohortId: { eq: $cohortCode } }) {
+    query ListUsers($cohortCode: String!, $nextToken: String) {
+      listUsers(filter: { cohortId: { eq: $cohortCode } }, nextToken: $nextToken) {
         items {
           id
           email
@@ -75,15 +75,57 @@ async function getStudentsByCohort(cohortCode) {
           profile
           cohortId
         }
+        nextToken
       }
     }
   `;
-  
+
+  const all = [];
+  let nextToken = null;
   try {
-    const data = await executeGraphQL(query, { cohortCode });
-    return data.listUsers.items;
+    do {
+      const data = await executeGraphQL(query, { cohortCode, nextToken });
+      all.push(...data.listUsers.items);
+      nextToken = data.listUsers.nextToken;
+    } while (nextToken);
+    return all;
   } catch (error) {
     console.error('Error getting students:', error);
+    return [];
+  }
+}
+
+/**
+ * Get teachers for a cohort. Teachers register with a schoolPrefix (e.g. "nepal")
+ * and are linked to every cohort whose code starts with that prefix.
+ */
+async function getTeachersByCohort(cohortCode) {
+  const query = `
+    query ListUsers($nextToken: String) {
+      listUsers(filter: { isTeacher: { eq: true } }, nextToken: $nextToken) {
+        items {
+          id
+          email
+          displayName
+          schoolPrefix
+        }
+        nextToken
+      }
+    }
+  `;
+
+  const all = [];
+  let nextToken = null;
+  try {
+    do {
+      const data = await executeGraphQL(query, { nextToken });
+      all.push(...data.listUsers.items);
+      nextToken = data.listUsers.nextToken;
+    } while (nextToken);
+    const code = cohortCode.toLowerCase();
+    return all.filter(t => t.schoolPrefix && code.startsWith(t.schoolPrefix.toLowerCase()));
+  } catch (error) {
+    console.error('Error getting teachers:', error);
     return [];
   }
 }
@@ -677,6 +719,7 @@ function collectReleaseDatesFromForm() {
 // Export functions to window
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
+window.getTeachersByCohort = getTeachersByCohort;
 window.getAllStudents = getAllStudents;
 window.getStudentsBySchoolPrefix = getStudentsBySchoolPrefix;
 window.getAllCohorts = getAllCohorts;
