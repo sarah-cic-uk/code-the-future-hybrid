@@ -49,7 +49,9 @@ export const handler: Schema['sendBookingEmail']['functionHandler'] = async (eve
     await send(
       tutorEmail,
       'New 1:1 session booked',
-      `Hi ${tutorName || 'there'},\n\n${student} has booked a 1:1 session with you for ${when}.` + signoff
+      `Hi ${tutorName || 'there'},\n\n${student} has booked a 1:1 session with you for ${when}.\n\n` +
+        `Student email: ${studentEmail || 'not provided'}\n` +
+        `Please send them a meeting invite for the session.` + signoff
     );
   } else if (kind === 'cancelledBooked') {
     await send(
@@ -70,6 +72,7 @@ export const handler: Schema['sendBookingEmail']['functionHandler'] = async (eve
       tutorEmail,
       'New 1:1 session request',
       `Hi ${tutorName || 'there'},\n\n${student} has requested a 1:1 session with you for ${when}.\n\n` +
+        `Student email: ${studentEmail || 'not provided'}\n` +
         `Please log in to Tutor Availability to confirm or decline it.` + signoff
     );
   }
