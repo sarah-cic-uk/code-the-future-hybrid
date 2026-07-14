@@ -41,6 +41,10 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
     // Feedback link in the profile dropdown for every logged-in user
     showRoleMenuItem('feedback-menu-item', 'Share Feedback', 'pages/feedback.html');
 
+    // Pull the latest role/cohort flags from the DB before deciding which staff
+    // menus to show, so a role change takes effect without needing to re-login.
+    await refreshUserRoleState();
+
     // Add role dashboard links to the profile dropdown on every page
     if (localStorage.getItem('isTeacher') === 'true') {
       showRoleMenuItem('teacher-menu-item', 'My Cohorts', 'pages/teacherCohortView.html');
@@ -205,12 +209,69 @@ function fetchCohortReleaseDates(cohortCode) {
   return _releaseDatesPromises[cohortCode];
 }
 
+// Role and cohort flags (isTeacher/isTutor/isAdmin/schoolPrefix/cohort) are cached
+// in localStorage at login and, historically, never refreshed. If a user's record
+// changes afterwards (e.g. an admin promotes them to teacher, or fixes their
+// schoolPrefix), the cached flags go stale and every page keeps trusting them —
+// hiding the staff menus, breaking the cohort view, and (worst) making the session
+// lock guard treat a teacher as a student and redirect them out of sessions.
+//
+// Re-fetch the user's record once per page load and rewrite the cache so record
+// changes take effect on the next navigation, no re-login required. Self-contained
+// (like fetchCohortReleaseDates) so it works on every page that loads app.js.
+// Cached per page load so auth() and enforceSessionLock() share a single request.
+let _roleRefreshPromise = null;
+function refreshUserRoleState() {
+  if (_roleRefreshPromise) return _roleRefreshPromise;
+  _roleRefreshPromise = (async () => {
+    const email = localStorage.getItem('userEmail');
+    if (!email) return;
+    try {
+      const configRes = await fetch('/amplify_outputs.json');
+      const config = await configRes.json();
+      const query = `
+        query ListUsers($email: String!) {
+          listUsers(filter: { email: { eq: $email } }) {
+            items { cohortId isTeacher isTutor isAdmin schoolPrefix }
+          }
+        }
+      `;
+      const res = await fetch(config.data.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
+        body: JSON.stringify({ query, variables: { email } })
+      });
+      const json = await res.json();
+      const user = json?.data?.listUsers?.items?.[0];
+      if (!user) return;
+      localStorage.setItem('isTeacher', user.isTeacher ? 'true' : 'false');
+      localStorage.setItem('isTutor', user.isTutor ? 'true' : 'false');
+      localStorage.setItem('isAdmin', user.isAdmin ? 'true' : 'false');
+      localStorage.setItem('schoolPrefix', user.schoolPrefix || '');
+      // Keep the cohort cache in step with the record. Clearing it when there's no
+      // cohortId (e.g. teachers) prevents a stale student cohort from tripping the
+      // session lock guard.
+      if (user.cohortId) localStorage.setItem('cohort', user.cohortId);
+      else localStorage.removeItem('cohort');
+    } catch (error) {
+      console.error('Error refreshing user role state:', error);
+      _roleRefreshPromise = null; // allow a retry on the next call
+    }
+  })();
+  return _roleRefreshPromise;
+}
+window.refreshUserRoleState = refreshUserRoleState;
+
 // Hard access control: keep students out of a session's pages until its unlock
 // date has passed. Staff (teacher/tutor/admin) may preview locked content.
 // Runs on every page; no-ops unless the URL is under /session<N>/.
 async function enforceSessionLock() {
   const match = window.location.pathname.match(/session(\d)/);
   if (!match) return; // not a session/lesson page
+
+  // Make role/cohort flags current before we trust them — a stale cached flag
+  // could otherwise lock a teacher out of a session they're allowed to preview.
+  await refreshUserRoleState();
 
   // Staff bypass — they need to review locked material
   if (localStorage.getItem('isTeacher') === 'true' ||

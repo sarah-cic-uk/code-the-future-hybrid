@@ -140,6 +140,10 @@
 
       // Load cohort data using localStorage
       if (localStorage.getItem('loggedIn') === 'true') {
+        // Refresh cached role/cohort flags from the DB first, so a recently
+        // promoted teacher sees their cohort without needing to re-login.
+        if (window.refreshUserRoleState) await window.refreshUserRoleState();
+
         const isTeacher = localStorage.getItem('isTeacher') === 'true';
         const schoolPrefix = (localStorage.getItem('schoolPrefix') || '').trim();
         const cohortCode = localStorage.getItem('cohort');
