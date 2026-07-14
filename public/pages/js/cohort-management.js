@@ -500,9 +500,12 @@ function buildStudentDetailHTML(student) {
  * Get user by email
  */
 async function getUserByEmail(email) {
+  // Email lookups are a DynamoDB scan + post-filter, capped at one page (~1MB) per
+  // request. With enough users the match can sit past the first page, so follow
+  // nextToken until found (email is unique → stop on the first matching page).
   const query = `
-    query ListUsers($email: String!) {
-      listUsers(filter: { email: { eq: $email } }) {
+    query ListUsers($email: String!, $nextToken: String) {
+      listUsers(filter: { email: { eq: $email } }, nextToken: $nextToken) {
         items {
           id
           email
@@ -515,14 +518,20 @@ async function getUserByEmail(email) {
           progress
           profile
         }
+        nextToken
       }
     }
   `;
-  
+
   try {
-    const data = await executeGraphQL(query, { email });
-    const users = data.listUsers.items;
-    return users.length > 0 ? users[0] : null;
+    let nextToken = null;
+    do {
+      const data = await executeGraphQL(query, { email, nextToken });
+      const users = data.listUsers.items;
+      if (users.length > 0) return users[0];
+      nextToken = data.listUsers.nextToken;
+    } while (nextToken);
+    return null;
   } catch (error) {
     console.error('Error getting user:', error);
     return null;

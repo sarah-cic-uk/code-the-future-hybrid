@@ -229,20 +229,28 @@ function refreshUserRoleState() {
     try {
       const configRes = await fetch('/amplify_outputs.json');
       const config = await configRes.json();
+      // Email lookups scan + filter one page (~1MB) at a time, so the match can sit
+      // past the first page once there are enough users. Follow nextToken until found.
       const query = `
-        query ListUsers($email: String!) {
-          listUsers(filter: { email: { eq: $email } }) {
+        query ListUsers($email: String!, $nextToken: String) {
+          listUsers(filter: { email: { eq: $email } }, nextToken: $nextToken) {
             items { cohortId isTeacher isTutor isAdmin schoolPrefix }
+            nextToken
           }
         }
       `;
-      const res = await fetch(config.data.url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
-        body: JSON.stringify({ query, variables: { email } })
-      });
-      const json = await res.json();
-      const user = json?.data?.listUsers?.items?.[0];
+      let user = null;
+      let nextToken = null;
+      do {
+        const res = await fetch(config.data.url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
+          body: JSON.stringify({ query, variables: { email, nextToken } })
+        });
+        const json = await res.json();
+        user = json?.data?.listUsers?.items?.[0];
+        nextToken = json?.data?.listUsers?.nextToken;
+      } while (!user && nextToken);
       if (!user) return;
       localStorage.setItem('isTeacher', user.isTeacher ? 'true' : 'false');
       localStorage.setItem('isTutor', user.isTutor ? 'true' : 'false');

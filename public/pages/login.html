@@ -388,15 +388,24 @@
 
           // Fetch user record from DynamoDB for cohort, userId, role flags
           try {
+            // Email lookups scan the table and filter one page (~1MB) at a time, so
+            // with enough users the match sits past the first page. Follow nextToken
+            // until found, or role flags never get set and the user looks role-less.
             const userQuery = `
-              query ListUsers($email: String!) {
-                listUsers(filter: { email: { eq: $email } }) {
+              query ListUsers($email: String!, $nextToken: String) {
+                listUsers(filter: { email: { eq: $email } }, nextToken: $nextToken) {
                   items { id cohortId isTeacher isTutor isAdmin schoolPrefix }
+                  nextToken
                 }
               }
             `;
-            const userData = await executeGraphQL(userQuery, { email });
-            const user = userData.listUsers.items[0];
+            let user = null;
+            let userNextToken = null;
+            do {
+              const userData = await executeGraphQL(userQuery, { email, nextToken: userNextToken });
+              user = userData.listUsers.items[0];
+              userNextToken = userData.listUsers.nextToken;
+            } while (!user && userNextToken);
             if (user) {
               localStorage.setItem('userId', user.id);
               if (user.cohortId) localStorage.setItem('cohort', user.cohortId);

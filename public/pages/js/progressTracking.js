@@ -83,23 +83,33 @@ async function executeGraphQL(query, variables = {}) {
 // shadow the global window.getUserByEmail from cohort-management.js
 // (which returns the full record incl. isTutor/isTeacher/schoolPrefix).
 async function getUserForProgress(email) {
+  // listUsers(filter:{email}) is a DynamoDB scan + post-filter, capped at one page
+  // (~1MB) per request. With enough users the match can sit on a later page, so we
+  // must follow nextToken or the user reads as "not found". Email is unique, so we
+  // stop as soon as a page yields a match.
   const query = `
-    query ListUsers($email: String!) {
-      listUsers(filter: { email: { eq: $email } }) {
+    query ListUsers($email: String!, $nextToken: String) {
+      listUsers(filter: { email: { eq: $email } }, nextToken: $nextToken) {
         items {
           id
           email
           displayName
           progress
         }
+        nextToken
       }
     }
   `;
 
   try {
-    const data = await executeGraphQL(query, { email });
-    const users = data.listUsers.items;
-    return users.length > 0 ? users[0] : null;
+    let nextToken = null;
+    do {
+      const data = await executeGraphQL(query, { email, nextToken });
+      const users = data.listUsers.items;
+      if (users.length > 0) return users[0];
+      nextToken = data.listUsers.nextToken;
+    } while (nextToken);
+    return null;
   } catch (error) {
     console.error('Error getting user:', error);
     return null;
