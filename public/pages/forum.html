@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="keywords" content="Code, Future, HTML, CSS, JavaScript, IBM, CIC" />
+  <meta name="description" content="Code the Future free HTML/CSS coding bootcamp" />
+  <meta name="author" content="Sarah Neenan" />
+
+  <title>Code the Future — Forum</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/styles/mainStyle.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" />
+
+  <script defer type="text/javascript" src="./js/app.js"></script>
+
+  <style>
+    .forum-layout {
+      display: flex;
+      gap: 0;
+      min-height: calc(100vh - 80px);
+    }
+
+    .forum-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      border-right: 1px solid #dee2e6;
+      padding: 1.5rem 0;
+      background: #f8f9fa;
+    }
+
+    .forum-sidebar h6 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6c757d;
+      padding: 0 1.25rem 0.5rem;
+      margin-bottom: 0;
+    }
+
+    .forum-section-btn {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.55rem 1.25rem;
+      border: none;
+      background: none;
+      font-size: 0.9rem;
+      color: #212529;
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: background 0.1s, border-color 0.1s;
+    }
+
+    .forum-section-btn:hover {
+      background: #e9ecef;
+    }
+
+    .forum-section-btn.active {
+      background: #ede9f8;
+      border-left-color: #31268c;
+      color: #31268c;
+      font-weight: 600;
+    }
+
+    .forum-main {
+      flex: 1;
+      padding: 2rem 2.5rem;
+      min-width: 0;
+    }
+
+    .forum-main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .forum-main-header h2 {
+      margin: 0;
+      font-size: 1.4rem;
+      color: #1d0c59;
+    }
+
+    .forum-search-wrap {
+      margin-bottom: 1.25rem;
+    }
+
+    .forum-search-wrap .input-group {
+      max-width: 420px;
+    }
+
+    .post-card {
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+      background: #fff;
+      transition: box-shadow 0.15s;
+    }
+
+    .post-card:hover {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .post-card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #1d0c59;
+      margin-bottom: 0.2rem;
+    }
+
+    .post-card-meta {
+      font-size: 0.8rem;
+      color: #6c757d;
+      margin-bottom: 0.6rem;
+    }
+
+    .post-card-body {
+      font-size: 0.9rem;
+      color: #343a40;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 0.75rem;
+    }
+
+    .post-card-body.expanded {
+      display: block;
+      -webkit-line-clamp: unset;
+    }
+
+    .post-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-badge {
+      font-size: 0.72rem;
+      background: #ede9f8;
+      color: #31268c;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .answers-panel {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #dee2e6;
+    }
+
+    .answer-item {
+      padding: 0.75rem 1rem;
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 0.6rem;
+      font-size: 0.875rem;
+    }
+
+    .answer-item-meta {
+      font-size: 0.78rem;
+      color: #6c757d;
+      margin-bottom: 0.3rem;
+    }
+
+    .answer-form {
+      margin-top: 0.9rem;
+    }
+
+    .answer-form textarea {
+      font-size: 0.875rem;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-forum-primary {
+      background-color: #31268c;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-forum-primary:hover {
+      background-color: #26207a;
+      color: #fff;
+    }
+
+    .btn-delete {
+      color: #dc3545;
+      background: none;
+      border: none;
+      padding: 0;
+      font-size: 0.8rem;
+      cursor: pointer;
+      opacity: 0.6;
+    }
+
+    .btn-delete:hover {
+      opacity: 1;
+    }
+
+    .forum-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #6c757d;
+    }
+
+    .forum-empty i {
+      font-size: 2.5rem;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .forum-layout {
+        flex-direction: column;
+      }
+      .forum-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        padding: 0.75rem 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        padding: 0.75rem;
+      }
+      .forum-section-btn {
+        width: auto;
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
+        border-radius: 4px;
+      }
+      .forum-section-btn.active {
+        background: #ede9f8;
+        border-left-color: transparent;
+        border-bottom-color: #31268c;
+      }
+      .forum-main {
+        padding: 1.25rem;
+      }
+      .forum-search-wrap .input-group {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-body">
+    <nav class="navbar navbar-expand-lg bg-light">
+      <div class="container-fluid g-0">
+        <a onclick="createPath('index.html')" class="navbar-brand" href="#" style="
+              border-right: 2px solid #d9437a;
+              padding-right: 10px;
+              color: #1d0c59;
+            ">
+          <img src="../images/logo.png" height="60px" alt="CTF logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
+          <div class="navbar-nav nav-justified">
+            <a class="nav-link" href="#" onclick="createPath('index.html')">About CTF</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/meetTheTutors.html')">Meet the tutors</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/1on1.html')">Schedule a 1:1</a>
+            <a class="nav-link" href="#" id="jobs-nav-link" onclick="createPath('pages/jobs.html')">Jobs at IBM</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/courseCatalog.html')">Course Catalog</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/sessions.html')" id="sessionsLink">Sessions</a>
+            <a class="nav-link" href="#" onclick="createPath('pages/faq.html')">FAQ</a>
+            <a class="nav-link active fw-semibold" href="#" onclick="createPath('pages/forum.html')">Forum</a>
+          </div>
+          <div class="d-flex align-items-center" div id="profile-button">
+            <div>
+              <p class=" my-auto" id="profileName"></p>
+            </div>
+            <div class="profileBtn dropdown px-3">
+              <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <img id="profile-pic-avatar" class="rounded-circle" height="25" alt=""
+                  src="../images/blank_avatar.jpg" loading="lazy" />
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink">
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/profile.html')">My Profile</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="createPath('pages/cohort.html')">My Cohort</a>
+                </li>
+                <li id="teacher-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/teacherCohortView.html')">My Cohorts</a></li>
+                <li id="tutor-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/tutorAvailability.html')">Tutor Availability</a></li>
+                <li id="admin-menu-item" style="display: none;"><a class="dropdown-item" href="#"
+                    onclick="createPath('pages/adminCohortView.html')">All Cohorts (Admin)</a></li>
+                <li>
+                  <a class="dropdown-item" href="#" onclick="logUserOut()">Log out</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="forum-layout">
+      <!-- Sidebar -->
+      <aside class="forum-sidebar">
+        <h6>Sections</h6>
+        <ul class="list-unstyled mb-0" id="forum-section-list"></ul>
+      </aside>
+
+      <!-- Main content -->
+      <main class="forum-main">
+        <div class="forum-main-header">
+          <h2 id="forum-section-heading">Forum</h2>
+          <button class="btn btn-forum-primary" data-bs-toggle="modal" data-bs-target="#askModal">
+            <i class="bi bi-plus-lg me-1"></i> Ask a question
+          </button>
+        </div>
+
+        <div class="forum-search-wrap">
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+            <input type="text" class="form-control" id="forum-search"
+              placeholder="Search all questions…" autocomplete="off" />
+            <button class="btn btn-outline-secondary" id="forum-search-clear" style="display:none;"
+              title="Clear search">
+              <i class="bi bi-x"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="forum-content">
+          <div class="text-center py-5 text-muted">
+            <div class="spinner-border spinner-border-sm" role="status"></div>
+            <span class="ms-2">Loading…</span>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Ask a question modal -->
+  <div class="modal fade" id="askModal" tabindex="-1" aria-labelledby="askModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="askModalLabel">Ask a question</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="ask-error" class="alert alert-danger" style="display:none;"></div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="ask-title">Question title <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="ask-title"
+              placeholder="e.g. How do I push to GitHub from the terminal?" maxlength="200" />
+            <div class="form-text">Keep it short and specific — a good title helps others find your question.</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold" for="ask-body">Details <span class="text-danger">*</span></label>
+            <textarea class="form-control" id="ask-body" rows="5"
+              placeholder="Describe what you've tried and where you're stuck…"></textarea>
+          </div>
+          <div class="mb-1">
+            <label class="form-label fw-semibold">Section</label>
+            <p class="form-text mt-0" id="ask-section-display" style="color:#31268c; font-weight:600;"></p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-forum-primary" id="ask-submit">Post question</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // ── Constants ────────────────────────────────────────────────────────────────
+
+    const FORUM_SECTIONS = [
+      { key: 'session1',    label: 'Session 1 — Git & GitHub' },
+      { key: 'session2',    label: 'Session 2 — HTML Basics' },
+      { key: 'session3',    label: 'Session 3 — HTML Advanced' },
+      { key: 'session4',    label: 'Session 4 — CSS' },
+      { key: 'session5',    label: 'Session 5 — Accessibility' },
+      { key: 'aiSession',   label: 'AI Session' },
+      { key: 'careersTech', label: 'Careers in Tech' },
+      { key: 'lifeAtIBM',   label: 'Life at IBM' },
+    ];
+
+    const SECTION_MAP = {};
+    FORUM_SECTIONS.forEach(s => { SECTION_MAP[s.key] = s.label; });
+
+    let activeSection = FORUM_SECTIONS[0].key;
+    let _apiConfig = null;
+    let _searchCache = null; // cached full post list for search
+    let _searchDebounce = null;
+
+    const isStaff = () =>
+      localStorage.getItem('isTutor') === 'true' ||
+      localStorage.getItem('isAdmin') === 'true';
+
+    // ── Config ───────────────────────────────────────────────────────────────────
+
+    async function getConfig() {
+      if (_apiConfig) return _apiConfig;
+      const res = await fetch('/amplify_outputs.json');
+      _apiConfig = await res.json();
+      return _apiConfig;
+    }
+
+    // ── GraphQL helper ───────────────────────────────────────────────────────────
+
+    async function gql(query, variables) {
+      const config = await getConfig();
+      const res = await fetch(config.data.url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': config.data.api_key },
+        body: JSON.stringify({ query, variables }),
+      });
+      return res.json();
+    }
+
+    // Exhausts nextToken pagination and returns all items.
+    async function listAll(query, variables) {
+      let items = [];
+      let nextToken = null;
+      do {
+        const json = await gql(query, { ...variables, nextToken });
+        const data = Object.values(json.data)[0];
+        items = items.concat(data.items || []);
+        nextToken = data.nextToken;
+      } while (nextToken);
+      return items;
+    }
+
+    // ── Queries ──────────────────────────────────────────────────────────────────
+
+    const LIST_POSTS_BY_SECTION = `
+      query ListPosts($section: String!, $nextToken: String) {
+        listForumPosts(filter: { section: { eq: $section } }, nextToken: $nextToken) {
+          items { id section title body authorName createdAt }
+          nextToken
+        }
+      }
+    `;
+
+    const LIST_ALL_POSTS = `
+      query ListAllPosts($nextToken: String) {
+        listForumPosts(nextToken: $nextToken) {
+          items { id section title body authorName createdAt }
+          nextToken
+        }
+      }
+    `;
+
+    const CREATE_POST = `
+      mutation CreatePost($input: CreateForumPostInput!) {
+        createForumPost(input: $input) { id }
+      }
+    `;
+
+    const DELETE_POST = `
+      mutation DeletePost($id: ID!) {
+        deleteForumPost(input: { id: $id }) { id }
+      }
+    `;
+
+    const LIST_ANSWERS = `
+      query ListAnswers($postId: String!, $nextToken: String) {
+        listForumAnswers(filter: { postId: { eq: $postId } }, nextToken: $nextToken) {
+          items { id postId body authorName createdAt }
+          nextToken
+        }
+      }
+    `;
+
+    const CREATE_ANSWER = `
+      mutation CreateAnswer($input: CreateForumAnswerInput!) {
+        createForumAnswer(input: $input) { id }
+      }
+    `;
+
+    const DELETE_ANSWER = `
+      mutation DeleteAnswer($id: ID!) {
+        deleteForumAnswer(input: { id: $id }) { id }
+      }
+    `;
+
+    // ── Helpers ──────────────────────────────────────────────────────────────────
+
+    function relativeTime(isoString) {
+      const ms = Date.now() - new Date(isoString).getTime();
+      const s = Math.floor(ms / 1000);
+      if (s < 60) return 'just now';
+      const m = Math.floor(s / 60);
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      const d = Math.floor(h / 24);
+      if (d < 30) return `${d}d ago`;
+      return new Date(isoString).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function deleteBtn(type, id, onDone) {
+      if (!isStaff()) return '';
+      const btn = document.createElement('button');
+      btn.className = 'btn-delete ms-auto';
+      btn.title = `Delete ${type}`;
+      btn.innerHTML = '<i class="bi bi-trash"></i>';
+      btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        if (!confirm(`Delete this ${type}? This cannot be undone.`)) return;
+        const mutation = type === 'post' ? DELETE_POST : DELETE_ANSWER;
+        await gql(mutation, { id });
+        onDone();
+      });
+      return btn;
+    }
+
+    // ── Render posts ─────────────────────────────────────────────────────────────
+
+    function renderPostList(posts, showSectionBadge) {
+      const container = document.getElementById('forum-content');
+      if (!posts.length) {
+        container.innerHTML = `
+          <div class="forum-empty">
+            <i class="bi bi-chat-square-text"></i>
+            <p class="fw-semibold mb-1">No questions here yet</p>
+            <p class="small">Be the first to ask one!</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = '';
+      posts.forEach(post => {
+        const card = document.createElement('div');
+        card.className = 'post-card';
+        card.dataset.postId = post.id;
+
+        const sectionBadge = showSectionBadge && SECTION_MAP[post.section]
+          ? `<span class="section-badge">${SECTION_MAP[post.section]}</span>` : '';
+
+        card.innerHTML = `
+          <div class="d-flex align-items-start justify-content-between gap-2">
+            <div class="post-card-title">${escHtml(post.title)}${sectionBadge}</div>
+          </div>
+          <div class="post-card-meta">${escHtml(post.authorName || 'Anonymous')} &middot; ${relativeTime(post.createdAt)}</div>
+          <div class="post-card-body">${escHtml(post.body)}</div>
+          <div class="post-card-actions">
+            <button class="btn btn-sm btn-outline-secondary toggle-btn">View discussion <i class="bi bi-chevron-down ms-1"></i></button>
+          </div>
+          <div class="answers-panel" style="display:none;"></div>
+        `;
+
+        // Staff delete for the post
+        if (isStaff()) {
+          const delBtn = deleteBtn('post', post.id, () => card.remove());
+          card.querySelector('.post-card-actions').appendChild(delBtn);
+        }
+
+        // Toggle answers
+        card.querySelector('.toggle-btn').addEventListener('click', () => togglePost(card, post));
+        container.appendChild(card);
+      });
+    }
+
+    async function togglePost(card, post) {
+      const panel = card.querySelector('.answers-panel');
+      const btn = card.querySelector('.toggle-btn');
+      const bodyEl = card.querySelector('.post-card-body');
+
+      if (panel.style.display !== 'none') {
+        panel.style.display = 'none';
+        bodyEl.classList.remove('expanded');
+        btn.innerHTML = 'View discussion <i class="bi bi-chevron-down ms-1"></i>';
+        return;
+      }
+
+      bodyEl.classList.add('expanded');
+      btn.innerHTML = 'Hide discussion <i class="bi bi-chevron-up ms-1"></i>';
+      panel.style.display = 'block';
+      panel.innerHTML = '<div class="text-muted small py-2"><span class="spinner-border spinner-border-sm me-1"></span>Loading answers…</div>';
+
+      await renderAnswers(panel, post.id);
+    }
+
+    async function renderAnswers(panel, postId) {
+      const answers = await listAll(LIST_ANSWERS, { postId });
+      answers.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+      panel.innerHTML = '';
+
+      if (!answers.length) {
+        panel.innerHTML = '<p class="text-muted small mb-2">No answers yet — be the first!</p>';
+      } else {
+        answers.forEach(ans => {
+          const div = document.createElement('div');
+          div.className = 'answer-item';
+          div.dataset.answerId = ans.id;
+          div.innerHTML = `
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="answer-item-meta">${escHtml(ans.authorName || 'Anonymous')} &middot; ${relativeTime(ans.createdAt)}</div>
+            </div>
+            <div>${escHtml(ans.body)}</div>
+          `;
+          if (isStaff()) {
+            const delBtn = deleteBtn('answer', ans.id, () => div.remove());
+            div.querySelector('.d-flex').appendChild(delBtn);
+          }
+          panel.appendChild(div);
+        });
+      }
+
+      // Answer form
+      const form = document.createElement('div');
+      form.className = 'answer-form';
+      form.innerHTML = `
+        <div id="ans-error-${postId}" class="alert alert-danger" style="display:none;"></div>
+        <textarea class="form-control mb-2" placeholder="Write your answer…" id="ans-body-${postId}" rows="3"></textarea>
+        <button class="btn btn-sm btn-forum-primary" id="ans-submit-${postId}">Post answer</button>
+      `;
+      panel.appendChild(form);
+
+      document.getElementById(`ans-submit-${postId}`).addEventListener('click', async () => {
+        const bodyEl = document.getElementById(`ans-body-${postId}`);
+        const errEl = document.getElementById(`ans-error-${postId}`);
+        const body = bodyEl.value.trim();
+        if (!body) {
+          errEl.textContent = 'Please write an answer before posting.';
+          errEl.style.display = 'block';
+          return;
+        }
+        errEl.style.display = 'none';
+        const btn = document.getElementById(`ans-submit-${postId}`);
+        btn.disabled = true;
+        btn.textContent = 'Posting…';
+        try {
+          await gql(CREATE_ANSWER, {
+            input: {
+              postId,
+              body,
+              authorName: localStorage.getItem('displayName') || 'Anonymous',
+              authorEmail: localStorage.getItem('userEmail') || '',
+            }
+          });
+          bodyEl.value = '';
+          // Re-render answers including the new one
+          await renderAnswers(panel, postId);
+        } catch (err) {
+          console.error(err);
+          errEl.textContent = 'Failed to post your answer. Please try again.';
+          errEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Post answer';
+        }
+      });
+    }
+
+    // ── Section loading ──────────────────────────────────────────────────────────
+
+    async function loadSection(sectionKey) {
+      activeSection = sectionKey;
+      _searchCache = null; // invalidate search cache when switching sections
+
+      // Update sidebar active state
+      document.querySelectorAll('.forum-section-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.section === sectionKey);
+      });
+
+      const sectionLabel = SECTION_MAP[sectionKey] || sectionKey;
+      document.getElementById('forum-section-heading').textContent = sectionLabel;
+      document.getElementById('ask-section-display').textContent = sectionLabel;
+
+      document.getElementById('forum-content').innerHTML = `
+        <div class="text-center py-5 text-muted">
+          <div class="spinner-border spinner-border-sm" role="status"></div>
+          <span class="ms-2">Loading…</span>
+        </div>`;
+
+      try {
+        const posts = await listAll(LIST_POSTS_BY_SECTION, { section: sectionKey });
+        posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        renderPostList(posts, false);
+      } catch (err) {
+        console.error(err);
+        document.getElementById('forum-content').innerHTML =
+          '<div class="alert alert-danger">Failed to load posts. Please refresh the page.</div>';
+      }
+    }
+
+    // ── Search ───────────────────────────────────────────────────────────────────
+
+    async function runSearch(term) {
+      const content = document.getElementById('forum-content');
+
+      if (!term) {
+        _searchCache = null;
+        loadSection(activeSection);
+        return;
+      }
+
+      content.innerHTML = `
+        <div class="text-center py-5 text-muted">
+          <div class="spinner-border spinner-border-sm" role="status"></div>
+          <span class="ms-2">Searching…</span>
+        </div>`;
+
+      try {
+        if (!_searchCache) {
+          _searchCache = await listAll(LIST_ALL_POSTS, {});
+        }
+        const q = term.toLowerCase();
+        const matched = _searchCache.filter(p =>
+          p.title.toLowerCase().includes(q) || p.body.toLowerCase().includes(q)
+        );
+        matched.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        document.getElementById('forum-section-heading').textContent =
+          matched.length ? `Results for "${term}"` : `No results for "${term}"`;
+
+        renderPostList(matched, true);
+      } catch (err) {
+        console.error(err);
+        content.innerHTML = '<div class="alert alert-danger">Search failed. Please try again.</div>';
+      }
+    }
+
+    // ── Sidebar ──────────────────────────────────────────────────────────────────
+
+    function buildSidebar() {
+      const ul = document.getElementById('forum-section-list');
+      FORUM_SECTIONS.forEach(s => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.className = 'forum-section-btn' + (s.key === activeSection ? ' active' : '');
+        btn.dataset.section = s.key;
+        btn.textContent = s.label;
+        btn.addEventListener('click', () => {
+          document.getElementById('forum-search').value = '';
+          document.getElementById('forum-search-clear').style.display = 'none';
+          _searchCache = null;
+          document.getElementById('forum-section-heading').textContent = SECTION_MAP[activeSection];
+          loadSection(s.key);
+        });
+        li.appendChild(btn);
+        ul.appendChild(li);
+      });
+    }
+
+    // ── Ask modal ────────────────────────────────────────────────────────────────
+
+    document.getElementById('ask-submit').addEventListener('click', async () => {
+      const title = document.getElementById('ask-title').value.trim();
+      const body = document.getElementById('ask-body').value.trim();
+      const errEl = document.getElementById('ask-error');
+      errEl.style.display = 'none';
+
+      if (!title) {
+        errEl.textContent = 'Please add a title for your question.';
+        errEl.style.display = 'block';
+        return;
+      }
+      if (!body) {
+        errEl.textContent = 'Please add some detail before posting.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      const btn = document.getElementById('ask-submit');
+      btn.disabled = true;
+      btn.textContent = 'Posting…';
+
+      try {
+        await gql(CREATE_POST, {
+          input: {
+            section: activeSection,
+            title,
+            body,
+            authorName: localStorage.getItem('displayName') || 'Anonymous',
+            authorEmail: localStorage.getItem('userEmail') || '',
+          }
+        });
+        document.getElementById('ask-title').value = '';
+        document.getElementById('ask-body').value = '';
+        bootstrap.Modal.getInstance(document.getElementById('askModal')).hide();
+        _searchCache = null;
+        loadSection(activeSection);
+      } catch (err) {
+        console.error(err);
+        errEl.textContent = 'Failed to post your question. Please try again.';
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Post question';
+      }
+    });
+
+    // Reset modal error state on close
+    document.getElementById('askModal').addEventListener('hidden.bs.modal', () => {
+      document.getElementById('ask-error').style.display = 'none';
+      document.getElementById('ask-submit').disabled = false;
+      document.getElementById('ask-submit').textContent = 'Post question';
+    });
+
+    // ── Search wiring ────────────────────────────────────────────────────────────
+
+    document.getElementById('forum-search').addEventListener('input', (e) => {
+      const term = e.target.value.trim();
+      document.getElementById('forum-search-clear').style.display = term ? 'block' : 'none';
+      clearTimeout(_searchDebounce);
+      _searchDebounce = setTimeout(() => runSearch(term), 300);
+    });
+
+    document.getElementById('forum-search-clear').addEventListener('click', () => {
+      document.getElementById('forum-search').value = '';
+      document.getElementById('forum-search-clear').style.display = 'none';
+      runSearch('');
+    });
+
+    // ── XSS-safe HTML escaping ───────────────────────────────────────────────────
+
+    function escHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────────
+
+    window.onload = () => {
+      auth(
+        document.querySelector('.loginBtn'),
+        document.querySelector('.profileBtn'),
+        document.querySelector('#sessionsLink')
+      );
+      buildSidebar();
+      loadSection(activeSection);
+    };
+
+    function createPath(options) {
+      window.location = getPath() + options;
+      return false;
+    }
+
+    function logUserOut() {
+      logout();
+    }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

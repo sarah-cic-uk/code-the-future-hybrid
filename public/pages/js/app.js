@@ -38,8 +38,9 @@ async function auth(loginBtn, profileBtn, sessionsBtn, needsAuth = true) {
       document.querySelectorAll('#profile-pic-avatar').forEach(el => el.src = cachedPic);
     }
 
-    // Feedback link in the profile dropdown for every logged-in user
+    // Feedback and forum links for every logged-in user
     showRoleMenuItem('feedback-menu-item', 'Share Feedback', 'pages/feedback.html');
+    showRoleMenuItem('forum-menu-item', 'Forum', 'pages/forum.html');
 
     // Pull the latest role/cohort flags from the DB before deciding which staff
     // menus to show, so a role change takes effect without needing to re-login.

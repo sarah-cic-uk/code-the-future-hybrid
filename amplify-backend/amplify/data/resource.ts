@@ -120,6 +120,25 @@ const schema = a.schema({
       status: a.string(),
     })
     .authorization((allow) => [allow.publicApiKey()]),
+
+  ForumPost: a
+    .model({
+      section: a.string().required(),
+      title: a.string().required(),
+      body: a.string().required(),
+      authorName: a.string(),
+      authorEmail: a.string(),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  ForumAnswer: a
+    .model({
+      postId: a.string().required(),
+      body: a.string().required(),
+      authorName: a.string(),
+      authorEmail: a.string(),
+    })
+    .authorization((allow) => [allow.publicApiKey()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
