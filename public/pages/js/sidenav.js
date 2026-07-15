@@ -284,7 +284,55 @@ template.innerHTML = `
         </ul>
       </li>
       <li class="nav-item pb-2">
-        <a href="#" onclick="createPath('index.html')" 
+        <button href="#submenuForum" data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="forum">
+          <i class="fs-4 bi-chat-square-text"></i>
+          <span class="ms-3 d-none d-sm-inline">Forum</span>
+        </button>
+        <ul class="collapse nav flex-column ms-1" id="submenuForum" data-bs-parent="#menu">
+          <li class="w-100">
+            <a href="#" onclick="createPath('pages/forum.html#session1')" class="nav-link p-0" name="forum-session1">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Session 1</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/forum.html#session2')" class="nav-link p-0" name="forum-session2">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Session 2</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/forum.html#session3')" class="nav-link p-0" name="forum-session3">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Session 3</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/forum.html#session4')" class="nav-link p-0" name="forum-session4">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Session 4</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/forum.html#session5')" class="nav-link p-0" name="forum-session5">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Session 5</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/forum.html#aiSession')" class="nav-link p-0" name="forum-aiSession">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">AI Session</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/forum.html#careersTech')" class="nav-link p-0" name="forum-careersTech">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Careers in Tech</span></a>
+          </li>
+          <li>
+            <a href="#" onclick="createPath('pages/forum.html#lifeAtIBM')" class="nav-link p-0" name="forum-lifeAtIBM">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Life at IBM</span></a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item pb-2">
+        <a href="#" onclick="createPath('index.html')"
           data-bs-toggle="collapse" class="nav-link px-0 py-0 align-middle" name="exitSession">
           <i class="fs-4 bi-box-arrow-left"></i>
           <span class="ms-3 d-none d-sm-inline">Exit Sessions</span>
