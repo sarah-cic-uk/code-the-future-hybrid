@@ -3,6 +3,7 @@ import { notifyAdmin } from '../functions/notify-admin/resource';
 import { bookingEmail } from '../functions/booking-email/resource';
 import { feedbackEmail } from '../functions/feedback-email/resource';
 import { forumEmail } from '../functions/forum-email/resource';
+import { deleteStudent } from '../functions/delete-student/resource';
 
 /**
  * Define your data schema
@@ -73,6 +74,19 @@ const schema = a.schema({
     })
     .returns(a.string())
     .handler(a.handler.function(feedbackEmail))
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  // Permanently deletes a student from Cognito + the DynamoDB User table.
+  // Password-gated inside the Lambda (see delete-student/handler.ts).
+  deleteStudent: a
+    .mutation()
+    .arguments({
+      email: a.string().required(),
+      userId: a.string().required(),
+      password: a.string().required(),
+    })
+    .returns(a.string())
+    .handler(a.handler.function(deleteStudent))
     .authorization((allow) => [allow.publicApiKey()]),
 
   // Emails forum participants (via SES):

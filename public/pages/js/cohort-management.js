@@ -74,6 +74,9 @@ async function getStudentsByCohort(cohortCode) {
           progress
           profile
           cohortId
+          isTutor
+          isTeacher
+          isAdmin
         }
         nextToken
       }
@@ -93,6 +96,73 @@ async function getStudentsByCohort(cohortCode) {
     console.error('Error getting students:', error);
     return [];
   }
+}
+
+/**
+ * Classify a user record as staff so cohort views can badge/exclude them.
+ * Returns 'Tutor' for tutors, 'Staff' for teachers/admins, or null for students.
+ */
+function getStaffRole(user) {
+  if (!user) return null;
+  if (user.isTutor) return 'Tutor';
+  if (user.isTeacher || user.isAdmin) return 'Staff';
+  return null;
+}
+
+/**
+ * Export a list of student objects (as built by the cohort views) to a CSV file
+ * download. Exports exactly the array passed in, so callers can pass the current
+ * filtered view. Includes a Type column so any tutor/staff rows are obvious.
+ */
+function exportStudentsToCsv(students, filename) {
+  const csvCell = (value) => {
+    const str = value === null || value === undefined ? '' : String(value);
+    return /[",\r\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
+  };
+
+  const headers = ['Name', 'Email', 'Status', 'Progress %', 'Sessions Completed', 'Last Active', 'Type'];
+  const rows = (students || []).map(s => {
+    const lastActive = s.progress && s.progress.lastAccessedDate > 0
+      ? new Date(s.progress.lastAccessedDate).toLocaleDateString('en-GB')
+      : 'Never';
+    return [
+      s.name,
+      s.email,
+      s.progress ? s.progress.status : '',
+      s.progress ? s.progress.percentage : '',
+      s.progress ? `${s.progress.completedCount}/${s.progress.totalSessions}` : '',
+      lastActive,
+      s.staffRole || 'Student',
+    ];
+  });
+
+  // Prepend a BOM so Excel reads UTF-8 (handles non-ASCII names correctly).
+  const csv = '﻿' + [headers, ...rows].map(r => r.map(csvCell).join(',')).join('\r\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename || 'students.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/**
+ * Permanently delete a student from Cognito + the DynamoDB User table via the
+ * password-gated deleteStudent Lambda. Returns the raw result string:
+ * 'deleted' | 'unauthorized' | 'error'.
+ */
+async function deleteStudentAccount({ email, userId, password }) {
+  const mutation = `
+    mutation DeleteStudent($email: String!, $userId: String!, $password: String!) {
+      deleteStudent(email: $email, userId: $userId, password: $password)
+    }
+  `;
+  const data = await executeGraphQL(mutation, { email, userId, password });
+  return data.deleteStudent;
 }
 
 /**
@@ -728,6 +798,9 @@ function collectReleaseDatesFromForm() {
 // Export functions to window
 window.getCohortByCode = getCohortByCode;
 window.getStudentsByCohort = getStudentsByCohort;
+window.getStaffRole = getStaffRole;
+window.exportStudentsToCsv = exportStudentsToCsv;
+window.deleteStudentAccount = deleteStudentAccount;
 window.getTeachersByCohort = getTeachersByCohort;
 window.getAllStudents = getAllStudents;
 window.getStudentsBySchoolPrefix = getStudentsBySchoolPrefix;

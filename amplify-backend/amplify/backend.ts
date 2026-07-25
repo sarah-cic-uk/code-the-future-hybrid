@@ -7,6 +7,7 @@ import { notifyAdmin } from './functions/notify-admin/resource';
 import { bookingEmail } from './functions/booking-email/resource';
 import { feedbackEmail } from './functions/feedback-email/resource';
 import { forumEmail } from './functions/forum-email/resource';
+import { deleteStudent } from './functions/delete-student/resource';
 
 /**
  * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
@@ -19,6 +20,7 @@ const backend = defineBackend({
   bookingEmail,
   feedbackEmail,
   forumEmail,
+  deleteStudent,
 });
 
 // Allow the email Lambdas to send through SES
@@ -30,6 +32,28 @@ backend.notifyAdmin.resources.lambda.addToRolePolicy(sesPolicy);
 backend.bookingEmail.resources.lambda.addToRolePolicy(sesPolicy);
 backend.feedbackEmail.resources.lambda.addToRolePolicy(sesPolicy);
 backend.forumEmail.resources.lambda.addToRolePolicy(sesPolicy);
+
+// The delete-student Lambda removes accounts from Cognito + the User table.
+// Inject the (synth-time) user pool id and User table name, and grant the
+// matching scoped permissions.
+const userPool = backend.auth.resources.userPool;
+const userTable = backend.data.resources.tables['User'];
+
+backend.deleteStudent.resources.lambda.addEnvironment('USER_POOL_ID', userPool.userPoolId);
+backend.deleteStudent.resources.lambda.addEnvironment('USER_TABLE', userTable.tableName);
+
+backend.deleteStudent.resources.lambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['cognito-idp:AdminDeleteUser'],
+    resources: [userPool.userPoolArn],
+  })
+);
+backend.deleteStudent.resources.lambda.addToRolePolicy(
+  new PolicyStatement({
+    actions: ['dynamodb:DeleteItem'],
+    resources: [userTable.tableArn],
+  })
+);
 
 // The login page authenticates with USER_PASSWORD_AUTH (AWS SDK v2), so the
 // user pool app client must allow that flow (plus SRP + refresh-token).

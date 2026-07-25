@@ -153,6 +153,26 @@
       color: #721c24;
     }
 
+    .staff-badge {
+      display: inline-block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 0.05rem 0.45rem;
+      border-radius: 999px;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+    }
+
+    .staff-badge-tutor {
+      background-color: #198754;
+      color: #fff;
+    }
+
+    .staff-badge-staff {
+      background-color: #6c757d;
+      color: #fff;
+    }
+
     .student-name {
       font-weight: 600;
       color: #1d0c59;
@@ -349,6 +369,17 @@
               </select>
             </div>
           </div>
+          <div class="d-flex align-items-center justify-content-between mt-2 flex-wrap gap-2">
+            <div class="form-check mb-0">
+              <input class="form-check-input" type="checkbox" id="students-only-toggle" onchange="filterStudents()">
+              <label class="form-check-label" for="students-only-toggle">
+                Hide tutors &amp; staff (students only)
+              </label>
+            </div>
+            <button class="btn btn-sm btn-outline-primary" onclick="exportStudents()">
+              <i class="bi bi-download me-1"></i>Export CSV
+            </button>
+          </div>
         </div>
 
         <!-- Student Table -->
@@ -425,6 +456,35 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
           <button type="button" class="btn btn-primary" id="release-dates-save-btn"
             onclick="saveReleaseDatesFromModal()">Save unlock dates</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete student confirmation -->
+  <div class="modal fade" id="deleteStudentModal" tabindex="-1" aria-labelledby="deleteStudentModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="deleteStudentModalLabel">Delete student account</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="mb-2">You are about to <strong>permanently delete</strong>:</p>
+          <p class="mb-3"><span id="delete-student-name" class="fw-bold"></span><br>
+            <span id="delete-student-email" class="text-muted small"></span></p>
+          <p class="small text-danger">This removes their login (Cognito) and all their data
+            (progress, profile) from the database. This cannot be undone.</p>
+          <label class="form-label fw-semibold" for="delete-student-password">Deletion password</label>
+          <input type="password" class="form-control" id="delete-student-password"
+            placeholder="Enter the deletion password" autocomplete="off">
+          <div id="delete-student-error" class="alert alert-danger mt-2 mb-0 py-2" style="display:none;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-danger" id="delete-student-confirm-btn"
+            onclick="confirmDeleteStudent()">Delete permanently</button>
         </div>
       </div>
     </div>
@@ -591,10 +651,14 @@
           });
           if (lastAccessedDate > 0 && status === 'Not Started') status = 'In Progress';
 
+          const staffRole = window.getStaffRole(student);
+
           return {
             id: student.id,
             name: student.displayName || 'Unknown',
             email: student.email || '',
+            staffRole,            // 'Tutor' | 'Staff' | null
+            isStaff: !!staffRole,
             progress: {
               completedCount: progressDetails.completedSessions,
               totalSessions: progressDetails.totalSessions,
@@ -622,12 +686,14 @@
     }
 
     function updateStatistics() {
-      const total = allStudents.length;
+      // Statistics reflect real students only — tutors/staff are excluded.
+      const realStudents = allStudents.filter(s => !s.isStaff);
+      const total = realStudents.length;
       const avgProgress = total > 0
-        ? Math.round(allStudents.reduce((sum, s) => sum + s.progress.percentage, 0) / total)
+        ? Math.round(realStudents.reduce((sum, s) => sum + s.progress.percentage, 0) / total)
         : 0;
-      const completed = allStudents.filter(s => s.progress.status === 'Completed').length;
-      const inProgress = allStudents.filter(s => s.progress.status === 'In Progress').length;
+      const completed = realStudents.filter(s => s.progress.status === 'Completed').length;
+      const inProgress = realStudents.filter(s => s.progress.status === 'In Progress').length;
 
       document.getElementById('total-students').textContent = total;
       document.getElementById('avg-progress').textContent = avgProgress + '%';
@@ -648,8 +714,12 @@
           ? formatTimeAgo(student.progress.lastAccessedDate)
           : 'Never';
 
+        const staffBadge = student.staffRole
+          ? `<span class="staff-badge staff-badge-${student.staffRole.toLowerCase()}">${student.staffRole}</span>`
+          : '';
+
         row.innerHTML = `
-          <td><span class="student-name">${student.name}</span></td>
+          <td><span class="student-name">${student.name}</span>${staffBadge}</td>
           <td>
             <div class="progress-bar-container">
               <div class="progress-bar-fill" style="width: ${student.progress.percentage}%">
@@ -659,12 +729,21 @@
           </td>
           <td><span class="status-badge status-${statusClass}">${student.progress.status}</span></td>
           <td><span class="last-active">${lastActive}</span></td>
-          <td><button class="btn btn-sm btn-outline-secondary view-details-btn">View Details</button></td>
+          <td>
+            <button class="btn btn-sm btn-outline-secondary view-details-btn">View Details</button>
+            <button class="btn btn-sm btn-outline-danger delete-student-btn ms-1" title="Delete student">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
         `;
 
         row.querySelector('.view-details-btn').addEventListener('click', (e) => {
           e.stopPropagation();
           showStudentDetail(student);
+        });
+        row.querySelector('.delete-student-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          openDeleteStudentModal(student);
         });
         tbody.appendChild(row);
       });
@@ -673,16 +752,88 @@
     function filterStudents() {
       const searchTerm = document.getElementById('search-input').value.toLowerCase();
       const statusFilter = document.getElementById('status-filter').value;
+      const studentsOnly = document.getElementById('students-only-toggle').checked;
 
       filteredStudents = allStudents.filter(student => {
         const matchesSearch = student.name.toLowerCase().includes(searchTerm);
         const matchesStatus = statusFilter === 'all' ||
           student.progress.status.toLowerCase().replace(' ', '-') === statusFilter;
+        const matchesRole = !studentsOnly || !student.isStaff;
 
-        return matchesSearch && matchesStatus;
+        return matchesSearch && matchesStatus && matchesRole;
       });
 
       sortStudents();
+    }
+
+    let deleteTargetStudent = null;
+
+    function openDeleteStudentModal(student) {
+      deleteTargetStudent = student;
+      document.getElementById('delete-student-name').textContent = student.name || 'Unknown';
+      document.getElementById('delete-student-email').textContent = student.email || '(no email)';
+      const pwd = document.getElementById('delete-student-password');
+      pwd.value = '';
+      const err = document.getElementById('delete-student-error');
+      err.style.display = 'none';
+      const btn = document.getElementById('delete-student-confirm-btn');
+      btn.disabled = false;
+      btn.textContent = 'Delete permanently';
+      new bootstrap.Modal(document.getElementById('deleteStudentModal')).show();
+    }
+
+    async function confirmDeleteStudent() {
+      if (!deleteTargetStudent) return;
+      const err = document.getElementById('delete-student-error');
+      const password = document.getElementById('delete-student-password').value;
+      if (!password) {
+        err.textContent = 'Please enter the deletion password.';
+        err.style.display = 'block';
+        return;
+      }
+      err.style.display = 'none';
+      const btn = document.getElementById('delete-student-confirm-btn');
+      btn.disabled = true;
+      btn.textContent = 'Deleting…';
+      try {
+        const result = await window.deleteStudentAccount({
+          email: deleteTargetStudent.email,
+          userId: deleteTargetStudent.id,
+          password
+        });
+        if (result === 'deleted') {
+          bootstrap.Modal.getInstance(document.getElementById('deleteStudentModal')).hide();
+          deleteTargetStudent = null;
+          await loadCohortStudents(currentCohortCode);
+        } else if (result === 'unauthorized') {
+          err.textContent = 'Incorrect deletion password.';
+          err.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Delete permanently';
+        } else {
+          throw new Error('delete failed');
+        }
+      } catch (e) {
+        console.error('Delete student failed:', e);
+        err.textContent = 'Something went wrong deleting this student. Please try again.';
+        err.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Delete permanently';
+      }
+    }
+
+    function exportStudents() {
+      if (!filteredStudents.length) {
+        alert('There are no students in the current view to export.');
+        return;
+      }
+      const activeCohort = teacherCohorts.find(c => c.cohortCode === currentCohortCode);
+      const cohortLabel = (activeCohort ? activeCohort.name : (currentCohortCode || 'cohort'))
+        .replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+      const statusFilter = document.getElementById('status-filter').value;
+      const statusLabel = statusFilter === 'all' ? 'all' : statusFilter;
+      const date = new Date().toISOString().slice(0, 10);
+      window.exportStudentsToCsv(filteredStudents, `students-${cohortLabel}-${statusLabel}-${date}.csv`);
     }
 
     function sortStudents() {
