@@ -81,6 +81,23 @@
       vertical-align: middle;
     }
 
+    .tutor-badge {
+      font-size: 0.68rem;
+      background: #198754;
+      color: #fff;
+      padding: 0.05rem 0.45rem;
+      border-radius: 999px;
+      font-weight: 600;
+      margin-left: 0.4rem;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .tutor-badge i {
+      font-size: 0.62rem;
+      margin-right: 0.15rem;
+    }
+
     .answers-panel {
       margin-top: 0.9rem;
       padding-top: 0.9rem;
@@ -389,7 +406,7 @@
     const LIST_POSTS_BY_SECTION = `
       query ListPosts($section: String!, $nextToken: String) {
         listForumPosts(filter: { section: { eq: $section } }, nextToken: $nextToken) {
-          items { id section title body authorName createdAt }
+          items { id section title body authorName authorEmail createdAt }
           nextToken
         }
       }
@@ -398,7 +415,7 @@
     const LIST_ALL_POSTS = `
       query ListAllPosts($nextToken: String) {
         listForumPosts(nextToken: $nextToken) {
-          items { id section title body authorName createdAt }
+          items { id section title body authorName authorEmail createdAt }
           nextToken
         }
       }
@@ -419,7 +436,7 @@
     const LIST_ANSWERS = `
       query ListAnswers($postId: String!, $nextToken: String) {
         listForumAnswers(filter: { postId: { eq: $postId } }, nextToken: $nextToken) {
-          items { id postId body authorName createdAt }
+          items { id postId body authorName authorEmail createdAt }
           nextToken
         }
       }
@@ -437,7 +454,59 @@
       }
     `;
 
+    // Tutors & admins — used to badge official (staff) posts/answers and to
+    // resolve tutor recipients for new-question notifications.
+    const LIST_STAFF = `
+      query ListStaff($nextToken: String) {
+        listUsers(filter: { or: [{ isTutor: { eq: true } }, { isAdmin: { eq: true } }] }, nextToken: $nextToken) {
+          items { email isTutor isAdmin }
+          nextToken
+        }
+      }
+    `;
+
+    const SEND_FORUM_NOTIFICATION = `
+      mutation SendForumNotification(
+        $type: String!, $recipients: [String], $questionTitle: String,
+        $section: String, $askerName: String, $authorName: String, $bodyPreview: String
+      ) {
+        sendForumNotification(
+          type: $type, recipients: $recipients, questionTitle: $questionTitle,
+          section: $section, askerName: $askerName, authorName: $authorName, bodyPreview: $bodyPreview
+        )
+      }
+    `;
+
     // ── Helpers ──────────────────────────────────────────────────────────────────
+
+    let _staffEmails = null;   // tutors OR admins — drives the "Tutor" badge
+    let _tutorEmails = null;   // tutors only — notification recipients
+
+    // Loads tutor/admin users once and builds both email sets (cached).
+    async function getStaffEmails() {
+      if (_staffEmails) return _staffEmails;
+      const norm = e => (e || '').trim().toLowerCase();
+      try {
+        const users = await listAll(LIST_STAFF, {});
+        _staffEmails = new Set(users.map(u => norm(u.email)).filter(Boolean));
+        _tutorEmails = new Set(
+          users.filter(u => u.isTutor).map(u => norm(u.email)).filter(Boolean)
+        );
+      } catch (err) {
+        console.error('Failed to load tutor list', err);
+        _staffEmails = new Set();
+        _tutorEmails = new Set();
+      }
+      return _staffEmails;
+    }
+
+    // Badge HTML for a post/answer authored by a tutor/admin, else ''.
+    function tutorBadge(email) {
+      if (!email || !_staffEmails) return '';
+      return _staffEmails.has(email.trim().toLowerCase())
+        ? '<span class="tutor-badge"><i class="bi bi-patch-check-fill"></i>Tutor</span>'
+        : '';
+    }
 
     function escHtml(str) {
       if (!str) return '';
@@ -527,7 +596,10 @@
         </div>`;
 
       try {
-        const posts = await listAll(LIST_POSTS_BY_SECTION, { section: sectionKey });
+        const [posts] = await Promise.all([
+          listAll(LIST_POSTS_BY_SECTION, { section: sectionKey }),
+          getStaffEmails(),
+        ]);
         posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         renderPostList(posts, false);
       } catch (err) {
@@ -563,7 +635,7 @@
           <div class="d-flex align-items-start justify-content-between gap-2">
             <div class="post-card-title">${escHtml(post.title)}${badge}</div>
           </div>
-          <div class="post-card-meta">${escHtml(post.authorName || 'Anonymous')} &middot; ${relativeTime(post.createdAt)}</div>
+          <div class="post-card-meta">${escHtml(post.authorName || 'Anonymous')}${tutorBadge(post.authorEmail)} &middot; ${relativeTime(post.createdAt)}</div>
           <div class="post-card-body-text">${escHtml(post.body)}</div>
           <div class="post-card-actions d-flex align-items-center gap-2">
             <button class="btn btn-sm btn-outline-secondary toggle-btn">
@@ -612,11 +684,15 @@
           <span class="spinner-border spinner-border-sm me-1"></span>Loading answers…
         </div>`;
 
-      await renderAnswers(panel, post.id);
+      await renderAnswers(panel, post);
     }
 
-    async function renderAnswers(panel, postId) {
-      const answers = await listAll(LIST_ANSWERS, { postId });
+    async function renderAnswers(panel, post) {
+      const postId = post.id;
+      const [answers] = await Promise.all([
+        listAll(LIST_ANSWERS, { postId }),
+        getStaffEmails(),
+      ]);
       answers.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
 
       panel.innerHTML = '';
@@ -632,7 +708,7 @@
           div.className = 'answer-item';
           div.innerHTML = `
             <div class="d-flex align-items-center justify-content-between">
-              <div class="answer-item-meta">${escHtml(ans.authorName || 'Anonymous')} &middot; ${relativeTime(ans.createdAt)}</div>
+              <div class="answer-item-meta">${escHtml(ans.authorName || 'Anonymous')}${tutorBadge(ans.authorEmail)} &middot; ${relativeTime(ans.createdAt)}</div>
             </div>
             <div>${escHtml(ans.body)}</div>
           `;
@@ -676,16 +752,57 @@
         btn.disabled = true;
         btn.textContent = 'Posting…';
         try {
+          const answererEmail = localStorage.getItem('userEmail') || '';
           await gql(CREATE_ANSWER, {
             input: {
               postId,
               body,
               authorName: localStorage.getItem('displayName') || 'Anonymous',
-              authorEmail: localStorage.getItem('userEmail') || '',
+              authorEmail: answererEmail,
             }
           });
+
+          // ── Notifications (best-effort — never block posting) ──────────────
+          const answererLower = answererEmail.trim().toLowerCase();
+          const askerEmail = (post.authorEmail || '').trim();
+          const askerLower = askerEmail.toLowerCase();
+
+          // 1. Notify the asker their question was answered.
+          //    Skip if we have no email, or they answered their own question.
+          if (askerEmail && askerLower !== answererLower) {
+            gql(SEND_FORUM_NOTIFICATION, {
+              type: 'newAnswer',
+              recipients: [askerEmail],
+              questionTitle: post.title,
+              section: post.section,
+              askerName: post.authorName,
+              authorName: localStorage.getItem('displayName') || 'Someone',
+              bodyPreview: body.slice(0, 300),
+            }).catch(err => console.error('Answer notification failed', err));
+          }
+
+          // 2. Notify tutors who previously replied on this thread — they may be
+          //    getting a reply. `answers` holds the thread state before this post.
+          //    We do NOT notify tutors who never joined the discussion.
+          const priorTutors = [...new Set(
+            answers.map(a => (a.authorEmail || '').trim().toLowerCase()).filter(Boolean)
+          )].filter(e =>
+            _tutorEmails && _tutorEmails.has(e) && e !== answererLower && e !== askerLower
+          );
+          if (priorTutors.length) {
+            gql(SEND_FORUM_NOTIFICATION, {
+              type: 'threadReply',
+              recipients: priorTutors,
+              questionTitle: post.title,
+              section: post.section,
+              askerName: post.authorName,
+              authorName: localStorage.getItem('displayName') || 'Someone',
+              bodyPreview: body.slice(0, 300),
+            }).catch(err => console.error('Thread-reply notification failed', err));
+          }
+
           bodyEl.value = '';
-          await renderAnswers(panel, postId);
+          await renderAnswers(panel, post);
         } catch (err) {
           console.error(err);
           errEl.textContent = 'Failed to post. Please try again.';
@@ -727,6 +844,7 @@
         </div>`;
 
       try {
+        await getStaffEmails();
         if (!_searchCache) {
           _searchCache = await listAll(LIST_ALL_POSTS, {});
         }
@@ -792,6 +910,21 @@
               authorEmail: localStorage.getItem('userEmail') || '',
             }
           });
+
+          // Notify all tutors of the new question (best-effort — never blocks posting).
+          getStaffEmails().then(() => {
+            const recipients = [..._tutorEmails];
+            if (!recipients.length) return;
+            return gql(SEND_FORUM_NOTIFICATION, {
+              type: 'newQuestion',
+              recipients,
+              questionTitle: title,
+              section,
+              askerName: localStorage.getItem('displayName') || 'A student',
+              bodyPreview: body.slice(0, 300),
+            });
+          }).catch(err => console.error('Question notification failed', err));
+
           document.getElementById('ask-title').value = '';
           document.getElementById('ask-section').value = '';
           document.getElementById('ask-body').value = '';

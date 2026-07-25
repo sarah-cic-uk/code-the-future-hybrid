@@ -2,6 +2,7 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 import { notifyAdmin } from '../functions/notify-admin/resource';
 import { bookingEmail } from '../functions/booking-email/resource';
 import { feedbackEmail } from '../functions/feedback-email/resource';
+import { forumEmail } from '../functions/forum-email/resource';
 
 /**
  * Define your data schema
@@ -72,6 +73,24 @@ const schema = a.schema({
     })
     .returns(a.string())
     .handler(a.handler.function(feedbackEmail))
+    .authorization((allow) => [allow.publicApiKey()]),
+
+  // Emails forum participants (via SES):
+  //   newQuestion -> notify every tutor a student posted a question
+  //   newAnswer   -> notify the asker their question was answered
+  sendForumNotification: a
+    .mutation()
+    .arguments({
+      type: a.string().required(),        // 'newQuestion' | 'newAnswer'
+      recipients: a.string().array(),     // tutor emails (newQuestion); single asker email (newAnswer)
+      questionTitle: a.string(),
+      section: a.string(),
+      askerName: a.string(),
+      authorName: a.string(),             // who triggered it (asker for Q, answerer for A)
+      bodyPreview: a.string(),
+    })
+    .returns(a.string())
+    .handler(a.handler.function(forumEmail))
     .authorization((allow) => [allow.publicApiKey()]),
 
   Cohort: a
