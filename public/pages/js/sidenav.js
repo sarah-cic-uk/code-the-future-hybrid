@@ -315,6 +315,11 @@ template.innerHTML = `
               <span class="d-none d-sm-inline">Session 5</span></a>
           </li>
           <li>
+            <a href="#" onclick="createPath('pages/forum.html#showcase')" class="nav-link p-0" name="forum-showcase">
+              <i class="fs-4 bi-dash"></i>
+              <span class="d-none d-sm-inline">Showcase</span></a>
+          </li>
+          <li>
             <a href="#" onclick="createPath('pages/forum.html#aiSession')" class="nav-link p-0" name="forum-aiSession">
               <i class="fs-4 bi-dash"></i>
               <span class="d-none d-sm-inline">AI Session</span></a>
