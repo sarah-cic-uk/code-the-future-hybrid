@@ -107,6 +107,44 @@ async function getProfilePictureUrl(userId) {
   }
 }
 
+// Upload a forum screenshot blob under an explicit key (e.g.
+// 'public/forum-attachments/<uuid>.jpg'). Requires a logged-in user.
+async function uploadForumImage(key, blob) {
+  const config = await getS3Config();
+  const s3 = await ensureCredentials();
+
+  await s3.putObject({
+    Bucket: config.bucket,
+    Key: key,
+    Body: blob,
+    ContentType: 'image/jpeg'
+  }).promise();
+}
+
+// Get a presigned (authenticated) URL to read a forum screenshot.
+// Returns null if the object doesn't exist.
+async function getForumImageUrl(key) {
+  if (!key) return null;
+  try {
+    const config = await getS3Config();
+    const s3 = await ensureCredentials();
+
+    await s3.headObject({ Bucket: config.bucket, Key: key }).promise();
+
+    return s3.getSignedUrl('getObject', {
+      Bucket: config.bucket,
+      Key: key,
+      Expires: 3600
+    });
+  } catch (error) {
+    if (error.code === 'NotFound' || error.code === 'NoSuchKey' || error.statusCode === 404) {
+      return null;
+    }
+    console.error(`Error getting forum image URL for ${key}:`, error);
+    return null;
+  }
+}
+
 // Cache a presigned URL for the nav-bar avatar with an expiry, and apply it.
 // URLs are signed for 1hr; cache for 55 min to stay safely valid.
 function cacheNavAvatar(url) {
@@ -121,5 +159,7 @@ window.profilePictures = {
   uploadProfilePicture,
   getProfilePictureUrl,
   ensureCredentials,
-  cacheNavAvatar
+  cacheNavAvatar,
+  uploadForumImage,
+  getForumImageUrl
 };

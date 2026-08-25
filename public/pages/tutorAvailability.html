@@ -986,7 +986,14 @@
 
       const calendarToggle = document.getElementById('switch-requested');
       const requestTab = document.getElementById('request-tab');
+      // Compare at day granularity (start of today), NOT the current instant.
+      // Requests are stored as naive wall-clock strings with no timezone, so an
+      // exact-instant comparison misfires across timezones: a slot that's still
+      // upcoming for a student (e.g. in Ethiopia) reads as "past" for a tutor
+      // whose clock is a few hours ahead, and the request silently disappears
+      // from the tutor's tab. Keeping today's requests visible all day fixes that.
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
       if (!loggedInTutor || !userId) {
         console.warn("No logged-in tutor or tutor ID found. Displaying empty state.");
@@ -997,6 +1004,7 @@
       }
 
       let hasFutureSessions = false;
+      let renderedCount = 0; // count only the rows actually shown (today + future)
 
       try {
         // Get requested sessions from DynamoDB using helper function
@@ -1030,17 +1038,18 @@
             continue;
           }
 
+          // Requests from a previous day are simply hidden — never deleted here.
+          // Rendering must not mutate data: the old auto-delete permanently
+          // destroyed requests, and when the delete failed or raced it left the
+          // request showing in the student's tab but missing from the tutor's.
+          // (Cleanup of genuinely old requests, if wanted, belongs in a separate
+          // explicit job, not in a table render.)
           if (slotDate < today) {
-            try {
-              await deleteSessionRequest(slotId);
-              console.log(`Removed past session: ${slotId}`);
-            } catch (error) {
-              console.error(`Error removing past session ${slotId}:`, error);
-            }
             continue;
           }
 
           hasFutureSessions = true;
+          renderedCount++;
 
           const formattedDate = slotDate.toLocaleDateString('en-GB', {
             year: 'numeric',
@@ -1093,8 +1102,7 @@
           calendarToggle.classList.remove('hidden');
         }
 
-        const requestedCount = hasFutureSessions ? Object.keys(requestedSessions).length : 0;
-        requestTab.textContent = `Requested sessions (${requestedCount})`;
+        requestTab.textContent = `Requested sessions (${renderedCount})`;
 
       } catch (error) {
         console.error('Error fetching requested sessions:', error);

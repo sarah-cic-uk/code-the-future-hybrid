@@ -161,6 +161,7 @@ const schema = a.schema({
       body: a.string().required(),
       authorName: a.string(),
       authorEmail: a.string(),
+      imageKey: a.string(),   // optional S3 key of an attached screenshot
     })
     .authorization((allow) => [allow.publicApiKey()]),
 
@@ -170,6 +171,7 @@ const schema = a.schema({
       body: a.string().required(),
       authorName: a.string(),
       authorEmail: a.string(),
+      imageKey: a.string(),   // optional S3 key of an attached screenshot
     })
     .authorization((allow) => [allow.publicApiKey()]),
 });

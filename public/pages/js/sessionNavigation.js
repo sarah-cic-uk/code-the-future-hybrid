@@ -164,10 +164,63 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	// save & update on click
 	markBtn.addEventListener("click", async () => {
-		await saveLesson(lessonName);
-		await renderCompletionStatus(lessonName, markBtn, bannerTarget);
+		// Ignore repeat clicks while a save is already in flight (the write is two
+		// network round-trips, so this window is real).
+		if (markBtn.dataset.saving === "true") return;
+
+		const previousLabel = markBtn.innerText;
+		markBtn.dataset.saving = "true";
+		markBtn.disabled = true;
+		markBtn.innerText = "Saving…";
+
+		let ok = false;
+		try {
+			ok = await saveLesson(lessonName);
+		} catch (error) {
+			console.error("Error saving lesson completion:", error);
+		}
+
+		markBtn.disabled = false;
+		markBtn.dataset.saving = "false";
+
+		if (ok) {
+			// Paint the confirmed state directly rather than re-reading (the read is
+			// an eventually-consistent scan and can lag the write we just made).
+			paintCompletionStatus(true, markBtn, bannerTarget);
+		} else {
+			// Save failed — restore the button and tell the student, instead of
+			// silently leaving it looking un-saved.
+			markBtn.innerText = previousLabel;
+			showSaveError("We couldn’t save your progress. Please check your connection and try again.");
+		}
 	});
 });
+
+// Transient error toast for a failed progress save. Kept self-contained here so
+// the lesson flow can surface write failures without depending on helpers in
+// progressTracking.js.
+function showSaveError(message) {
+	let el = document.getElementById("lesson-save-error");
+	if (!el) {
+		el = document.createElement("div");
+		el.id = "lesson-save-error";
+		el.className = "alert alert-danger alert-dismissible fade show";
+		el.style.position = "fixed";
+		el.style.top = "80px";
+		el.style.right = "20px";
+		el.style.zIndex = "9999";
+		el.style.minWidth = "300px";
+		document.body.appendChild(el);
+	}
+	el.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+
+	setTimeout(() => {
+		if (el && el.parentNode) el.remove();
+	}, 6000);
+}
 
 // ================= Helper Functions =================
 
@@ -214,9 +267,9 @@ function getCurrentSessionName() {
 // === Lesson completion helpers using DynamoDB ===
 async function saveLesson(lessonName) {
 	const session = getCurrentSessionName();
-	if (!session || typeof window._saveLessonComplete !== 'function') return;
+	if (!session || typeof window._saveLessonComplete !== 'function') return false;
 
-	await window._saveLessonComplete(session, lessonName);
+	return await window._saveLessonComplete(session, lessonName);
 }
 
 async function checkLessonComplete(lessonName) {
@@ -240,8 +293,17 @@ function extractLessonName(path) {
 
 
 async function renderCompletionStatus(lessonName, markBtn, bannerTarget) {
+	// Used on initial page load: read the saved state from DynamoDB and paint it.
 	const completed = await checkLessonComplete(lessonName);
+	paintCompletionStatus(completed, markBtn, bannerTarget);
+}
 
+// Pure UI painter — no network. Split out from renderCompletionStatus so the
+// mark-complete handler can paint the completed state optimistically after a
+// confirmed save, instead of re-reading through getUserForProgress. That read
+// is a DynamoDB scan (eventually consistent), so straight after a write it can
+// still return the pre-write copy and wrongly repaint the lesson as incomplete.
+function paintCompletionStatus(completed, markBtn, bannerTarget) {
 	if (completed) {
 		if (markBtn) {
 			markBtn.classList.remove("btn-success");
