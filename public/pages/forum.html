@@ -65,11 +65,18 @@
       -webkit-box-orient: vertical;
       overflow: hidden;
       margin-bottom: 0.65rem;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     .post-card-body-text.expanded {
       display: block;
       -webkit-line-clamp: unset;
+    }
+
+    .answer-item-body {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
     }
 
     .section-badge {
@@ -837,7 +844,7 @@
             <div class="d-flex align-items-center justify-content-between">
               <div class="answer-item-meta">${escHtml(ans.authorName || 'Anonymous')}${tutorBadge(ans.authorEmail)} &middot; ${relativeTime(ans.createdAt)}</div>
             </div>
-            <div>${escHtml(ans.body)}</div>
+            <div class="answer-item-body">${escHtml(ans.body)}</div>
             ${ans.imageKey ? `<img class="forum-attachment" data-image-key="${escHtml(ans.imageKey)}" alt="Attachment" />` : ''}
           `;
           if (isStaff()) {
