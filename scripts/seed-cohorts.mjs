@@ -21,6 +21,9 @@ const COHORTS = [
   { cohortCode: 'shePlusTechJuly26', name: 'ShePlusTech — July 2026' },
   { cohortCode: 'nepalJuly26', name: 'Nepal — July 2026' },
   { cohortCode: '2026GeneralAcc3ss', name: 'General Access 2026' },
+  // 1-day course on 2026-09-18; all sessions unlocked from the start (release dates 0).
+  // Teacher/tutor code: DTSP8Tutor
+  { cohortCode: 'DTSP8', name: 'DTSP Cohort 8' },
   // Shared cohort for tutors (auto-assigned when registering with the tutor code)
   { cohortCode: 'tutors', name: 'Code the Future Tutors' },
 ];

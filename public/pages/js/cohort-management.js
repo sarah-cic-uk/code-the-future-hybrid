@@ -166,18 +166,24 @@ async function deleteStudentAccount({ email, userId, password }) {
 }
 
 /**
- * Get teachers for a cohort. Teachers register with a schoolPrefix (e.g. "nepal")
- * and are linked to every cohort whose code starts with that prefix.
+ * Get teachers for a cohort. A user is a teacher of a cohort if either:
+ *  - (prefix rule) they registered as a teacher with a schoolPrefix (e.g. "nepal")
+ *    and the cohort code starts with that prefix; or
+ *  - (explicit rule) they assigned themselves via teacherCohorts (e.g. a tutor who
+ *    also teaches a specific cohort — see setSelfTeacherCohort).
+ * Returns the union, deduped by id.
  */
 async function getTeachersByCohort(cohortCode) {
   const query = `
     query ListUsers($nextToken: String) {
-      listUsers(filter: { isTeacher: { eq: true } }, nextToken: $nextToken) {
+      listUsers(nextToken: $nextToken) {
         items {
           id
           email
           displayName
+          isTeacher
           schoolPrefix
+          teacherCohorts
         }
         nextToken
       }
@@ -193,9 +199,29 @@ async function getTeachersByCohort(cohortCode) {
       nextToken = data.listUsers.nextToken;
     } while (nextToken);
     const code = cohortCode.toLowerCase();
-    return all.filter(t => t.schoolPrefix && code.startsWith(t.schoolPrefix.toLowerCase()));
+    return all.filter(t => {
+      const byPrefix = t.isTeacher && t.schoolPrefix &&
+        code.startsWith(t.schoolPrefix.toLowerCase());
+      const byAssignment = parseTeacherCohorts(t.teacherCohorts).includes(cohortCode);
+      return byPrefix || byAssignment;
+    });
   } catch (error) {
     console.error('Error getting teachers:', error);
+    return [];
+  }
+}
+
+/**
+ * Parse a User.teacherCohorts value (AWSJSON string or already-parsed array)
+ * into an array of cohortCode strings. Tolerant of null/malformed values.
+ */
+function parseTeacherCohorts(raw) {
+  if (!raw) return [];
+  try {
+    const val = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    return Array.isArray(val) ? val : [];
+  } catch (e) {
+    console.error('Could not parse teacherCohorts:', e);
     return [];
   }
 }
@@ -622,6 +648,7 @@ async function getUserById(id) {
         isTeacher
         isTutor
         schoolPrefix
+        teacherCohorts
         progress
         profile
       }
@@ -635,6 +662,38 @@ async function getUserById(id) {
     console.error('Error getting user by id:', error);
     return null;
   }
+}
+
+/**
+ * Add or remove the currently logged-in user from a cohort's teacher list by
+ * editing their own User.teacherCohorts array. Read-modify-write so we never
+ * clobber other assignments. Returns the updated array of cohortCodes.
+ * @param {string} cohortCode - the cohort to assign/unassign
+ * @param {boolean} assign - true to add, false to remove
+ */
+async function setSelfTeacherCohort(cohortCode, assign) {
+  const userId = localStorage.getItem('userId');
+  if (!userId) throw new Error('Not logged in');
+
+  const user = await getUserById(userId);
+  if (!user) throw new Error('Could not load current user');
+
+  const current = parseTeacherCohorts(user.teacherCohorts);
+  const set = new Set(current);
+  if (assign) set.add(cohortCode);
+  else set.delete(cohortCode);
+  const next = Array.from(set);
+
+  const mutation = `
+    mutation UpdateUser($id: ID!, $teacherCohorts: AWSJSON!) {
+      updateUser(input: { id: $id, teacherCohorts: $teacherCohorts }) {
+        id
+        teacherCohorts
+      }
+    }
+  `;
+  await executeGraphQL(mutation, { id: userId, teacherCohorts: JSON.stringify(next) });
+  return next;
 }
 
 /**
@@ -810,6 +869,8 @@ window.calculateCohortProgress = calculateCohortProgress;
 window.getStudentProgressDetails = getStudentProgressDetails;
 window.getUserByEmail = getUserByEmail;
 window.getUserById = getUserById;
+window.setSelfTeacherCohort = setSelfTeacherCohort;
+window.parseTeacherCohorts = parseTeacherCohorts;
 window.getProfilePictureUrl = getProfilePictureUrl;
 window.buildStudentDetailHTML = buildStudentDetailHTML;
 window.COURSE_LESSONS = COURSE_LESSONS;

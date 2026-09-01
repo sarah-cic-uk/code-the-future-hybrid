@@ -473,6 +473,9 @@
               <i class="bi bi-calendar-event"></i> Set Session Unlock Dates
             </button>
 
+            <button id="assign-teacher-btn" class="btn mb-3 ms-2" style="display: none;"
+              onclick="toggleSelfTeacher()"></button>
+
             <div class="student-table-container mt-4">
               <h5 class="mb-3">Students in this Cohort</h5>
               <div class="row g-2 align-items-center mb-3">
@@ -764,6 +767,7 @@
               name: cohortData.name || cohortData.cohortCode,
               teacherName,
               teacherId: cohortData.teacherId,
+              teacherUserIds: cohortTeachers.map(t => t.id),
               sessionReleaseDates: cohortData.sessionReleaseDates,
               students,
               avgProgress,
@@ -899,11 +903,64 @@
       document.getElementById('detail-cohort-info').textContent =
         `Code: ${cohort.code} | Teacher: ${cohort.teacherName} | ${cohort.studentCount} Students | Avg Progress: ${cohort.avgProgress}%`;
 
+      renderAssignTeacherButton(cohort);
+
       // Reset the per-student filters each time a cohort is opened
       document.getElementById('detail-status-filter').value = 'all';
       document.getElementById('detail-students-only').checked = false;
 
       applyStudentFilters();
+    }
+
+    // Show a self-assign toggle for tutors: add/remove themselves from this
+    // cohort's teacher list. Hidden for non-tutors.
+    function renderAssignTeacherButton(cohort) {
+      const btn = document.getElementById('assign-teacher-btn');
+      if (localStorage.getItem('isTutor') !== 'true') {
+        btn.style.display = 'none';
+        return;
+      }
+      const myId = localStorage.getItem('userId');
+      const assigned = (cohort.teacherUserIds || []).includes(myId);
+      btn.style.display = 'inline-block';
+      btn.disabled = false;
+      btn.dataset.assigned = assigned ? 'true' : 'false';
+      btn.className = `btn mb-3 ms-2 ${assigned ? 'btn-outline-danger' : 'btn-outline-success'}`;
+      btn.innerHTML = assigned
+        ? '<i class="bi bi-person-dash"></i> Remove me as teacher'
+        : '<i class="bi bi-person-plus"></i> Assign me as teacher';
+    }
+
+    // Toggle the current tutor's teacher assignment for the open cohort.
+    async function toggleSelfTeacher() {
+      const cohort = window.currentReleaseCohort;
+      if (!cohort) return;
+      const btn = document.getElementById('assign-teacher-btn');
+      const assign = btn.dataset.assigned !== 'true';
+      const myId = localStorage.getItem('userId');
+      btn.disabled = true;
+      try {
+        await window.setSelfTeacherCohort(cohort.code, assign);
+
+        // Update the cached cohort in place so the button + header reflect the change.
+        const ids = new Set(cohort.teacherUserIds || []);
+        if (assign) ids.add(myId); else ids.delete(myId);
+        cohort.teacherUserIds = Array.from(ids);
+
+        const refreshed = await window.getTeachersByCohort(cohort.code);
+        cohort.teacherUserIds = refreshed.map(t => t.id);
+        cohort.teacherName = refreshed.length > 0
+          ? refreshed.map(t => t.displayName || t.email).join(', ')
+          : 'Unassigned';
+        document.getElementById('detail-cohort-info').textContent =
+          `Code: ${cohort.code} | Teacher: ${cohort.teacherName} | ${cohort.studentCount} Students | Avg Progress: ${cohort.avgProgress}%`;
+
+        renderAssignTeacherButton(cohort);
+      } catch (err) {
+        console.error('Error updating teacher assignment:', err);
+        alert('Could not update teacher assignment. Please try again.');
+        btn.disabled = false;
+      }
     }
 
     // Filters the current cohort's students by status + role, then renders the rows.

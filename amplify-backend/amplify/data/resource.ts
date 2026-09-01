@@ -19,6 +19,7 @@ const schema = a.schema({
       isTutor: a.boolean(),
       isAdmin: a.boolean(),
       schoolPrefix: a.string(),
+      teacherCohorts: a.json(), // array of cohortCodes this user is explicitly a teacher for
       progress: a.json(),
       profile: a.json(),
     })
