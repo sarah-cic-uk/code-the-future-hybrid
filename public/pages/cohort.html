@@ -54,6 +54,41 @@
       justify-content: center;
       min-height: 150px;
     }
+
+    /* Tutor-only cohort switcher */
+    .cohort-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      max-width: 1100px;
+      margin: 0.5rem auto 1.5rem;
+    }
+
+    .cohort-chip {
+      border: 2px solid #31238c;
+      border-radius: 999px;
+      background-color: white;
+      color: #31238c;
+      padding: 0.3rem 0.9rem;
+    }
+
+    .cohort-chip:hover {
+      background-color: #31238c;
+      color: white;
+    }
+
+    .cohort-chip.active {
+      background-color: #d9437a;
+      border-color: #d9437a;
+      color: white;
+    }
+
+    .cohort-chip .chip-count {
+      margin-left: 0.4rem;
+      font-size: 0.85em;
+      opacity: 0.8;
+    }
   </style>
 </head>
 
@@ -118,7 +153,9 @@
       </div>
     </nav>
     <div class="container-fluid page-content">
-      <h1 class="text-center pt-4">Meet your Cohort</h1>
+      <h1 class="text-center pt-4" id="cohort-heading">Meet your Cohort</h1>
+      <!-- Tutor-only: one chip per cohort -->
+      <div id="cohort-chips" class="cohort-chips" role="group" aria-label="Choose a cohort" style="display: none;"></div>
       <div class="row card-container">
         <!-- cohort cards here -->
       </div>
@@ -130,6 +167,13 @@
     const itemsPerPage = 8;
     let currentPage = 1;
     let cohortMembers = [];
+
+    // Tutor mode: browse every cohort via the chip switcher
+    const SELECTED_COHORT_KEY = 'myCohortSelected';
+    let viewingAsTutor = false;
+    let tutorCohorts = [];      // [{ code, name, taught }]
+    let studentsByCohort = {};  // cohortCode -> User records
+    let selectedCohortCode = null;
 
     window.onload = async (event) => {
       auth(
@@ -144,20 +188,26 @@
         // promoted teacher sees their cohort without needing to re-login.
         if (window.refreshUserRoleState) await window.refreshUserRoleState();
 
+        const isTutor = localStorage.getItem('isTutor') === 'true' ||
+          localStorage.getItem('isAdmin') === 'true';
         const isTeacher = localStorage.getItem('isTeacher') === 'true';
         const schoolPrefix = (localStorage.getItem('schoolPrefix') || '').trim();
         const cohortCode = localStorage.getItem('cohort');
 
-        // Teachers see every student across their school's cohorts (by prefix);
-        // everyone else sees their own cohort.
-        let students = [];
-        if (isTeacher && schoolPrefix) {
-          students = await window.getStudentsBySchoolPrefix(schoolPrefix);
-        } else if (cohortCode) {
-          students = await window.getStudentsByCohort(cohortCode);
-        }
+        // Tutors can switch between every cohort; teachers see every student
+        // across their school's cohorts (by prefix); everyone else sees their own cohort.
+        if (isTutor) {
+          await loadTutorCohorts();
+        } else {
+          let students = [];
+          if (isTeacher && schoolPrefix) {
+            students = await window.getStudentsBySchoolPrefix(schoolPrefix);
+          } else if (cohortCode) {
+            students = await window.getStudentsByCohort(cohortCode);
+          }
 
-        await loadCohortData(students);
+          await loadCohortData(students);
+        }
 
         const elements = document.getElementsByClassName("dynamic-link");
         for (let i = 0; i < elements.length; i++) {
@@ -165,6 +215,100 @@
         }
       }
     };
+
+    // Tutors browse every cohort. One scan of all users, grouped by cohort, so
+    // switching chips is instant. Cohorts the tutor teaches are listed first.
+    async function loadTutorCohorts() {
+      viewingAsTutor = true;
+      document.getElementById('cohort-heading').textContent = 'Cohort Profiles';
+      showLoadingState();
+
+      const userId = localStorage.getItem('userId');
+      const [cohorts, students, me] = await Promise.all([
+        window.getAllCohorts(),
+        window.getAllStudents(),
+        userId ? window.getUserById(userId) : null
+      ]);
+
+      studentsByCohort = {};
+      students.forEach(s => {
+        (studentsByCohort[s.cohortId] = studentsByCohort[s.cohortId] || []).push(s);
+      });
+
+      const taught = window.parseTeacherCohorts(me?.teacherCohorts);
+      tutorCohorts = cohorts
+        .map(c => ({ code: c.cohortCode, name: c.name || c.cohortCode, taught: taught.includes(c.cohortCode) }))
+        .sort((a, b) => (b.taught - a.taught) || a.name.localeCompare(b.name));
+
+      if (tutorCohorts.length === 0) {
+        document.querySelector(".card-container").innerHTML = `
+          <div class="col-12 text-center py-5">
+            <h3 class="text-muted">No cohorts found</h3>
+          </div>
+        `;
+        return;
+      }
+
+      // Reopen the last cohort viewed (e.g. coming back from a profile), else
+      // the first cohort they teach, else their own cohort, else the first one.
+      let saved = null;
+      try { saved = sessionStorage.getItem(SELECTED_COHORT_KEY); } catch (e) { /* ignore storage errors */ }
+      const initial = [saved, tutorCohorts.find(c => c.taught)?.code, localStorage.getItem('cohort')]
+        .find(code => code && tutorCohorts.some(c => c.code === code)) || tutorCohorts[0].code;
+
+      renderCohortChips();
+      selectTutorCohort(initial);
+    }
+
+    function renderCohortChips() {
+      const container = document.getElementById('cohort-chips');
+      container.innerHTML = '';
+
+      tutorCohorts.forEach(({ code, name, taught }) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'cohort-chip';
+        chip.dataset.code = code;
+        if (taught) {
+          chip.title = 'You teach this cohort';
+          chip.insertAdjacentHTML('beforeend', '<i class="bi bi-person-check me-1"></i>');
+        }
+        chip.append(name);
+
+        const count = document.createElement('span');
+        count.className = 'chip-count';
+        count.textContent = (studentsByCohort[code] || []).length;
+        chip.appendChild(count);
+
+        chip.addEventListener('click', () => selectTutorCohort(code));
+        container.appendChild(chip);
+      });
+
+      container.style.display = 'flex';
+    }
+
+    function selectTutorCohort(code) {
+      selectedCohortCode = code;
+      try { sessionStorage.setItem(SELECTED_COHORT_KEY, code); } catch (e) { /* ignore storage errors */ }
+
+      document.querySelectorAll('#cohort-chips .cohort-chip').forEach(chip => {
+        const active = chip.dataset.code === code;
+        chip.classList.toggle('active', active);
+        chip.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+
+      loadCohortData(studentsByCohort[code] || []);
+    }
+
+    function showLoadingState() {
+      document.querySelector(".card-container").innerHTML = `
+        <div class="col-12 text-center py-5">
+          <div class="spinner-border" role="status" style="color: #31268c;">
+            <span class="visually-hidden">Loading cohorts...</span>
+          </div>
+        </div>
+      `;
+    }
 
     async function loadCohortData(students) {
       cohortMembers = [];
@@ -203,6 +347,19 @@
 
     function showEmptyState() {
       const cardContainer = document.querySelector(".card-container");
+      document.querySelector(".pagination-container")?.remove();
+
+      if (viewingAsTutor) {
+        const cohort = tutorCohorts.find(c => c.code === selectedCohortCode);
+        cardContainer.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <h3 class="text-muted">No students have joined <span class="empty-cohort-name"></span> yet</h3>
+          </div>
+        `;
+        cardContainer.querySelector('.empty-cohort-name').textContent = cohort ? cohort.name : 'this cohort';
+        return;
+      }
+
       cardContainer.innerHTML = `
         <div class="col-12 text-center py-5">
           <h3 class="text-muted mb-3">No one else has joined your cohort yet</h3>
